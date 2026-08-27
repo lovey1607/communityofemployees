@@ -179,7 +179,7 @@ export default function HomePage() {
                   }}
                 >
                   <Zap size={15} />
-                  <span>Launch Live Portal</span>
+                  <span>Place Live Bids</span>
                   <ArrowRight size={13} />
                 </button>
 
@@ -498,7 +498,7 @@ export default function HomePage() {
                 background: 'rgba(168, 85, 247, 0.12)',
               }}
             >
-              🔒 5-TIER ENTERPRISE TRUST PROTOCOL
+              🔒 6-TIER ENTERPRISE TRUST PROTOCOL
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.2vw, 38px)', fontWeight: 900, color: isNightMode ? '#ffffff' : '#0f172a', letterSpacing: '-0.025em', marginTop: 10, marginBottom: 12 }}>
               Zero-Trust Verification & Enterprise Quality Audits

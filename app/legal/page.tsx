@@ -189,7 +189,7 @@ export default function MasterLegalPage() {
               <li><strong>Purpose Limitation:</strong> Contact information (name, official corporate email, phone number, GSTIN) is processed strictly to enable reverse auctions, statutory verification, and RFP matching.</li>
               <li><strong>No Data Monetization:</strong> COE does not sell, rent, or distribute corporate employee data to third-party marketing brokers or advertisers.</li>
               <li><strong>Blind Bidding Confidentiality:</strong> During live reverse auctions, vendor pricing proposals are anonymized to prevent price collusion and protect proprietary commercial margins.</li>
-              <li><strong>Data Principal Rights:</strong> Users have the right to access, rectify, or request deletion of their profile data by emailing <strong>privacy@coe.com</strong>.</li>
+              <li><strong>Data Principal Rights:</strong> Users have the right to access, rectify, or request deletion of their profile data by emailing <strong>contact@communityofemployees.com</strong>.</li>
             </ul>
           </section>
 
@@ -220,7 +220,7 @@ export default function MasterLegalPage() {
               <div><strong>Designation:</strong> Grievance Redressal & Legal Compliance Officer</div>
               <div style={{ marginTop: 4 }}><strong>Organization:</strong> Community of Employees (COE)</div>
               <div style={{ marginTop: 4 }}><strong>Office:</strong> Building 10B, DLF Cyber City, Phase II, Gurugram, Haryana 122002</div>
-              <div style={{ marginTop: 4 }}><strong>Email:</strong> legal@coe.com · grievance@coe.com</div>
+              <div style={{ marginTop: 4 }}><strong>Email:</strong> contact@communityofemployees.com</div>
               <div style={{ marginTop: 4 }}><strong>Resolution SLA:</strong> Acknowledged within 24 hours; resolved within 15 working days.</div>
             </div>
           </section>

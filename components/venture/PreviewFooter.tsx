@@ -138,9 +138,6 @@ export function PreviewFooter() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
             <span>© 2026 Community of Employees (COE). All rights reserved. Operating in Delhi NCR.</span>
-            <Link href="/legal" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
-              Legal Disclaimer & Intermediary Safe Harbor
-            </Link>
           </div>
 
           <button

@@ -128,7 +128,7 @@ export function ContactSection() {
                   <div>
                     <div style={{ fontSize: 13, fontWeight: 800, color: '#ffffff' }}>Enterprise Procurement Desk</div>
                     <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>
-                      procurement@coe.com · partners@coe.com
+                      contact@communityofemployees.com
                     </div>
                   </div>
                 </div>
