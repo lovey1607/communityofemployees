@@ -5,7 +5,7 @@
 // Level 3: Detailed Vendor Proposal Slide-Over Drawer with Accept/Negotiate
 // ============================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -442,7 +442,14 @@ export default function SpecificRFPInquiryPage() {
   const router = useRouter();
   const rfpId = params.id as string;
 
-  const { rfpList, getBidsForRFP, vendorProfiles, acceptBid, isNightMode } = useStore();
+  const { rfpList, getBidsForRFP, vendorProfiles, acceptBid, isNightMode, hydrated, loadRfpDetail } =
+    useStore();
+
+  // Bids are fetched per requirement — the poster's view is the only one the
+  // server will return rival quotes to.
+  useEffect(() => {
+    if (hydrated && rfpId) void loadRfpDetail(rfpId);
+  }, [hydrated, rfpId, loadRfpDetail]);
   const [selectedBid, setSelectedBid] = useState<Bid | null>(null);
   const [sortBy, setSortBy] = useState<'match' | 'price' | 'distance'>('match');
 
@@ -550,7 +557,7 @@ export default function SpecificRFPInquiryPage() {
                   <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
                     {rfpTitle}
                   </h1>
-                  {rfp.status === 'approved' ? (
+                  {rfp.status === 'awarded' ? (
                     <span style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(34,197,94,0.18)', color: '#22c55e', fontSize: 11, fontWeight: 800 }}>
                       ● Contract Awarded
                     </span>

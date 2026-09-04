@@ -10,9 +10,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import { BlurredCyberHubBackground } from '@/components/canvas/BlurredCyberHubBackground';
-import { Shield, Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
-
-const ADMIN_CREDS = { email: 'admin@coe.com', pass: 'test1234' };
+import { Shield, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -24,43 +22,33 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = (e?: React.FormEvent) => {
+  const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setError('');
     const loginEmail = email.trim();
-    const loginPass = password;
 
     if (!loginEmail || !loginEmail.includes('@')) {
       setError('Enter a valid email address.');
       return;
     }
-    if (!loginPass) {
+    if (!password) {
       setError('Please enter your password.');
       return;
     }
 
     setLoading(true);
-    setTimeout(() => {
-      const ok = loginWithPassword(loginEmail, loginPass, 'admin');
-      setLoading(false);
-      if (ok) {
-        router.push('/admin/dashboard');
-      } else {
-        setError('Invalid credentials or insufficient permissions.');
-      }
-    }, 400);
-  };
-
-  const handleQuickLogin = () => {
-    setEmail(ADMIN_CREDS.email);
-    setPassword(ADMIN_CREDS.pass);
-    setLoading(true);
-    setTimeout(() => {
-      const ok = loginWithPassword(ADMIN_CREDS.email, ADMIN_CREDS.pass, 'admin');
-      setLoading(false);
-      if (ok) router.push('/admin/dashboard');
-      else setError('Quick login failed.');
-    }, 350);
+    const result = await loginWithPassword(loginEmail, password);
+    setLoading(false);
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
+    // The server decides what an admin is; this only picks where to land.
+    if (useStore.getState().currentUser?.role !== 'admin') {
+      setError('That account does not have admin access.');
+      return;
+    }
+    router.push('/admin/dashboard');
   };
 
   return (
@@ -328,29 +316,11 @@ export default function AdminLoginPage() {
                   letterSpacing: '0.06em',
                 }}
               >
-                🔑 Demo Access
+                Restricted
               </span>
-              <button
-                type="button"
-                onClick={handleQuickLogin}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 5,
-                  background: 'rgba(234,179,8,0.18)',
-                  border: '1px solid rgba(234,179,8,0.35)',
-                  borderRadius: 8,
-                  padding: '4px 10px',
-                  color: '#eab308',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  fontFamily: 'var(--font-body)',
-                }}
-              >
-                <Sparkles size={11} />
-                <span>1-Click Auto Login</span>
-              </button>
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', fontWeight: 600 }}>
+                Admin accounts are created by an existing admin.
+              </span>
             </div>
           </div>
         </div>

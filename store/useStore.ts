@@ -1,8 +1,18 @@
 // ============================================================
-// store/useStore.ts — Global Zustand state management with RBAC
-// Full Authentication (Email + Password / OTP), Multi-Role Profiles,
-// Corporate Bid Evaluation, Vendor Blind Bidding, and Admin Suite.
+// store/useStore.ts — Global client state.
+//
+// This used to BE the database: seed arrays, plaintext passwords and an
+// impersonation switch, all persisted to localStorage. It is now a thin
+// client cache in front of the real API. Rules:
+//
+//   · No user records, profiles, RFPs or bids are persisted to localStorage.
+//     Everything comes from the server on load and after every mutation.
+//   · The session lives in an httpOnly cookie the browser never exposes to
+//     JavaScript; `currentUser` here is a *display copy*, not a credential.
+//   · Nothing in this file authorises anything. The server decides.
 // ============================================================
+
+'use client';
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -15,60 +25,53 @@ import {
   RFP,
   Bid,
   BidLineItem,
+  CategoryDetails,
+  UniversalFields,
   Toast,
 } from '@/lib/types';
 import { THEMES, DEFAULT_THEME, ThemeConfig } from '@/lib/themes';
 import { generateId } from '@/lib/utils';
-import {
-  SEED_USERS,
-  SEED_CORPORATE_PROFILES,
-  SEED_VENDOR_PROFILES,
-  SEED_RFPS,
-  SEED_BIDS,
-} from '@/lib/mockDatabase';
-import { GURUGRAM_PRESEEDED_VENUES } from '@/data/venues';
+import { api, describeApiError } from '@/lib/apiClient';
 
-export function findPreseededVenueProfile(email: string, userId?: string): VendorProfile | undefined {
-  const cleanEmail = email.trim().toLowerCase();
-  const venue = GURUGRAM_PRESEEDED_VENUES.find(
-    (v) => v.email.toLowerCase() === cleanEmail || (userId && `user_venue_${v.sanitizedKey}` === userId)
-  );
-  if (!venue) return undefined;
-
-  return {
-    id: `vp_venue_${venue.sanitizedKey}`,
-    userId: userId || `user_venue_${venue.sanitizedKey}`,
-    category: venue.category,
-    vendorName: `${venue.name} Representative`,
-    companyName: venue.name,
-    mobile: venue.phone,
-    companyMobile: venue.companyPhone,
-    address: venue.address,
-    city: venue.city,
-    locality: venue.locality,
-    distanceKm: venue.distanceKm,
-    entityType: venue.entityType || 'Pvt Ltd',
-    gstNumber: venue.gstNumber,
-    gstVerified: true,
-    portfolioSummary: venue.description,
-    corporateSuitability: venue.corporateSuitability,
-    pastClients: venue.pastClients || [],
-    status: 'approved',
-    isCompleted: true,
-    submittedAt: '2026-07-20T10:00:00Z',
-    verifiedAt: '2026-07-20T12:00:00Z',
-    place_id: venue.place_id,
-    formatted_address: venue.address,
-    placeName: venue.name,
-    lat: venue.lat,
-    lng: venue.lng,
-    rating: venue.rating,
-    user_ratings_total: venue.user_ratings_total,
-    timings: venue.timings,
-    amenities: venue.amenities,
-    avgCostPerPerson: venue.avgCostPerPerson,
-  };
+// ─── Server payload shapes ─────────────────────────────────────
+interface SessionPayload {
+  user: (User & { approvalStatus: 'pending' | 'approved' | 'rejected'; emailVerified: boolean }) | null;
+  corporateProfile: CorporateProfile | null;
+  vendorProfile: VendorProfile | null;
 }
+
+export interface AdminUserRecord extends User {
+  approvalStatus: 'pending' | 'approved' | 'rejected';
+  emailVerified: boolean;
+  deletedAt?: string | null;
+  rejectionReason?: string | null;
+  corporateProfile: CorporateProfile | null;
+  vendorProfile: VendorProfile | null;
+}
+
+export interface AuditEntry {
+  id: string;
+  actorEmail: string | null;
+  actorRole: string | null;
+  action: string;
+  entityType: string;
+  entityId: string | null;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface AdminStats {
+  employees: Record<string, number>;
+  vendors: Record<string, number>;
+  rfps: { total: number; active: number; byStatus: Record<string, number> };
+  bids: { total: number; accepted: number; totalQuotedValue: number };
+  categories: { rfps: Record<string, number>; vendors: Record<string, number> };
+}
+
+export type ActionResult = { success: boolean; message: string };
+
+const ok = (message: string): ActionResult => ({ success: true, message });
+const fail = (message: string): ActionResult => ({ success: false, message });
 
 interface COEStore {
   // ─── Theme & Day/Night ─────────────────────────────────────
@@ -79,19 +82,22 @@ interface COEStore {
   gravitySettled: boolean;
   isNightMode: boolean;
 
-  // ─── Authentication & RBAC State ───────────────────────────
+  // ─── Session ───────────────────────────────────────────────
   currentUser: User | null;
   currentCorporateProfile: CorporateProfile | null;
   currentVendorProfile: VendorProfile | null;
   authModalOpen: boolean;
-  generatedOtp: { email: string; code: string; role: UserRole } | null;
+  hydrated: boolean;
+  busy: boolean;
 
-  // ─── Relational Database Tables ────────────────────────────
-  users: User[];
+  // ─── Server-backed caches (never persisted) ────────────────
+  users: AdminUserRecord[];
   corporateProfiles: CorporateProfile[];
   vendorProfiles: VendorProfile[];
   rfpList: RFP[];
   bids: Bid[];
+  auditLog: AuditEntry[];
+  adminStats: AdminStats | null;
   toasts: Toast[];
 
   // ─── Day/Night Actions ─────────────────────────────────────
@@ -103,51 +109,102 @@ interface COEStore {
   openModal: (category?: CategoryType) => void;
   closeModal: () => void;
 
-  // ─── Toast Notifications ───────────────────────────────────
+  // ─── Toasts ────────────────────────────────────────────────
   addToast: (toast: Omit<Toast, 'id'>) => void;
   removeToast: (id: string) => void;
 
-  // ─── Auth & Onboarding Actions ─────────────────────────────
+  // ─── Auth ──────────────────────────────────────────────────
   openAuthModal: () => void;
   closeAuthModal: () => void;
-  loginWithPassword: (email: string, password: string, role: UserRole) => boolean;
-  registerUser: (email: string, password: string, role: UserRole) => boolean;
-  sendOtp: (email: string, role: UserRole) => string;
-  verifyOtp: (email: string, code: string) => { success: boolean; isNewUser: boolean; role: UserRole };
-  switchPersona: (role: UserRole, specificEmail?: string) => void;
-  logout: () => void;
-  saveCorporateProfile: (profile: Omit<CorporateProfile, 'id' | 'userId' | 'email' | 'isCompleted' | 'status'>) => void;
-  updateCorporateProfile: (profile: Partial<CorporateProfile>) => void;
-  saveVendorProfile: (profile: Omit<VendorProfile, 'id' | 'userId' | 'status' | 'isCompleted' | 'gstVerified'>) => void;
-  updateVendorProfile: (profile: Partial<VendorProfile>) => void;
-  registerNewVenue: (venueData: Omit<VendorProfile, 'id' | 'userId' | 'status' | 'isCompleted' | 'gstVerified'>) => void;
-  changePassword: (oldPassword: string, newPassword: string) => { success: boolean; message: string };
+  hydrateSession: () => Promise<void>;
+  loginWithPassword: (email: string, password: string) => Promise<ActionResult>;
+  registerUser: (
+    input:
+      | { role: 'corporate'; email: string; password: string; name?: string; officeCompanyName?: string }
+      | {
+          role: 'vendor';
+          email: string;
+          password: string;
+          companyName: string;
+          vendorName?: string;
+          gstNumber: string;
+          category: CategoryType;
+          serviceAreas: string[];
+          mobile?: string;
+          city?: string;
+        }
+  ) => Promise<ActionResult>;
+  resendVerification: (email: string) => Promise<ActionResult>;
+  requestPasswordReset: (email: string) => Promise<ActionResult>;
+  logout: () => Promise<void>;
+  changePassword: (oldPassword: string, newPassword: string) => Promise<ActionResult>;
+  deleteAccount: (password: string) => Promise<ActionResult>;
 
-  // ─── Corporate Actions ─────────────────────────────────────
-  submitRFP: (rfp: Omit<RFP, 'id' | 'submittedAt' | 'status' | 'corporateId' | 'corporateUserId' | 'companyName' | 'totalBudget'>) => void;
-  deleteRFP: (rfpId: string) => void;
-  acceptBid: (bidId: string, rfpId: string) => void;
+  // ─── Profiles ──────────────────────────────────────────────
+  saveCorporateProfile: (profile: Partial<CorporateProfile> & Record<string, unknown>) => Promise<ActionResult>;
+  updateCorporateProfile: (profile: Partial<CorporateProfile> & Record<string, unknown>) => Promise<ActionResult>;
+  saveVendorProfile: (profile: Partial<VendorProfile> & Record<string, unknown>) => Promise<ActionResult>;
+  updateVendorProfile: (profile: Partial<VendorProfile> & Record<string, unknown>) => Promise<ActionResult>;
+
+  // ─── Data loading ──────────────────────────────────────────
+  loadRfps: (query?: Record<string, string>) => Promise<void>;
+  loadRfpDetail: (rfpId: string) => Promise<void>;
+  loadMyBids: () => Promise<void>;
+  loadVendorDirectory: (query?: Record<string, string>) => Promise<void>;
+  loadAdminData: () => Promise<void>;
+
+  // ─── Corporate actions ─────────────────────────────────────
+  submitRFP: (rfp: {
+    category: CategoryType;
+    occasion?: string;
+    categoryDetails: CategoryDetails | Record<string, unknown>;
+    universal: UniversalFields | Record<string, unknown>;
+    serviceArea?: string;
+    bidVisibility?: 'masked' | 'open';
+  }) => Promise<ActionResult>;
+  deleteRFP: (rfpId: string) => Promise<ActionResult>;
+  acceptBid: (bidId: string, rfpId: string) => Promise<ActionResult>;
+  completeRFP: (rfpId: string) => Promise<ActionResult>;
+  rateVendor: (rfpId: string, rating: number, comment: string) => Promise<ActionResult>;
   getBidsForRFP: (rfpId: string) => Bid[];
 
-  // ─── Vendor Actions ───────────────────────────────────────
-  submitBid: (bid: Omit<Bid, 'id' | 'submittedAt' | 'status' | 'vendorId' | 'vendorUserId' | 'vendorName' | 'vendorCompany' | 'distanceKm' | 'matchPercentage'>) => void;
-  reviseBid: (bidId: string, newPrice: number, newProposal: string, newLineItems?: BidLineItem[]) => void;
-  getVendorOwnBids: (vendorUserId: string) => Bid[];
+  // ─── Vendor actions ────────────────────────────────────────
+  submitBid: (bid: {
+    rfpId: string;
+    totalPrice: number;
+    lineItems?: BidLineItem[];
+    proposal?: string;
+    validUntil?: string;
+  }) => Promise<ActionResult>;
+  reviseBid: (
+    bidId: string,
+    newPrice: number,
+    newProposal: string,
+    newLineItems?: BidLineItem[]
+  ) => Promise<ActionResult>;
+  withdrawBid: (bidId: string) => Promise<ActionResult>;
+  getVendorOwnBids: () => Bid[];
 
-  // ─── Self-Service Account Management ────────────────────
-  deleteAccount: () => void;
-  withdrawBid: (bidId: string) => void;
-
-  // ─── Admin Actions ────────────────────────────────────────
-  adminVerifyCorporate: (corporateId: string, status: 'approved' | 'rejected' | 'pending') => void;
-  adminVerifyVendor: (vendorId: string, status: 'approved' | 'rejected' | 'pending') => void;
-  adminToggleUserSuspension: (userId: string) => void;
-  adminDeleteUser: (userId: string) => void;
-  adminUpdateUser: (userId: string, data: Partial<User>) => void;
-  adminDeleteVendorProfile: (vendorId: string) => void;
-  adminDeleteBid: (bidId: string) => void;
-  adminUpdateBid: (bidId: string, data: Partial<Bid>) => void;
+  // ─── Admin actions ─────────────────────────────────────────
+  adminDecide: (userId: string, decision: 'approved' | 'rejected' | 'pending', reason?: string) => Promise<ActionResult>;
+  adminVerifyCorporate: (userId: string, status: 'approved' | 'rejected' | 'pending') => Promise<ActionResult>;
+  adminVerifyVendor: (userId: string, status: 'approved' | 'rejected' | 'pending') => Promise<ActionResult>;
+  adminToggleUserSuspension: (userId: string) => Promise<ActionResult>;
+  adminDeleteUser: (userId: string) => Promise<ActionResult>;
+  adminUpdateUser: (userId: string, data: Partial<AdminUserRecord>) => Promise<ActionResult>;
+  adminDeleteBid: (bidId: string) => Promise<ActionResult>;
+  adminUpdateBid: (bidId: string, data: { status?: 'pending' | 'rejected' | 'withdrawn' }) => Promise<ActionResult>;
+  adminDeleteRFP: (rfpId: string) => Promise<ActionResult>;
 }
+
+const qs = (query?: Record<string, string>) => {
+  if (!query) return '';
+  const params = new URLSearchParams(
+    Object.entries(query).filter(([, v]) => v !== undefined && v !== '')
+  );
+  const s = params.toString();
+  return s ? `?${s}` : '';
+};
 
 export const useStore = create<COEStore>()(
   persist(
@@ -160,967 +217,532 @@ export const useStore = create<COEStore>()(
       gravitySettled: false,
       isNightMode: true,
 
-      // No user auto-logged in — all users must sign in from the homepage
       currentUser: null,
       currentCorporateProfile: null,
       currentVendorProfile: null,
       authModalOpen: false,
-      generatedOtp: null,
+      hydrated: false,
+      busy: false,
 
-      // Initial Tables seeded from mock database
-      users: SEED_USERS,
-      corporateProfiles: SEED_CORPORATE_PROFILES,
-      vendorProfiles: SEED_VENDOR_PROFILES,
-      rfpList: SEED_RFPS,
-      bids: SEED_BIDS,
+      users: [],
+      corporateProfiles: [],
+      vendorProfiles: [],
+      rfpList: [],
+      bids: [],
+      auditLog: [],
+      adminStats: null,
       toasts: [],
 
-      // ─── Day/Night Actions ──────────────────────────────────
+      // ─── Day/Night ──────────────────────────────────────────
       toggleNightMode: () => set((state) => ({ isNightMode: !state.isNightMode })),
       setNightMode: (isNight) => set({ isNightMode: isNight }),
       setHoveredCategory: (cat) => set({ hoveredCategory: cat }),
 
       selectCategory: (category) =>
-        set({
-          activeCategory: category,
-          theme: THEMES[category],
-          gravitySettled: true,
-        }),
+        set({ activeCategory: category, theme: THEMES[category], gravitySettled: true }),
 
       resetCategory: () =>
-        set({
-          activeCategory: null,
-          theme: DEFAULT_THEME,
-          gravitySettled: false,
-          modalOpen: false,
-        }),
+        set({ activeCategory: null, theme: DEFAULT_THEME, gravitySettled: false, modalOpen: false }),
 
       openModal: (category?: CategoryType) => {
         const cat = category || get().activeCategory || 'food';
-        set({
-          activeCategory: cat,
-          theme: THEMES[cat],
-          modalOpen: true,
-        });
+        set({ activeCategory: cat, theme: THEMES[cat], modalOpen: true });
       },
       closeModal: () => set({ modalOpen: false }),
 
-      // ─── Toast Notifications ─────────────────────────────────
+      // ─── Toasts ─────────────────────────────────────────────
       addToast: (toastData) => {
         const id = generateId();
-        const newToast: Toast = { ...toastData, id };
-        set((state) => ({ toasts: [...state.toasts, newToast] }));
-
-        // Auto remove after duration
-        setTimeout(() => {
-          get().removeToast(id);
-        }, toastData.duration || 4500);
+        set((state) => ({ toasts: [...state.toasts, { ...toastData, id }] }));
+        setTimeout(() => get().removeToast(id), toastData.duration || 4500);
       },
+      removeToast: (id) => set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) })),
 
-      removeToast: (id) => {
-        set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) }));
-      },
-
-      // ─── Auth Modal ──────────────────────────────────────────
       openAuthModal: () => set({ authModalOpen: true }),
       closeAuthModal: () => set({ authModalOpen: false }),
 
-      // ─── Test Password / Direct Authentication ───────────────
-      loginWithPassword: (email, password, role) => {
-        const cleanEmail = email.trim().toLowerCase();
-        const state = get();
-
-        // Check if this is one of our 33 verified pre-seeded Gurugram venues
-        const preseededVenue = findPreseededVenueProfile(cleanEmail);
-
-        // Known test credentials (base seed passwords)
-        const KNOWN_PASSWORDS: Record<string, string> = {
-          'admin@coe.com': 'test1234',
-          'hr@nexus.com': 'test1234',
-          'admin.ops@apexfin.com': 'test1234',
-          'people@indigotec.com': 'test1234',
-          'sports@arenaturf.com': 'test1234',
-          'food@royalfeast.in': 'test1234',
-          'trips@summitretreats.in': 'test1234',
-          'gifts@luxehampers.com': 'test1234',
-          'dress@threadsco.in': 'test1234',
-          'sports2@proleagues.in': 'test1234',
-          'food2@cyberhubgourmet.com': 'test1234',
-          'trips2@wandercraft.in': 'test1234',
-          'gifts2@arcadeawards.com': 'test1234',
-          'dress2@brandwear.in': 'test1234',
-        };
-
-        // Determine the expected password
-        const preseededPassword = preseededVenue ? (preseededVenue as any)._defaultPassword || 'gurgaon123' : null;
-        const knownPassword = KNOWN_PASSWORDS[cleanEmail];
-        const expectedPassword = knownPassword || preseededPassword;
-
-        // Match existing seed user by email
-        let user = state.users.find((u) => u.email.toLowerCase() === cleanEmail);
-
-        // Validate password for existing users
-        if (user) {
-          // Check suspension first
-          if (user.isSuspended) {
-            get().addToast({ type: 'error', title: '🚫 Account Suspended', message: 'Your account has been suspended. Contact admin@coe.com.' });
-            return false;
-          }
-          // Validate password: check stored password or known default
-          const storedPass = user.password;
-          const validPass = storedPass || expectedPassword || 'gurgaon123';
-          if (password && validPass && password !== validPass) {
-            get().addToast({ type: 'error', title: '❌ Invalid Credentials', message: 'Incorrect password. Please try again.' });
-            return false;
-          }
-        }
-
-        if (!user) {
-          // Create user on-the-fly for new pre-seeded venue logins
-          if (!preseededVenue && expectedPassword && password !== expectedPassword) {
-            get().addToast({ type: 'error', title: '❌ Invalid Credentials', message: 'Incorrect email or password.' });
-            return false;
-          }
-          user = {
-            id: preseededVenue ? preseededVenue.userId : `user_${generateId()}`,
-            email: cleanEmail,
-            role: preseededVenue ? 'vendor' : role,
-            createdAt: new Date().toISOString(),
-            isSuspended: false,
-          };
-          set((s) => ({ users: [...s.users, user!] }));
-        }
-
-        // Find matching profiles in current state or from pre-seeded directory
-        let corpProf = state.corporateProfiles.find(
-          (p) => p.userId === user!.id || p.email?.toLowerCase() === cleanEmail
-        );
-        let vendorProf = state.vendorProfiles.find((p) => p.userId === user!.id) || preseededVenue;
-
-        if (preseededVenue) {
-          vendorProf = preseededVenue;
-          // Ensure profile is in state.vendorProfiles
-          if (!state.vendorProfiles.some((p) => p.id === preseededVenue.id || p.userId === user!.id)) {
-            set((s) => ({ vendorProfiles: [...s.vendorProfiles, preseededVenue] }));
-          }
-        }
-
-        // Auto-create minimal profile only for unknown corporate users
-        if (role === 'corporate' && !corpProf && !preseededVenue) {
-          corpProf = {
-            id: `corp_${generateId()}`,
-            userId: user.id,
-            name: 'Corporate Officer',
-            mobile: '9811200000',
-            email: cleanEmail,
-            officeCompanyName: 'New Corporate Account',
-            officeAddress: 'DLF Cyber City, Gurugram',
-            city: 'Gurugram',
-            position: 'Manager',
-            department: 'Operations',
-            isCompleted: false,
-            status: 'pending',
-            submittedAt: new Date().toISOString(),
-          };
-          set((s) => ({ corporateProfiles: [...s.corporateProfiles, corpProf!] }));
-        }
-
-        const effectiveRole = preseededVenue ? 'vendor' : role;
-
-        set({
-          currentUser: user,
-          currentCorporateProfile: effectiveRole === 'corporate' ? (corpProf || null) : null,
-          currentVendorProfile: effectiveRole === 'vendor' ? (vendorProf || null) : null,
-          authModalOpen: false,
-        });
-
-        get().addToast({
-          type: 'success',
-          title: `✅ Logged in as ${effectiveRole.toUpperCase()}`,
-          message: preseededVenue
-            ? `Welcome ${preseededVenue.companyName} (${preseededVenue.category.toUpperCase()})`
-            : `Authenticated successfully: ${cleanEmail}`,
-        });
-
-        return true;
-      },
-
-      registerUser: (email, password, role) => {
-        const cleanEmail = email.trim().toLowerCase();
-        const state = get();
-        const preseededVenue = findPreseededVenueProfile(cleanEmail);
-
-        // Check if user already exists
-        const existingUser = state.users.find((u) => u.email.toLowerCase() === cleanEmail);
-        if (existingUser) {
-          const existingCorp = state.corporateProfiles.find((p) => p.userId === existingUser.id);
-          const existingVen = state.vendorProfiles.find((p) => p.userId === existingUser.id) || preseededVenue;
+      // ─── Session ────────────────────────────────────────────
+      hydrateSession: async () => {
+        try {
+          const data = await api.get<SessionPayload>('/api/auth/session');
           set({
-            currentUser: existingUser,
-            currentCorporateProfile: existingCorp || null,
-            currentVendorProfile: existingVen || null,
+            currentUser: data.user,
+            currentCorporateProfile: data.corporateProfile,
+            currentVendorProfile: data.vendorProfile,
+            hydrated: true,
+          });
+        } catch {
+          set({ currentUser: null, currentCorporateProfile: null, currentVendorProfile: null, hydrated: true });
+        }
+      },
+
+      loginWithPassword: async (email, password) => {
+        set({ busy: true });
+        try {
+          const data = await api.post<SessionPayload>('/api/auth/login', { email, password });
+          set({
+            currentUser: data.user,
+            currentCorporateProfile: data.corporateProfile,
+            currentVendorProfile: data.vendorProfile,
             authModalOpen: false,
+            hydrated: true,
           });
-          return true;
+          get().addToast({
+            type: 'success',
+            title: 'Signed in',
+            message: `Welcome back, ${data.user?.email ?? ''}`,
+          });
+          return ok('Signed in.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not sign in', message });
+          return fail(message);
+        } finally {
+          set({ busy: false });
         }
+      },
 
-        // Create brand new user without pre-filled profile
-        const newUser: User = {
-          id: preseededVenue ? preseededVenue.userId : `user_${generateId()}`,
-          email: cleanEmail,
-          role: preseededVenue ? 'vendor' : role,
-          createdAt: new Date().toISOString(),
-          isSuspended: false,
-        };
+      registerUser: async (input) => {
+        set({ busy: true });
+        try {
+          await api.post('/api/auth/signup', input);
+          get().addToast({
+            type: 'success',
+            title: 'Check your inbox',
+            message: 'Confirm your email, then an admin reviews your account before it goes live.',
+            duration: 8000,
+          });
+          return ok('Check your inbox to confirm your email address.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Signup failed', message });
+          return fail(message);
+        } finally {
+          set({ busy: false });
+        }
+      },
 
-        const initialVendor = preseededVenue || null;
-        if (preseededVenue) {
-          set((s) => ({
-            users: [...s.users, newUser],
-            vendorProfiles: s.vendorProfiles.some((p) => p.id === preseededVenue.id)
-              ? s.vendorProfiles
-              : [...s.vendorProfiles, preseededVenue],
+      resendVerification: async (email) => {
+        try {
+          await api.post('/api/auth/resend-verification', { email });
+          return ok('If that address needs confirming, a new link is on its way.');
+        } catch (error) {
+          return fail(describeApiError(error));
+        }
+      },
+
+      requestPasswordReset: async (email) => {
+        try {
+          await api.post('/api/auth/forgot-password', { email });
+          return ok('If that address is registered, a reset link is on its way.');
+        } catch (error) {
+          return fail(describeApiError(error));
+        }
+      },
+
+      logout: async () => {
+        try {
+          await api.post('/api/auth/logout');
+        } catch {
+          /* the cookie is cleared server-side on the next request either way */
+        }
+        set({
+          currentUser: null,
+          currentCorporateProfile: null,
+          currentVendorProfile: null,
+          users: [],
+          corporateProfiles: [],
+          vendorProfiles: [],
+          rfpList: [],
+          bids: [],
+          auditLog: [],
+          adminStats: null,
+        });
+        get().addToast({ type: 'info', title: 'Signed out', message: 'You have been securely signed out.' });
+      },
+
+      changePassword: async (oldPassword, newPassword) => {
+        try {
+          await api.post('/api/auth/change-password', {
+            currentPassword: oldPassword,
+            newPassword,
+          });
+          get().addToast({
+            type: 'success',
+            title: 'Password updated',
+            message: 'Your other devices have been signed out.',
+          });
+          return ok('Password updated.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not update password', message });
+          return fail(message);
+        }
+      },
+
+      deleteAccount: async (password) => {
+        try {
+          await api.post('/api/auth/delete-account', { password });
+          set({
+            currentUser: null,
+            currentCorporateProfile: null,
+            currentVendorProfile: null,
+            rfpList: [],
+            bids: [],
+          });
+          get().addToast({ type: 'info', title: 'Account closed', message: 'Sorry to see you go.' });
+          return ok('Account closed.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not close account', message });
+          return fail(message);
+        }
+      },
+
+      // ─── Profiles ───────────────────────────────────────────
+      saveCorporateProfile: async (profile) => get().updateCorporateProfile(profile),
+
+      updateCorporateProfile: async (profile) => {
+        try {
+          const saved = await api.put<CorporateProfile>('/api/profile/corporate', profile);
+          set({ currentCorporateProfile: saved });
+          get().addToast({ type: 'success', title: 'Profile saved', message: 'Your company details are up to date.' });
+          return ok('Profile saved.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not save profile', message });
+          return fail(message);
+        }
+      },
+
+      saveVendorProfile: async (profile) => get().updateVendorProfile(profile),
+
+      updateVendorProfile: async (profile) => {
+        try {
+          const saved = await api.put<VendorProfile>('/api/profile/vendor', profile);
+          set({ currentVendorProfile: saved });
+          get().addToast({ type: 'success', title: 'Profile saved', message: 'Your listing is up to date.' });
+          return ok('Profile saved.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not save profile', message });
+          return fail(message);
+        }
+      },
+
+      // ─── Loading ────────────────────────────────────────────
+      loadRfps: async (query) => {
+        try {
+          const data = await api.get<{ rfps: RFP[] }>(`/api/rfps${qs(query)}`);
+          set({ rfpList: data.rfps });
+        } catch (error) {
+          if ((error as { status?: number }).status !== 401) {
+            console.warn('[store] loadRfps', error);
+          }
+        }
+      },
+
+      loadRfpDetail: async (rfpId) => {
+        try {
+          const data = await api.get<{ rfp: RFP; bids: Bid[] }>(`/api/rfps/${encodeURIComponent(rfpId)}`);
+          set((state) => ({
+            rfpList: state.rfpList.some((r) => r.id === data.rfp.id)
+              ? state.rfpList.map((r) => (r.id === data.rfp.id ? data.rfp : r))
+              : [data.rfp, ...state.rfpList],
+            bids: [...state.bids.filter((b) => b.rfpId !== rfpId), ...data.bids],
           }));
-        } else {
-          set((s) => ({ users: [...s.users, newUser] }));
+        } catch (error) {
+          console.warn('[store] loadRfpDetail', error);
         }
-
-        set({
-          currentUser: newUser,
-          currentCorporateProfile: null,
-          currentVendorProfile: initialVendor,
-          authModalOpen: false,
-        });
-
-        get().addToast({
-          type: 'success',
-          title: 'Account Registered',
-          message: `Account created for ${cleanEmail}. Please complete your KYC profile.`,
-        });
-
-        return true;
       },
 
-      // ─── OTP Authentication Flow ─────────────────────────────
-      sendOtp: (email, role) => {
-        const cleanEmail = email.trim().toLowerCase();
-        // Generate a clean 6-digit OTP code (always '123456' for rapid testing in dev)
-        const code = '123456';
-        set({ generatedOtp: { email: cleanEmail, code, role } });
-
-        get().addToast({
-          type: 'info',
-          title: '🔑 Verification Code Sent',
-          message: `Test OTP is: ${code} (sent to ${cleanEmail})`,
-          duration: 8000,
-        });
-
-        return code;
-      },
-
-      verifyOtp: (email, code) => {
-        const cleanEmail = email.trim().toLowerCase();
-        const pending = get().generatedOtp;
-
-        // In test mode: accept '123456' or the generated code
-        const isValid =
-          (pending && pending.email.toLowerCase() === cleanEmail && pending.code === code) ||
-          code === '123456';
-
-        if (!isValid) {
-          get().addToast({
-            type: 'error',
-            title: 'Invalid OTP Code',
-            message: 'The 6-digit code you entered is incorrect or has expired.',
+      loadMyBids: async () => {
+        try {
+          const data = await api.get<{ bids: (Bid & { rfp: RFP })[] }>('/api/bids');
+          set((state) => {
+            const rfpsFromBids = data.bids.map((b) => b.rfp).filter(Boolean);
+            const merged = [...state.rfpList];
+            for (const r of rfpsFromBids) {
+              if (!merged.some((x) => x.id === r.id)) merged.push(r);
+            }
+            return { bids: data.bids, rfpList: merged };
           });
-          return { success: false, isNewUser: false, role: 'corporate' };
+        } catch (error) {
+          console.warn('[store] loadMyBids', error);
         }
+      },
 
-        const state = get();
-        const preseededVenue = findPreseededVenueProfile(cleanEmail);
-        let existingUser = state.users.find((u) => u.email.toLowerCase() === cleanEmail);
-
-        // Block suspended users
-        if (existingUser?.isSuspended) {
-          get().addToast({ type: 'error', title: '🚫 Account Suspended', message: 'Your account has been suspended. Contact admin@coe.com.' });
-          return { success: false, isNewUser: false, role: 'corporate' };
+      loadVendorDirectory: async (query) => {
+        try {
+          const data = await api.get<{ vendors: VendorProfile[] }>(`/api/vendors${qs(query)}`);
+          set({ vendorProfiles: data.vendors });
+        } catch (error) {
+          console.warn('[store] loadVendorDirectory', error);
         }
-
-        const selectedRole = preseededVenue ? 'vendor' : (pending?.role || 'corporate');
-
-        let isNewUser = false;
-        if (!existingUser) {
-          isNewUser = !preseededVenue;
-          existingUser = {
-            id: preseededVenue ? preseededVenue.userId : `user_${generateId()}`,
-            email: cleanEmail,
-            role: selectedRole,
-            createdAt: new Date().toISOString(),
-            isSuspended: false,
-          };
-          set((s) => ({ users: [...s.users, existingUser!] }));
-        }
-
-        const corpProf = state.corporateProfiles.find((p) => p.userId === existingUser!.id);
-        let vendorProf = state.vendorProfiles.find((p) => p.userId === existingUser!.id) || preseededVenue;
-
-        if (preseededVenue && !state.vendorProfiles.some((p) => p.id === preseededVenue.id)) {
-          set((s) => ({ vendorProfiles: [...s.vendorProfiles, preseededVenue] }));
-        }
-
-        set({
-          currentUser: existingUser,
-          currentCorporateProfile: corpProf || null,
-          currentVendorProfile: vendorProf || null,
-          generatedOtp: null,
-          authModalOpen: false,
-        });
-
-        get().addToast({
-          type: 'success',
-          title: '✅ Successfully Authenticated',
-          message: `Logged in as ${cleanEmail} (${existingUser.role.toUpperCase()})`,
-        });
-
-        return {
-          success: true,
-          isNewUser,
-          role: existingUser.role,
-        };
       },
 
-      // ─── Persona Switcher (For rapid testing across all roles) ──
-      switchPersona: (role, specificEmail) => {
-        const state = get();
-        let targetUser: User | undefined;
-        const cleanEmail = specificEmail?.trim().toLowerCase();
-        const preseededVenue = cleanEmail ? findPreseededVenueProfile(cleanEmail) : undefined;
-
-        if (cleanEmail) {
-          targetUser = state.users.find((u) => u.email.toLowerCase() === cleanEmail);
-          if (!targetUser && preseededVenue) {
-            targetUser = {
-              id: preseededVenue.userId,
-              email: cleanEmail,
-              role: 'vendor',
-              createdAt: '2026-07-20T10:00:00Z',
-              isSuspended: false,
-            };
-            set((s) => ({ users: [...s.users, targetUser!] }));
-          }
-        } else {
-          targetUser = state.users.find((u) => u.role === role);
-        }
-
-        if (!targetUser) return;
-
-        const corpProf = state.corporateProfiles.find((p) => p.userId === targetUser.id);
-        let vendorProf = state.vendorProfiles.find((p) => p.userId === targetUser.id) || preseededVenue;
-
-        if (preseededVenue && !state.vendorProfiles.some((p) => p.id === preseededVenue.id)) {
-          set((s) => ({ vendorProfiles: [...s.vendorProfiles, preseededVenue] }));
-        }
-
-        set({
-          currentUser: targetUser,
-          currentCorporateProfile: corpProf || null,
-          currentVendorProfile: vendorProf || null,
-        });
-
-        const roleLabel =
-          role === 'corporate'
-            ? 'Corporate Employee (Demand Side)'
-            : role === 'vendor'
-            ? `Vendor (${vendorProf?.category.toUpperCase() || 'SUPPLY'})`
-            : 'Super Admin (Control Center)';
-
-        get().addToast({
-          type: 'info',
-          title: `Switched to ${role.toUpperCase()}`,
-          message: `Active persona: ${targetUser.email} · ${roleLabel}`,
-        });
-      },
-
-      logout: () => {
-        set({
-          currentUser: null,
-          currentCorporateProfile: null,
-          currentVendorProfile: null,
-        });
-        get().addToast({
-          type: 'info',
-          title: 'Logged Out',
-          message: 'You have been securely signed out.',
-        });
-      },
-
-      // ─── Onboarding & Profile Updaters ───────────────────────
-      saveCorporateProfile: (profileData) => {
-        const state = get();
-        const user = state.currentUser;
-        if (!user) return;
-
-        const newProf: CorporateProfile = {
-          ...profileData,
-          id: `corp_prof_${generateId()}`,
-          userId: user.id,
-          email: user.email,
-          isCompleted: true,
-          status: 'pending',
-          submittedAt: new Date().toISOString(),
-        };
-
-        set((s) => ({
-          corporateProfiles: [
-            ...s.corporateProfiles.filter((p) => p.userId !== user.id),
-            newProf,
-          ],
-          currentCorporateProfile: newProf,
-        }));
-
-        get().addToast({
-          type: 'info',
-          title: '🏢 Corporate Profile Submitted',
-          message: `Welcome ${profileData.name}! Your account is pending verification by the COE Admin.`,
-        });
-      },
-
-      updateCorporateProfile: (profileData) => {
-        const state = get();
-        const current = state.currentCorporateProfile;
-        if (!current) return;
-
-        const updated: CorporateProfile = {
-          ...current,
-          ...profileData,
-        };
-
-        set((s) => ({
-          corporateProfiles: s.corporateProfiles.map((p) => (p.id === current.id ? updated : p)),
-          currentCorporateProfile: updated,
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: 'Profile Updated',
-          message: 'Corporate profile details saved successfully.',
-        });
-      },
-
-      saveVendorProfile: (profileData) => {
-        const state = get();
-        const user = state.currentUser;
-        if (!user) return;
-
-        const newProf: VendorProfile = {
-          ...profileData,
-          id: `vendor_prof_${generateId()}`,
-          userId: user.id,
-          isCompleted: true,
-          status: 'pending',
-          gstVerified: false,
-          submittedAt: new Date().toISOString(),
-        };
-
-        set((s) => ({
-          vendorProfiles: [
-            ...s.vendorProfiles.filter((p) => p.userId !== user.id),
-            newProf,
-          ],
-          currentVendorProfile: newProf,
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: '🏪 Vendor Profile Submitted',
-          message: 'Your onboarding profile and GSTIN are in queue for Admin verification.',
-        });
-      },
-
-      updateVendorProfile: (profileData) => {
-        const state = get();
-        const current = state.currentVendorProfile;
-        if (!current) return;
-
-        const updated: VendorProfile = {
-          ...current,
-          ...profileData,
-        };
-
-        set((s) => ({
-          vendorProfiles: s.vendorProfiles.map((v) => (v.id === current.id ? updated : v)),
-          currentVendorProfile: updated,
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: 'Vendor Profile Updated',
-          message: 'Your vendor details, service range, and references have been saved.',
-        });
-      },
-
-      registerNewVenue: (venueData) => {
-        const state = get();
-        const user = state.currentUser;
-        if (!user) return;
-
-        const newProf: VendorProfile = {
-          ...venueData,
-          id: `vp_venue_${generateId()}`,
-          userId: user.id,
-          isCompleted: true,
-          status: 'approved',
-          gstVerified: true,
-          submittedAt: new Date().toISOString(),
-          verifiedAt: new Date().toISOString(),
-          distanceKm: venueData.distanceKm || Math.round((Math.random() * 6 + 1.5) * 10) / 10,
-          rating: venueData.rating || 4.7,
-          user_ratings_total: venueData.user_ratings_total || 64,
-        };
-
-        set((s) => ({
-          vendorProfiles: [newProf, ...s.vendorProfiles],
-          currentVendorProfile: newProf,
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: '🎉 New Venue Registered',
-          message: `${venueData.companyName} has been registered and verified in Gurugram!`,
-        });
-      },
-
-      changePassword: (oldPassword, newPassword) => {
-        const state = get();
-        const user = state.currentUser;
-        if (!user) return { success: false, message: 'Not logged in' };
-
-        const currentPass = user.password || 'gurgaon123';
-        if (oldPassword !== currentPass && oldPassword !== 'gurgaon123' && oldPassword !== 'test1234') {
-          get().addToast({
-            type: 'error',
-            title: 'Password Change Failed',
-            message: 'Current password does not match.',
+      loadAdminData: async () => {
+        try {
+          const [usersData, rfpData, bidData, statsData, auditData] = await Promise.all([
+            api.get<{ users: AdminUserRecord[] }>('/api/admin/users?limit=100'),
+            api.get<{ rfps: RFP[] }>('/api/admin/rfps?limit=100'),
+            api.get<{ bids: Bid[] }>('/api/admin/bids?limit=100'),
+            api.get<AdminStats>('/api/admin/stats'),
+            api.get<{ entries: AuditEntry[] }>('/api/admin/audit?limit=100'),
+          ]);
+          set({
+            users: usersData.users,
+            corporateProfiles: usersData.users
+              .map((u) => u.corporateProfile)
+              .filter((p): p is CorporateProfile => Boolean(p)),
+            vendorProfiles: usersData.users
+              .map((u) => u.vendorProfile)
+              .filter((p): p is VendorProfile => Boolean(p)),
+            rfpList: rfpData.rfps,
+            bids: bidData.bids,
+            adminStats: statsData,
+            auditLog: auditData.entries,
           });
-          return { success: false, message: 'Current password is incorrect' };
+        } catch (error) {
+          console.warn('[store] loadAdminData', error);
         }
-
-        const updatedUser: User = { ...user, password: newPassword };
-        set((s) => ({
-          currentUser: updatedUser,
-          users: s.users.map((u) => (u.id === user.id ? updatedUser : u)),
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: '🔒 Password Updated',
-          message: 'Your account credentials have been successfully updated.',
-        });
-        return { success: true, message: 'Password updated successfully' };
       },
 
-      // ─── Corporate RFP Actions ───────────────────────────────
-      submitRFP: (rfpData) => {
-        const state = get();
-        const user = state.currentUser;
-        const corp = state.currentCorporateProfile;
-
-        if (!user || user.role !== 'corporate' || !corp) {
+      // ─── Corporate ──────────────────────────────────────────
+      submitRFP: async (rfp) => {
+        try {
+          await api.post('/api/rfps', rfp);
+          await get().loadRfps();
           get().addToast({
-            type: 'error',
-            title: '🔒 Sign In Required',
-            message: 'You must be logged in as a Corporate to publish an RFP.',
+            type: 'success',
+            title: 'Requirement posted',
+            message: 'Vendors in this category can start bidding now.',
           });
-          return;
+          return ok('Requirement posted.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not post requirement', message });
+          return fail(message);
         }
-
-        if (corp.status !== 'approved') {
-          get().addToast({
-            type: 'warning',
-            title: '⏳ Verification Pending',
-            message: 'Your corporate profile is awaiting Admin approval before you can publish RFPs.',
-          });
-          return;
-        }
-
-        const totalBudget = rfpData.universal.persons * rfpData.universal.budgetPerPerson;
-
-        const newRFP: RFP = {
-          ...rfpData,
-          id: `rfp_${generateId()}`,
-          corporateId: corp.id,
-          corporateUserId: user.id,
-          companyName: corp.officeCompanyName,
-          totalBudget,
-          submittedAt: new Date().toISOString(),
-          status: 'open',
-        };
-
-        set((s) => ({ rfpList: [newRFP, ...s.rfpList] }));
-
-        get().addToast({
-          type: 'success',
-          title: '🎉 Corporate RFP Published',
-          message: `Live Auction created for ${rfpData.category.toUpperCase()} (${rfpData.universal.persons} pax)!`,
-        });
       },
 
-      deleteRFP: (rfpId) => {
-        const state = get();
-        const user = state.currentUser;
-        const rfp = state.rfpList.find((r) => r.id === rfpId);
-        // Ownership guard: only the RFP owner or admin can delete
-        if (!rfp) return;
-        if (user?.role !== 'admin' && rfp.corporateUserId !== user?.id) {
-          get().addToast({ type: 'error', title: '🔒 Unauthorized', message: 'You can only delete your own RFPs.' });
-          return;
+      deleteRFP: async (rfpId) => {
+        try {
+          await api.del(`/api/rfps/${encodeURIComponent(rfpId)}`);
+          set((state) => ({ rfpList: state.rfpList.filter((r) => r.id !== rfpId) }));
+          get().addToast({ type: 'warning', title: 'Requirement withdrawn', message: 'Open bids were closed.' });
+          return ok('Requirement withdrawn.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not withdraw', message });
+          return fail(message);
         }
-        set((s) => ({
-          rfpList: s.rfpList.filter((r) => r.id !== rfpId),
-          bids: s.bids.filter((b) => b.rfpId !== rfpId),
-        }));
-
-        get().addToast({
-          type: 'info',
-          title: 'RFP Removed',
-          message: 'The requirement and associated bids have been removed.',
-        });
       },
 
-      acceptBid: (bidId, rfpId) => {
-        const state = get();
-        const user = state.currentUser;
-        const rfp = state.rfpList.find((r) => r.id === rfpId);
-        const winningBid = state.bids.find((b) => b.id === bidId);
-
-        // Ownership guard: only the RFP's corporate owner can accept a bid
-        if (!rfp || (user?.role !== 'admin' && rfp.corporateUserId !== user?.id)) {
-          get().addToast({ type: 'error', title: '🔒 Unauthorized', message: 'You can only accept bids on your own RFPs.' });
-          return;
-        }
-
-        set((s) => ({
-          bids: s.bids.map((b) =>
-            b.id === bidId
-              ? { ...b, status: 'accepted' as const }
-              : b.rfpId === rfpId
-              ? { ...b, status: 'rejected' as const }
-              : b
-          ),
-          rfpList: s.rfpList.map((r) =>
-            r.id === rfpId
-              ? { ...r, status: 'approved' as const, acceptedBidId: bidId }
-              : r
-          ),
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: '🤝 Deal Confirmed & Contract Awarded!',
-          message: `Contract locked with ${winningBid?.vendorCompany || 'Vendor'}. Full contact unlocked.`,
-        });
-      },
-
-      getBidsForRFP: (rfpId) => {
-        return get().bids.filter((b) => b.rfpId === rfpId);
-      },
-
-      // ─── Vendor Bidding Actions (Live Reverse Bidding) ───────
-      submitBid: (bidData) => {
-        const state = get();
-        const user = state.currentUser;
-        const vendor = state.currentVendorProfile;
-        const targetRfp = state.rfpList.find((r) => r.id === bidData.rfpId);
-
-        if (!user || user.role !== 'vendor' || !vendor) {
-          get().addToast({
-            type: 'error',
-            title: '🔒 Vendor Login Required',
-            message: 'You must be logged in as a Vendor Partner to submit a bid.',
-          });
-          return;
-        }
-
-        if (vendor.status !== 'approved') {
-          get().addToast({
-            type: 'warning',
-            title: '⏳ KYC Verification Required',
-            message: 'Your GSTIN and vendor profile are pending Admin verification. Bidding is locked.',
-          });
-          return;
-        }
-
-        // Category match guard: vendor can only bid on RFPs matching their category
-        if (targetRfp && vendor.category !== targetRfp.category) {
-          get().addToast({
-            type: 'warning',
-            title: '⚠️ Category Mismatch',
-            message: `Your venue is registered under ${vendor.category.toUpperCase()}. This RFP is for ${targetRfp.category.toUpperCase()}.`,
-          });
-          return;
-        }
-
-        const distance = vendor.distanceKm || Math.round((Math.random() * 6 + 1.5) * 10) / 10;
-
-        let matchScore = 90;
-        if (targetRfp && targetRfp.totalBudget > 0) {
-          const priceRatio = bidData.totalPrice / targetRfp.totalBudget;
-          if (priceRatio <= 1.0) {
-            matchScore = Math.min(99, Math.round(95 + (1 - priceRatio) * 10));
-          } else {
-            matchScore = Math.max(65, Math.round(90 - (priceRatio - 1) * 30));
-          }
-        }
-
-        const newBid: Bid = {
-          ...bidData,
-          id: `bid_${generateId()}`,
-          vendorId: vendor.id,
-          vendorUserId: user.id,
-          vendorName: vendor.vendorName,
-          vendorCompany: vendor.companyName,
-          distanceKm: distance,
-          matchPercentage: matchScore,
-          submittedAt: new Date().toISOString(),
-          status: 'pending',
-        };
-
-        set((s) => ({
-          bids: [newBid, ...s.bids],
-          rfpList: s.rfpList.map((r) =>
-            r.id === bidData.rfpId ? { ...r, status: 'bid-received' as const } : r
-          ),
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: '📝 Quotation Placed in Live Auction',
-          message: `Your quote of ₹${bidData.totalPrice.toLocaleString('en-IN')} is live for corporate review.`,
-        });
-      },
-
-      reviseBid: (bidId, newPrice, newProposal, newLineItems) => {
-        const state = get();
-        const existing = state.bids.find((b) => b.id === bidId);
-        if (!existing) return;
-
-        const targetRfp = state.rfpList.find((r) => r.id === existing.rfpId);
-        let matchScore = existing.matchPercentage;
-        if (targetRfp && targetRfp.totalBudget > 0) {
-          const priceRatio = newPrice / targetRfp.totalBudget;
-          if (priceRatio <= 1.0) {
-            matchScore = Math.min(99, Math.round(95 + (1 - priceRatio) * 10));
-          } else {
-            matchScore = Math.max(65, Math.round(90 - (priceRatio - 1) * 30));
-          }
-        }
-
-        const updatedBid: Bid = {
-          ...existing,
-          totalPrice: newPrice,
-          proposal: newProposal || existing.proposal,
-          lineItems: newLineItems || existing.lineItems,
-          matchPercentage: matchScore,
-          submittedAt: new Date().toISOString(),
-        };
-
-        set((s) => ({
-          bids: s.bids.map((b) => (b.id === bidId ? updatedBid : b)),
-        }));
-
-        get().addToast({
-          type: 'success',
-          title: '⚡ Quotation Revised Live',
-          message: `Your revised quote of ₹${newPrice.toLocaleString('en-IN')} (${matchScore}% match) has been updated in the live auction.`,
-        });
-      },
-
-      getVendorOwnBids: (vendorUserId) => {
-        return get().bids.filter((b) => b.vendorUserId === vendorUserId);
-      },
-
-      // ─── Vendor: Withdraw a Submitted Bid ───────────────────
-      withdrawBid: (bidId) => {
-        const state2 = get();
-        const currentUser2 = state2.currentUser;
-        const bid = state2.bids.find((b) => b.id === bidId);
-        if (!bid || bid.status === 'accepted') return;
-        // Ownership guard: vendor can only withdraw their own bids
-        if (currentUser2?.role !== 'admin' && bid.vendorUserId !== currentUser2?.id) {
-          get().addToast({ type: 'error', title: '🔒 Unauthorized', message: 'You can only withdraw your own bids.' });
-          return;
-        }
-        set((s) => ({
-          bids: s.bids.filter((b) => b.id !== bidId),
-          rfpList: s.rfpList.map((r) => {
-            if (r.id !== bid.rfpId) return r;
-            const remaining = s.bids.filter((b) => b.rfpId === r.id && b.id !== bidId);
-            return { ...r, status: remaining.length > 0 ? ('bid-received' as const) : ('open' as const) };
-          }),
-        }));
-        get().addToast({ type: 'info', title: 'Bid Withdrawn', message: 'Your quotation has been retracted from the live auction.' });
-      },
-
-      // ─── Self-Service Account Deletion ──────────────────────
-      deleteAccount: () => {
-        const state = get();
-        const user = state.currentUser;
-        if (!user) return;
-        set((s) => ({
-          users: s.users.filter((u) => u.id !== user.id),
-          corporateProfiles: s.corporateProfiles.filter((c) => c.userId !== user.id),
-          vendorProfiles: s.vendorProfiles.filter((v) => v.userId !== user.id),
-          rfpList: s.rfpList.filter((r) => r.corporateUserId !== user.id),
-          bids: s.bids.filter((b) => b.vendorUserId !== user.id),
-          currentUser: null,
-          currentCorporateProfile: null,
-          currentVendorProfile: null,
-        }));
-        get().addToast({ type: 'info', title: 'Account Deleted', message: 'Your account and all associated data have been permanently removed.' });
-      },
-
-      // ─── Admin Master Control Actions ────────────────────────
-      adminVerifyCorporate: (corporateId, status) => {
-        set((state) => {
-          const now = new Date().toISOString();
-          const updatedList = state.corporateProfiles.map((c) =>
-            c.id === corporateId
-              ? {
-                  ...c,
-                  status,
-                  verifiedAt: status === 'approved' ? now : undefined,
-                }
-              : c
+      acceptBid: async (bidId, rfpId) => {
+        try {
+          const result = await api.post<{ vendorCompany: string }>(
+            `/api/rfps/${encodeURIComponent(rfpId)}/award`,
+            { bidId }
           );
-          const updatedCurrent =
-            state.currentCorporateProfile?.id === corporateId
-              ? {
-                  ...state.currentCorporateProfile,
-                  status,
-                  verifiedAt: status === 'approved' ? now : undefined,
-                }
-              : state.currentCorporateProfile;
-
-          return {
-            corporateProfiles: updatedList,
-            currentCorporateProfile: updatedCurrent,
-          };
-        });
-
-        get().addToast({
-          type: status === 'approved' ? 'success' : status === 'rejected' ? 'error' : 'info',
-          title: `Corporate Status: ${status.toUpperCase()}`,
-          message: `Corporate verification status updated to ${status}.`,
-        });
+          await get().loadRfpDetail(rfpId);
+          get().addToast({
+            type: 'success',
+            title: 'Bid awarded',
+            message: `${result.vendorCompany} has been notified.`,
+          });
+          return ok('Bid awarded.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not award bid', message });
+          return fail(message);
+        }
       },
 
-      adminVerifyVendor: (vendorId, status) => {
-        set((state) => {
-          const now = new Date().toISOString();
-          const updatedList = state.vendorProfiles.map((v) =>
-            v.id === vendorId
-              ? {
-                  ...v,
-                  status,
-                  gstVerified: status === 'approved',
-                  verifiedAt: status === 'approved' ? now : undefined,
-                }
-              : v
-          );
-          const updatedCurrent =
-            state.currentVendorProfile?.id === vendorId
-              ? {
-                  ...state.currentVendorProfile,
-                  status,
-                  gstVerified: status === 'approved',
-                  verifiedAt: status === 'approved' ? now : undefined,
-                }
-              : state.currentVendorProfile;
-
-          return {
-            vendorProfiles: updatedList,
-            currentVendorProfile: updatedCurrent,
-          };
-        });
-
-        get().addToast({
-          type: status === 'approved' ? 'success' : 'warning',
-          title: `Vendor Status: ${status.toUpperCase()}`,
-          message: `Vendor verification updated to ${status}.`,
-        });
+      completeRFP: async (rfpId) => {
+        try {
+          await api.post(`/api/rfps/${encodeURIComponent(rfpId)}/complete`);
+          await get().loadRfpDetail(rfpId);
+          get().addToast({ type: 'success', title: 'Marked complete', message: 'You can now rate the vendor.' });
+          return ok('Marked complete.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not mark complete', message });
+          return fail(message);
+        }
       },
 
-      adminToggleUserSuspension: (userId) => {
-        set((state) => ({
-          users: state.users.map((u) =>
-            u.id === userId ? { ...u, isSuspended: !u.isSuspended } : u
-          ),
-        }));
-
-        const u = get().users.find((user) => user.id === userId);
-        get().addToast({
-          type: u?.isSuspended ? 'warning' : 'success',
-          title: u?.isSuspended ? 'User Suspended' : 'User Re-Activated',
-          message: `Account status updated for ${u?.email}`,
-        });
+      rateVendor: async (rfpId, rating, comment) => {
+        try {
+          await api.post('/api/reviews', { rfpId, rating, comment });
+          await get().loadRfpDetail(rfpId);
+          get().addToast({ type: 'success', title: 'Thanks for the rating', message: 'It helps the next team pick well.' });
+          return ok('Rating saved.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not save rating', message });
+          return fail(message);
+        }
       },
 
-      adminDeleteUser: (userId) => {
-        set((state) => ({
-          users: state.users.filter((u) => u.id !== userId),
-          corporateProfiles: state.corporateProfiles.filter((c) => c.userId !== userId),
-          vendorProfiles: state.vendorProfiles.filter((v) => v.userId !== userId),
-        }));
+      getBidsForRFP: (rfpId) => get().bids.filter((b) => b.rfpId === rfpId),
 
-        get().addToast({
-          type: 'error',
-          title: 'User Account Deleted',
-          message: 'The user and associated records have been removed.',
-        });
+      // ─── Vendor ─────────────────────────────────────────────
+      submitBid: async (bid) => {
+        try {
+          await api.post(`/api/rfps/${encodeURIComponent(bid.rfpId)}/bids`, {
+            rfpId: bid.rfpId,
+            totalPrice: bid.totalPrice,
+            lineItems: bid.lineItems ?? [],
+            proposal: bid.proposal ?? '',
+            validUntil: bid.validUntil,
+          });
+          await get().loadMyBids();
+          get().addToast({ type: 'success', title: 'Bid submitted', message: 'The poster can see your quote now.' });
+          return ok('Bid submitted.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not submit bid', message });
+          return fail(message);
+        }
       },
 
-      adminUpdateUser: (userId, data) => {
-        set((state) => ({
-          users: state.users.map((u) => (u.id === userId ? { ...u, ...data } : u)),
-        }));
-        get().addToast({ type: 'success', title: 'User Details Updated', message: 'User record saved successfully.' });
+      reviseBid: async (bidId, newPrice, newProposal, newLineItems) => {
+        try {
+          await api.patch(`/api/bids/${encodeURIComponent(bidId)}`, {
+            totalPrice: newPrice,
+            proposal: newProposal,
+            ...(newLineItems ? { lineItems: newLineItems } : {}),
+          });
+          await get().loadMyBids();
+          get().addToast({ type: 'success', title: 'Bid revised', message: 'Your updated quote is live.' });
+          return ok('Bid revised.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not revise bid', message });
+          return fail(message);
+        }
       },
 
-      adminDeleteVendorProfile: (vendorId) => {
-        set((state) => ({
-          vendorProfiles: state.vendorProfiles.filter((v) => v.id !== vendorId),
-        }));
-        get().addToast({ type: 'warning', title: 'Vendor Profile Removed', message: 'Vendor profile deleted. User account is retained.' });
+      withdrawBid: async (bidId) => {
+        try {
+          await api.del(`/api/bids/${encodeURIComponent(bidId)}`);
+          await get().loadMyBids();
+          get().addToast({ type: 'warning', title: 'Bid withdrawn', message: 'Your quote has been pulled.' });
+          return ok('Bid withdrawn.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not withdraw bid', message });
+          return fail(message);
+        }
       },
 
-      adminDeleteBid: (bidId) => {
-        set((state) => ({
-          bids: state.bids.filter((b) => b.id !== bidId),
-        }));
-        get().addToast({ type: 'error', title: 'Bid Deleted', message: 'The bid has been permanently removed from the platform.' });
+      getVendorOwnBids: () => get().bids,
+
+      // ─── Admin ──────────────────────────────────────────────
+      adminDecide: async (userId, decision, reason) => {
+        try {
+          await api.post(`/api/admin/approvals/${encodeURIComponent(userId)}`, { decision, reason });
+          await get().loadAdminData();
+          get().addToast({
+            type: decision === 'approved' ? 'success' : 'warning',
+            title: `Account ${decision}`,
+            message: 'The account holder has been emailed.',
+          });
+          return ok(`Account ${decision}.`);
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Action failed', message });
+          return fail(message);
+        }
       },
 
-      adminUpdateBid: (bidId, data) => {
-        set((state) => ({
-          bids: state.bids.map((b) => b.id === bidId ? { ...b, ...data } : b),
-        }));
-        get().addToast({ type: 'success', title: 'Bid Updated', message: 'Bid details have been saved successfully.' });
+      adminVerifyCorporate: async (userId, status) => get().adminDecide(userId, status),
+      adminVerifyVendor: async (userId, status) => get().adminDecide(userId, status),
+
+      adminToggleUserSuspension: async (userId) => {
+        const target = get().users.find((u) => u.id === userId);
+        if (!target) return fail('That account is not loaded.');
+        return get().adminUpdateUser(userId, { isSuspended: !target.isSuspended });
+      },
+
+      adminUpdateUser: async (userId, data) => {
+        try {
+          await api.patch(`/api/admin/users/${encodeURIComponent(userId)}`, {
+            ...(data.isSuspended !== undefined ? { isSuspended: data.isSuspended } : {}),
+            ...(data.approvalStatus !== undefined ? { approvalStatus: data.approvalStatus } : {}),
+          });
+          await get().loadAdminData();
+          get().addToast({ type: 'success', title: 'Account updated', message: 'Change recorded in the audit log.' });
+          return ok('Account updated.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not update account', message });
+          return fail(message);
+        }
+      },
+
+      adminDeleteUser: async (userId) => {
+        try {
+          await api.del(`/api/admin/users/${encodeURIComponent(userId)}`);
+          await get().loadAdminData();
+          get().addToast({
+            type: 'warning',
+            title: 'Account closed',
+            message: 'Soft-deleted — their history stays intact for the audit trail.',
+          });
+          return ok('Account closed.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not close account', message });
+          return fail(message);
+        }
+      },
+
+      adminDeleteBid: async (bidId) => {
+        try {
+          await api.del(`/api/admin/bids/${encodeURIComponent(bidId)}`);
+          await get().loadAdminData();
+          get().addToast({ type: 'warning', title: 'Bid removed', message: 'Recorded in the audit log.' });
+          return ok('Bid removed.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not remove bid', message });
+          return fail(message);
+        }
+      },
+
+      adminUpdateBid: async (bidId, data) => {
+        try {
+          await api.patch(`/api/admin/bids/${encodeURIComponent(bidId)}`, data);
+          await get().loadAdminData();
+          get().addToast({ type: 'success', title: 'Bid updated', message: 'Recorded in the audit log.' });
+          return ok('Bid updated.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not update bid', message });
+          return fail(message);
+        }
+      },
+
+      adminDeleteRFP: async (rfpId) => {
+        try {
+          await api.del(`/api/admin/rfps/${encodeURIComponent(rfpId)}`);
+          await get().loadAdminData();
+          get().addToast({ type: 'warning', title: 'Requirement removed', message: 'Recorded in the audit log.' });
+          return ok('Requirement removed.');
+        } catch (error) {
+          const message = describeApiError(error);
+          get().addToast({ type: 'error', title: 'Could not remove requirement', message });
+          return fail(message);
+        }
       },
     }),
     {
-      name: 'coe-store-storage-v7',
-      partialize: (state) => ({
-        rfpList: state.rfpList,
-        bids: state.bids,
-        // Strip passwords from persisted users — never store plaintext creds in localStorage
-        users: state.users.map((u) => { const { password: _pw, ...rest } = u; return rest; }),
-        corporateProfiles: state.corporateProfiles,
-        vendorProfiles: state.vendorProfiles,
-        currentUser: state.currentUser ? (({ password: _pw, ...rest }) => rest)(state.currentUser) : null,
-        currentCorporateProfile: state.currentCorporateProfile,
-        currentVendorProfile: state.currentVendorProfile,
-        isNightMode: state.isNightMode,
-      }),
+      name: 'coe-ui-preferences-v1',
+      // Only cosmetic preferences survive a reload. Identity and business data
+      // are fetched from the server every time.
+      partialize: (state) => ({ isNightMode: state.isNightMode }),
     }
   )
 );

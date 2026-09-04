@@ -9,6 +9,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ToastContainer } from '@/components/ui/ToastNotification';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { SessionProvider } from '@/components/SessionProvider';
 
 export const metadata: Metadata = {
   title: 'COE Portal — Community of Employees',
@@ -40,6 +41,7 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
+          <SessionProvider />
           {children}
           <ToastContainer />
           <AuthModal />

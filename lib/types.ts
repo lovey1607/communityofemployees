@@ -184,7 +184,19 @@ export interface RFP {
   universal: UniversalFields;
   totalBudget: number;
   submittedAt: string;
-  status: 'open' | 'bid-received' | 'approved' | 'closed';
+  /**
+   * Lifecycle: draft → open → bid-received → awarded → completed,
+   * with cancelled/closed as terminal states. 'bid-received' is a derived
+   * convenience state (an open RFP that has at least one live bid).
+   */
+  status:
+    | 'draft'
+    | 'open'
+    | 'bid-received'
+    | 'awarded'
+    | 'completed'
+    | 'cancelled'
+    | 'closed';
   acceptedBidId?: string;
 }
 

@@ -8,7 +8,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { useStore } from '@/store/useStore';
+import { DeleteAccountButton } from '@/components/auth/DeleteAccountButton';
 import { RFP, Bid, VendorProfile, BidLineItem, CategoryType } from '@/lib/types';
 import { CATEGORY_LABELS, THEMES } from '@/lib/themes';
 import { formatCurrency, formatDate } from '@/lib/utils';
@@ -21,7 +23,6 @@ import {
   RefreshCw, TrendingDown, Building, MapPin, Phone, AlertTriangle,
 } from 'lucide-react';
 
-import { findPreseededVenueProfile } from '@/store/useStore';
 import { VendorTrustBadge } from '@/components/reviews/VendorTrustBadge';
 
 const GURUGRAM_LOCALITIES = [
@@ -43,8 +44,10 @@ const GURUGRAM_LOCALITIES = [
 ];
 
 // ─── Register New Venue / Facility Modal ──────────────────────
+// One vendor account = one listing. This modal used to mint an extra vendor
+// record client-side; it now updates the signed-in vendor's own listing.
 function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
-  const { registerNewVenue, isNightMode } = useStore();
+  const { updateVendorProfile, isNightMode } = useStore();
   const [venueName, setVenueName] = useState('');
   const [category, setCategory] = useState<CategoryType>('sports');
   const [timings, setTimings] = useState('6:00 AM - 11:00 PM');
@@ -75,7 +78,9 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
     e.preventDefault();
     if (!venueName.trim() || !address.trim() || !isPhoneValid) return;
 
-    registerNewVenue({
+    // Rating and review counts are earned, not set here — they come from
+    // completed events (see /api/reviews).
+    void updateVendorProfile({
       category,
       vendorName: `${venueName} Coordinator`,
       companyName: venueName.trim(),
@@ -84,20 +89,13 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
       address: address.trim(),
       locality,
       city: 'Gurugram',
-      distanceKm: Math.round((Math.random() * 5 + 1.5) * 10) / 10,
       gstNumber: gstNumber.trim().toUpperCase(),
       portfolioSummary: description.trim(),
       corporateSuitability: corporateSuitability.trim(),
-      pastClients: ['Corporate Verified Partner'],
-      formatted_address: address.trim(),
-      placeName: venueName.trim(),
-      rating: 4.8,
-      user_ratings_total: 42,
       timings,
       amenities,
       avgCostPerPerson: Number(avgCost) || 800,
-    });
-    onClose();
+    }).then(onClose);
   };
 
   return (
@@ -355,7 +353,7 @@ function EditVendorProfileModal({
   profile: VendorProfile;
   onClose: () => void;
 }) {
-  const { updateVendorProfile, changePassword, deleteAccount, isNightMode } = useStore();
+  const { updateVendorProfile, changePassword, isNightMode } = useStore();
   const router = useRouter();
   const [tab, setTab] = useState<'profile' | 'security' | 'danger'>('profile');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -378,10 +376,11 @@ function EditVendorProfileModal({
   const [newClient, setNewClient] = useState('');
 
   // Password fields
-  const [oldPassword, setOldPassword] = useState('gurgaon123');
+  const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
   const isMobileValid = /^[6-9]\d{9}$/.test(mobile);
 
@@ -431,30 +430,26 @@ function EditVendorProfileModal({
     onClose();
   };
 
-  const handleChangePassword = (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPasswordError('');
     if (!newPassword || newPassword !== confirmPassword) {
-      alert('New passwords do not match');
-      return;
-    }
-    if (newPassword.length < 6) {
-      alert('Password must be at least 6 characters');
+      setPasswordError('The two new passwords do not match.');
       return;
     }
     setPasswordLoading(true);
-    const success = changePassword(oldPassword, newPassword);
+    // Strength rules live server-side (lib/validation.ts) so they cannot be
+    // bypassed; the message comes back from there.
+    const result = await changePassword(oldPassword, newPassword);
     setPasswordLoading(false);
-    if (success) {
-      setNewPassword('');
-      setConfirmPassword('');
-      onClose();
+    if (!result.success) {
+      setPasswordError(result.message);
+      return;
     }
-  };
-
-  const handleDeleteAccount = () => {
-    deleteAccount();
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
     onClose();
-    router.push('/');
   };
 
   return (
@@ -775,7 +770,7 @@ function EditVendorProfileModal({
                 <ShieldCheck size={16} /> Account Security & Password
               </div>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>
-                Default password for all pre-seeded Gurugram vendors is <strong style={{ color: '#ffffff' }}>gurgaon123</strong>. You can change your password below.
+                Changing your password signs you out everywhere else.
               </div>
             </div>
 
@@ -855,7 +850,7 @@ function EditVendorProfileModal({
                 </p>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button onClick={() => setShowDeleteConfirm(false)} style={{ flex: 1, padding: '8px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: '#ffffff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
-                  <button onClick={() => { deleteAccount(); router.push('/'); }} style={{ flex: 2, padding: '8px', borderRadius: 10, border: 'none', background: '#ef4444', color: '#ffffff', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>Yes, Delete My Account</button>
+                  <DeleteAccountButton label="Yes, delete my account" />
                 </div>
               </div>
             ) : (
@@ -1046,7 +1041,6 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
 
     submitBid({
       rfpId: rfp.id,
-      category: rfp.category,
       totalPrice,
       lineItems: lineItems.filter((l) => l.description.trim()),
       proposal,
@@ -1293,30 +1287,28 @@ export default function VendorDashboard() {
   const [registeringVenue, setRegisteringVenue] = useState(false);
   const [confirmWithdrawBid, setConfirmWithdrawBid] = useState<Bid | null>(null);
 
-  const preseededProfile = currentUser?.email ? findPreseededVenueProfile(currentUser.email) : undefined;
-  const vendor = currentVendorProfile || preseededProfile || {
-    id: 'vendor_prof_01',
-    userId: 'user_vendor_01',
-    vendorName: 'Rajat Verma',
-    companyName: 'Royal Feast Catering & Hospitality',
-    category: 'food' as CategoryType,
-    mobile: '+91 98711 22334',
-    companyMobile: '+91 0124 4567890',
-    address: 'Plaza 3, DLF Phase 1, Gurugram, Haryana',
-    city: 'Gurugram',
-    distanceKm: 2.8,
-    gstNumber: '07AAAAA0000A1Z5',
-    gstVerified: true,
-    pastClients: ['Google India', 'Microsoft', 'Zomato', 'Deloitte'],
-    status: 'approved' as const,
-    isCompleted: true,
-    timings: '12:00 PM - 12:00 AM',
-    avgCostPerPerson: 850,
-    amenities: ['Artisanal Catering', 'Mixology Bar', 'Corporate Galas'],
-  };
+  // No stand-in profile: if the server has not sent one, the vendor has not
+  // finished onboarding and there is nothing truthful to show here.
+  const vendor = currentVendorProfile;
+  if (!vendor) {
+    return (
+      <main style={{ minHeight: '100vh', paddingTop: 140, background: '#0B0F17', textAlign: 'center', color: 'rgba(255,255,255,0.7)' }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 8 }}>Finish setting up your listing</h1>
+        <p style={{ fontSize: 14 }}>
+          Complete your vendor profile and we&apos;ll start showing you matching requirements.
+        </p>
+        <Link
+          href="/vendor/onboarding"
+          style={{ display: 'inline-block', marginTop: 18, padding: '11px 20px', borderRadius: 11, background: '#f97316', color: '#0b0d12', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
+        >
+          Complete profile
+        </Link>
+      </main>
+    );
+  }
 
   // Tailored strictly to vendor category
-  const openRFPs = rfpList.filter((r) => r.category === vendor.category && r.status !== 'approved');
+  const openRFPs = rfpList.filter((r) => r.category === vendor.category && (r.status === 'open' || r.status === 'bid-received'));
 
   // Vendor's own bids
   const myBids = bids.filter((b) => b.vendorUserId === currentUser?.id || b.vendorId === vendor.id);

@@ -1,0 +1,28 @@
+{
+  "_comment": "Copy this file to seed/fixtures.json (gitignored) and set your own local passwords. Never commit real credentials. Passwords must satisfy lib/validation.ts: 10+ characters, letters plus a number or symbol, and not on the common-password list.",
+  "seedVenueVendors": true,
+  "venueEmailDomain": "coe-dev.local",
+  "accounts": [
+    {
+      "email": "admin@coe-dev.local",
+      "password": "CHANGE-ME-local-only-1",
+      "role": "admin"
+    },
+    {
+      "email": "hr@nexus-dev.local",
+      "password": "CHANGE-ME-local-only-2",
+      "role": "corporate",
+      "companyName": "Nexus Technologies",
+      "city": "Gurugram"
+    },
+    {
+      "email": "ops@royalfeast-dev.local",
+      "password": "CHANGE-ME-local-only-3",
+      "role": "vendor",
+      "companyName": "Royal Feast Caterers",
+      "category": "food",
+      "city": "Gurugram",
+      "gstNumber": "06AAACD1234A1ZK"
+    }
+  ]
+}

@@ -1,7 +1,11 @@
 'use client';
 // ============================================================
 // components/NavBar.tsx — Top Navigation with Role-Specific Views
-// Corporate View, Vendor View, Super Admin View & Persona Switcher
+// Corporate View, Vendor View, Super Admin View.
+//
+// The "Switch Test Persona" menu that used to live here let anyone become
+// any role with one click. It has been removed — role comes from the
+// server-side session and nothing else.
 // ============================================================
 
 import React, { useState } from 'react';
@@ -23,8 +27,8 @@ export function NavBar() {
     currentUser,
     currentCorporateProfile,
     currentVendorProfile,
-    switchPersona,
     openAuthModal,
+    logout,
     isNightMode,
     theme,
   } = useStore();
@@ -47,10 +51,10 @@ export function NavBar() {
       ? '#f97316'
       : '#eab308';
 
-  const handleSwitch = (role: UserRole, email: string, redirectRoute: string) => {
-    switchPersona(role, email);
+  const handleSignOut = async () => {
     setPersonaMenuOpen(false);
-    router.push(redirectRoute);
+    await logout();
+    router.push('/');
   };
 
   return (
@@ -240,134 +244,41 @@ export function NavBar() {
                 }}
               >
                 <div style={{ fontSize: 10.5, fontWeight: 800, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, padding: '0 4px' }}>
-                  Switch Test Persona (RBAC)
+                  Signed in as
+                </div>
+                <div style={{ padding: '0 4px 10px', fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.75)' : '#334155', wordBreak: 'break-all' }}>
+                  {currentUser?.email ?? 'Not signed in'}
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleSwitch('corporate', 'sarah.sharma@techcorp.com', '/corporate')}
-                  style={{
-                    width: '100%',
-                    padding: '8px 10px',
-                    borderRadius: 8,
-                    background: userRole === 'corporate' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    color: isNightMode ? '#ffffff' : '#0f172a',
-                    marginBottom: 4,
-                  }}
-                >
-                  <Building2 size={15} color="#10b981" />
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 700 }}>Corporate Employee</div>
-                    <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>Nexus Tech India (HR)</div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSwitch('vendor', 'rajat@royalfeast.in', '/vendor-dashboard')}
-                  style={{
-                    width: '100%',
-                    padding: '8px 10px',
-                    borderRadius: 8,
-                    background: userRole === 'vendor' ? 'rgba(249, 115, 22, 0.15)' : 'transparent',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    color: isNightMode ? '#ffffff' : '#0f172a',
-                    marginBottom: 4,
-                  }}
-                >
-                  <Store size={15} color="#f97316" />
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 700 }}>Food & Party Vendor</div>
-                    <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>Royal Feast Catering</div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSwitch('vendor', 'vikram@arenaturf.com', '/vendor-dashboard')}
-                  style={{
-                    width: '100%',
-                    padding: '8px 10px',
-                    borderRadius: 8,
-                    background: 'transparent',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    color: isNightMode ? '#ffffff' : '#0f172a',
-                    marginBottom: 4,
-                  }}
-                >
-                  <Store size={15} color="#0ea5e9" />
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 700 }}>Sports Vendor</div>
-                    <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>Arena Turf Management</div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSwitch('admin', 'admin@coeportal.com', '/admin')}
-                  style={{
-                    width: '100%',
-                    padding: '8px 10px',
-                    borderRadius: 8,
-                    background: userRole === 'admin' ? 'rgba(234, 179, 8, 0.15)' : 'transparent',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    color: isNightMode ? '#ffffff' : '#0f172a',
-                    marginBottom: 8,
-                  }}
-                >
-                  <Shield size={15} color="#eab308" />
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 700 }}>Super Admin</div>
-                    <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>Master Control Suite</div>
-                  </div>
-                </button>
-
                 <div style={{ borderTop: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)', paddingTop: 8 }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPersonaMenuOpen(false);
-                      openAuthModal();
-                    }}
-                    style={{
-                      width: '100%',
-                      padding: '7px 10px',
-                      borderRadius: 8,
-                      background: 'none',
-                      border: 'none',
-                      color: '#10b981',
-                      fontSize: 12,
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                    }}
-                  >
-                    <KeyRound size={14} /> Passwordless Email + OTP
-                  </button>
+                  {currentUser ? (
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      style={{
+                        width: '100%', padding: '7px 10px', borderRadius: 8, background: 'none',
+                        border: 'none', color: '#fb7185', fontSize: 12, fontWeight: 700,
+                        cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 6,
+                      }}
+                    >
+                      <LogOut size={14} /> Sign out
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPersonaMenuOpen(false);
+                        openAuthModal();
+                      }}
+                      style={{
+                        width: '100%', padding: '7px 10px', borderRadius: 8, background: 'none',
+                        border: 'none', color: '#10b981', fontSize: 12, fontWeight: 700,
+                        cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 6,
+                      }}
+                    >
+                      <KeyRound size={14} /> Sign in
+                    </button>
+                  )}
                 </div>
               </motion.div>
             )}

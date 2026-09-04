@@ -122,11 +122,16 @@ function EditUserModal({ user, onClose }: { user: User; onClose: () => void }) {
 }
 
 // ─── Edit Bid Modal ──────────────────────────────────────────
+// Admins can change a bid's STATUS (e.g. reject spam) but not its price or
+// proposal — rewriting a vendor's quote on their behalf is not a power the
+// API grants, so the fields are read-only here too.
 function EditBidModal({ bid, onClose }: { bid: Bid; onClose: () => void }) {
   const { adminUpdateBid } = useStore();
-  const [totalPrice, setTotalPrice] = useState(bid.totalPrice.toString());
-  const [proposal, setProposal] = useState(bid.proposal);
-  const [status, setStatus] = useState(bid.status);
+  const totalPrice = bid.totalPrice.toString();
+  const proposal = bid.proposal;
+  const [status, setStatus] = useState<'pending' | 'rejected' | 'withdrawn'>(
+    bid.status === 'accepted' ? 'pending' : bid.status
+  );
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(5,8,20,0.82)', backdropFilter: 'blur(14px)' }} onClick={onClose}>
       <motion.div initial={{ scale: 0.93, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.93, opacity: 0 }}
@@ -145,27 +150,32 @@ function EditBidModal({ bid, onClose }: { bid: Bid; onClose: () => void }) {
 
         <form onSubmit={(e) => {
           e.preventDefault();
-          adminUpdateBid(bid.id, { totalPrice: parseInt(totalPrice, 10), proposal, status });
+          void adminUpdateBid(bid.id, { status });
           onClose();
         }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
             <div>
               <label style={lbl('Total Price')}>Total Bid Price (₹)</label>
-              <input className="input-base" type="number" required value={totalPrice} onChange={(e) => setTotalPrice(e.target.value)} />
+              <input className="input-base" type="number" value={totalPrice} readOnly disabled />
             </div>
             <div>
               <label style={lbl('Status')}>Bid Status</label>
-              <select className="input-base" value={status} onChange={(e) => setStatus(e.target.value as Bid['status'])}>
+              <select
+                className="input-base"
+                value={status}
+                onChange={(e) => setStatus(e.target.value as 'pending' | 'rejected' | 'withdrawn')}
+              >
                 <option value="pending">Pending</option>
-                <option value="accepted">Accepted</option>
                 <option value="rejected">Rejected</option>
+                <option value="withdrawn">Withdrawn</option>
               </select>
+              {/* "Accepted" is set by awarding on the requirement, not from here. */}
             </div>
           </div>
 
           <div style={{ marginBottom: 20 }}>
             <label style={lbl('Proposal')}>Vendor Proposal</label>
-            <textarea className="input-base" rows={4} value={proposal} onChange={(e) => setProposal(e.target.value)} style={{ resize: 'vertical' }} />
+            <textarea className="input-base" rows={4} value={proposal} readOnly disabled style={{ resize: 'vertical' }} />
           </div>
 
           {/* Line Items (read-only) */}
@@ -409,14 +419,14 @@ export default function AdminDashboard() {
     rfpList, bids,
     adminVerifyVendor, adminVerifyCorporate,
     adminToggleUserSuspension, adminDeleteUser,
-    adminDeleteVendorProfile, adminUpdateUser,
+    adminUpdateUser, loadAdminData,
   } = useStore();
 
   const [activeTab, setActiveTab] = useState<'monitor' | 'corporate' | 'vendors' | 'analytics'>('monitor');
   const [categoryFilter, setCategoryFilter] = useState<CategoryType | 'all'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<{ type: 'user' | 'vendor-profile'; id: string; label: string } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ type: 'user'; id: string; label: string } | null>(null);
 
   // ── Metrics ──
   const pendingVendors = vendorProfiles.filter((v) => v.status === 'pending').length;
@@ -755,9 +765,11 @@ export default function AdminDashboard() {
                           <Lock size={12} /> {vendorUser.isSuspended ? 'Reactivate' : 'Suspend'}
                         </button>
                       )}
-                      <button onClick={() => setConfirmDelete({ type: 'vendor-profile', id: vendor.id, label: vendor.companyName })} style={btnStyle('#ef4444')}>
-                        <Trash2 size={12} /> Delete Profile
-                      </button>
+                      {vendorUser && (
+                        <button onClick={() => setConfirmDelete({ type: 'user', id: vendorUser.id, label: vendor.companyName })} style={btnStyle('#ef4444')}>
+                          <Trash2 size={12} /> Close account
+                        </button>
+                      )}
                     </div>
                   </div>
 
@@ -865,15 +877,10 @@ export default function AdminDashboard() {
         {confirmDelete && (
           <ConfirmDialog
             title={confirmDelete.type === 'user' ? 'Delete User Account?' : 'Delete Vendor Profile?'}
-            message={
-              confirmDelete.type === 'user'
-                ? `This permanently deletes "${confirmDelete.label}" and all associated data (RFPs, bids, profiles). Cannot be undone.`
-                : `This removes the vendor profile for "${confirmDelete.label}". The user account will remain active but unlinked.`
-            }
-            confirmLabel={confirmDelete.type === 'user' ? 'Delete User & All Data' : 'Delete Vendor Profile'}
+            message={`This closes "${confirmDelete.label}". Their open requirements are cancelled and live bids withdrawn; awarded history is kept so the audit trail stays intact.`}
+            confirmLabel="Close this account"
             onConfirm={() => {
-              if (confirmDelete.type === 'user') adminDeleteUser(confirmDelete.id);
-              else adminDeleteVendorProfile(confirmDelete.id);
+              void adminDeleteUser(confirmDelete.id);
               setConfirmDelete(null);
             }}
             onCancel={() => setConfirmDelete(null)}

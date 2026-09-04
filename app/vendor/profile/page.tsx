@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
+import { DeleteAccountButton } from '@/components/auth/DeleteAccountButton';
 import { VendorProfile, CategoryType } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 import { BlurredCyberHubBackground } from '@/components/canvas/BlurredCyberHubBackground';
@@ -46,7 +47,7 @@ function EditVendorModal({
   profile: VendorProfile;
   onClose: () => void;
 }) {
-  const { updateVendorProfile, deleteAccount } = useStore();
+  const { updateVendorProfile } = useStore();
   const router = useRouter();
 
   const [companyName, setCompanyName] = useState(profile.companyName);
@@ -249,7 +250,7 @@ function EditVendorModal({
               </p>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={() => setShowDeleteConfirm(false)} style={{ flex: 1, padding: '8px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: '#ffffff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Cancel</button>
-                <button onClick={() => { deleteAccount(); router.push('/'); }} style={{ flex: 2, padding: '8px', borderRadius: 10, border: 'none', background: '#ef4444', color: '#ffffff', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Yes, Delete Vendor Account</button>
+                <DeleteAccountButton label="Yes, delete vendor account" />
               </div>
             </div>
           ) : (

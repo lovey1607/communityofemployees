@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
+import { DeleteAccountButton } from '@/components/auth/DeleteAccountButton';
 import { RFP, CorporateProfile, CategoryType } from '@/lib/types';
 import { CATEGORY_LABELS, THEMES } from '@/lib/themes';
 import { formatCurrency, formatDate } from '@/lib/utils';
@@ -48,11 +49,14 @@ function getRFPTitle(rfp: RFP): string {
 
 // ─── Status Badge ───────────────────────────────────────────
 function StatusBadge({ status }: { status: RFP['status'] }) {
-  const map = {
-    open:           { label: 'Open — Awaiting Bids',  color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
-    'bid-received': { label: '🔥 Bids Received',      color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
-    approved:       { label: '✅ Contract Awarded',    color: '#0ea5e9', bg: 'rgba(14,165,233,0.15)' },
-    closed:         { label: '🔒 Closed',              color: '#94a3b8', bg: 'rgba(148,163,184,0.15)' },
+  const map: Record<RFP['status'], { label: string; color: string; bg: string }> = {
+    draft:          { label: 'Draft — not posted yet', color: '#94a3b8', bg: 'rgba(148,163,184,0.15)' },
+    open:           { label: 'Open — awaiting bids',   color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
+    'bid-received': { label: '🔥 Bids received',       color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
+    awarded:        { label: '✅ Awarded',              color: '#0ea5e9', bg: 'rgba(14,165,233,0.15)' },
+    completed:      { label: '🎉 Completed',            color: '#a78bfa', bg: 'rgba(167,139,250,0.15)' },
+    cancelled:      { label: '✖ Withdrawn',            color: '#94a3b8', bg: 'rgba(148,163,184,0.15)' },
+    closed:         { label: '🔒 Closed',               color: '#94a3b8', bg: 'rgba(148,163,184,0.15)' },
   };
   const s = map[status];
   return (
@@ -103,7 +107,7 @@ function ConfirmDialog({
 
 // ─── Edit Corporate Profile Modal ──────────────────────────
 function EditProfileModal({ profile, onClose }: { profile: CorporateProfile; onClose: () => void }) {
-  const { updateCorporateProfile, deleteAccount, logout, isNightMode } = useStore();
+  const { updateCorporateProfile, logout, isNightMode } = useStore();
   const router = useRouter();
 
   const [name, setName] = useState(profile.name);
@@ -113,8 +117,6 @@ function EditProfileModal({ profile, onClose }: { profile: CorporateProfile; onC
   const [city, setCity] = useState(profile.city || 'Gurugram');
   const [position, setPosition] = useState(profile.position);
   const [department, setDepartment] = useState(profile.department);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
   const isMobileValid = /^[6-9]\d{9}$/.test(mobile);
 
   const handleSave = (e: React.FormEvent) => {
@@ -135,10 +137,6 @@ function EditProfileModal({ profile, onClose }: { profile: CorporateProfile; onC
     onClose();
   };
 
-  const handleDeleteAccount = () => {
-    deleteAccount();
-    router.push('/');
-  };
 
   const labelStyle: React.CSSProperties = {
     display: 'block', fontSize: 11, fontWeight: 700,
@@ -260,25 +258,14 @@ function EditProfileModal({ profile, onClose }: { profile: CorporateProfile; onC
           {/* Danger zone */}
           <div style={{ borderTop: '1px solid rgba(239,68,68,0.2)', paddingTop: 16, marginTop: 4 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: '#ef4444', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>⚠️ Danger Zone</div>
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              style={{ width: '100%', padding: '10px', borderRadius: 12, border: '1.5px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'var(--font-body)' }}
-            >
-              <Trash2 size={14} /> Delete My Account & All Data
-            </button>
+            <DeleteAccountButton
+              label="Delete my account"
+              style={{ width: '100%', flex: 'none', padding: '10px', borderRadius: 12, border: '1.5px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 13, fontFamily: 'var(--font-body)' }}
+            />
           </div>
         </motion.div>
       </div>
 
-      {showDeleteConfirm && (
-        <ConfirmDialog
-          title="Delete Corporate Account"
-          message="This will permanently delete your account, all posted RFPs, and all associated data. This action cannot be undone."
-          confirmLabel="Yes, Delete My Account"
-          onConfirm={handleDeleteAccount}
-          onCancel={() => setShowDeleteConfirm(false)}
-        />
-      )}
     </>
   );
 }
@@ -410,7 +397,7 @@ export default function CorporateDashboard() {
   // Stats
   const totalBudget = myRFPs.reduce((s, r) => s + (r.totalBudget || 0), 0);
   const totalBids = myRFPs.reduce((s, r) => s + getBidCount(r.id), 0);
-  const awarded = myRFPs.filter((r) => r.status === 'approved').length;
+  const awarded = myRFPs.filter((r) => r.status === 'awarded' || r.status === 'completed').length;
 
   return (
     <main style={{ minHeight: '100vh', paddingTop: 96, paddingBottom: 60, position: 'relative', background: '#0B0F17' }}>
