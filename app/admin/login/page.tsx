@@ -188,7 +188,7 @@ export default function AdminLoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@coe.com"
+                    placeholder="you@communityofemployees.com"
                     style={{ paddingLeft: 36, fontSize: 13.5 }}
                   />
                 </div>
