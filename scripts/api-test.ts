@@ -410,6 +410,14 @@ async function main() {
     JSON.stringify(Object.keys(directory[0] ?? {}))
   );
 
+  r = await anon.call('GET', '/api/vendors?limit=5');
+  const withoutOrigin = ((r.json.data ?? {}) as { vendors: { distanceFromYouKm: number | null }[] }).vendors ?? [];
+  check(
+    'no coordinates means no distances (not a distance from 0,0)',
+    withoutOrigin.every((v) => v.distanceFromYouKm === null),
+    JSON.stringify(withoutOrigin.slice(0, 2).map((v) => v.distanceFromYouKm))
+  );
+
   r = await anon.call('GET', '/api/vendors?lat=28.4949&lng=77.0895&limit=5');
   const nearby = (r.json.data ?? {}) as { sortedByDistance: boolean; vendors: { distanceFromYouKm: number | null }[] };
   check('nearby search sorts by real distance', nearby.sortedByDistance === true);

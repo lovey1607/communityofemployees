@@ -333,6 +333,12 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               <div style={{ width: `${Math.round((coeDirectSpend / legacyAgencySpend) * 100)}%`, background: '#10b981', transition: 'width 0.2s ease' }} />
               <div style={{ width: `${Math.round((annualSavings / legacyAgencySpend) * 100)}%`, background: 'rgba(239,68,68,0.5)', transition: 'width 0.2s ease' }} />
             </div>
+            {/* Say what the model assumes. A savings figure with an unstated
+                assumption behind it is a claim, not an estimate. */}
+            <p style={{ margin: '8px 0 0', fontSize: 10, lineHeight: 1.5, color: isNightMode ? 'rgba(255,255,255,0.42)' : '#94a3b8' }}>
+              Estimate. Assumes a {Math.round(config.typicalBrokerMargin * 100)}% agency margin on this
+              category and a 2% platform fee. Your actual saving depends on the bids you get.
+            </p>
           </div>
         </div>
 
@@ -511,11 +517,15 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               <div style={{ width: `${Math.round((coeDirectSpend / legacyAgencySpend) * 100)}%`, background: '#10b981' }} />
               <div style={{ width: `${Math.round((annualSavings / legacyAgencySpend) * 100)}%`, background: 'rgba(239,68,68,0.6)' }} />
             </div>
+            <p style={{ margin: '10px 0 0', fontSize: 10.5, lineHeight: 1.55, color: isNightMode ? 'rgba(255,255,255,0.42)' : '#94a3b8' }}>
+              Estimate. Assumes a {Math.round(config.typicalBrokerMargin * 100)}% agency margin on this
+              category and a 2% platform fee. Your actual saving depends on the bids you get.
+            </p>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.8)' : '#64748b', marginBottom: 18 }}>
             <Clock size={14} color="#0ea5e9" />
-            <span>Eliminates ~<strong style={{ color: isNightMode ? '#ffffff' : '#0f172a' }}>{hoursSaved} hours</strong> of procurement negotiation</span>
+            <span>Saves roughly <strong style={{ color: isNightMode ? '#ffffff' : '#0f172a' }}>{hoursSaved} hours</strong> of chasing quotes (about half a day per event)</span>
           </div>
 
           <a

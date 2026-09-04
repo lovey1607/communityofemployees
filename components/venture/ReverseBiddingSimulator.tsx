@@ -1,7 +1,9 @@
 'use client';
 // ============================================================
 // components/venture/ReverseBiddingSimulator.tsx
-// Interactive Live Reverse-Auction Engine Visualizer
+// Interactive walkthrough of the reverse-auction flow.
+// Everything in here is illustrative sample data, clearly labelled as such —
+// it is not, and must not be made to look like, real platform activity.
 // Real-time price drops, competitive bid ticks, and savings tally
 // ============================================================
 
@@ -238,7 +240,7 @@ export function ReverseBiddingSimulator() {
                   color: '#34d399',
                 }}
               >
-                LIVE REVERSE-AUCTION ENGINE
+                Worked example · sample data
               </span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#f97316', fontWeight: 700 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f97316', animation: 'pulse 1.5s infinite' }} />

@@ -38,9 +38,20 @@ export const GET = route(async (request) => {
   const category = url.searchParams.get('category');
   const q = url.searchParams.get('q')?.trim();
   const area = url.searchParams.get('area')?.trim();
-  const lat = Number(url.searchParams.get('lat'));
-  const lng = Number(url.searchParams.get('lng'));
-  const hasOrigin = Number.isFinite(lat) && Number.isFinite(lng);
+  // Note: Number(null) is 0, which is a valid-looking coordinate. Check that
+  // the parameters were actually supplied before treating them as an origin,
+  // or every caller gets distances measured from the Gulf of Guinea.
+  const latParam = url.searchParams.get('lat');
+  const lngParam = url.searchParams.get('lng');
+  const lat = Number(latParam);
+  const lng = Number(lngParam);
+  const hasOrigin =
+    latParam !== null &&
+    lngParam !== null &&
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lng) <= 180;
 
   const conditions = [
     eq(users.approvalStatus, 'approved'),

@@ -1,8 +1,11 @@
 'use client';
 // ============================================================
-// app/page.tsx — COE Enterprise Reverse-Bidding Marketplace
-// Official Venture Homepage & Master Portal Gateway
-// 2-Column Hero | Precision Calculator | 123+ Verified NCR Hubs | Live Portal Integration
+// app/page.tsx — COE homepage.
+//
+// The hero speaks to the employee who got handed the job of organising
+// something, not to a procurement department. Numbers on this page are
+// either derived from real data (venue count) or describe how the product
+// works — nothing invented to manufacture urgency.
 // ============================================================
 
 import React, { useState } from 'react';
@@ -23,6 +26,7 @@ import { PreviewFooter } from '@/components/venture/PreviewFooter';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { CategoryModal } from '@/components/modal/CategoryModal';
 import { useStore } from '@/store/useStore';
+import { GURUGRAM_PRESEEDED_VENUES } from '@/data/venues';
 
 export default function HomePage() {
   const [activeWorkflowTab, setActiveWorkflowTab] = useState<'corporate' | 'vendor'>('corporate');
@@ -99,7 +103,7 @@ export default function HomePage() {
             >
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
               <span style={{ fontSize: 11, fontWeight: 800, color: isNightMode ? '#34d399' : '#059669', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                ENTERPRISE REVERSE-BIDDING MARKETPLACE
+                Currently live in Gurgaon
               </span>
             </motion.div>
           </div>
@@ -125,7 +129,7 @@ export default function HomePage() {
                   color: isNightMode ? '#ffffff' : '#0f172a',
                 }}
               >
-                Cut Corporate Event Spends by 20%+.
+                Got roped into planning the office party again?
               </h1>
 
               {/* Single-Line Headline 2 with Vibrant Gradient */}
@@ -142,7 +146,7 @@ export default function HomePage() {
                   WebkitTextFillColor: 'transparent',
                 }}
               >
-                Let Verified Venues Bid Blindly for Your Business.
+                Post it once. Let Gurgaon&apos;s venues fight over it.
               </h2>
 
               {/* Subtitle */}
@@ -155,7 +159,11 @@ export default function HomePage() {
                   marginBottom: 22,
                 }}
               >
-                Eliminate traditional broker markups and slow negotiation calls. Post your sports leagues, galas, and offsites in 60 seconds — verified Gurugram facilities compete with live reverse bids.
+                Apart from your actual job, are <em>you</em> the one organising the team&apos;s next
+                sports meet? The Friday lunch, the offsite nobody agrees on, the Diwali party, the
+                jerseys? Put it up here and let vendors around Cyber City, Golf Course Road, Sohna
+                Road and Udyog Vihar come back with real quotes. No calls, no bhaiya-please-adjust,
+                no chasing.
               </p>
 
               {/* CTAs */}
@@ -179,7 +187,7 @@ export default function HomePage() {
                   }}
                 >
                   <Zap size={15} />
-                  <span>Place Live Bids</span>
+                  <span>Post what you need</span>
                   <ArrowRight size={13} />
                 </button>
 
@@ -200,7 +208,7 @@ export default function HomePage() {
                   }}
                 >
                   <Trophy size={15} color="#f97316" />
-                  <span>Explore Pilot Venues (123+)</span>
+                  <span>See who&apos;s on here ({GURUGRAM_PRESEEDED_VENUES.length})</span>
                 </a>
               </div>
 
@@ -214,30 +222,33 @@ export default function HomePage() {
                   borderTop: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
                 }}
               >
+                {/* Only things we can stand behind: a real count, and two
+                    statements about how the product works. No made-up
+                    "average turnaround" — there is no average yet. */}
                 <div>
-                  <div style={{ fontSize: 16, fontWeight: 900, color: '#10b981', fontFamily: 'var(--font-display)' }}>
-                    &lt; 4.5 Hours
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#f97316', fontFamily: 'var(--font-display)' }}>
+                    {GURUGRAM_PRESEEDED_VENUES.length} venues
                   </div>
                   <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', fontWeight: 600, marginTop: 2 }}>
-                    Avg Turnaround Time
+                    Across Gurgaon, admin-reviewed
                   </div>
                 </div>
 
                 <div>
-                  <div style={{ fontSize: 16, fontWeight: 900, color: '#f97316', fontFamily: 'var(--font-display)' }}>
-                    123+ Venues
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#10b981', fontFamily: 'var(--font-display)' }}>
+                    One form
                   </div>
                   <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', fontWeight: 600, marginTop: 2 }}>
-                    Verified Delhi NCR Hubs
+                    Instead of eleven WhatsApp threads
                   </div>
                 </div>
 
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 900, color: '#0ea5e9', fontFamily: 'var(--font-display)' }}>
-                    Zero Broker Margin
+                    No middleman
                   </div>
                   <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', fontWeight: 600, marginTop: 2 }}>
-                    Direct Venue Pricing
+                    You talk to the venue directly
                   </div>
                 </div>
               </div>
@@ -266,6 +277,73 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
+          1b. WHAT YOU CAN PUT UP — every category gets equal weight.
+          ══════════════════════════════════════════════════════════ */}
+      <section style={{ padding: '56px 24px 8px', position: 'relative' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(20px, 2.6vw, 30px)',
+              fontWeight: 900,
+              letterSpacing: '-0.02em',
+              color: isNightMode ? '#ffffff' : '#0f172a',
+              marginBottom: 6,
+            }}
+          >
+            Whatever it is this quarter
+          </h2>
+          <p style={{ fontSize: 14, color: isNightMode ? 'rgba(255,255,255,0.6)' : '#475569', marginBottom: 26 }}>
+            Sports meet or Secret Santa, it goes up the same way.
+          </p>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+              gap: 12,
+            }}
+          >
+            {[
+              { emoji: '🏏', title: 'Sports meet', line: 'Turf, courts, referees, kit. Box cricket on a Saturday.' },
+              { emoji: '🍛', title: 'Team lunch', line: 'Thirty people, one bill, and someone is Jain.' },
+              { emoji: '🍽️', title: 'Team dinner', line: 'A reserved section and a bar tab that stays sane.' },
+              { emoji: '🚌', title: 'Team outing', line: 'A day out with transport that actually shows up.' },
+              { emoji: '🎉', title: 'Office party', line: 'Diwali, annual day, quarter close. Stage, sound, décor.' },
+              { emoji: '🏆', title: 'Function', line: 'Awards night, launch, milestone. Formal run of show.' },
+              { emoji: '⛰️', title: 'Offsite', line: 'Rooms, a conference hall, and one thing to bond over.' },
+              { emoji: '🎁', title: 'Gifting & merch', line: 'Hampers, welcome kits, jerseys with the logo right.' },
+            ].map((item) => (
+              <div
+                key={item.title}
+                style={{
+                  padding: 16,
+                  borderRadius: 14,
+                  background: isNightMode ? 'rgba(255,255,255,0.035)' : 'rgba(255,255,255,0.85)',
+                  border: isNightMode ? '1px solid rgba(255,255,255,0.09)' : '1px solid rgba(0,0,0,0.08)',
+                }}
+              >
+                <div style={{ fontSize: 22, marginBottom: 8 }} aria-hidden>{item.emoji}</div>
+                <div
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 800,
+                    color: isNightMode ? '#ffffff' : '#0f172a',
+                    marginBottom: 4,
+                  }}
+                >
+                  {item.title}
+                </div>
+                <div style={{ fontSize: 12.5, lineHeight: 1.55, color: isNightMode ? 'rgba(255,255,255,0.58)' : '#64748b' }}>
+                  {item.line}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
           2. LIVE REVERSE-BIDDING INTERACTIVE SIMULATOR SECTION
           ══════════════════════════════════════════════════════════ */}
       <section id="simulator" style={{ padding: '80px 24px', position: 'relative', scrollMarginTop: 80 }}>
@@ -283,13 +361,15 @@ export default function HomePage() {
                 background: 'rgba(16, 185, 129, 0.12)',
               }}
             >
-              ⚡ SEE THE AUCTION ENGINE IN ACTION
+              ⚡ Worked example — not live activity
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.2vw, 38px)', fontWeight: 900, color: isNightMode ? '#ffffff' : '#0f172a', letterSpacing: '-0.025em', marginTop: 10, marginBottom: 10 }}>
-              How Reverse-Bidding Compresses Costs in Real Time
+              What happens after you post
             </h2>
             <p style={{ fontSize: 14.5, color: isNightMode ? 'rgba(255,255,255,0.65)' : '#475569', maxWidth: 640, margin: '0 auto' }}>
-              Unlike traditional procurement where middlemen quote high upfront, our blind bidding mechanism allows top venues to compete downwards, passing 100% of the cost savings directly to your company.
+              A walkthrough with made-up numbers, so you can see the shape of it: vendors can see the
+              requirement but not each other&apos;s quotes, so the price they send is the price they
+              are willing to do it for. Nothing on this page is a real bid.
             </p>
           </div>
 
