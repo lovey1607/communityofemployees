@@ -20,8 +20,9 @@ interface VendorTrustBadgeProps {
 export function VendorTrustBadge({
   placeId,
   vendorName,
-  rating = 4.8,
-  userRatingsTotal = 48,
+  // No default score. A vendor with no ratings shows as unrated, not 4.8.
+  rating,
+  userRatingsTotal,
   showModalOnClick = true,
 }: VendorTrustBadgeProps) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -66,9 +67,9 @@ export function VendorTrustBadge({
         title="Click to view verified Google Places reviews & business rating"
       >
         <Star size={13} fill="#fbbf24" color="#fbbf24" />
-        <span>{rating.toFixed(1)}</span>
+        <span>{rating === undefined ? 'Not rated' : rating.toFixed(1)}</span>
         <span style={{ fontSize: 10.5, color: 'rgba(255, 255, 255, 0.65)', fontWeight: 500 }}>
-          ({userRatingsTotal})
+          {userRatingsTotal === undefined ? '' : `(${userRatingsTotal})`}
         </span>
         <span
           style={{

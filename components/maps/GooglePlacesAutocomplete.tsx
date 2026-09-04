@@ -58,10 +58,6 @@ export function GooglePlacesAutocomplete({
   );
   const [autoSyncName, setAutoSyncName] = useState(true);
   const [isApiKeyActive, setIsApiKeyActive] = useState(false);
-  const [showKeyModal, setShowKeyModal] = useState(false);
-  const [keyInput, setKeyInput] = useState('');
-  const [keySaving, setKeySaving] = useState(false);
-  const [keySuccess, setKeySuccess] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -73,12 +69,20 @@ export function GooglePlacesAutocomplete({
     }
   }, [value]);
 
-  // Check stored key or initial status
+  // Whether live Google Places is available is server configuration, not
+  // something the visitor can set. (This component used to POST a key the
+  // user typed to an endpoint that wrote it into the server's .env file.)
   useEffect(() => {
-    const storedKey = typeof window !== 'undefined' ? localStorage.getItem('coe_google_maps_key') : null;
-    if (storedKey) {
-      setIsApiKeyActive(true);
-    }
+    let cancelled = false;
+    fetch('/api/config/google-key')
+      .then((r) => r.json())
+      .then((d) => {
+        if (!cancelled) setIsApiKeyActive(Boolean(d.isConfigured));
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Close dropdown on outside click
@@ -102,13 +106,7 @@ export function GooglePlacesAutocomplete({
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        const storedKey = typeof window !== 'undefined' ? localStorage.getItem('coe_google_maps_key') : null;
-        const headers: HeadersInit = {};
-        if (storedKey) headers['x-google-maps-key'] = storedKey;
-
-        const res = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(inputValue.trim())}`, {
-          headers,
-        });
+        const res = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(inputValue.trim())}`);
         if (res.ok) {
           const data = await res.json();
           if (data.success && Array.isArray(data.predictions)) {
@@ -166,36 +164,6 @@ export function GooglePlacesAutocomplete({
     inputRef.current?.focus();
   };
 
-  const handleSaveApiKey = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!keyInput.trim()) return;
-    setKeySaving(true);
-    try {
-      const res = await fetch('/api/config/google-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey: keyInput.trim() }),
-      });
-      if (res.ok) {
-        localStorage.setItem('coe_google_maps_key', keyInput.trim());
-        setIsApiKeyActive(true);
-        setKeySuccess(true);
-        setTimeout(() => {
-          setShowKeyModal(false);
-          setKeySuccess(false);
-          // Refetch suggestions with new key
-          if (inputValue) {
-            setInputValue((prev) => prev);
-          }
-        }, 1200);
-      }
-    } catch (err) {
-      console.error('Failed to save API key:', err);
-    } finally {
-      setKeySaving(false);
-    }
-  };
-
   return (
     <div ref={containerRef} style={{ width: '100%', position: 'relative' }}>
       {/* Label Bar */}
@@ -214,9 +182,7 @@ export function GooglePlacesAutocomplete({
             {label} {required && <span style={{ color: '#ef4444' }}>*</span>}
           </label>
 
-          <button
-            type="button"
-            onClick={() => setShowKeyModal(true)}
+          <span
             style={{
               fontSize: 10.5,
               color: isApiKeyActive ? '#10b981' : '#fbbf24',
@@ -231,20 +197,24 @@ export function GooglePlacesAutocomplete({
               fontWeight: 700,
               transition: 'all 0.2s ease',
             }}
-            title="Click to connect your Google Cloud API key for 100% live Google reviews"
+            title={
+              isApiKeyActive
+                ? 'Live Google Places data is connected'
+                : 'Showing the built-in Gurugram directory — set GOOGLE_MAPS_API_KEY to enable live Google Places'
+            }
           >
             {isApiKeyActive ? (
               <>
                 <CheckCircle2 size={11} color="#10b981" />
-                <span>Google Places Live API Connected</span>
+                <span>Google Places connected</span>
               </>
             ) : (
               <>
                 <Key size={11} color="#fbbf24" />
-                <span>Connect Google API Key (Live Ratings)</span>
+                <span>Built-in Gurugram directory</span>
               </>
             )}
-          </button>
+          </span>
         </div>
       )}
 
@@ -566,102 +536,6 @@ export function GooglePlacesAutocomplete({
         </motion.div>
       )}
 
-      {/* ── API Key Configuration Modal ── */}
-      <AnimatePresence>
-        {showKeyModal && (
-          <div
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 400,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 20,
-              background: 'rgba(5, 8, 20, 0.85)',
-              backdropFilter: 'blur(14px)',
-            }}
-            onClick={() => setShowKeyModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.93, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.93, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                width: '100%',
-                maxWidth: 500,
-                background: '#0B0F17',
-                border: '1.5px solid rgba(234, 179, 8, 0.35)',
-                borderRadius: 22,
-                padding: '26px',
-                boxShadow: '0 30px 90px rgba(0,0,0,0.95)',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(234, 179, 8, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24' }}>
-                    <Key size={18} />
-                  </div>
-                  <div>
-                    <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-display)' }}>
-                      Connect Google Cloud API Key
-                    </h2>
-                    <div style={{ fontSize: 11.5, color: 'rgba(255, 255, 255, 0.5)' }}>
-                      Enables 100% live Google Places reviews & real-time ratings
-                    </div>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowKeyModal(false)}
-                  style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer' }}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-
-              <form onSubmit={handleSaveApiKey}>
-                <div style={{ marginBottom: 14 }}>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: 6 }}>
-                    Google Maps API Key (Places API Enabled)
-                  </label>
-                  <input
-                    className="input-base"
-                    placeholder="AIzaSy..."
-                    value={keyInput}
-                    onChange={(e) => setKeyInput(e.target.value)}
-                    autoFocus
-                  />
-                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 6, lineHeight: 1.4 }}>
-                    Paste your Google Cloud API key with <strong>Places API</strong> and <strong>Maps JavaScript API</strong> enabled.
-                  </div>
-                </div>
-
-                {keySuccess && (
-                  <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', fontSize: 12, fontWeight: 700, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Check size={14} /> Key saved and live Google Places API connected!
-                  </div>
-                )}
-
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button type="button" onClick={() => setShowKeyModal(false)} className="btn-ghost" style={{ flex: 1 }}>
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={!keyInput.trim() || keySaving}
-                    className="btn-primary"
-                    style={{ flex: 2, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
-                  >
-                    {keySaving ? 'Connecting…' : 'Save & Connect Live API'}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

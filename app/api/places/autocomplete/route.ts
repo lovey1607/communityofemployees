@@ -292,10 +292,10 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Check runtime env or header key
-    const clientKey = request.headers.get('x-google-maps-key');
+    // The key is server configuration. A client-supplied key header used to
+    // be honoured here, which let any caller make this server issue Google
+    // requests with a key of their choosing.
     const apiKey =
-      clientKey ||
       process.env.GOOGLE_MAPS_API_KEY ||
       process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 

@@ -1437,8 +1437,8 @@ export default function VendorDashboard() {
                 <VendorTrustBadge
                   placeId={vendor.place_id}
                   vendorName={vendor.companyName}
-                  rating={vendor.rating || 4.8}
-                  userRatingsTotal={vendor.user_ratings_total || 48}
+                  rating={vendor.rating ?? undefined}
+                  userRatingsTotal={vendor.user_ratings_total ?? undefined}
                 />
               </div>
 

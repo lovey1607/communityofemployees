@@ -358,8 +358,8 @@ function VendorProposalDrawer({
             <VendorGoogleReviewsWidget
               placeId={vendorProfile?.place_id || bid.place_id}
               vendorName={bid.vendorCompany}
-              fallbackRating={vendorProfile?.rating || bid.rating || 4.8}
-              fallbackTotalReviews={vendorProfile?.user_ratings_total || bid.user_ratings_total || 48}
+              fallbackRating={vendorProfile?.rating ?? bid.rating}
+              fallbackTotalReviews={vendorProfile?.user_ratings_total ?? bid.user_ratings_total}
             />
           </div>
         </div>
@@ -745,8 +745,8 @@ export default function SpecificRFPInquiryPage() {
                           <VendorTrustBadge
                             placeId={prof?.place_id || bid.place_id}
                             vendorName={bid.vendorCompany}
-                            rating={prof?.rating || bid.rating || 4.8}
-                            userRatingsTotal={prof?.user_ratings_total || bid.user_ratings_total || 48}
+                            rating={prof?.rating ?? bid.rating}
+                            userRatingsTotal={prof?.user_ratings_total ?? bid.user_ratings_total}
                           />
                         </div>
 

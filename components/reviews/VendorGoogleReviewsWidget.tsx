@@ -24,8 +24,8 @@ interface VendorGoogleReviewsWidgetProps {
 export function VendorGoogleReviewsWidget({
   placeId,
   vendorName = 'Vendor Partner',
-  fallbackRating = 4.8,
-  fallbackTotalReviews = 48,
+  fallbackRating,
+  fallbackTotalReviews,
   compact = false,
 }: VendorGoogleReviewsWidgetProps) {
   const [details, setDetails] = useState<GooglePlaceDetails | null>(null);
@@ -45,11 +45,8 @@ export function VendorGoogleReviewsWidget({
 
     async function fetchPlaceDetails() {
       try {
-        const storedKey = typeof window !== 'undefined' ? localStorage.getItem('coe_google_maps_key') : null;
-        const headers: HeadersInit = {};
-        if (storedKey) headers['x-google-maps-key'] = storedKey;
-
-        const res = await fetch(`/api/places/details?placeId=${encodeURIComponent(placeId!)}`, { headers });
+        // The Google key is server configuration; the browser never holds it.
+        const res = await fetch(`/api/places/details?placeId=${encodeURIComponent(placeId!)}`);
         if (!res.ok) {
           throw new Error(`Failed to fetch place details (HTTP ${res.status})`);
         }
@@ -57,7 +54,7 @@ export function VendorGoogleReviewsWidget({
         if (isMounted) {
           if (data.success && data.place) {
             setDetails(data.place);
-            setIsKeyMissing(Boolean(data.isApiKeyMissing));
+            setIsKeyMissing(data.reviewsAvailable === false);
           } else {
             setError(data.error || 'Unable to load Google reviews');
           }
@@ -81,8 +78,11 @@ export function VendorGoogleReviewsWidget({
     };
   }, [placeId]);
 
-  const rating = details?.rating ?? fallbackRating;
-  const userRatingsTotal = details?.user_ratings_total ?? fallbackTotalReviews;
+  // Never invent a score. If Google has not given us one, `rating` is null
+  // and the UI says the rating is unavailable rather than showing a number
+  // nobody earned.
+  const rating: number | null = details?.rating ?? fallbackRating ?? null;
+  const userRatingsTotal: number | null = details?.user_ratings_total ?? fallbackTotalReviews ?? null;
   const reviews: GooglePlaceReview[] = details?.reviews || [];
 
   // Render Skeleton while loading
@@ -130,13 +130,19 @@ export function VendorGoogleReviewsWidget({
           fontSize: 12,
           fontWeight: 700,
         }}
-        title={`Verified Google Business: ${rating} / 5.0 (${userRatingsTotal} reviews)`}
+        title={
+          rating === null
+            ? 'No Google rating available for this listing'
+            : `Google rating: ${rating} / 5.0 (${userRatingsTotal ?? 0} reviews)`
+        }
       >
         <Star size={13} fill="#fbbf24" color="#fbbf24" />
-        <span>{rating.toFixed(1)}</span>
-        <span style={{ fontSize: 10.5, color: 'rgba(255, 255, 255, 0.65)', fontWeight: 500 }}>
-          ({userRatingsTotal})
-        </span>
+        <span>{rating === null ? 'Not rated' : rating.toFixed(1)}</span>
+        {userRatingsTotal !== null && (
+          <span style={{ fontSize: 10.5, color: 'rgba(255, 255, 255, 0.65)', fontWeight: 500 }}>
+            ({userRatingsTotal})
+          </span>
+        )}
       </div>
     );
   }
@@ -236,10 +242,12 @@ export function VendorGoogleReviewsWidget({
             }}
           >
             <Star size={18} fill="#facc15" color="#facc15" />
-            <span>{rating.toFixed(1)} / 5.0</span>
+            <span>{rating === null ? 'Not rated yet' : `${rating.toFixed(1)} / 5.0`}</span>
           </div>
           <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255, 255, 255, 0.7)', marginTop: 2 }}>
-            {userRatingsTotal} Verified Google Reviews
+            {userRatingsTotal === null
+              ? 'Google reviews not connected'
+              : `${userRatingsTotal} Google reviews`}
           </div>
         </div>
       </div>
@@ -262,10 +270,12 @@ export function VendorGoogleReviewsWidget({
           }}
         >
           <div style={{ fontSize: 11.5, fontWeight: 800, color: 'rgba(255, 255, 255, 0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            Real-World Customer Reviews & Feedback
+            Reviews from Google
           </div>
           <div style={{ fontSize: 11, color: 'rgba(255, 255, 255, 0.4)' }}>
-            Showing {Math.min(5, reviews.length)} of {userRatingsTotal}
+            {userRatingsTotal === null
+              ? '—'
+              : `Showing ${Math.min(5, reviews.length)} of ${userRatingsTotal}`}
           </div>
         </div>
 
@@ -283,10 +293,12 @@ export function VendorGoogleReviewsWidget({
           >
             <CheckCircle size={22} color="#10b981" style={{ margin: '0 auto 8px', opacity: 0.8 }} />
             <div style={{ fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>
-              Verified Google Business Profile
+              {isKeyMissing ? 'Google reviews not connected' : 'No public Google reviews yet'}
             </div>
             <div style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.5)' }}>
-              No public reviews yet · Ready for enterprise procurement
+              {isKeyMissing
+                ? 'This deployment has no Google Places key configured, so live reviews are unavailable.'
+                : 'COE ratings from completed events appear on the vendor profile.'}
             </div>
           </div>
         ) : (
