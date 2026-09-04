@@ -18,6 +18,26 @@ import bcrypt from 'bcryptjs';
 import { Pool } from 'pg';
 import { GURUGRAM_PRESEEDED_VENUES } from '../data/venues';
 
+/**
+ * The venue GSTINs in data/venues.ts are placeholders and do not carry a
+ * valid mod-36 check character, which would make a seeded vendor unable to
+ * save their own profile (lib/validation.ts checks it). Recompute the check
+ * character so seeded rows are at least self-consistent.
+ */
+const GSTIN_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function withValidChecksum(gstin: string): string {
+  const base = gstin.toUpperCase().slice(0, 14);
+  if (base.length !== 14) return gstin;
+  let sum = 0;
+  for (let i = 0; i < 14; i += 1) {
+    const value = GSTIN_ALPHABET.indexOf(base[i]!);
+    if (value < 0) return gstin;
+    const product = value * (i % 2 === 0 ? 1 : 2);
+    sum += Math.floor(product / 36) + (product % 36);
+  }
+  return base + GSTIN_ALPHABET[(36 - (sum % 36)) % 36];
+}
+
 interface FixtureAccount {
   email: string;
   password: string;
@@ -135,7 +155,7 @@ async function main() {
           account.category ?? 'food',
           account.companyName ?? 'Dev Vendor',
           `${account.companyName ?? 'Dev Vendor'} Representative`,
-          account.gstNumber ?? '06AAACD1234A1ZK',
+          withValidChecksum(account.gstNumber ?? '06AAACD1234A1ZL'),
           account.city ?? 'Gurugram',
           JSON.stringify([account.city ?? 'Gurugram']),
         ]
@@ -175,7 +195,7 @@ async function main() {
         [
           id('vp'), userId, venue.category, venue.name, `${venue.name} Representative`,
           venue.phone, venue.companyPhone, venue.address, venue.city, venue.locality,
-          venue.distanceKm, venue.entityType ?? 'Pvt Ltd', venue.gstNumber,
+          venue.distanceKm, venue.entityType ?? 'Pvt Ltd', withValidChecksum(venue.gstNumber),
           venue.description, venue.corporateSuitability,
           JSON.stringify(venue.pastClients ?? []), JSON.stringify(venue.amenities ?? []),
           venue.timings, venue.avgCostPerPerson, venue.place_id, venue.address, venue.name,
