@@ -10,8 +10,37 @@
   --font-body: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
 
+  /* ─── Surface: one ground for the whole product ───────────
+     Mirrors lib/roleTheme.ts. Four different near-blacks used to be in
+     circulation; there is now one. */
+  --surface-ground: #0B0F17;
+  --surface-raised: rgba(255, 255, 255, 0.035);
+  --surface-overlay: #0F131C;
+  --surface-border: rgba(255, 255, 255, 0.09);
+  --surface-border-strong: rgba(255, 255, 255, 0.16);
+  --surface-scrim: rgba(5, 7, 14, 0.82);
+
+  /* ─── Text, by emphasis ───────────────────────────────────── */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.68);
+  --text-muted: rgba(255, 255, 255, 0.46);
+  --text-faint: rgba(255, 255, 255, 0.28);
+
+  /* ─── Role accents. Kept as they were; defined once. ──────── */
+  --role-corporate: #10b981;
+  --role-vendor: #f97316;
+  --role-admin: #eab308;
+  --role-public: #f97316;
+
+  /* ─── Status. Never reused as a role accent, so a vendor's
+     orange is never mistaken for a warning. ─────────────────── */
+  --status-success: #22c55e;
+  --status-warning: #fbbf24;
+  --status-danger: #ef4444;
+  --status-info: #38bdf8;
+
   /* Dynamic theme vars */
-  --theme-bg: #03040a;
+  --theme-bg: #0B0F17;
   --theme-primary: #10b981;
   --theme-accent: #38bdf8;
   --theme-text: #ffffff;
@@ -202,7 +231,7 @@ h1, h2, h3, h4, h5 {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(3, 5, 14, 0.82);
+  background: var(--surface-scrim);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   z-index: 100;

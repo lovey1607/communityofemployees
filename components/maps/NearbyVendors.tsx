@@ -236,7 +236,7 @@ export function NearbyVendors() {
                     scale: 8,
                     fillColor: '#38bdf8',
                     fillOpacity: 1,
-                    strokeColor: '#0b0d12',
+                    strokeColor: '#0B0F17',
                     strokeWeight: 2,
                   }}
                 />

@@ -159,7 +159,7 @@ export function AuthModal() {
         cursor: 'pointer',
         fontSize: 13,
         fontWeight: 600,
-        color: mode === value ? '#0b0d12' : muted,
+        color: mode === value ? '#0B0F17' : muted,
         background: mode === value ? '#f97316' : 'transparent',
         transition: 'all .18s ease',
       }}
@@ -402,7 +402,7 @@ export function AuthModal() {
               border: 'none',
               cursor: loading ? 'wait' : 'pointer',
               background: '#f97316',
-              color: '#0b0d12',
+              color: '#0B0F17',
               fontSize: 14,
               fontWeight: 700,
               display: 'flex',

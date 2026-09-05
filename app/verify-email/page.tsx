@@ -63,7 +63,7 @@ function VerifyEmailInner() {
           href="/"
           style={{
             display: 'inline-block', padding: '11px 20px', borderRadius: 11,
-            background: '#f97316', color: '#0b0d12', fontWeight: 700, fontSize: 14, textDecoration: 'none',
+            background: '#f97316', color: '#0B0F17', fontWeight: 700, fontSize: 14, textDecoration: 'none',
           }}
         >
           Back to COE

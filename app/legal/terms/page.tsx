@@ -12,7 +12,7 @@ import { PreviewFooter } from '@/components/venture/PreviewFooter';
 
 export default function TermsOfServicePage() {
   return (
-    <div style={{ background: '#05070E', color: '#ffffff', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: '#0B0F17', color: '#ffffff', minHeight: '100vh', position: 'relative' }}>
       <BlurredCyberHubBackground />
 
       {/* Top Header */}

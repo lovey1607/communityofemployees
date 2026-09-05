@@ -275,7 +275,7 @@ export default function AdminLoginPage() {
                   borderRadius: 12,
                   border: 'none',
                   background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)',
-                  color: '#050814',
+                  color: '#0B0F17',
                   fontSize: 14,
                   fontWeight: 800,
                   cursor: loading ? 'not-allowed' : 'pointer',

@@ -1299,7 +1299,7 @@ export default function VendorDashboard() {
         </p>
         <Link
           href="/vendor/onboarding"
-          style={{ display: 'inline-block', marginTop: 18, padding: '11px 20px', borderRadius: 11, background: '#f97316', color: '#0b0d12', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
+          style={{ display: 'inline-block', marginTop: 18, padding: '11px 20px', borderRadius: 11, background: '#f97316', color: '#0B0F17', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
         >
           Complete profile
         </Link>

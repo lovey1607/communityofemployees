@@ -57,7 +57,7 @@ export function AdminNav() {
                 justifyContent: 'center',
                 fontSize: 16,
                 fontWeight: 800,
-                color: '#050814',
+                color: '#0B0F17',
                 fontFamily: 'var(--font-display)',
                 boxShadow: '0 4px 16px rgba(234, 179, 8, 0.35)',
               }}

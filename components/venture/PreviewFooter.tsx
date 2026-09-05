@@ -38,7 +38,7 @@ export function PreviewFooter() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#050814',
+                  color: '#0B0F17',
                   fontWeight: 900,
                   fontSize: 16,
                   fontFamily: 'var(--font-display)',

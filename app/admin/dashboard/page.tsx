@@ -111,7 +111,7 @@ function EditUserModal({ user, onClose }: { user: User; onClose: () => void }) {
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
             <button type="button" onClick={onClose} style={{ flex: 1, padding: '10px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Cancel</button>
-            <button type="submit" style={{ flex: 2, padding: '10px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #eab308, #ca8a04)', color: '#050814', fontSize: 13.5, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: 'var(--font-body)' }}>
+            <button type="submit" style={{ flex: 2, padding: '10px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #eab308, #ca8a04)', color: '#0B0F17', fontSize: 13.5, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: 'var(--font-body)' }}>
               <Save size={14} /> Save Changes
             </button>
           </div>
@@ -230,7 +230,7 @@ function TabBtn({ label, active, count, color = '#eab308', onClick }: { label: s
     }}>
       {label}
       {count !== undefined && count > 0 && (
-        <span style={{ fontSize: 11, background: active ? color : 'rgba(255,255,255,0.15)', color: active ? '#050814' : '#fff', padding: '2px 7px', borderRadius: 999, fontWeight: 800 }}>
+        <span style={{ fontSize: 11, background: active ? color : 'rgba(255,255,255,0.15)', color: active ? '#0B0F17' : '#fff', padding: '2px 7px', borderRadius: 999, fontWeight: 800 }}>
           {count}
         </span>
       )}
@@ -491,7 +491,7 @@ export default function AdminDashboard() {
         {/* ── Header ── */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28, flexWrap: 'wrap', gap: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #eab308, #ca8a04)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#050814', boxShadow: '0 8px 24px rgba(234,179,8,0.35)' }}>
+            <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #eab308, #ca8a04)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0B0F17', boxShadow: '0 8px 24px rgba(234,179,8,0.35)' }}>
               <Shield size={26} />
             </div>
             <div>

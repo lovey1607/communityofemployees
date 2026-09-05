@@ -34,7 +34,7 @@ export default function HomePage() {
   return (
     <div
       style={{
-        background: isNightMode ? '#05070E' : '#f8fafc',
+        background: isNightMode ? '#0B0F17' : '#f8fafc',
         color: isNightMode ? '#ffffff' : '#0f172a',
         minHeight: '100vh',
         overflowX: 'hidden',

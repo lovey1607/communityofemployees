@@ -87,7 +87,7 @@ export function PreviewHeader() {
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 0 20px rgba(16,185,129,0.4)',
-              color: '#050814',
+              color: '#0B0F17',
               fontWeight: 900,
               fontSize: 18,
               fontFamily: 'var(--font-display)',

@@ -83,7 +83,7 @@ function ResetPasswordInner() {
               type="submit" disabled={busy}
               style={{
                 width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-                background: '#f97316', color: '#0b0d12', fontWeight: 700, fontSize: 14,
+                background: '#f97316', color: '#0B0F17', fontWeight: 700, fontSize: 14,
                 cursor: busy ? 'wait' : 'pointer', opacity: busy ? 0.6 : 1,
               }}
             >
