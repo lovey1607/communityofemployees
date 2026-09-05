@@ -1,7 +1,7 @@
 // POST /api/rfps/:id/bids — an approved vendor quotes on a live requirement.
 // One live bid per vendor per RFP; posting again revises the existing one.
 
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { bids, corporateProfiles, rfps, vendorProfiles } from '@/lib/db/schema';
 import { newId } from '@/lib/server/crypto';
@@ -20,6 +20,7 @@ import {
 } from '@/lib/server/http';
 import { createBidSchema } from '@/lib/validation';
 import { serializeBid } from '@/lib/server/serialize';
+import { scoreBid } from '@/lib/server/match';
 
 export const dynamic = 'force-dynamic';
 
@@ -86,10 +87,51 @@ export const POST = route(async (request: Request, ctx: Ctx) => {
       ? haversineKm({ lat: poster.lat, lng: poster.lng }, { lat: vendor.lat, lng: vendor.lng })
       : vendor.distanceKm;
 
-  const matchPercentage = Math.max(
-    40,
-    Math.min(99, Math.round(100 - Math.abs(body.totalPrice - rfp.totalBudget) / Math.max(rfp.totalBudget, 1) * 100))
-  );
+  // How well this bid answers the requirement. Scored server-side from the
+  // saved RFP and vendor records so a bidder cannot influence their own
+  // score, and stored with its breakdown so the buyer can see the reasoning
+  // on the comparison screen rather than a bare number.
+  const [record] = await db
+    .select({
+      // Completed work on COE, counted through the accepted bid rather than
+      // a denormalised column — rfps records the winning bid id, and the bid
+      // is what carries the vendor.
+      completed: sql<number>`(
+        SELECT COUNT(*)::int
+        FROM rfps r
+        JOIN bids b ON b.id = r.accepted_bid_id
+        WHERE r.status = 'completed' AND b.vendor_id = ${vendor.id}
+      )`,
+      avgRating: sql<number | null>`(
+        SELECT AVG(rating)::float FROM vendor_reviews vr WHERE vr.vendor_id = ${vendor.id}
+      )`,
+      ratingCount: sql<number>`(
+        SELECT COUNT(*)::int FROM vendor_reviews vr WHERE vr.vendor_id = ${vendor.id}
+      )`,
+    })
+    .from(vendorProfiles)
+    .where(eq(vendorProfiles.id, vendor.id))
+    .limit(1);
+
+  const universal = (rfp.universal ?? {}) as { persons?: number };
+  const match = scoreBid({
+    budget: rfp.totalBudget,
+    bidPrice: body.totalPrice,
+    headcount: Number(universal.persons ?? 0),
+    requirements: (rfp.categoryDetails ?? {}) as Record<string, unknown>,
+    distanceKm: distanceKm ?? null,
+    serviceArea: rfp.serviceArea ?? null,
+    vendor: {
+      amenities: vendor.amenities ?? null,
+      avgCostPerPerson: vendor.avgCostPerPerson ?? null,
+      serviceAreas: vendor.serviceAreas ?? null,
+      locality: vendor.locality ?? null,
+      completedEvents: Number(record?.completed ?? 0),
+      averageRating: record?.avgRating ?? null,
+      ratingCount: Number(record?.ratingCount ?? 0),
+    },
+  });
+  const matchPercentage = match.percentage;
 
   const now = new Date();
   const [existing] = await db
@@ -110,6 +152,7 @@ export const POST = route(async (request: Request, ctx: Ctx) => {
         validUntil,
         distanceKm,
         matchPercentage,
+        matchFactors: match.factors,
         status: 'pending',
         revisedAt: now,
         updatedAt: now,
@@ -130,6 +173,7 @@ export const POST = route(async (request: Request, ctx: Ctx) => {
         validUntil,
         distanceKm,
         matchPercentage,
+        matchFactors: match.factors,
       })
       .returning();
   }

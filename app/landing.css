@@ -42,12 +42,25 @@
 .logo-badge{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--saffron),#FF3D71);display:grid;place-items:center;color:#fff;font-size:.8rem;font-weight:800;box-shadow:0 8px 16px -8px rgba(255,107,44,.8);transform:rotate(-6deg);transition:transform .3s var(--ease)}
 .logo:hover .logo-badge{transform:rotate(6deg) scale(1.05)}
 .logo small{display:block;font-family:var(--font-body);font-weight:500;font-size:.68rem;color:var(--muted);letter-spacing:.02em;line-height:1}
-.nav-links{display:flex;gap:1.6rem;font-weight:500;font-size:.92rem;color:var(--ink-2)}
+.nav-links{display:flex;gap:1.35rem;font-weight:500;font-size:.9rem;color:var(--ink-2);white-space:nowrap}
 .nav-links a{position:relative;padding:.3rem 0}
 .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--saffron);border-radius:2px;transform:scaleX(0);transition:transform .25s var(--ease)}
 .nav-links a:hover::after{transform:scaleX(1)}
 .nav .btn{padding:.65rem 1.1rem;font-size:.9rem}
 @media (max-width:820px){.nav-links{display:none}}
+/* Six links plus a wordmark plus a CTA is a lot for one bar. Between 1180px
+   and the mobile breakpoint the two least load-bearing links drop out and
+   the wordmark loses its second line, rather than the whole bar wrapping. */
+@media (max-width:1180px){
+  .nav-links{gap:1rem;font-size:.85rem}
+  .nav-links a:nth-child(4){display:none}
+  .logo{font-size:1.02rem}
+  .logo small{display:none}
+}
+@media (max-width:1010px){
+  .nav-links a:nth-child(2){display:none}
+  .nav .btn{padding:.6rem .9rem;font-size:.85rem}
+}
 @media (max-width:480px){.nav .btn{padding:.55rem .8rem;font-size:.78rem}.logo small{display:none}.logo{font-size:.95rem;white-space:nowrap;min-width:0}.nav .logo span:last-child{font-size:.74rem;line-height:1.1;white-space:normal;max-width:100px}.nav .wrap{gap:.5rem}.nav .logo-badge{flex:none}.chip:nth-child(n+6){display:none}.branch-switch{display:flex;flex-wrap:wrap;border-radius:18px}.branch-switch button{flex:1;text-align:center}}
 
 /* ---------- hero ---------- */
@@ -332,3 +345,47 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
 .parties .venue span{color:var(--muted)}
 .parties .foot-note{margin-top:1.2rem;font-size:.82rem;color:var(--muted);text-align:center}
 .marquee-rev{animation-direction:reverse}
+
+/* ---------- live badge ---------- */
+.live-pill{gap:.5rem}
+.pill-sub{color:var(--muted);font-weight:500}
+@media (max-width:560px){.pill-sub{display:none}}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--turf);position:relative;flex:none}
+.live-dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--turf);animation:live-ping 1.8s var(--ease) infinite}
+@keyframes live-ping{0%{transform:scale(1);opacity:.6}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
+
+/* ---------- rotating headline word ----------
+   A fixed-height window with the words stacked inside it, stepped one line at
+   a time. Height is set in em so it tracks the clamped headline size instead
+   of needing its own breakpoints. */
+.rotator{display:inline-block;height:1.12em;overflow:hidden;vertical-align:bottom}
+.rot-track{display:flex;flex-direction:column;animation:rot 12s steps(1,end) infinite}
+.rot-word{height:1.12em;line-height:1.12em;white-space:nowrap}
+@keyframes rot{
+  0%,16%{transform:translateY(0)}
+  20%,36%{transform:translateY(-1.12em)}
+  40%,56%{transform:translateY(-2.24em)}
+  60%,76%{transform:translateY(-3.36em)}
+  80%,96%{transform:translateY(-4.48em)}
+  100%{transform:translateY(0)}
+}
+
+/* ---------- the one pun ---------- */
+.quip{margin-top:1.4rem;font-size:1.05rem;font-weight:600;color:var(--ink-2);display:flex;gap:.5rem;align-items:baseline;justify-content:center;flex-wrap:wrap}
+.quip-swap{display:inline-block;height:1.25em;overflow:hidden;vertical-align:bottom;position:relative;top:.12em}
+.quip-swap b{display:block;height:1.25em;line-height:1.25em;color:var(--saffron);font-weight:800;animation:quip 6s var(--ease) infinite}
+@keyframes quip{0%,42%{transform:translateY(0)}50%,92%{transform:translateY(-1.25em)}100%{transform:translateY(0)}}
+.quip-note{font-size:.86rem;font-weight:500;color:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---------- for companies ---------- */
+.companies{background:var(--cream-2)}
+.companies .vendor-in{align-items:center}
+.companies .trust-grid{margin-top:2.5rem}
+
+/* Anyone who has asked for less motion gets none of the above. */
+@media (prefers-reduced-motion:reduce){
+  .rot-track,.quip-swap b,.live-dot::after{animation:none}
+  .rotator,.quip-swap{height:auto}
+  .rot-word:not(:first-child),.quip-swap b:not(:first-child){display:none}
+}

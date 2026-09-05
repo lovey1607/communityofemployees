@@ -177,13 +177,65 @@ function EditVendorModal({
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            {/* This field was a free-text box while onboarding already
+                constrained the same value to ten digits, so an edit here could
+                save something the server would later reject — and this is the
+                number the buyer's WhatsApp button is built from. */}
             <div>
-              <label style={labelStyle}>Contact Mobile</label>
-              <input className="input-base" required value={mobile} onChange={(e) => setMobile(e.target.value)} />
+              <label style={labelStyle}>Contact Mobile (WhatsApp)</label>
+              <div style={{ display: 'flex' }}>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '0 11px',
+                    borderRadius: '10px 0 0 10px',
+                    border: '1px solid var(--line)',
+                    borderRight: 'none',
+                    background: 'var(--cream-2)',
+                    color: 'var(--ink-2)',
+                    fontSize: 13,
+                    fontWeight: 700,
+                  }}
+                >
+                  +91
+                </span>
+                <input
+                  className="input-base"
+                  style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  required
+                  placeholder="9871100000"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                />
+              </div>
+              <div
+                style={{
+                  fontSize: 11,
+                  marginTop: 4,
+                  fontWeight: 600,
+                  color: /^[6-9]\d{9}$/.test(mobile) ? '#137A43' : 'var(--muted)',
+                }}
+              >
+                {/^[6-9]\d{9}$/.test(mobile)
+                  ? 'Buyers reach you here on WhatsApp once they award you'
+                  : `${mobile.length}/10 digits — must start with 6, 7, 8 or 9`}
+              </div>
             </div>
             <div>
               <label style={labelStyle}>Company Landline / Alternate</label>
-              <input className="input-base" value={companyMobile} onChange={(e) => setCompanyMobile(e.target.value)} />
+              <input
+                className="input-base"
+                type="tel"
+                inputMode="numeric"
+                maxLength={11}
+                placeholder="Optional"
+                value={companyMobile}
+                onChange={(e) => setCompanyMobile(e.target.value.replace(/\D/g, '').slice(0, 11))}
+              />
             </div>
           </div>
 

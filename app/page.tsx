@@ -168,6 +168,10 @@ const OCCASIONS: { emoji: string; title: string; body: string; tags: string[] }[
   },
 ];
 
+// Cycled in the hero headline. Order matters only in that the first one is
+// what a visitor sees before any animation runs.
+const ROTATING = ['Office party.', 'Sports day.', 'Team lunch.', 'Offsite.', 'Diwali night.'];
+
 const HERO_CHIPS = [
   '🏏 Box cricket league, 6 teams, Sohna Road',
   '🍻 Friday drinks at Cyber Hub, 22 pax',
@@ -416,9 +420,10 @@ export default function HomePage() {
           <nav className="nav-links" aria-label="Sections">
             <a href="#how">How it works</a>
             <a href="#sports">Sports</a>
+            <a href="#parties">Parties &amp; dining</a>
             <a href="#calc">Cost calculator</a>
-            <a href="#near">Near you</a>
-            <a href="#vendors">For venues</a>
+            <a href="#vendors">For vendors</a>
+            <a href="#companies">For companies</a>
           </nav>
           <button type="button" className="btn btn-saffron" onClick={goPost}>
             {currentUser ? 'Go to my dashboard' : 'Post for your team'} <span className="arr">→</span>
@@ -435,18 +440,41 @@ export default function HomePage() {
         </div>
         <div className="wrap">
           <div className="hero-top">
-            <div className="pill rv">
-              <span className="dot">📍</span> Gurgaon &amp; Delhi NCR · Cyber City to Sohna Road
+            <div className="pill rv live-pill">
+              <span className="live-dot" aria-hidden="true" /> Live in Delhi &amp; Delhi NCR
+              <span className="pill-sub">· Cyber City to Sohna Road</span>
             </div>
             <h1 className="rv rv-d1">
-              <span className="line">Office party. Sports day. Offsite.</span>
+              {/* The first noun cycles through what people actually post, so
+                  the headline shows the range instead of listing it. */}
+              <span className="line">
+                <span className="rotator" aria-hidden="true">
+                  <span className="rot-track">
+                    {ROTATING.map((word) => (
+                      <span className="rot-word" key={word}>
+                        {word}
+                      </span>
+                    ))}
+                  </span>
+                </span>
+                <span className="sr-only">{ROTATING.join(', ')}.</span>
+              </span>
               <span className="line">
                 Someone has to plan it. <span className="mark">Ab akele nahi.</span>
               </span>
             </h1>
             <p className="lead rv rv-d2">
-              Post what your team needs — headcount, budget, vibe — and verified venues across Gurgaon bid live
-              for it. You pick. Done. Back to your actual job.
+              Post what your team needs — headcount, budget, vibe — and verified venues across Delhi NCR bid
+              live for it. You pick. Done. Back to your actual job.
+            </p>
+            {/* One pun, once, at the bottom of the hero. The whole joke is the
+                single letter that swaps, so the animation is that letter and
+                nothing else. */}
+            <p className="quip rv rv-d3" aria-label="Tu veer hai. Tu beer hai.">
+              <span aria-hidden="true">
+                Tu <span className="quip-swap"><b>वीर</b><b>बीयर</b></span> hai
+              </span>
+              <span className="quip-note">— either way, someone&rsquo;s booking the venue</span>
             </p>
           </div>
 
@@ -1023,39 +1051,88 @@ export default function HomePage() {
       </section>
 
       {/* ════════ SAMPLE FEED ════════ */}
-      <section id="feed">
-        <div className="wrap">
-          <div className="eyebrow rv">What people post</div>
-          <h2 className="rv rv-d1">
-            Real-shaped requirements. <span className="hi">Zero corporate-speak.</span>
-          </h2>
-          <div className="feed">
-            {[
-              { d: '', k: '🏏 Sports', hub: 'Sohna Road hub', h: 'Box cricket league, 6 teams, two Saturdays', p: '~70 players. Floodlit slots after 6pm, need umpires and jerseys with team names. Budget around ₹2.3L all-in.', n: 3 },
-              { d: 'rv-d1', k: '🪔 Party', hub: 'Cyber City hub', h: 'Diwali party for our floor, ~45 people', p: 'Veg-heavy menu, one round of mocktails/cocktails, a DJ for 2 hours, walkable from the rapid metro. ₹1,500/head.', n: 2 },
-              { d: 'rv-d2', k: '🚌 Outing', hub: 'Golf Course Ext hub', h: 'Day outing for a 28-person team, weekday', p: 'Something active in the morning (pickleball / turf), lunch, back by 5. Manager wants “team bonding” but we want fun. ₹2,000/head.', n: 3 },
-            ].map((post) => (
-              <div className={`post rv ${post.d}`} key={post.h}>
-                <div className="meta">
-                  <span className="k">{post.k}</span>
-                  <span>{post.hub}</span>
-                </div>
-                <h3>{post.h}</h3>
-                <p>{post.p}</p>
-                <div className="bids">
-                  <span className="av">{Array.from({ length: post.n }, (_, i) => <i key={i} />)}</span> {post.n} venues bidding
-                </div>
-              </div>
-            ))}
+      <section className="vendor" id="vendors">
+        <div className="wrap vendor-in">
+          <div>
+            <div className="eyebrow rv">For vendors — venues, turfs, caterers</div>
+            <h2 className="rv rv-d1">Run a turf, club or restaurant in NCR? Corporate groups are posting.</h2>
+            <ul className="vlist rv rv-d2">
+              <li>See real requirements with headcount, budget and date — bid only on what suits you.</li>
+              <li>No listing fee, no lead-selling. You quote directly; no broker in between.</li>
+              <li>Get verified once (GSTIN + review) and bid on every post in your hub.</li>
+            </ul>
+            <div style={{ marginTop: '1.5rem' }} className="rv rv-d3">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  say('Venue registration: GSTIN + admin review, then you can bid on every post in your hub.');
+                  goPost();
+                }}
+              >
+                Register as a vendor <span className="arr">→</span>
+              </button>
+            </div>
           </div>
-          <div className="sample-lbl">
-            ✎ Illustrative examples — a template for what real posts look like, not live activity.
+          <div className="panel rv rv-d1" style={{ background: 'var(--paper)' }}>
+            <div style={{ fontSize: '.75rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 700 }}>
+              Hubs we’re onboarding in
+            </div>
+            <ul className="vlist" style={{ marginTop: '.8rem' }}>
+              {HUBS.map((h) => (
+                <li key={h.n}>
+                  {h.n} <span style={{ color: 'var(--muted)' }}>· {h.d.split(' · ')[1] || h.d}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* ════════ TRUST ════════ */}
-      <section className="trust" id="trust">
+      {/* ════════ FOR COMPANIES ════════ */}
+      <section className="companies" id="companies">
+        <div className="wrap vendor-in">
+          <div className="panel rv" style={{ background: 'var(--paper)', order: 1 }}>
+            <div
+              style={{
+                fontSize: '.75rem',
+                letterSpacing: '.08em',
+                textTransform: 'uppercase',
+                color: 'var(--muted)',
+                fontWeight: 700,
+              }}
+            >
+              What your team gets
+            </div>
+            <ul className="vlist" style={{ marginTop: '.8rem' }}>
+              <li>One place for every requirement — sports, parties, lunches, offsites, gifting, merch.</li>
+              <li>Itemised quotes you can compare line by line, not three PDFs and a WhatsApp forward.</li>
+              <li>Bidder identities stay masked until you award, so the price is the price.</li>
+              <li>A record of what was quoted, what was agreed and what it cost — for finance, later.</li>
+            </ul>
+          </div>
+          <div style={{ order: 2 }}>
+            <div className="eyebrow rv">For companies &amp; HR teams</div>
+            <h2 className="rv rv-d1">
+              Running this for a whole office? <span className="hi-turf">Stop collecting quotes by hand.</span>
+            </h2>
+            <ul className="vlist rv rv-d2">
+              <li>Admin, HR and workplace teams post once; verified vendors across NCR bid against each other.</li>
+              <li>Set the budget per head and the headcount — the total is computed, not negotiated upward.</li>
+              <li>No listing fee and no commission on your side. You are the buyer, not the product.</li>
+            </ul>
+            <div style={{ marginTop: '1.5rem' }} className="rv rv-d3">
+              <button type="button" className="btn btn-primary" onClick={goPost}>
+                Post for my company <span className="arr">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* The trust points used to be their own section between the feed and
+            the vendor pitch. They are reassurance for the buyer, so they read
+            better attached to the buyer's pitch than as a standalone stripe —
+            one fewer full-width band on a page that had too many. */}
         <div className="wrap">
           <div className="eyebrow rv">The boring-but-important bit</div>
           <h2 className="rv rv-d1">Why your finance team will also be okay with this.</h2>
@@ -1076,45 +1153,6 @@ export default function HomePage() {
                 <p>{t.p}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ VENDORS ════════ */}
-      <section className="vendor" id="vendors">
-        <div className="wrap vendor-in">
-          <div>
-            <div className="eyebrow rv">For venues, turfs, caterers</div>
-            <h2 className="rv rv-d1">Run a turf, club or restaurant in NCR? Corporate groups are posting.</h2>
-            <ul className="vlist rv rv-d2">
-              <li>See real requirements with headcount, budget and date — bid only on what suits you.</li>
-              <li>No listing fee, no lead-selling. You quote directly; no broker in between.</li>
-              <li>Get verified once (GSTIN + review) and bid on every post in your hub.</li>
-            </ul>
-            <div style={{ marginTop: '1.5rem' }} className="rv rv-d3">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  say('Venue registration: GSTIN + admin review, then you can bid on every post in your hub.');
-                  goPost();
-                }}
-              >
-                Register your venue <span className="arr">→</span>
-              </button>
-            </div>
-          </div>
-          <div className="panel rv rv-d1" style={{ background: 'var(--paper)' }}>
-            <div style={{ fontSize: '.75rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 700 }}>
-              Hubs we’re onboarding in
-            </div>
-            <ul className="vlist" style={{ marginTop: '.8rem' }}>
-              {HUBS.map((h) => (
-                <li key={h.n}>
-                  {h.n} <span style={{ color: 'var(--muted)' }}>· {h.d.split(' · ')[1] || h.d}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </section>

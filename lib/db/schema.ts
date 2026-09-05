@@ -15,6 +15,7 @@ import {
   uniqueIndex,
   index,
 } from 'drizzle-orm/pg-core';
+import type { MatchFactor } from '@/lib/server/match';
 
 export const users = pgTable(
   'users',
@@ -181,6 +182,8 @@ export const bids = pgTable(
     validUntil: timestamp('valid_until', { withTimezone: true }),
     distanceKm: doublePrecision('distance_km').notNull().default(0),
     matchPercentage: integer('match_percentage').notNull().default(0),
+    /** Per-factor breakdown behind matchPercentage — see lib/server/match.ts. */
+    matchFactors: jsonb('match_factors').$type<MatchFactor[]>().notNull().default([]),
     status: text('status')
       .$type<'pending' | 'accepted' | 'rejected' | 'withdrawn'>()
       .notNull()

@@ -207,7 +207,12 @@ async function main() {
           '', '', venue.address, venue.city, venue.locality,
           venue.distanceKm, venue.entityType ?? 'Pvt Ltd', '',
           venue.description, venue.corporateSuitability,
-          JSON.stringify(venue.pastClients ?? []), JSON.stringify(venue.amenities ?? []),
+          // pastClients is NOT seeded. data/venues.ts lists blue-chip client
+          // names against every venue, none of which was supplied by the
+          // venue — presenting those as references would be inventing a
+          // trading history for a real business. A vendor adds its own from
+          // its profile page.
+          JSON.stringify([]), JSON.stringify(venue.amenities ?? []),
           venue.timings, venue.avgCostPerPerson, venue.place_id, venue.address, venue.name,
           venue.lat, venue.lng,
           // rating / user_ratings_total stay NULL: the values in data/venues.ts

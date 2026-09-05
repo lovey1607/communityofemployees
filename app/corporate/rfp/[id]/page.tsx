@@ -51,11 +51,22 @@ function VendorProposalDrawer({
   const catTheme = THEMES[rfp.category];
   const isAccepted = bid.status === 'accepted';
 
-  const phone = vendorProfile?.mobile || '+91 98711 22334';
-  const companyPhone = vendorProfile?.companyMobile || '+91 0124 4567890';
-  const address = vendorProfile?.address || 'DLF Phase 1, Gurugram';
-  const gstin = vendorProfile?.gstNumber || '07AAAAA0000A1Z5';
-  const clients = vendorProfile?.pastClients || ['Google India', 'Microsoft', 'Zomato', 'Deloitte'];
+  // No invented fallbacks. This panel appears AFTER an award, when the buyer
+  // is about to ring the vendor and put money behind it — a placeholder phone
+  // number or a made-up GSTIN here is worse than an empty field. Previously
+  // any vendor without client references was shown as having worked with
+  // Google, Microsoft, Zomato and Deloitte, which was simply untrue.
+  const phone = vendorProfile?.mobile?.trim() || null;
+  const companyPhone = vendorProfile?.companyMobile?.trim() || null;
+  const address = vendorProfile?.address?.trim() || null;
+  const gstin = vendorProfile?.gstNumber?.trim() || null;
+  const clients = vendorProfile?.pastClients ?? [];
+
+  // wa.me needs the country code and digits only. A bare 10-digit Indian
+  // mobile gets 91 prefixed; anything already carrying a country code is
+  // left alone.
+  const waDigits = (phone ?? companyPhone ?? '').replace(/[^0-9]/g, '');
+  const waNumber = waDigits.length === 10 ? `91${waDigits}` : waDigits.length >= 11 ? waDigits : '';
 
   const whatsappText = encodeURIComponent(
     `Hello ${bid.vendorName}, regarding your quotation of ₹${bid.totalPrice.toLocaleString('en-IN')} for ${CATEGORY_LABELS[rfp.category]} (${rfp.companyName}). Let's finalize timeline & SLA.`
@@ -257,14 +268,20 @@ function VendorProposalDrawer({
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ShieldCheck size={16} color="#1E9E5A" />
-                <span>GSTIN: <strong style={{ fontFamily: 'monospace' }}>{gstin}</strong> (Verified Compliance)</span>
+                <ShieldCheck size={16} color={gstin ? '#1E9E5A' : '#A79C90'} />
+                <span>
+                  {gstin ? (
+                    <>GSTIN: <strong style={{ fontFamily: 'monospace' }}>{gstin}</strong></>
+                  ) : (
+                    <span style={{ color: 'var(--muted)' }}>GSTIN not yet provided by this vendor</span>
+                  )}
+                </span>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <MapPin size={16} color="#FF6B2C" />
                 <span>
-                  Base Hub: <strong>{address}</strong>
+                  Base Hub: <strong>{address ?? <span style={{ color: 'var(--muted)', fontWeight: 400 }}>not provided</span>}</strong>
                   {/* Distance is derived from both saved coordinates; if either
                       is missing it comes back as 0, which is not a distance. */}
                   {bid.distanceKm > 0 ? ` (~${bid.distanceKm} km from your office)` : ''}
@@ -329,9 +346,10 @@ function VendorProposalDrawer({
                 </div>
               )}
 
-              <div style={{ marginTop: 4, paddingTop: 10, borderTop: '1px solid rgba(235, 223, 204, 0.9)' }}>
+              {clients.length > 0 && (
+              <div style={{ marginTop: 4, paddingTop: 10, borderTop: '1px solid var(--line)' }}>
                 <div style={{ fontSize: 11, color: '#7A7169', marginBottom: 6 }}>
-                  Past Corporate Client References:
+                  Past corporate clients, as listed by the vendor:
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {clients.map((c) => (
@@ -352,6 +370,7 @@ function VendorProposalDrawer({
                   ))}
                 </div>
               </div>
+              )}
             </div>
           </div>
 
@@ -379,25 +398,53 @@ function VendorProposalDrawer({
             gap: 12,
           }}
         >
-          <a
-            href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${whatsappText}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-ghost"
-            style={{
-              flex: 1,
-              padding: '12px',
-              fontSize: 13,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 6,
-              textDecoration: 'none',
-            }}
-          >
-            <MessageSquare size={15} />
-            <span>Message / Negotiate</span>
-          </a>
+          {/* WhatsApp is how this conversation actually continues in Gurgaon,
+              so once the bid is awarded it becomes the primary action rather
+              than a secondary one. It only renders when the vendor has given
+              a real number — an empty wa.me link is a dead end that looks
+              like a working button. */}
+          {waNumber ? (
+            <a
+              href={`https://wa.me/${waNumber}?text=${whatsappText}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={isAccepted ? 'btn-primary' : 'btn-ghost'}
+              style={{
+                flex: isAccepted ? 2 : 1,
+                padding: '12px',
+                fontSize: 13,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 7,
+                textDecoration: 'none',
+                ...(isAccepted
+                  ? { background: '#1E9E5A', color: '#ffffff', border: 'none', fontWeight: 800 }
+                  : {}),
+              }}
+            >
+              <MessageSquare size={15} />
+              <span>{isAccepted ? 'Continue on WhatsApp' : 'Message / Negotiate'}</span>
+            </a>
+          ) : (
+            <div
+              style={{
+                flex: 1,
+                padding: '12px',
+                fontSize: 12.5,
+                color: 'var(--muted)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6,
+                border: '1px dashed var(--line)',
+                borderRadius: 12,
+              }}
+            >
+              <MessageSquare size={14} />
+              <span>{isAccepted ? 'No WhatsApp number on file for this vendor' : 'Contact opens after you award'}</span>
+            </div>
+          )}
 
           {isAccepted ? (
             <div
@@ -808,6 +855,73 @@ export default function SpecificRFPInquiryPage() {
                       >
                         <Zap size={12} /> {bid.matchPercentage}% Match
                       </div>
+
+                      {/* The reasoning behind the number. A match score with no
+                          breakdown is something the buyer has to take on faith,
+                          and this is the screen where they commit budget. */}
+                      {bid.matchFactors && bid.matchFactors.length > 0 && (
+                        <details style={{ flex: 1 }}>
+                          <summary
+                            style={{
+                              cursor: 'pointer',
+                              fontSize: 11.5,
+                              color: 'var(--muted)',
+                              fontWeight: 600,
+                              listStyle: 'none',
+                            }}
+                          >
+                            Why this score?
+                          </summary>
+                          <div
+                            style={{
+                              marginTop: 8,
+                              display: 'grid',
+                              gap: 6,
+                              background: 'var(--cream-2)',
+                              border: '1px solid var(--line)',
+                              borderRadius: 10,
+                              padding: '10px 12px',
+                            }}
+                          >
+                            {bid.matchFactors.map((f) => (
+                              <div key={f.key} style={{ display: 'grid', gap: 3 }}>
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    gap: 10,
+                                    fontSize: 11.5,
+                                  }}
+                                >
+                                  <strong style={{ color: 'var(--ink)' }}>{f.label}</strong>
+                                  <span style={{ color: 'var(--muted)' }}>
+                                    {Math.round(f.score * f.weight)}/{f.weight}
+                                  </span>
+                                </div>
+                                <div
+                                  aria-hidden="true"
+                                  style={{
+                                    height: 4,
+                                    borderRadius: 2,
+                                    background: 'rgba(29, 26, 23, 0.08)',
+                                    overflow: 'hidden',
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      width: `${Math.round(f.score * 100)}%`,
+                                      height: '100%',
+                                      background:
+                                        f.score >= 0.8 ? '#1E9E5A' : f.score >= 0.5 ? '#FFC83D' : '#C2321C',
+                                    }}
+                                  />
+                                </div>
+                                <span style={{ fontSize: 11, color: 'var(--ink-2)' }}>{f.detail}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </details>
+                      )}
 
                       <div style={{ textAlign: 'right' }}>
                         <div style={{ fontSize: 10.5, color: '#7A7169', textTransform: 'uppercase' }}>

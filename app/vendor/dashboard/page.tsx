@@ -1847,12 +1847,17 @@ export default function VendorDashboard() {
                                 borderRadius: 999,
                                 fontSize: 11,
                                 fontWeight: 700,
-                                background: isAwarded ? 'rgba(34, 197, 94, 0.2)' : 'rgba(245, 158, 11, 0.2)',
-                                color: isAwarded ? '#12854A' : '#A66A00',
-                                border: `1px solid ${isAwarded ? '#12854A' : '#A66A00'}44`,
+                                background: isAwarded ? 'rgba(34, 197, 94, 0.2)' : 'rgba(46, 107, 255, 0.14)',
+                                color: isAwarded ? '#12854A' : '#1F4FCC',
+                                border: `1px solid ${isAwarded ? '#12854A' : '#1F4FCC'}44`,
                               }}
                             >
-                              {isAwarded ? '🎉 Awarded' : '● In Review'}
+                              {/* "In Review" implied a gate that does not
+                                  exist: the bid is already with the company
+                                  the moment it is submitted, and nobody at COE
+                                  reviews it. Saying so avoids vendors waiting
+                                  for an approval that is never coming. */}
+                              {isAwarded ? '🎉 Awarded' : '● Live with the company'}
                             </span>
                           </td>
 

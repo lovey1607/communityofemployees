@@ -219,6 +219,14 @@ export interface Bid {
   proposal: string;
   distanceKm: number;
   matchPercentage: number;
+  /** Why the score is what it is — see lib/server/match.ts. */
+  matchFactors?: {
+    key: string;
+    label: string;
+    score: number;
+    weight: number;
+    detail: string;
+  }[];
   submittedAt: string;
   status: 'pending' | 'accepted' | 'rejected';
   place_id?: string;

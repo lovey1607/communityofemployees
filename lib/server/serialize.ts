@@ -182,6 +182,7 @@ export function serializeBid(
     proposal: row.proposal,
     distanceKm: row.distanceKm,
     matchPercentage: row.matchPercentage,
+    matchFactors: row.matchFactors ?? [],
     submittedAt: row.submittedAt.toISOString(),
     status: row.status === 'withdrawn' ? 'rejected' : row.status,
     validUntil: iso(row.validUntil),

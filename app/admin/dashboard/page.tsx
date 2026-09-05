@@ -165,11 +165,20 @@ function EditBidModal({ bid, onClose }: { bid: Bid; onClose: () => void }) {
                 value={status}
                 onChange={(e) => setStatus(e.target.value as 'pending' | 'rejected' | 'withdrawn')}
               >
-                <option value="pending">Pending</option>
+                <option value="pending">Live with the company</option>
                 <option value="rejected">Rejected</option>
                 <option value="withdrawn">Withdrawn</option>
               </select>
-              {/* "Accepted" is set by awarding on the requirement, not from here. */}
+              {/* There is deliberately no "Accept" here. Awarding is the buying
+                  company's decision and is made on their requirement screen;
+                  an admin who could award would be picking winners in someone
+                  else's procurement. The dropdown looked broken without this
+                  said out loud, so it now says it. */}
+              <p style={{ margin: '6px 0 0', fontSize: 11, color: 'var(--muted)', lineHeight: 1.5 }}>
+                Bids go live to the company the moment they are submitted — there is no
+                approval step here. Awarding is the company&rsquo;s decision, on their own
+                requirement screen. This is only for taking a bid down.
+              </p>
             </div>
           </div>
 
