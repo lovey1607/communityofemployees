@@ -370,6 +370,101 @@ const replayStatus = await replay.evaluate(async () => {
 });
 ok('the copied cookie is dead after logout', replayStatus === 401, `status ${replayStatus}`);
 
+// Sign a fresh context in via the API — the UI sign-in path is exercised
+// above; here we only need the cookie.
+async function apiSignIn(page, email, password) {
+  await page.goto(BASE, { waitUntil: 'domcontentloaded' });
+  const status = await page.evaluate(async (creds) => {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify(creds),
+    });
+    return r.status;
+  }, { email, password });
+  if (status !== 200) throw new Error(`sign-in for ${email} returned ${status}`);
+}
+
+// ─── 9. The category modal is a second, separate posting path ─
+//
+// Everything above posts through the dashboard form. The category modal is
+// the path most people actually use, and it broke independently: it called
+// submitRFP() without awaiting, so a requirement the server rejected still
+// showed the "Published to verified vendors" screen and then existed
+// nowhere. Nothing here covered it, which is why it shipped. It does now.
+console.log('\n── Post through the category modal ──');
+{
+  const { c: modalCtx, page: mp } = await ctx();
+  await apiSignIn(mp, EMP, PASS);
+  await mp.goto(`${BASE}/corporate/dashboard`, { waitUntil: 'domcontentloaded' });
+  await mp.waitForTimeout(2000);
+
+  const before = Number(
+    (await pool.query('SELECT COUNT(*)::int AS n FROM rfps')).rows[0].n
+  );
+
+  await mp.getByRole('button', { name: /Post New RFP/i }).first().click();
+  await mp.waitForTimeout(900);
+  const modal = mp.locator('.modal-overlay');
+  ok('the category modal opens', (await modal.count()) === 1);
+
+  // Step 1 — a format, so categoryDetails isn't empty.
+  for (const b of await modal.locator('button').all()) {
+    const t = (await b.innerText().catch(() => '')) || '';
+    if (/Gala Dinner/i.test(t)) { await b.click(); break; }
+  }
+  await modal.getByRole('button', { name: /^Continue/i }).click();
+  await mp.waitForTimeout(700);
+
+  // Step 2 — the fields the server actually validates.
+  const dates = modal.locator('input[type="date"]');
+  await dates.nth(0).fill('2027-06-18');
+  await dates.nth(1).fill('2027-06-18');
+  const nums = modal.locator('input[type="number"]');
+  await nums.nth(0).fill('64');
+  await nums.nth(1).fill('1450');
+  await modal.getByRole('button', { name: /^Continue/i }).click();
+  await mp.waitForTimeout(700);
+  await shot(mp, 'modal-confirm-step');
+
+  await modal.getByRole('button', { name: /Publish Corporate RFP/i }).click();
+  await mp.waitForTimeout(2500);
+  await shot(mp, 'modal-published');
+
+  const after = Number(
+    (await pool.query('SELECT COUNT(*)::int AS n FROM rfps')).rows[0].n
+  );
+  ok('the modal actually writes an RFP', after === before + 1, `${before} -> ${after}`);
+
+  const confirmation = await modal.innerText().catch(() => '');
+  ok('the success screen only appears once the server accepted it', /Live|Published/i.test(confirmation));
+
+  const row = (
+    await pool.query(
+      "SELECT status, total_budget FROM rfps ORDER BY created_at DESC LIMIT 1"
+    )
+  ).rows[0];
+  ok('it is posted open, so vendors can see it', row.status === 'open', row.status);
+  ok('budget is computed server-side (64 x 1450)', Number(row.total_budget) === 92800, String(row.total_budget));
+
+  // And the vendor's feed really contains it.
+  const { c: vCtx, page: vp } = await ctx();
+  await apiSignIn(vp, VENDOR.email, VENDOR.password);
+  const feed = await vp.evaluate(async () => {
+    const r = await fetch('/api/rfps', { credentials: 'same-origin' });
+    return r.json();
+  });
+  const ids = (feed.data?.rfps ?? feed.data ?? []).map((r) => r.id);
+  const newest = (
+    await pool.query('SELECT id FROM rfps ORDER BY created_at DESC LIMIT 1')
+  ).rows[0].id;
+  ok('the vendor feed contains the modal-posted requirement', ids.includes(newest));
+
+  await modalCtx.close();
+  await vCtx.close();
+}
+
 await browser.close();
 await pool.end();
 console.log('\nScreenshots in', SHOTS);

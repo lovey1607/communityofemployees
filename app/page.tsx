@@ -127,6 +127,47 @@ const HUBS = [
   { n: 'Aerocity & Central Delhi', d: 'Delhi · near IGI', lat: 28.549, lng: 77.121 },
 ];
 
+// The five things people actually post, beyond sport. Kept as data so the
+// section and the calculator can never disagree about what COE covers.
+const OCCASIONS: { emoji: string; title: string; body: string; tags: string[] }[] = [
+  {
+    emoji: '🎊',
+    title: 'Office party & Diwali night',
+    body: 'The big one. Venue, food, bar, sound, a stage if there’s an award bit. Usually 60–300 people and one person quietly panicking about it.',
+    tags: ['Banquets & farmhouses', 'Bar packages', 'Stage & sound'],
+  },
+  {
+    emoji: '🍛',
+    title: 'Team lunch & quarterly offsite meal',
+    body: 'Recurring, unglamorous, and where most of the annual spend actually goes. Buffet or set menu, veg counts that are right the first time.',
+    tags: ['Set menu / buffet', 'Jain & veg counts', 'Near the office'],
+  },
+  {
+    emoji: '🥂',
+    title: 'Client & leadership dinner',
+    body: 'Small headcount, high stakes. A private section, a menu you’ve seen in advance, and a bill that doesn’t surprise finance afterwards.',
+    tags: ['Private dining', 'Plated service', 'Itemised quote'],
+  },
+  {
+    emoji: '🚌',
+    title: 'Offsite & team outing',
+    body: 'A day out or an overnight — resort, farmhouse or hill drive. Transport, meals and an activity slot, quoted as one line rather than four vendors.',
+    tags: ['Transport included', 'Day or overnight', 'Activities'],
+  },
+  {
+    emoji: '🎁',
+    title: 'Gifting & rewards',
+    body: 'Diwali hampers, joining kits, long-service awards. Per-head budget in, options back — with what’s actually inside the box itemised.',
+    tags: ['Hampers & kits', 'Bulk pricing', 'Branded options'],
+  },
+  {
+    emoji: '👕',
+    title: 'Merch & team kit',
+    body: 'Jerseys for the league, hoodies for the offsite, polos for the stall. Sizes, print method and delivery date, priced per piece.',
+    tags: ['Sizing runs', 'Print & embroidery', 'Delivery date'],
+  },
+];
+
 const HERO_CHIPS = [
   '🏏 Box cricket league, 6 teams, Sohna Road',
   '🍻 Friday drinks at Cyber Hub, 22 pax',
@@ -134,7 +175,7 @@ const HERO_CHIPS = [
   '🏸 Badminton doubles tournament, Sec 52',
   '🚌 Day offsite near Sohna, 40 people',
   '🥂 Farewell dinner, Golf Course Road',
-  '🥒 Pickleball evening, Sector 62',
+  '🏓 Pickleball evening, Sector 62',
 ];
 
 // ─── Helpers ────────────────────────────────────────────────
@@ -252,11 +293,44 @@ export default function HomePage() {
   const [geoMsg, setGeoMsg] = useState('Showing hubs by distance from DLF Cyber City (default).');
   const [mapView, setMapView] = useState({ lat: HUBS[0].lat, lng: HUBS[0].lng, label: HUBS[0].n, pad: 0.09 });
 
+  const locateRef = useRef<(() => void) | null>(null);
+
   const rankedHubs = useMemo(
     () =>
       HUBS.map((h) => ({ ...h, km: distanceKm(origin.lat, origin.lng, h.lat, h.lng) })).sort((a, b) => a.km - b.km),
     [origin]
   );
+
+  // Ask for location as soon as the visitor lands, so the "near you" section
+  // is already sorted from where they are rather than from a default hub.
+  //
+  // This is an ask, not a grab: the browser shows its own permission prompt
+  // and nothing happens until the visitor answers it. A decline is a normal
+  // outcome — the section falls back to Cyber City and stays fully usable —
+  // and the coordinates are used to sort this list, never stored or sent on.
+  // The Permissions API check keeps us from re-prompting someone who has
+  // already said no.
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return;
+    let cancelled = false;
+    const ask = () => {
+      if (cancelled) return;
+      locateRef.current?.();
+    };
+    if (navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: 'geolocation' as PermissionName })
+        .then((status) => {
+          if (status.state !== 'denied') ask();
+        })
+        .catch(() => ask());
+    } else {
+      ask();
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const locate = () => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
@@ -292,6 +366,7 @@ export default function HomePage() {
       { timeout: 9000, maximumAge: 120000 }
     );
   };
+  locateRef.current = locate;
 
   // ── Real venues, straight from the directory ──────────────
   const sportsVenues = useMemo(
@@ -302,6 +377,17 @@ export default function HomePage() {
     const items = sportsVenues.map((v) => ({ name: v.name, detail: `${v.locality} · ${v.city}` }));
     return [...items, ...items];
   }, [sportsVenues]);
+
+  // The party/dining side of the directory. Same source as the sports strip,
+  // so neither list can drift from what a vendor search actually returns.
+  const partyVenues = useMemo(
+    () => GURUGRAM_PRESEEDED_VENUES.filter((v) => v.category === 'food'),
+    []
+  );
+  const partyMarquee = useMemo(() => {
+    const items = partyVenues.map((v) => ({ name: v.name, detail: `${v.locality} · ${v.city}` }));
+    return [...items, ...items];
+  }, [partyVenues]);
 
   const confetti = useMemo(
     () =>
@@ -640,7 +726,23 @@ export default function HomePage() {
                   <rect x="30" y="-20" width="240" height="340" rx="10" fill="none" stroke="rgba(255,255,255,.18)" strokeWidth="3" />
                 </svg>
               </div>
-              <span className="big" aria-hidden="true">🥒</span>
+              {/* No emoji exists for pickleball — the cucumber that used to sit
+                  here was a pun, not a sport. This is the paddle and the
+                  perforated ball, which is what the game actually looks like. */}
+              <span className="big" aria-hidden="true">
+                <svg viewBox="0 0 48 48" width="1em" height="1em" fill="none" style={{ display: 'block' }}>
+                  <g transform="rotate(-24 24 24)">
+                    <ellipse cx="19" cy="17" rx="12" ry="14" fill="currentColor" opacity=".92" />
+                    <rect x="16" y="30" width="6" height="13" rx="3" fill="currentColor" opacity=".92" />
+                  </g>
+                  <circle cx="36" cy="33" r="8" fill="currentColor" opacity=".55" />
+                  <g fill="#1D1A17" opacity=".85">
+                    <circle cx="33" cy="30" r="1.15" /><circle cx="38.5" cy="30" r="1.15" />
+                    <circle cx="36" cy="34" r="1.15" /><circle cx="33" cy="36.5" r="1.15" />
+                    <circle cx="38.5" cy="36.5" r="1.15" />
+                  </g>
+                </svg>
+              </span>
               <h3>Pickleball &amp; padel</h3>
               <p>Low skill floor, high trash-talk ceiling. Perfect for mixed teams where half the office “doesn’t play sports”.</p>
               <div className="fmt"><span>Beginner-friendly</span><span>Padel too</span><span>Evening slots</span></div>
@@ -660,6 +762,54 @@ export default function HomePage() {
           <p className="foot-note">
             {sportsVenues.length} sports venues currently in the directory — the strip above is the live list.
             Need one that isn’t on it? Tell us the name; we onboard them for your bid.
+          </p>
+        </div>
+      </section>
+
+      {/* ════════ PARTIES, LUNCHES, DINNERS ════════ */}
+      <section className="parties" id="parties">
+        <div className="wrap">
+          <div className="eyebrow rv">Parties &amp; dining</div>
+          <h2 className="rv rv-d1">
+            Most of what gets posted here isn’t a match. <span className="hi">It’s a table for forty.</span>
+          </h2>
+          <p className="lead rv rv-d2" style={{ marginTop: '1rem' }}>
+            Diwali party, quarterly team lunch, a farewell dinner, the client dinner someone booked badly last
+            time. Same flow as everything else — post once, venues bid, you pick.
+          </p>
+
+          <div className="occ-grid">
+            {OCCASIONS.map((o, i) => (
+              <div className={`occ rv rv-d${(i % 3) + 1}`} key={o.title}>
+                <span className="occ-emo" aria-hidden="true">{o.emoji}</span>
+                <h3>{o.title}</h3>
+                <p>{o.body}</p>
+                <div className="fmt">
+                  {o.tags.map((t) => (
+                    <span key={t}>{t}</span>
+                  ))}
+                </div>
+                <button type="button" className="occ-cta" onClick={goPost}>
+                  Post this <span className="arr">→</span>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="marquee rv" aria-label="Party and dining venues in the COE directory">
+            <div className="marquee-track marquee-rev">
+              {partyMarquee.map((v, i) => (
+                <div className="venue" key={`${v.name}-${i}`}>
+                  <b>{v.name}</b>
+                  <span>{v.detail}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="foot-note">
+            {partyVenues.length} party, dining and banquet venues currently in the directory — restaurants,
+            breweries, banquet halls and farmhouses across Gurgaon. Ratings show once a venue is matched to its
+            Google listing; until then it reads “not rated yet” rather than guessing.
           </p>
         </div>
       </section>

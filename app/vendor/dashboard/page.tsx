@@ -1008,7 +1008,7 @@ function ReviseBidModal({
 }
 
 // ─── Itemized Bid Submit Modal ─────────────────────────────────
-function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
+function SubmitBidModal({ rfp, onClose, onSubmitted }: { rfp: RFP; onClose: () => void; onSubmitted?: () => void }) {
   const { submitBid, currentUser, currentVendorProfile, bids } = useStore();
   const catTheme = THEMES[rfp.category];
 
@@ -1024,6 +1024,7 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
     `We have extensive corporate experience executing ${CATEGORY_LABELS[rfp.category]} events in DLF Cyber City. We guarantee top-tier service delivery matching your strict schedule.`
   );
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const totalPrice = lineItems.reduce((sum, item) => sum + (item.amount || 0), 0);
 
@@ -1035,17 +1036,25 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
     setLineItems(updated);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (totalPrice <= 0 || !proposal.trim()) return;
+    if (totalPrice <= 0 || !proposal.trim() || sending) return;
 
-    submitBid({
+    // Await the server before showing the confirmation. This previously
+    // flipped to "submitted" regardless of the result, so a rejected bid
+    // looked sent and then wasn't anywhere.
+    setSending(true);
+    const result = await submitBid({
       rfpId: rfp.id,
       totalPrice,
       lineItems: lineItems.filter((l) => l.description.trim()),
       proposal,
     });
-    setSubmitted(true);
+    setSending(false);
+    if (result.success) {
+      setSubmitted(true);
+      onSubmitted?.();
+    }
   };
 
   return (
@@ -1259,7 +1268,7 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
                 }}
               >
                 <Send size={15} />
-                Submit Live Quote · {formatCurrency(totalPrice)}
+                {sending ? 'Sending…' : `Submit Live Quote · ${formatCurrency(totalPrice)}`}
               </button>
             </form>
           )}
@@ -1896,7 +1905,11 @@ export default function VendorDashboard() {
       {/* Submit Bid Modal */}
       <AnimatePresence>
         {selectedRFP && (
-          <SubmitBidModal rfp={selectedRFP} onClose={() => setSelectedRFP(null)} />
+          <SubmitBidModal
+            rfp={selectedRFP}
+            onClose={() => setSelectedRFP(null)}
+            onSubmitted={() => setActiveTab('my-bids')}
+          />
         )}
       </AnimatePresence>
 

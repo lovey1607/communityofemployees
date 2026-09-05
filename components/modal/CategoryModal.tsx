@@ -73,6 +73,7 @@ export function CategoryModal() {
     urgency: 'Upcoming Month',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [direction, setDirection] = useState(1);
 
   const effectiveCategory: CategoryType = activeCategory || 'food';
@@ -148,13 +149,22 @@ export function CategoryModal() {
       return;
     }
 
-    // All clear — submit
-    submitRFP({
-      category: effectiveCategory,
-      categoryDetails: categoryDetails as CategoryDetails,
-      universal: universal as UniversalFields,
-    });
-    setSubmitted(true);
+    // All clear — submit.
+    //
+    // This used to call submitRFP() without awaiting and flip straight to the
+    // confirmation screen, so a requirement the server had rejected still
+    // showed "posted" and then never appeared anywhere. The success screen now
+    // waits for the server to actually accept it.
+    setSubmitting(true);
+    void (async () => {
+      const result = await submitRFP({
+        category: effectiveCategory,
+        categoryDetails: categoryDetails as CategoryDetails,
+        universal: universal as UniversalFields,
+      });
+      setSubmitting(false);
+      if (result.success) setSubmitted(true);
+    })();
   };
 
   const renderStep1 = () => {
@@ -207,12 +217,12 @@ export function CategoryModal() {
               width: '100%',
               maxWidth: 680,
               maxHeight: '92vh',
-              background: 'rgba(7, 10, 24, 0.94)',
+              background: 'var(--paper)',
               border: `1px solid ${effectiveTheme.primary}44`,
               borderRadius: 24,
               backdropFilter: 'blur(36px)',
               WebkitBackdropFilter: 'blur(36px)',
-              boxShadow: `0 32px 90px rgba(60, 30, 0, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.9) inset`,
+              boxShadow: '0 32px 90px rgba(60, 30, 0, 0.20)',
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
@@ -302,8 +312,8 @@ export function CategoryModal() {
                           padding: '5px 12px',
                           borderRadius: 999,
                           border: isSelected ? `1.5px solid ${catTheme.primary}` : '1px solid var(--line)',
-                          background: isSelected ? `${catTheme.primary}25` : 'var(--cream-2)',
-                          color: isSelected ? 'var(--ink)' : 'var(--ink-2)',
+                          background: isSelected ? catTheme.primary : 'var(--cream-2)',
+                          color: isSelected ? '#ffffff' : 'var(--ink-2)',
                           fontSize: 12,
                           fontWeight: isSelected ? 800 : 600,
                           cursor: 'pointer',
@@ -413,6 +423,7 @@ export function CategoryModal() {
                       padding: '10px 22px',
                       fontSize: 13.5,
                       background: effectiveTheme.primary,
+                      color: '#ffffff',
                     }}
                   >
                     <span>Continue</span>
@@ -422,7 +433,7 @@ export function CategoryModal() {
                   <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={!isApproved}
+                    disabled={!isApproved || submitting}
                     className="btn-primary"
                     style={{
                       display: 'flex',
@@ -430,16 +441,14 @@ export function CategoryModal() {
                       gap: 8,
                       padding: '10px 24px',
                       fontSize: 13.5,
-                      background: isApproved
-                        ? `linear-gradient(135deg, ${effectiveTheme.primary} 0%, ${effectiveTheme.accent} 100%)`
-                        : 'rgba(255, 255, 255, 0.9)',
-                      color: isApproved ? 'var(--ink)' : 'var(--ink-2)',
+                      background: isApproved ? effectiveTheme.primary : 'var(--cream-2)',
+                      color: isApproved ? '#ffffff' : 'var(--muted)',
                       cursor: isApproved ? 'pointer' : 'not-allowed',
-                      boxShadow: isApproved ? `0 0 20px ${effectiveTheme.primary}60` : 'none',
+                      boxShadow: isApproved ? `0 8px 20px ${effectiveTheme.primary}45` : 'none',
                     }}
                   >
                     <Sparkles size={16} />
-                    <span>{isApproved ? 'Publish Corporate RFP' : 'Sign in as Corporate to Publish'}</span>
+                    <span>{submitting ? 'Publishing…' : isApproved ? 'Publish Corporate RFP' : 'Sign in as Corporate to Publish'}</span>
                   </button>
                 )}
               </div>

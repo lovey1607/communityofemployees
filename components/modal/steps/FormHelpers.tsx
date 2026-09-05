@@ -78,8 +78,8 @@ export function CheckOption({
         alignItems: 'center',
         gap: 10,
         padding: '10px 14px',
-        background: checked ? `${theme.primary}18` : 'var(--cream-2)',
-        border: `1px solid ${checked ? theme.primary : 'var(--line)'}`,
+        background: checked ? `${theme.primary}1F` : 'var(--cream-2)',
+        border: `1.5px solid ${checked ? theme.primary : 'var(--line)'}`,
         borderRadius: 10,
         cursor: 'pointer',
         transition: 'all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)',
@@ -103,7 +103,7 @@ export function CheckOption({
       >
         {checked && (
           <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-            <path d="M1 4L3.5 6.5L9 1" stroke="#050711" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1 4L3.5 6.5L9 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
       </div>
@@ -138,13 +138,13 @@ export function RadioGroup({
               padding: '9px 16px',
               borderRadius: 999,
               border: `1px solid ${isSelected ? theme.primary : 'var(--line)'}`,
-              background: isSelected ? `${theme.primary}22` : 'var(--cream-2)',
-              color: isSelected ? 'var(--ink)' : 'var(--ink-2)',
+              background: isSelected ? theme.primary : 'var(--cream-2)',
+              color: isSelected ? '#ffffff' : 'var(--ink-2)',
               fontSize: 13,
               fontWeight: isSelected ? 700 : 500,
               cursor: 'pointer',
               transition: 'all 0.2s',
-              boxShadow: isSelected ? `0 0 16px ${theme.primary}33` : 'none',
+              boxShadow: isSelected ? `0 6px 16px ${theme.primary}40` : 'none',
             }}
           >
             {opt}

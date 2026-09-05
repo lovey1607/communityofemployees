@@ -17,6 +17,7 @@ import { randomBytes } from 'node:crypto';
 import bcrypt from 'bcryptjs';
 import { Pool } from 'pg';
 import { GURUGRAM_PRESEEDED_VENUES } from '../data/venues';
+import { GURUGRAM_PILOT_COMPANIES } from '../data/pilot-companies';
 
 /**
  * The venue GSTINs in data/venues.ts are placeholders and do not carry a
@@ -52,8 +53,11 @@ interface Fixtures {
   accounts: FixtureAccount[];
   /** Create vendor accounts for the Gurugram venue directory. */
   seedVenueVendors?: boolean;
+  seedPilotCompanies?: boolean;
   /** Domain suffix used to build venue vendor logins when generating. */
   venueEmailDomain?: string;
+  /** Domain suffix for pilot corporate placeholders. */
+  pilotCompanyEmailDomain?: string;
 }
 
 const FIXTURE_PATH = join(process.cwd(), 'seed', 'fixtures.json');
@@ -76,6 +80,7 @@ function loadFixtures(): { fixtures: Fixtures; generated: boolean } {
     generated: true,
     fixtures: {
       seedVenueVendors: true,
+      seedPilotCompanies: true,
       venueEmailDomain: 'coe-dev.local',
       accounts: [
         { email: 'admin@coe-dev.local', password: strongPassword(), role: 'admin' },
@@ -190,20 +195,66 @@ async function main() {
             corporate_suitability, past_clients, amenities, timings, avg_cost_per_person,
             is_completed, place_id, formatted_address, place_name, lat, lng, rating,
             user_ratings_total, service_areas, submitted_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,TRUE,$14,$15,$16::jsonb,$17::jsonb,$18,$19,
-                 TRUE,$20,$21,$22,$23,$24,$25,$26,$27::jsonb, NOW())`,
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,FALSE,$14,$15,$16::jsonb,$17::jsonb,$18,$19,
+                 TRUE,$20,$21,$22,$23,$24,NULL,NULL,$25::jsonb, NOW())`,
         [
           id('vp'), userId, venue.category, venue.name, `${venue.name} Representative`,
-          venue.phone, venue.companyPhone, venue.address, venue.city, venue.locality,
-          venue.distanceKm, venue.entityType ?? 'Pvt Ltd', withValidChecksum(venue.gstNumber),
+          // Contact details and GSTIN are NOT seeded. These are real, named
+          // Gurgaon businesses that have not signed up; the numbers and GST
+          // identifiers in data/venues.ts were placeholders, and writing them
+          // in as verified facts would publish false trade details about real
+          // companies. A venue supplies its own when it claims the listing.
+          '', '', venue.address, venue.city, venue.locality,
+          venue.distanceKm, venue.entityType ?? 'Pvt Ltd', '',
           venue.description, venue.corporateSuitability,
           JSON.stringify(venue.pastClients ?? []), JSON.stringify(venue.amenities ?? []),
           venue.timings, venue.avgCostPerPerson, venue.place_id, venue.address, venue.name,
-          venue.lat, venue.lng, venue.rating, venue.user_ratings_total,
+          venue.lat, venue.lng,
+          // rating / user_ratings_total stay NULL: the values in data/venues.ts
+          // were invented. Real ones come from the Google Places lookup at
+          // runtime when a key is configured; until then a venue reads
+          // "Not rated yet", which is true.
           JSON.stringify([venue.locality, venue.city].filter(Boolean)),
         ]
       );
       created.push({ email, role: 'vendor (venue)', password });
+    }
+  }
+
+  // ─── Pilot corporate placeholders ───────────────────────────
+  //
+  // Demand-side outreach list. These companies have NOT signed up, so the
+  // accounts are created as `pending` — never approved, never "verified" —
+  // with no contact person, phone number or CIN. They exist so the portal has
+  // realistic demand data to demo against and so there is a working list for
+  // outreach. Nothing in the product presents them as customers.
+  if (fixtures.seedPilotCompanies !== false) {
+    const domain = fixtures.pilotCompanyEmailDomain ?? 'pilot.coe-dev.local';
+    for (const company of GURUGRAM_PILOT_COMPANIES) {
+      const slug = company.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '')
+        .slice(0, 40);
+      const email = `${slug}@${domain}`;
+      const existing = await pool.query('SELECT id FROM users WHERE email_normalized = $1', [email]);
+      if (existing.rowCount) continue;
+
+      const password = strongPassword();
+      const userId = id('user');
+      await pool.query(
+        `INSERT INTO users (id, email, email_normalized, email_domain, role, password_hash,
+                            email_verified_at, approval_status)
+         VALUES ($1,$2,$3,$4,'corporate',$5, NOW(), 'pending')`,
+        [userId, email, email, domain, await bcrypt.hash(password, rounds)]
+      );
+      await pool.query(
+        `INSERT INTO corporate_profiles
+           (id, user_id, name, mobile, email, office_company_name, office_address, city,
+            position, department, team_size, is_completed, submitted_at)
+         VALUES ($1,$2,'','',$3,$4,$5,'Gurugram','','',$6,FALSE, NOW())`,
+        [id('cp'), userId, email, company.name, `${company.hub}, Gurugram`, company.sizeBand]
+      );
+      created.push({ email, role: 'corporate (pilot placeholder)', password });
     }
   }
 

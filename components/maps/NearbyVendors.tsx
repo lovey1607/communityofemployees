@@ -14,7 +14,7 @@
 //     prompt is a normal outcome, not an error state.
 // ============================================================
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GoogleMap, MarkerF, InfoWindowF, useJsApiLoader } from '@react-google-maps/api';
 import { MapPin, Navigation, Search, Star, AlertCircle, Loader2 } from 'lucide-react';
 import { api } from '@/lib/apiClient';
@@ -95,6 +95,8 @@ export function NearbyVendors() {
     return () => clearTimeout(timer);
   }, [load, query]);
 
+  const requestLocationRef = useRef<(() => void) | null>(null);
+
   const requestLocation = () => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
       setLocationNote('This browser cannot share a location. Search by area instead.');
@@ -119,6 +121,32 @@ export function NearbyVendors() {
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 300_000 }
     );
   };
+  requestLocationRef.current = requestLocation;
+
+  // Same ask-on-arrival behaviour as the homepage: the directory is far more
+  // useful sorted by distance, so we ask straight away rather than waiting for
+  // the button. The browser's own prompt is the consent step, a decline just
+  // leaves the list unsorted, and we never re-prompt someone who declined.
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return;
+    let cancelled = false;
+    const ask = () => {
+      if (!cancelled) requestLocationRef.current?.();
+    };
+    if (navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: 'geolocation' as PermissionName })
+        .then((status) => {
+          if (status.state !== 'denied') ask();
+        })
+        .catch(() => ask());
+    } else {
+      ask();
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const visible = useMemo(() => {
     if (!origin || maxDistance === 0) return vendors;

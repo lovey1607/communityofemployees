@@ -145,7 +145,7 @@
 .sport .art{position:absolute;inset:0;z-index:-1;overflow:hidden}
 .sport .art svg{position:absolute;inset:0;width:100%;height:100%;transition:transform .8s var(--ease)}
 .sport:hover .art svg{transform:scale(1.08) rotate(-2deg)}
-.sport .big{font-size:4rem;line-height:1;position:absolute;top:1.1rem;right:1.1rem;filter:drop-shadow(0 8px 12px rgba(0,0,0,.3));transition:transform .5s var(--ease)}
+.sport .big{font-size:4rem;line-height:1;position:absolute;top:1.1rem;right:1.1rem;color:#fff;filter:drop-shadow(0 8px 12px rgba(0,0,0,.3));transition:transform .5s var(--ease)}
 .sport:hover .big{transform:rotate(-12deg) scale(1.15) translateY(-4px)}
 .sport h3{font-size:1.5rem;font-weight:800;text-shadow:0 2px 12px rgba(0,0,0,.25)}
 .sport p{font-size:.88rem;opacity:.9;margin-top:.35rem}
@@ -307,3 +307,28 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
 .sports .sport .fmt span { color: rgba(255,255,255,.7); }
 .branch .btn-ghost { color: #fff; border-color: rgba(255,255,255,.45); background: transparent; }
 .branch .btn-ghost:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.7); }
+
+/* ---------- parties & dining ----------
+   Deliberately on the cream ground, not a second dark band: the sports
+   section earns its ink background by being the one visual break on the
+   page, and a second one would just read as stripes. */
+.parties{background:var(--cream-2)}
+.occ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.5rem}
+@media (max-width:980px){.occ-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.occ-grid{grid-template-columns:1fr}}
+.occ{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.4rem 1.2rem;display:flex;flex-direction:column;position:relative;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.occ:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.occ-emo{font-size:2rem;line-height:1;margin-bottom:.9rem}
+.occ h3{font-size:1.08rem;margin-bottom:.5rem;letter-spacing:-.01em}
+.occ p{color:var(--ink-2);font-size:.93rem;line-height:1.6;flex:1}
+.occ .fmt{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.occ .fmt span{background:var(--cream-2);border:1px solid var(--line);color:var(--ink-2);border-radius:999px;padding:.25rem .6rem;font-size:.74rem;font-weight:600}
+.occ-cta{margin-top:1.1rem;align-self:flex-start;background:none;border:0;padding:0;color:var(--saffron);font-weight:700;font-size:.9rem;cursor:pointer;font-family:var(--font-body);display:inline-flex;gap:.35rem;align-items:center}
+.occ-cta:hover .arr{transform:translateX(4px)}
+.occ-cta .arr{transition:transform .25s var(--ease)}
+.parties .marquee{margin-top:2.5rem}
+.parties .venue{background:var(--paper);border-color:var(--line)}
+.parties .venue b{color:var(--ink)}
+.parties .venue span{color:var(--muted)}
+.parties .foot-note{margin-top:1.2rem;font-size:.82rem;color:var(--muted);text-align:center}
+.marquee-rev{animation-direction:reverse}
