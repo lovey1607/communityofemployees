@@ -72,33 +72,50 @@ jobs:
       - name: Migrate
         run: npm run db:migrate
 
+      - name: Write CI fixtures
+        # seed.ts only GENERATES passwords when seed/fixtures.json is absent —
+        # it prints them once and never writes the file. So CI writes the file
+        # first and the seed reads it, which makes the credentials the suites
+        # need deterministic instead of something to scrape out of stdout.
+        #
+        # These are throwaway logins for a database that lives ~10 minutes.
+        # They still satisfy the app's own password policy, because the seed
+        # is the same code path real accounts go through.
+        run: |
+          cat > seed/fixtures.json <<'JSON'
+          {
+            "seedVenueVendors": true,
+            "seedPilotCompanies": false,
+            "venueEmailDomain": "coe-dev.local",
+            "accounts": [
+              { "email": "admin@coe-dev.local", "password": "ci-Admin-Throwaway-71", "role": "admin" },
+              { "email": "hr@nexus-dev.local", "password": "ci-Corp-Throwaway-71", "role": "corporate",
+                "companyName": "Nexus Technologies", "city": "Gurugram" },
+              { "email": "ops@royalfeast-dev.local", "password": "ci-Vendor-Throwaway-71", "role": "vendor",
+                "companyName": "Royal Feast Caterers", "category": "food", "city": "Gurugram",
+                "gstNumber": "06AAACD1234A1ZL" },
+              { "email": "ops@cyberhubgourmet-dev.local", "password": "ci-Vendor2-Throwaway-71", "role": "vendor",
+                "companyName": "Cyber Hub Gourmet", "category": "food", "city": "Gurugram",
+                "gstNumber": "06AAACD1234A1ZL" }
+            ]
+          }
+          JSON
+
       - name: Seed
-        # Writes seed/fixtures.json on first run, so the credentials below are
-        # deterministic within this job and never leave it.
+        # seedPilotCompanies is false above: the 116 outreach placeholders are
+        # demo data and add ~40s of bcrypt to every run for nothing.
         run: npm run db:seed
 
-      - name: Read seeded credentials
-        id: creds
+      - name: Test credentials
         run: |
-          node -e "
-            const a = require('./seed/fixtures.json').accounts;
-            const pick = (r) => a.filter((x) => x.role === r);
-            const [admin] = pick('admin');
-            const vendors = pick('vendor');
-            const out = {
-              TEST_ADMIN_EMAIL: admin.email,
-              TEST_ADMIN_PASSWORD: admin.password,
-              TEST_VENDOR_EMAIL: vendors[0].email,
-              TEST_VENDOR_PASSWORD: vendors[0].password,
-              TEST_VENDOR2_EMAIL: vendors[1].email,
-              TEST_VENDOR2_PASSWORD: vendors[1].password,
-            };
-            // Masked so a failing step cannot print them into a public log.
-            for (const [k, v] of Object.entries(out)) {
-              console.log('::add-mask::' + v);
-              console.log(k + '=' + v);
-            }
-          " >> "$GITHUB_ENV"
+          {
+            echo "TEST_ADMIN_EMAIL=admin@coe-dev.local"
+            echo "TEST_ADMIN_PASSWORD=ci-Admin-Throwaway-71"
+            echo "TEST_VENDOR_EMAIL=ops@royalfeast-dev.local"
+            echo "TEST_VENDOR_PASSWORD=ci-Vendor-Throwaway-71"
+            echo "TEST_VENDOR2_EMAIL=ops@cyberhubgourmet-dev.local"
+            echo "TEST_VENDOR2_PASSWORD=ci-Vendor2-Throwaway-71"
+          } >> "$GITHUB_ENV"
 
       - name: Start the server
         run: |
