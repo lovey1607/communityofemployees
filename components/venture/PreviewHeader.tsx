@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Zap, Menu, X, ArrowRight } from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { OfficeLightSwitch } from '@/components/OfficeLightSwitch';
 
 export function PreviewHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -63,11 +62,11 @@ export function PreviewHeader() {
           margin: '0 auto',
           padding: '10px 20px',
           borderRadius: 20,
-          background: 'rgba(11, 15, 23, 0.88)',
+          background: 'var(--paper)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: '0 16px 40px rgba(0, 0, 0, 0.65)',
+          border: '1px solid var(--line)',
+          boxShadow: '0 16px 40px rgba(60, 30, 0, 0.18)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -82,12 +81,12 @@ export function PreviewHeader() {
               width: 36,
               height: 36,
               borderRadius: 10,
-              background: 'linear-gradient(135deg, #10b981 0%, #0ea5e9 100%)',
+              background: 'linear-gradient(135deg, #1E9E5A 0%, #2E6BFF 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(16,185,129,0.4)',
-              color: '#0B0F17',
+              boxShadow: '0 0 20px rgba(30, 158, 90,0.4)',
+              color: '#FFF7EC',
               fontWeight: 900,
               fontSize: 18,
               fontFamily: 'var(--font-display)',
@@ -97,14 +96,14 @@ export function PreviewHeader() {
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
                 COE
               </span>
-              <span style={{ fontSize: 9.5, padding: '2px 6px', borderRadius: 6, background: 'rgba(249,115,22,0.2)', color: '#f97316', fontWeight: 800, border: '1px solid rgba(249,115,22,0.35)', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: 9.5, padding: '2px 6px', borderRadius: 6, background: 'rgba(255, 107, 44,0.2)', color: '#FF6B2C', fontWeight: 800, border: '1px solid rgba(255, 107, 44,0.35)', whiteSpace: 'nowrap' }}>
                 NCR PILOT
               </span>
             </div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', fontWeight: 600, whiteSpace: 'nowrap' }}>
+            <div style={{ fontSize: 10, color: 'var(--ink-2)', fontWeight: 600, whiteSpace: 'nowrap' }}>
               Community of Employees
             </div>
           </div>
@@ -129,14 +128,14 @@ export function PreviewHeader() {
                 textDecoration: 'none',
                 fontSize: 'clamp(12px, 0.9vw, 13px)',
                 fontWeight: 700,
-                color: 'rgba(255,255,255,0.75)',
+                color: 'var(--ink-2)',
                 transition: 'color 0.2s ease',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 display: 'inline-block',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#34d399')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#5CD48F')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)')}
             >
               {link.label}
             </a>
@@ -146,7 +145,6 @@ export function PreviewHeader() {
         {/* Action Buttons & Office Lights Switch */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
           <div className="hidden md:block">
-            <OfficeLightSwitch />
           </div>
 
           {!currentUser ? (
@@ -156,9 +154,9 @@ export function PreviewHeader() {
                 style={{
                   padding: '8px 14px',
                   borderRadius: 10,
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  background: 'rgba(255,255,255,0.06)',
-                  color: '#ffffff',
+                  border: '1px solid var(--line)',
+                  background: 'var(--cream-2)',
+                  color: 'var(--ink)',
                   fontSize: 12.5,
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -178,7 +176,7 @@ export function PreviewHeader() {
                   padding: '8px 18px',
                   borderRadius: 10,
                   border: 'none',
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
                   color: '#ffffff',
                   fontSize: 12.5,
                   fontWeight: 800,
@@ -187,7 +185,7 @@ export function PreviewHeader() {
                   alignItems: 'center',
                   gap: 6,
                   whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 20px rgba(16,185,129,0.35)',
+                  boxShadow: '0 4px 20px rgba(30, 158, 90,0.35)',
                 }}
               >
                 <Zap size={14} />
@@ -208,7 +206,7 @@ export function PreviewHeader() {
                 padding: '8px 18px',
                 borderRadius: 10,
                 border: 'none',
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
                 color: '#ffffff',
                 fontSize: 12.5,
                 fontWeight: 800,
@@ -218,7 +216,7 @@ export function PreviewHeader() {
                 gap: 6,
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 4px 20px rgba(16,185,129,0.35)',
+                boxShadow: '0 4px 20px rgba(30, 158, 90,0.35)',
               }}
             >
               <Zap size={14} />
@@ -233,7 +231,7 @@ export function PreviewHeader() {
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#ffffff',
+              color: 'var(--ink)',
               cursor: 'pointer',
               padding: 4,
               display: 'none',
@@ -254,8 +252,8 @@ export function PreviewHeader() {
             marginTop: 10,
             padding: 16,
             borderRadius: 16,
-            background: '#0B0F17',
-            border: '1px solid rgba(255,255,255,0.1)',
+            background: '#FFF7EC',
+            border: '1px solid var(--line)',
             display: 'flex',
             flexDirection: 'column',
             gap: 12,
@@ -273,15 +271,14 @@ export function PreviewHeader() {
                 textDecoration: 'none',
                 fontSize: 14,
                 fontWeight: 700,
-                color: 'rgba(255,255,255,0.8)',
+                color: 'var(--ink)',
                 padding: '6px 0',
               }}
             >
               {link.label}
             </a>
           ))}
-          <div style={{ paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <OfficeLightSwitch />
+          <div style={{ paddingTop: 8, borderTop: '1px solid var(--line)' }}>
           </div>
         </motion.div>
       )}

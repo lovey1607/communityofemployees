@@ -130,17 +130,17 @@ export function NearbyVendors() {
   const showMap = Boolean(browserKey) && mapReady && !loadError;
 
   const card: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.03)',
-    border: '1px solid rgba(255,255,255,0.09)',
+    background: 'var(--paper)',
+    border: '1px solid var(--line)',
     borderRadius: 14,
     padding: 14,
   };
   const control: React.CSSProperties = {
     padding: '10px 12px',
     borderRadius: 11,
-    border: '1px solid rgba(255,255,255,0.14)',
-    background: 'rgba(255,255,255,0.04)',
-    color: '#e8ecf5',
+    border: '1px solid var(--line)',
+    background: 'var(--paper)',
+    color: 'var(--ink)',
     fontSize: 13.5,
   };
 
@@ -149,7 +149,7 @@ export function NearbyVendors() {
       {/* ── Controls ── */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
         <div style={{ position: 'relative', flex: '1 1 240px' }}>
-          <Search size={15} style={{ position: 'absolute', left: 12, top: 12, color: '#8b95ab' }} />
+          <Search size={15} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--muted)' }} />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -179,8 +179,8 @@ export function NearbyVendors() {
             alignItems: 'center',
             gap: 7,
             fontWeight: 600,
-            color: origin ? '#34d399' : '#e8ecf5',
-            borderColor: origin ? 'rgba(52,211,153,0.4)' : 'rgba(255,255,255,0.14)',
+            color: origin ? 'var(--turf)' : 'var(--ink)',
+            borderColor: origin ? 'rgba(30, 158, 90, 0.45)' : 'var(--line)',
           }}
         >
           {locating ? <Loader2 size={15} className="spin" /> : <Navigation size={15} />}
@@ -188,7 +188,7 @@ export function NearbyVendors() {
         </button>
       </div>
 
-      <p style={{ margin: '0 0 14px', fontSize: 12, color: '#8b95ab', lineHeight: 1.55 }}>
+      <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.55 }}>
         {locationNote ??
           'We only ask your browser for a location when you press that button, and we use it to sort this list. It is not stored or sent anywhere else.'}
       </p>
@@ -206,9 +206,9 @@ export function NearbyVendors() {
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
-                border: maxDistance === km ? '1px solid #f97316' : '1px solid rgba(255,255,255,0.14)',
-                background: maxDistance === km ? 'rgba(249,115,22,0.14)' : 'transparent',
-                color: maxDistance === km ? '#f97316' : '#8b95ab',
+                border: maxDistance === km ? '1px solid var(--saffron)' : '1px solid var(--line)',
+                background: maxDistance === km ? 'rgba(255, 107, 44,0.14)' : 'transparent',
+                color: maxDistance === km ? 'var(--saffron)' : 'var(--muted)',
               }}
             >
               {km === 0 ? 'Any distance' : `Within ${km} km`}
@@ -234,9 +234,9 @@ export function NearbyVendors() {
                   icon={{
                     path: (typeof google !== 'undefined' && google.maps.SymbolPath.CIRCLE) as never,
                     scale: 8,
-                    fillColor: '#38bdf8',
+                    fillColor: '#2E6BFF',
                     fillOpacity: 1,
-                    strokeColor: '#0B0F17',
+                    strokeColor: '#FFF7EC',
                     strokeWeight: 2,
                   }}
                 />
@@ -250,7 +250,7 @@ export function NearbyVendors() {
                 >
                   {activeMarker === v.id && (
                     <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-                      <div style={{ color: '#111827', maxWidth: 210 }}>
+                      <div style={{ color: 'var(--ink)', maxWidth: 210 }}>
                         <strong style={{ display: 'block', fontSize: 13 }}>{v.companyName}</strong>
                         <span style={{ fontSize: 12 }}>{v.locality ?? v.city}</span>
                         {v.distanceFromYouKm !== null && (
@@ -270,7 +270,7 @@ export function NearbyVendors() {
         {/* ── List ── */}
         <div style={{ display: 'grid', gap: 10, maxHeight: showMap ? 640 : undefined, overflowY: showMap ? 'auto' : undefined }}>
           {!browserKey && (
-            <div style={{ ...card, display: 'flex', gap: 9, alignItems: 'flex-start', color: '#fbbf24', fontSize: 12.5 }}>
+            <div style={{ ...card, display: 'flex', gap: 9, alignItems: 'flex-start', color: '#A66A00', fontSize: 12.5 }}>
               <AlertCircle size={15} style={{ flexShrink: 0, marginTop: 1 }} />
               <span>
                 The map needs a browser Maps key (<code>NEXT_PUBLIC_GOOGLE_MAPS_BROWSER_KEY</code>). The
@@ -280,9 +280,9 @@ export function NearbyVendors() {
           )}
 
           {loading ? (
-            <div style={{ ...card, color: '#8b95ab', fontSize: 13.5 }}>Loading vendors…</div>
+            <div style={{ ...card, color: 'var(--muted)', fontSize: 13.5 }}>Loading vendors…</div>
           ) : visible.length === 0 ? (
-            <div style={{ ...card, color: '#8b95ab', fontSize: 13.5 }}>
+            <div style={{ ...card, color: 'var(--muted)', fontSize: 13.5 }}>
               Nothing matches that yet. Try a wider distance or another category.
             </div>
           ) : (
@@ -290,10 +290,10 @@ export function NearbyVendors() {
               <div key={v.id} style={card}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start' }}>
                   <div>
-                    <h3 style={{ margin: '0 0 3px', fontSize: 14.5, fontWeight: 700, color: '#fff' }}>
+                    <h3 style={{ margin: '0 0 3px', fontSize: 14.5, fontWeight: 700, color: 'var(--ink)' }}>
                       {v.companyName}
                     </h3>
-                    <p style={{ margin: 0, fontSize: 12.5, color: '#8b95ab', display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <p style={{ margin: 0, fontSize: 12.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 5 }}>
                       <MapPin size={12} /> {v.locality ?? v.city}
                     </p>
                   </div>
@@ -301,7 +301,7 @@ export function NearbyVendors() {
                     <span
                       style={{
                         flexShrink: 0, padding: '3px 9px', borderRadius: 999, fontSize: 11.5,
-                        fontWeight: 700, background: 'rgba(56,189,248,0.14)', color: '#38bdf8',
+                        fontWeight: 700, background: 'rgba(46, 107, 255, 0.12)', color: 'var(--sky)',
                       }}
                     >
                       {v.distanceFromYouKm} km
@@ -309,18 +309,18 @@ export function NearbyVendors() {
                   )}
                 </div>
 
-                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 9, fontSize: 11.5, color: '#8b95ab' }}>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 9, fontSize: 11.5, color: 'var(--muted)' }}>
                   <span
                     style={{
-                      padding: '2px 8px', borderRadius: 999, background: 'rgba(249,115,22,0.14)',
-                      color: '#f97316', fontWeight: 700,
+                      padding: '2px 8px', borderRadius: 999, background: 'rgba(255, 107, 44,0.14)',
+                      color: '#FF6B2C', fontWeight: 700,
                     }}
                   >
                     {CATEGORY_LABELS[v.category]}
                   </span>
                   {v.rating !== undefined && v.rating !== null ? (
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                      <Star size={11} fill="#facc15" color="#facc15" />
+                      <Star size={11} fill="#FFC83D" color="#FFC83D" />
                       {v.rating.toFixed(1)}
                       {v.user_ratings_total ? ` (${v.user_ratings_total})` : ''}
                     </span>
@@ -331,7 +331,7 @@ export function NearbyVendors() {
                 </div>
 
                 {v.portfolioSummary && (
-                  <p style={{ margin: '9px 0 0', fontSize: 12.5, color: 'rgba(255,255,255,0.62)', lineHeight: 1.55 }}>
+                  <p style={{ margin: '9px 0 0', fontSize: 12.5, color: 'var(--ink-2)', lineHeight: 1.55 }}>
                     {v.portfolioSummary.length > 160 ? `${v.portfolioSummary.slice(0, 160)}…` : v.portfolioSummary}
                   </p>
                 )}

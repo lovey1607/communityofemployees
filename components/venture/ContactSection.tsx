@@ -52,7 +52,7 @@ export function ContactSection() {
     display: 'block',
     fontSize: 11,
     fontWeight: 700,
-    color: 'rgba(255,255,255,0.65)',
+    color: 'var(--ink-2)',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     marginBottom: 6,
@@ -63,9 +63,9 @@ export function ContactSection() {
       <div
         style={{
           borderRadius: 24,
-          background: 'linear-gradient(145deg, rgba(11,15,23,0.95) 0%, rgba(15,23,42,0.9) 100%)',
-          border: '1.5px solid rgba(16, 185, 129, 0.25)',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.85)',
+          background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(29, 26, 23, 0.35) 100%)',
+          border: '1.5px solid rgba(30, 158, 90, 0.25)',
+          boxShadow: '0 24px 80px rgba(60, 30, 0, 0.18)',
           overflow: 'hidden',
         }}
       >
@@ -74,8 +74,8 @@ export function ContactSection() {
           <div
             style={{
               padding: '36px',
-              background: 'linear-gradient(160deg, rgba(16,185,129,0.12) 0%, transparent 60%)',
-              borderRight: '1px solid rgba(255,255,255,0.08)',
+              background: 'linear-gradient(160deg, rgba(30, 158, 90,0.12) 0%, transparent 60%)',
+              borderRight: '1px solid var(--line)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -89,8 +89,8 @@ export function ContactSection() {
                   gap: 6,
                   padding: '3px 10px',
                   borderRadius: 999,
-                  background: 'rgba(16, 185, 129, 0.15)',
-                  color: '#34d399',
+                  background: 'rgba(30, 158, 90, 0.15)',
+                  color: '#137A43',
                   fontSize: 11,
                   fontWeight: 800,
                   textTransform: 'uppercase',
@@ -100,46 +100,46 @@ export function ContactSection() {
               >
                 <Sparkles size={12} /> ENTERPRISE PILOT ACCESS
               </div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 8 }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 8 }}>
                 Connect with the Reverse-Bidding Network
               </h3>
-              <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, marginBottom: 26 }}>
+              <p style={{ fontSize: 13.5, color: 'var(--ink-2)', lineHeight: 1.6, marginBottom: 26 }}>
                 Whether you are an enterprise HR/procurement team seeking 20%+ savings, or a verified venue looking to bid on verified corporate event RFPs.
               </p>
 
               {/* Office Location Box */}
               <div style={{ display: 'grid', gap: 16 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(30, 158, 90,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1E9E5A', flexShrink: 0 }}>
                     <MapPin size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#ffffff' }}>Delhi NCR Operational Hub</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--ink)' }}>Delhi NCR Operational Hub</div>
+                    <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>
                       Building 10B, DLF Cyber City, Phase II, Gurugram, Haryana 122002
                     </div>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(14,165,233,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0ea5e9', flexShrink: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(46, 107, 255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2E6BFF', flexShrink: 0 }}>
                     <Mail size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#ffffff' }}>Enterprise Procurement Desk</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--ink)' }}>Enterprise Procurement Desk</div>
+                    <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>
                       contact@communityofemployees.com
                     </div>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(249,115,22,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f97316', flexShrink: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255, 107, 44,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FF6B2C', flexShrink: 0 }}>
                     <Phone size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#ffffff' }}>Gurugram Operations Line</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--ink)' }}>Gurugram Operations Line</div>
+                    <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 2 }}>
                       +91 98112 00000 (Mon - Sat, 9:00 AM - 8:00 PM)
                     </div>
                   </div>
@@ -169,9 +169,9 @@ export function ContactSection() {
                         style={{
                           padding: '10px',
                           borderRadius: 10,
-                          border: interestType === 'corporate' ? '1.5px solid #10b981' : '1px solid rgba(255,255,255,0.1)',
-                          background: interestType === 'corporate' ? 'rgba(16,185,129,0.18)' : 'rgba(255,255,255,0.03)',
-                          color: interestType === 'corporate' ? '#ffffff' : 'rgba(255,255,255,0.6)',
+                          border: interestType === 'corporate' ? '1.5px solid #1E9E5A' : '1px solid var(--line)',
+                          background: interestType === 'corporate' ? 'rgba(30, 158, 90,0.18)' : 'var(--cream-2)',
+                          color: interestType === 'corporate' ? 'var(--ink)' : 'var(--ink-2)',
                           fontSize: 12.5,
                           fontWeight: 700,
                           cursor: 'pointer',
@@ -185,9 +185,9 @@ export function ContactSection() {
                         style={{
                           padding: '10px',
                           borderRadius: 10,
-                          border: interestType === 'vendor' ? '1.5px solid #f97316' : '1px solid rgba(255,255,255,0.1)',
-                          background: interestType === 'vendor' ? 'rgba(249,115,22,0.18)' : 'rgba(255,255,255,0.03)',
-                          color: interestType === 'vendor' ? '#ffffff' : 'rgba(255,255,255,0.6)',
+                          border: interestType === 'vendor' ? '1.5px solid #FF6B2C' : '1px solid var(--line)',
+                          background: interestType === 'vendor' ? 'rgba(255, 107, 44,0.18)' : 'var(--cream-2)',
+                          color: interestType === 'vendor' ? 'var(--ink)' : 'var(--ink-2)',
                           fontSize: 12.5,
                           fontWeight: 700,
                           cursor: 'pointer',
@@ -241,12 +241,12 @@ export function ContactSection() {
                         <span
                           style={{
                             padding: '9px 12px',
-                            background: 'rgba(255,255,255,0.06)',
-                            border: '1px solid rgba(255,255,255,0.12)',
+                            background: 'var(--cream-2)',
+                            border: '1px solid var(--line)',
                             borderRight: 'none',
                             borderTopLeftRadius: 10,
                             borderBottomLeftRadius: 10,
-                            color: 'rgba(255,255,255,0.8)',
+                            color: 'var(--ink)',
                             fontSize: 12.5,
                             fontWeight: 800,
                           }}
@@ -302,7 +302,7 @@ export function ContactSection() {
                       padding: '13px',
                       borderRadius: 11,
                       border: 'none',
-                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                      background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
                       color: '#ffffff',
                       fontSize: 13.5,
                       fontWeight: 800,
@@ -312,7 +312,7 @@ export function ContactSection() {
                       justifyContent: 'center',
                       gap: 8,
                       opacity: (!name || !isEmailValid || !isMobileValid || !company || loading) ? 0.45 : 1,
-                      boxShadow: '0 6px 20px rgba(16,185,129,0.3)',
+                      boxShadow: '0 6px 20px rgba(30, 158, 90,0.3)',
                     }}
                   >
                     {loading ? 'Submitting Application…' : 'Schedule Corporate Consultation & Access'}
@@ -331,32 +331,32 @@ export function ContactSection() {
                       width: 54,
                       height: 54,
                       borderRadius: '50%',
-                      background: 'rgba(16,185,129,0.2)',
-                      border: '2px solid #10b981',
+                      background: 'rgba(30, 158, 90,0.2)',
+                      border: '2px solid #1E9E5A',
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#10b981',
+                      color: '#1E9E5A',
                       marginBottom: 14,
-                      boxShadow: '0 0 24px rgba(16,185,129,0.4)',
+                      boxShadow: '0 0 24px rgba(30, 158, 90,0.4)',
                     }}
                   >
                     <CheckCircle2 size={28} />
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 900, color: '#ffffff', marginBottom: 6 }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 900, color: 'var(--ink)', marginBottom: 6 }}>
                     Inquiry Received Successfully!
                   </h3>
-                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, maxWidth: 360, margin: '0 auto 18px' }}>
-                    Thank you <strong style={{ color: '#ffffff' }}>{name}</strong>. Our Gurugram Enterprise Lead will connect with you at <strong style={{ color: '#10b981' }}>{email}</strong> shortly.
+                  <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.6, maxWidth: 360, margin: '0 auto 18px' }}>
+                    Thank you <strong style={{ color: 'var(--ink)' }}>{name}</strong>. Our Gurugram Enterprise Lead will connect with you at <strong style={{ color: '#1E9E5A' }}>{email}</strong> shortly.
                   </p>
                   <button
                     onClick={() => { setSubmitted(false); setName(''); setEmail(''); setMobile(''); setCompany(''); setMessage(''); }}
                     style={{
                       padding: '8px 18px',
                       borderRadius: 9,
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      background: 'rgba(255,255,255,0.05)',
-                      color: '#ffffff',
+                      border: '1px solid var(--line)',
+                      background: 'var(--cream-2)',
+                      color: 'var(--ink)',
                       fontSize: 12,
                       fontWeight: 700,
                       cursor: 'pointer',

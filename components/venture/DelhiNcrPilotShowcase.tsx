@@ -58,9 +58,9 @@ export function DelhiNcrPilotShowcase() {
               gap: 6,
               padding: '4px 12px',
               borderRadius: 999,
-              background: 'rgba(249, 115, 22, 0.15)',
-              border: '1px solid rgba(249, 115, 22, 0.3)',
-              color: '#f97316',
+              background: 'rgba(255, 107, 44, 0.15)',
+              border: '1px solid rgba(255, 107, 44, 0.3)',
+              color: '#FF6B2C',
               fontSize: 11.5,
               fontWeight: 800,
               textTransform: 'uppercase',
@@ -68,19 +68,19 @@ export function DelhiNcrPilotShowcase() {
               marginBottom: 10,
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f97316', animation: 'pulse 1.5s infinite' }} />
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B2C', animation: 'pulse 1.5s infinite' }} />
             PHASE 1 LIVE DEPLOYMENT · DELHI NCR ({totalCount}+ ANCHORS)
           </div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
             Gurugram Enterprise Pilot: Sports & Party Hubs
           </h2>
-          <p style={{ fontSize: 14.5, color: 'rgba(255,255,255,0.65)', maxWidth: 680, marginTop: 6, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14.5, color: 'var(--ink-2)', maxWidth: 680, marginTop: 6, lineHeight: 1.6 }}>
             Direct reverse-bidding network across DLF Cyber City, Golf Course Road, Sector 29, Sohna Road, Noida & Aerocity. Verified anchor facilities ready for live corporate reverse auctions.
           </p>
         </div>
 
         {/* Category Switcher Pill */}
-        <div style={{ display: 'flex', gap: 8, background: 'rgba(255,255,255,0.06)', padding: 5, borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div style={{ display: 'flex', gap: 8, background: 'var(--cream-2)', padding: 5, borderRadius: 16, border: '1px solid var(--line)' }}>
           <button
             onClick={() => { setActiveCategory('sports'); setLocalityFilter('all'); }}
             style={{
@@ -88,14 +88,14 @@ export function DelhiNcrPilotShowcase() {
               borderRadius: 12,
               border: 'none',
               cursor: 'pointer',
-              background: activeCategory === 'sports' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'transparent',
-              color: activeCategory === 'sports' ? '#ffffff' : 'rgba(255,255,255,0.6)',
+              background: activeCategory === 'sports' ? 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)' : 'transparent',
+              color: activeCategory === 'sports' ? '#ffffff' : 'var(--ink-2)',
               fontSize: 13,
               fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
               gap: 8,
-              boxShadow: activeCategory === 'sports' ? '0 4px 16px rgba(16,185,129,0.35)' : 'none',
+              boxShadow: activeCategory === 'sports' ? '0 4px 16px rgba(30, 158, 90,0.35)' : 'none',
               transition: 'all 0.2s ease',
             }}
           >
@@ -110,14 +110,14 @@ export function DelhiNcrPilotShowcase() {
               borderRadius: 12,
               border: 'none',
               cursor: 'pointer',
-              background: activeCategory === 'food' ? 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)' : 'transparent',
-              color: activeCategory === 'food' ? '#ffffff' : 'rgba(255,255,255,0.6)',
+              background: activeCategory === 'food' ? 'linear-gradient(135deg, #FF6B2C 0%, #D9541C 100%)' : 'transparent',
+              color: activeCategory === 'food' ? '#ffffff' : 'var(--ink-2)',
               fontSize: 13,
               fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
               gap: 8,
-              boxShadow: activeCategory === 'food' ? '0 4px 16px rgba(249,115,22,0.35)' : 'none',
+              boxShadow: activeCategory === 'food' ? '0 4px 16px rgba(255, 107, 44,0.35)' : 'none',
               transition: 'all 0.2s ease',
             }}
           >
@@ -136,9 +136,9 @@ export function DelhiNcrPilotShowcase() {
             style={{
               padding: '6px 14px',
               borderRadius: 999,
-              border: localityFilter === loc ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.1)',
-              background: localityFilter === loc ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.03)',
-              color: localityFilter === loc ? '#34d399' : 'rgba(255,255,255,0.6)',
+              border: localityFilter === loc ? '1px solid #1E9E5A' : '1px solid var(--line)',
+              background: localityFilter === loc ? 'rgba(30, 158, 90,0.15)' : 'var(--cream-2)',
+              color: localityFilter === loc ? '#137A43' : 'var(--ink-2)',
               fontSize: 12,
               fontWeight: 700,
               cursor: 'pointer',
@@ -154,7 +154,7 @@ export function DelhiNcrPilotShowcase() {
       {/* ── Venue Cards Grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(330px, 1fr))', gap: 20 }}>
         {filteredVenues.map((venue) => {
-          const accentColor = venue.category === 'sports' ? '#10b981' : '#f97316';
+          const accentColor = venue.category === 'sports' ? '#1E9E5A' : '#FF6B2C';
           return (
             <motion.div
               key={venue.id}
@@ -162,14 +162,14 @@ export function DelhiNcrPilotShowcase() {
               onClick={() => setSelectedVenue(venue)}
               style={{
                 borderRadius: 22,
-                background: 'rgba(11, 15, 23, 0.92)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: 'var(--paper)',
+                border: '1px solid var(--line)',
                 padding: '22px',
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
+                boxShadow: '0 16px 40px rgba(60, 30, 0, 0.18)',
                 position: 'relative',
                 overflow: 'hidden',
               }}
@@ -193,23 +193,23 @@ export function DelhiNcrPilotShowcase() {
                     >
                       {venue.category === 'sports' ? 'SPORTS COMPLEX' : 'BREWPUB / LOUNGE'}
                     </span>
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: '#ffffff', marginTop: 6 }}>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginTop: 6 }}>
                       {venue.name}
                     </h3>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', padding: '4px 8px', borderRadius: 8 }}>
-                    <ShieldCheck size={13} color="#10b981" />
-                    <span style={{ fontSize: 11, fontWeight: 800, color: '#34d399' }}>Verified</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(30, 158, 90,0.12)', border: '1px solid rgba(30, 158, 90,0.3)', padding: '4px 8px', borderRadius: 8 }}>
+                    <ShieldCheck size={13} color="#1E9E5A" />
+                    <span style={{ fontSize: 11, fontWeight: 800, color: '#137A43' }}>Verified</span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'rgba(255,255,255,0.6)', marginBottom: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--ink-2)', marginBottom: 12 }}>
                   <MapPin size={13} color={accentColor} />
                   <span>{venue.locality}</span>
                 </div>
 
-                <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5, marginBottom: 14 }}>
+                <p style={{ fontSize: 12.5, color: 'var(--ink-2)', lineHeight: 1.5, marginBottom: 14 }}>
                   {venue.description}
                 </p>
 
@@ -223,16 +223,16 @@ export function DelhiNcrPilotShowcase() {
                         fontWeight: 700,
                         padding: '3px 8px',
                         borderRadius: 6,
-                        background: 'rgba(255,255,255,0.05)',
-                        color: 'rgba(255,255,255,0.8)',
-                        border: '1px solid rgba(255,255,255,0.08)',
+                        background: 'var(--cream-2)',
+                        color: 'var(--ink)',
+                        border: '1px solid var(--line)',
                       }}
                     >
                       {am}
                     </span>
                   ))}
                   {venue.amenities.length > 3 && (
-                    <span style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.4)', alignSelf: 'center' }}>
+                    <span style={{ fontSize: 10.5, color: 'var(--ink-2)', alignSelf: 'center' }}>
                       +{venue.amenities.length - 3} more
                     </span>
                   )}
@@ -243,13 +243,13 @@ export function DelhiNcrPilotShowcase() {
               <div
                 style={{
                   paddingTop: 14,
-                  borderTop: '1px solid rgba(255,255,255,0.08)',
+                  borderTop: '1px solid var(--line)',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11.5, color: 'rgba(255,255,255,0.5)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11.5, color: 'var(--ink-2)' }}>
                   <Clock size={13} />
                   <span>{venue.timings}</span>
                 </div>
@@ -282,32 +282,32 @@ export function DelhiNcrPilotShowcase() {
           onClick={() => setShowCustomModal(true)}
           style={{
             borderRadius: 22,
-            background: 'linear-gradient(145deg, rgba(16,185,129,0.08) 0%, rgba(14,165,233,0.05) 100%)',
-            border: '2px dashed rgba(16, 185, 129, 0.45)',
+            background: 'linear-gradient(145deg, rgba(30, 158, 90,0.08) 0%, rgba(46, 107, 255,0.05) 100%)',
+            border: '2px dashed rgba(30, 158, 90, 0.45)',
             padding: '24px',
             cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
+            boxShadow: '0 16px 40px rgba(60, 30, 0, 0.18)',
             position: 'relative',
             minHeight: 280,
           }}
         >
           <div>
-            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16,185,129,0.2)', border: '1px solid rgba(16,185,129,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', marginBottom: 14 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(30, 158, 90,0.2)', border: '1px solid rgba(30, 158, 90,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1E9E5A', marginBottom: 14 }}>
               <PlusCircle size={24} />
             </div>
 
-            <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', padding: '2px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.15)', color: '#34d399' }}>
+            <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', padding: '2px 8px', borderRadius: 6, background: 'rgba(30, 158, 90,0.15)', color: '#137A43' }}>
               ON-DEMAND PILOT SOURCING
             </span>
 
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 900, color: '#ffffff', marginTop: 8, marginBottom: 8 }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 900, color: 'var(--ink)', marginTop: 8, marginBottom: 8 }}>
               Need an Unlisted Venue in Delhi NCR?
             </h3>
 
-            <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.7)', lineHeight: 1.55 }}>
+            <p style={{ fontSize: 12.5, color: 'var(--ink-2)', lineHeight: 1.55 }}>
               Have a specific golf club, microbrewery, 5-star lawn, or sports arena in mind? Tell us the name and our team will onboard them for a blind reverse auction within 24 hours.
             </p>
           </div>
@@ -318,7 +318,7 @@ export function DelhiNcrPilotShowcase() {
               padding: '10px 16px',
               borderRadius: 11,
               border: 'none',
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
               color: '#ffffff',
               fontSize: 12.5,
               fontWeight: 800,
@@ -326,7 +326,7 @@ export function DelhiNcrPilotShowcase() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: 6,
-              boxShadow: '0 4px 16px rgba(16,185,129,0.3)',
+              boxShadow: '0 4px 16px rgba(30, 158, 90,0.3)',
             }}
           >
             <span>Request Custom Venue Sourcing</span>
@@ -346,7 +346,7 @@ export function DelhiNcrPilotShowcase() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(5, 8, 20, 0.88)',
+              background: 'rgba(29, 26, 23, 0.45)',
               backdropFilter: 'blur(16px)',
               padding: 20,
             }}
@@ -361,10 +361,10 @@ export function DelhiNcrPilotShowcase() {
                 width: '100%',
                 maxWidth: 520,
                 borderRadius: 24,
-                background: '#0B0F17',
-                border: '1.5px solid rgba(16,185,129,0.35)',
+                background: '#FFF7EC',
+                border: '1.5px solid rgba(30, 158, 90,0.35)',
                 padding: '32px',
-                boxShadow: '0 40px 100px rgba(0,0,0,0.9)',
+                boxShadow: '0 40px 100px rgba(60, 30, 0, 0.18)',
                 position: 'relative',
               }}
             >
@@ -374,15 +374,15 @@ export function DelhiNcrPilotShowcase() {
                   position: 'absolute',
                   top: 20,
                   right: 20,
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  background: 'var(--cream-2)',
+                  border: '1px solid var(--line)',
                   borderRadius: 10,
                   width: 32,
                   height: 32,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#ffffff',
+                  color: 'var(--ink)',
                   cursor: 'pointer',
                 }}
               >
@@ -391,19 +391,19 @@ export function DelhiNcrPilotShowcase() {
 
               {!customSubmitted ? (
                 <form onSubmit={handleCustomSubmit}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 999, background: 'rgba(16,185,129,0.15)', color: '#34d399', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 999, background: 'rgba(30, 158, 90,0.15)', color: '#137A43', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
                     <Sparkles size={12} /> Bespoke Venue Onboarding
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 900, color: '#ffffff', marginBottom: 6 }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 900, color: 'var(--ink)', marginBottom: 6 }}>
                     Request Custom Venue Sourcing
                   </h3>
-                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.5, marginBottom: 20 }}>
+                  <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.5, marginBottom: 20 }}>
                     Enter any desired sports facility, microbrewery, or resort in Delhi NCR. We will onboard them and trigger live reverse bids.
                   </p>
 
                   <div style={{ display: 'grid', gap: 14 }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: 6 }}>
+                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--ink-2)', textTransform: 'uppercase', marginBottom: 6 }}>
                         Venue / Facility Name *
                       </label>
                       <input
@@ -418,7 +418,7 @@ export function DelhiNcrPilotShowcase() {
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                       <div>
-                        <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: 6 }}>
+                        <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--ink-2)', textTransform: 'uppercase', marginBottom: 6 }}>
                           Locality / Cluster
                         </label>
                         <select className="input-base" value={customLocality} onChange={(e) => setCustomLocality(e.target.value)}>
@@ -432,7 +432,7 @@ export function DelhiNcrPilotShowcase() {
                       </div>
 
                       <div>
-                        <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: 6 }}>
+                        <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--ink-2)', textTransform: 'uppercase', marginBottom: 6 }}>
                           Estimated Headcount
                         </label>
                         <select className="input-base" value={customPax} onChange={(e) => setCustomPax(e.target.value)}>
@@ -452,7 +452,7 @@ export function DelhiNcrPilotShowcase() {
                         padding: '13px',
                         borderRadius: 12,
                         border: 'none',
-                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                        background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
                         color: '#ffffff',
                         fontSize: 13.5,
                         fontWeight: 800,
@@ -461,7 +461,7 @@ export function DelhiNcrPilotShowcase() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: 8,
-                        boxShadow: '0 6px 20px rgba(16,185,129,0.35)',
+                        boxShadow: '0 6px 20px rgba(30, 158, 90,0.35)',
                       }}
                     >
                       <Send size={15} />
@@ -471,14 +471,14 @@ export function DelhiNcrPilotShowcase() {
                 </form>
               ) : (
                 <div style={{ textAlign: 'center', padding: '24px 0' }}>
-                  <div style={{ width: 50, height: 50, borderRadius: '50%', background: 'rgba(16,185,129,0.2)', border: '2px solid #10b981', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', marginBottom: 14 }}>
+                  <div style={{ width: 50, height: 50, borderRadius: '50%', background: 'rgba(30, 158, 90,0.2)', border: '2px solid #1E9E5A', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#1E9E5A', marginBottom: 14 }}>
                     <CheckCircle2 size={26} />
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 900, color: '#ffffff', marginBottom: 6 }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 900, color: 'var(--ink)', marginBottom: 6 }}>
                     Sourcing Request Logged!
                   </h3>
-                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>
-                    We will connect with <strong style={{ color: '#10b981' }}>{customVenueName}</strong> to set up direct reverse bids for your event.
+                  <p style={{ fontSize: 13, color: 'var(--ink-2)' }}>
+                    We will connect with <strong style={{ color: '#1E9E5A' }}>{customVenueName}</strong> to set up direct reverse bids for your event.
                   </p>
                 </div>
               )}
@@ -498,7 +498,7 @@ export function DelhiNcrPilotShowcase() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(5, 8, 20, 0.85)',
+              background: 'rgba(29, 26, 23, 0.45)',
               backdropFilter: 'blur(16px)',
               padding: 20,
             }}
@@ -515,10 +515,10 @@ export function DelhiNcrPilotShowcase() {
                 maxHeight: '90vh',
                 overflowY: 'auto',
                 borderRadius: 24,
-                background: '#0B0F17',
-                border: '1.5px solid rgba(16,185,129,0.3)',
+                background: '#FFF7EC',
+                border: '1.5px solid rgba(30, 158, 90,0.3)',
                 padding: '32px',
-                boxShadow: '0 40px 100px rgba(0,0,0,0.9)',
+                boxShadow: '0 40px 100px rgba(60, 30, 0, 0.18)',
                 position: 'relative',
               }}
             >
@@ -528,15 +528,15 @@ export function DelhiNcrPilotShowcase() {
                   position: 'absolute',
                   top: 20,
                   right: 20,
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  background: 'var(--cream-2)',
+                  border: '1px solid var(--line)',
                   borderRadius: 10,
                   width: 32,
                   height: 32,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#ffffff',
+                  color: 'var(--ink)',
                   cursor: 'pointer',
                 }}
               >
@@ -544,46 +544,46 @@ export function DelhiNcrPilotShowcase() {
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <span style={{ fontSize: 11, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.2)', color: '#34d399' }}>
+                <span style={{ fontSize: 11, fontWeight: 800, padding: '3px 8px', borderRadius: 6, background: 'rgba(30, 158, 90,0.2)', color: '#137A43' }}>
                   ✓ VERIFIED ANCHOR FACILITY
                 </span>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Delhi NCR Cluster</span>
+                <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>Delhi NCR Cluster</span>
               </div>
 
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 900, color: '#ffffff', marginBottom: 6 }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 900, color: 'var(--ink)', marginBottom: 6 }}>
                 {selectedVenue.name}
               </h2>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 18 }}>
-                <MapPin size={14} color="#10b981" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--ink-2)', marginBottom: 18 }}>
+                <MapPin size={14} color="#1E9E5A" />
                 <span>{selectedVenue.address}</span>
               </div>
 
               {/* Timing & Facility Details Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
-                <div style={{ padding: '14px', borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', fontWeight: 700 }}>Operating Hours</div>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: '#ffffff', marginTop: 4 }}>{selectedVenue.timings}</div>
+                <div style={{ padding: '14px', borderRadius: 14, background: 'var(--cream-2)', border: '1px solid var(--line)' }}>
+                  <div style={{ fontSize: 10.5, color: 'var(--ink-2)', textTransform: 'uppercase', fontWeight: 700 }}>Operating Hours</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--ink)', marginTop: 4 }}>{selectedVenue.timings}</div>
                 </div>
 
-                <div style={{ padding: '14px', borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', fontWeight: 700 }}>Locality Corridor</div>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: '#10b981', marginTop: 4 }}>{selectedVenue.locality.split(',')[0]}</div>
+                <div style={{ padding: '14px', borderRadius: 14, background: 'var(--cream-2)', border: '1px solid var(--line)' }}>
+                  <div style={{ fontSize: 10.5, color: 'var(--ink-2)', textTransform: 'uppercase', fontWeight: 700 }}>Locality Corridor</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#1E9E5A', marginTop: 4 }}>{selectedVenue.locality.split(',')[0]}</div>
                 </div>
               </div>
 
               {/* Corporate Suitability */}
-              <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', marginBottom: 20 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+              <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(30, 158, 90,0.08)', border: '1px solid rgba(30, 158, 90,0.2)', marginBottom: 20 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#137A43', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
                   🏢 Corporate Suitability & Scope
                 </div>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}>
+                <p style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.5 }}>
                   {selectedVenue.corporateSuitability}
                 </p>
               </div>
 
               {/* Key Amenities */}
               <div style={{ marginBottom: 24 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: 8 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--ink-2)', textTransform: 'uppercase', marginBottom: 8 }}>
                   Facility Amenities & Features
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -593,9 +593,9 @@ export function DelhiNcrPilotShowcase() {
                       style={{
                         padding: '5px 12px',
                         borderRadius: 8,
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        color: '#ffffff',
+                        background: 'var(--cream-2)',
+                        border: '1px solid var(--line)',
+                        color: 'var(--ink)',
                         fontSize: 12,
                         fontWeight: 700,
                       }}
@@ -613,9 +613,9 @@ export function DelhiNcrPilotShowcase() {
                     flex: 1,
                     padding: '12px',
                     borderRadius: 12,
-                    border: '1px solid rgba(255,255,255,0.15)',
+                    border: '1px solid var(--line)',
                     background: 'transparent',
-                    color: '#ffffff',
+                    color: 'var(--ink)',
                     fontWeight: 700,
                     cursor: 'pointer',
                   }}
@@ -629,7 +629,7 @@ export function DelhiNcrPilotShowcase() {
                     flex: 2,
                     padding: '12px',
                     borderRadius: 12,
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
                     color: '#ffffff',
                     fontWeight: 800,
                     display: 'flex',
@@ -637,7 +637,7 @@ export function DelhiNcrPilotShowcase() {
                     justifyContent: 'center',
                     gap: 8,
                     textDecoration: 'none',
-                    boxShadow: '0 8px 24px rgba(16,185,129,0.35)',
+                    boxShadow: '0 8px 24px rgba(30, 158, 90,0.35)',
                   }}
                 >
                   Source via Live Reverse Auction <ArrowRight size={14} />

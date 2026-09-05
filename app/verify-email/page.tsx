@@ -38,7 +38,7 @@ function VerifyEmailInner() {
   }, [token]);
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0B0F17', padding: 24 }}>
+    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#FFF7EC', padding: 24 }}>
       <BlurredCyberHubBackground />
       <div
         style={{
@@ -46,24 +46,24 @@ function VerifyEmailInner() {
           zIndex: 10,
           maxWidth: 460,
           textAlign: 'center',
-          background: 'rgba(11,15,23,0.92)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          background: 'var(--paper)',
+          border: '1px solid var(--line)',
           borderRadius: 22,
           padding: 32,
         }}
       >
-        <p style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '.16em', color: '#f97316', textTransform: 'uppercase' }}>
+        <p style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '.16em', color: '#FF6B2C', textTransform: 'uppercase' }}>
           Community of Employees
         </p>
-        <h1 style={{ margin: '0 0 12px', fontSize: 21, fontWeight: 700, color: '#fff' }}>
+        <h1 style={{ margin: '0 0 12px', fontSize: 21, fontWeight: 700, color: 'var(--ink)' }}>
           {state === 'working' ? 'One moment…' : state === 'done' ? 'Email confirmed' : 'That link did not work'}
         </h1>
-        <p style={{ margin: '0 0 22px', fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.68)' }}>{message}</p>
+        <p style={{ margin: '0 0 22px', fontSize: 14, lineHeight: 1.6, color: 'var(--ink-2)' }}>{message}</p>
         <Link
           href="/"
           style={{
             display: 'inline-block', padding: '11px 20px', borderRadius: 11,
-            background: '#f97316', color: '#0B0F17', fontWeight: 700, fontSize: 14, textDecoration: 'none',
+            background: '#FF6B2C', color: '#FFF7EC', fontWeight: 700, fontSize: 14, textDecoration: 'none',
           }}
         >
           Back to COE

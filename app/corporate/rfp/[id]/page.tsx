@@ -47,7 +47,7 @@ function VendorProposalDrawer({
   onClose: () => void;
   onAccept: () => void;
 }) {
-  const { isNightMode } = useStore();
+  useStore();
   const catTheme = THEMES[rfp.category];
   const isAccepted = bid.status === 'accepted';
 
@@ -69,7 +69,7 @@ function VendorProposalDrawer({
         zIndex: 100,
         display: 'flex',
         justifyContent: 'flex-end',
-        background: 'rgba(0, 0, 0, 0.65)',
+        background: 'rgba(60, 30, 0, 0.18)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
       }}
@@ -85,9 +85,9 @@ function VendorProposalDrawer({
           width: '100%',
           maxWidth: 580,
           height: '100%',
-          background: isNightMode ? '#0B0F17' : '#ffffff',
-          borderLeft: isNightMode ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.1)',
-          boxShadow: '-20px 0 60px rgba(0, 0, 0, 0.8)',
+          background: '#ffffff',
+          borderLeft: '1px solid rgba(235, 223, 204, 0.95)',
+          boxShadow: '-20px 0 60px rgba(60, 30, 0, 0.18)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -97,7 +97,7 @@ function VendorProposalDrawer({
         <div
           style={{
             padding: '24px 28px',
-            borderBottom: isNightMode ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+            borderBottom: '1px solid rgba(235, 223, 204, 0.9)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -108,7 +108,7 @@ function VendorProposalDrawer({
             <div style={{ fontSize: 11, fontWeight: 800, color: catTheme.primary, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
               Level 3 · Vendor Proposal Dossier
             </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: '#1D1A17' }}>
               {bid.vendorCompany}
             </h2>
           </div>
@@ -119,12 +119,12 @@ function VendorProposalDrawer({
               width: 34,
               height: 34,
               borderRadius: 10,
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: 'var(--cream-2)',
+              border: '1px solid var(--line)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: isNightMode ? '#ffffff' : '#0f172a',
+              color: '#1D1A17',
               cursor: 'pointer',
             }}
           >
@@ -139,7 +139,7 @@ function VendorProposalDrawer({
             style={{
               borderRadius: 18,
               padding: '20px',
-              background: isNightMode ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
+              background: 'rgba(235, 223, 204, 0.9)',
               border: `1px solid ${catTheme.primary}33`,
               marginBottom: 22,
               display: 'flex',
@@ -148,13 +148,13 @@ function VendorProposalDrawer({
             }}
           >
             <div>
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div style={{ fontSize: 11, color: '#7A7169', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Binding Total Quotation
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: isAccepted ? '#10b981' : catTheme.primary }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, color: isAccepted ? '#1E9E5A' : catTheme.primary }}>
                 {formatCurrency(bid.totalPrice)}
               </div>
-              <div style={{ fontSize: 12, color: '#10b981', fontWeight: 600, marginTop: 2 }}>
+              <div style={{ fontSize: 12, color: '#1E9E5A', fontWeight: 600, marginTop: 2 }}>
                 ✓ Within Corporate Target Budget
               </div>
             </div>
@@ -163,9 +163,9 @@ function VendorProposalDrawer({
               style={{
                 padding: '8px 14px',
                 borderRadius: 14,
-                background: bid.matchPercentage >= 90 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
-                border: `1px solid ${bid.matchPercentage >= 90 ? '#10b981' : '#f59e0b'}`,
-                color: bid.matchPercentage >= 90 ? '#10b981' : '#f59e0b',
+                background: bid.matchPercentage >= 90 ? 'rgba(30, 158, 90, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                border: `1px solid ${bid.matchPercentage >= 90 ? '#1E9E5A' : '#A66A00'}`,
+                color: bid.matchPercentage >= 90 ? '#1E9E5A' : '#A66A00',
                 textAlign: 'center',
               }}
             >
@@ -178,38 +178,38 @@ function VendorProposalDrawer({
 
           {/* 1. Itemized Price Breakdown Table */}
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#1D1A17', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
               1. Itemized Line-Item Price Breakdown
             </div>
 
             <div
               style={{
                 borderRadius: 14,
-                border: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
-                background: isNightMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
+                border: '1px solid rgba(235, 223, 204, 0.9)',
+                background: 'rgba(235, 223, 204, 0.9)',
                 overflow: 'hidden',
               }}
             >
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5, textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ borderBottom: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)', color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b', fontSize: 11, textTransform: 'uppercase' }}>
+                  <tr style={{ borderBottom: '1px solid rgba(235, 223, 204, 0.9)', color: '#7A7169', fontSize: 11, textTransform: 'uppercase' }}>
                     <th style={{ padding: '10px 14px' }}>Item Description</th>
                     <th style={{ padding: '10px 14px', textAlign: 'right' }}>Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   {bid.lineItems.map((item, i) => (
-                    <tr key={i} style={{ borderBottom: isNightMode ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.04)' }}>
-                      <td style={{ padding: '10px 14px', color: isNightMode ? 'rgba(255,255,255,0.85)' : '#334155' }}>
+                    <tr key={i} style={{ borderBottom: '1px solid rgba(235, 223, 204, 0.9)' }}>
+                      <td style={{ padding: '10px 14px', color: '#4A443D' }}>
                         {item.description}
                       </td>
-                      <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                      <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 700, color: '#1D1A17' }}>
                         {formatCurrency(item.amount)}
                       </td>
                     </tr>
                   ))}
-                  <tr style={{ background: isNightMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)', fontWeight: 800 }}>
-                    <td style={{ padding: '10px 14px', color: isNightMode ? '#ffffff' : '#0f172a' }}>Total Final Bid</td>
+                  <tr style={{ background: 'rgba(235, 223, 204, 0.9)', fontWeight: 800 }}>
+                    <td style={{ padding: '10px 14px', color: '#1D1A17' }}>Total Final Bid</td>
                     <td style={{ padding: '10px 14px', textAlign: 'right', color: catTheme.primary, fontSize: 14 }}>
                       {formatCurrency(bid.totalPrice)}
                     </td>
@@ -221,17 +221,17 @@ function VendorProposalDrawer({
 
           {/* 2. Custom Pitch & Notes */}
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#1D1A17', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
               2. Custom Vendor Pitch & SLA Commitments
             </div>
             <div
               style={{
                 fontSize: 13,
-                color: isNightMode ? 'rgba(255,255,255,0.75)' : '#334155',
+                color: '#4A443D',
                 lineHeight: 1.6,
                 padding: '14px 16px',
                 borderRadius: 12,
-                background: isNightMode ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.025)',
+                background: 'rgba(0,0,0,0.025)',
                 borderLeft: `3px solid ${catTheme.primary}`,
               }}
             >
@@ -241,7 +241,7 @@ function VendorProposalDrawer({
 
           {/* 3. Verified Credentials & Venue Details */}
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#1D1A17', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
               3. Verified Venue Specifications & Corporate Credentials
             </div>
 
@@ -249,20 +249,20 @@ function VendorProposalDrawer({
               style={{
                 borderRadius: 14,
                 padding: '16px',
-                background: isNightMode ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.025)',
-                border: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+                background: 'rgba(0,0,0,0.025)',
+                border: '1px solid rgba(235, 223, 204, 0.9)',
                 display: 'grid',
                 gap: 10,
                 fontSize: 12.5,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ShieldCheck size={16} color="#10b981" />
+                <ShieldCheck size={16} color="#1E9E5A" />
                 <span>GSTIN: <strong style={{ fontFamily: 'monospace' }}>{gstin}</strong> (Verified Compliance)</span>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <MapPin size={16} color="#f97316" />
+                <MapPin size={16} color="#FF6B2C" />
                 <span>
                   Base Hub: <strong>{address}</strong>
                   {/* Distance is derived from both saved coordinates; if either
@@ -273,27 +273,27 @@ function VendorProposalDrawer({
 
               {(vendorProfile?.timings || bid.timings) && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Clock size={16} color="#38bdf8" />
+                  <Clock size={16} color="#2E6BFF" />
                   <span>Operating Timings: <strong>{vendorProfile?.timings || bid.timings}</strong></span>
                 </div>
               )}
 
               {(vendorProfile?.avgCostPerPerson || bid.avgCostPerPerson) && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <DollarSign size={16} color="#34d399" />
+                  <DollarSign size={16} color="#137A43" />
                   <span>Average Cost per Person: <strong>{formatCurrency(vendorProfile?.avgCostPerPerson || bid.avgCostPerPerson || 850)} / pax</strong></span>
                 </div>
               )}
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Building2 size={16} color="#0ea5e9" />
+                <Building2 size={16} color="#2E6BFF" />
                 <span>Representative: <strong>{bid.vendorName}</strong></span>
               </div>
 
               {/* Amenities Pills */}
               {(vendorProfile?.amenities || bid.amenities) && (
-                <div style={{ marginTop: 4, paddingTop: 10, borderTop: isNightMode ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)' }}>
-                  <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', marginBottom: 6 }}>
+                <div style={{ marginTop: 4, paddingTop: 10, borderTop: '1px solid rgba(235, 223, 204, 0.9)' }}>
+                  <div style={{ fontSize: 11, color: '#7A7169', marginBottom: 6 }}>
                     Featured Facilities & Amenities:
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -304,9 +304,9 @@ function VendorProposalDrawer({
                           fontSize: 11,
                           padding: '3px 8px',
                           borderRadius: 999,
-                          background: 'rgba(249, 115, 22, 0.12)',
-                          border: '1px solid rgba(249, 115, 22, 0.25)',
-                          color: '#fb923c',
+                          background: 'rgba(255, 107, 44, 0.12)',
+                          border: '1px solid rgba(255, 107, 44, 0.25)',
+                          color: '#FF8F5C',
                           fontWeight: 600,
                         }}
                       >
@@ -319,18 +319,18 @@ function VendorProposalDrawer({
 
               {/* Corporate Suitability */}
               {(vendorProfile?.corporateSuitability || bid.corporateSuitability) && (
-                <div style={{ marginTop: 4, paddingTop: 10, borderTop: isNightMode ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)' }}>
-                  <div style={{ fontSize: 11, color: '#10b981', fontWeight: 700, marginBottom: 2 }}>
+                <div style={{ marginTop: 4, paddingTop: 10, borderTop: '1px solid rgba(235, 223, 204, 0.9)' }}>
+                  <div style={{ fontSize: 11, color: '#1E9E5A', fontWeight: 700, marginBottom: 2 }}>
                     🏆 Corporate Event Suitability:
                   </div>
-                  <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', lineHeight: 1.4 }}>
+                  <div style={{ fontSize: 12, color: '#4A443D', lineHeight: 1.4 }}>
                     {vendorProfile?.corporateSuitability || bid.corporateSuitability}
                   </div>
                 </div>
               )}
 
-              <div style={{ marginTop: 4, paddingTop: 10, borderTop: isNightMode ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)' }}>
-                <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', marginBottom: 6 }}>
+              <div style={{ marginTop: 4, paddingTop: 10, borderTop: '1px solid rgba(235, 223, 204, 0.9)' }}>
+                <div style={{ fontSize: 11, color: '#7A7169', marginBottom: 6 }}>
                   Past Corporate Client References:
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -341,9 +341,9 @@ function VendorProposalDrawer({
                         fontSize: 11,
                         padding: '3px 8px',
                         borderRadius: 999,
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        color: isNightMode ? '#ffffff' : '#0f172a',
+                        background: 'var(--cream-2)',
+                        border: '1px solid var(--line)',
+                        color: '#1D1A17',
                         fontWeight: 600,
                       }}
                     >
@@ -357,7 +357,7 @@ function VendorProposalDrawer({
 
           {/* 4. Verified Google Business Reviews & Rating */}
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#1D1A17', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
               4. Verified Google Places Reviews & Live Rating
             </div>
             <VendorGoogleReviewsWidget
@@ -373,8 +373,8 @@ function VendorProposalDrawer({
         <div
           style={{
             padding: '18px 28px',
-            borderTop: isNightMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
-            background: isNightMode ? 'rgba(11, 15, 23, 0.98)' : '#ffffff',
+            borderTop: '1px solid rgba(235, 223, 204, 0.9)',
+            background: '#ffffff',
             display: 'flex',
             gap: 12,
           }}
@@ -405,10 +405,10 @@ function VendorProposalDrawer({
                 flex: 2,
                 padding: '12px',
                 background: 'rgba(34, 197, 94, 0.2)',
-                border: '1px solid #22c55e',
+                border: '1px solid #12854A',
                 borderRadius: 12,
                 textAlign: 'center',
-                color: '#22c55e',
+                color: '#12854A',
                 fontWeight: 800,
                 fontSize: 13.5,
                 display: 'flex',
@@ -428,7 +428,7 @@ function VendorProposalDrawer({
                 flex: 2,
                 padding: '12px',
                 fontSize: 13.5,
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
               }}
             >
               <CheckCircle size={16} />
@@ -447,7 +447,7 @@ export default function SpecificRFPInquiryPage() {
   const router = useRouter();
   const rfpId = params.id as string;
 
-  const { rfpList, getBidsForRFP, vendorProfiles, acceptBid, isNightMode, hydrated, loadRfpDetail } =
+  const { rfpList, getBidsForRFP, vendorProfiles, acceptBid, hydrated, loadRfpDetail } =
     useStore();
 
   // Bids are fetched per requirement — the poster's view is the only one the
@@ -462,7 +462,7 @@ export default function SpecificRFPInquiryPage() {
 
   if (!rfp) {
     return (
-      <main style={{ minHeight: '100vh', paddingTop: 120, textAlign: 'center', color: '#ffffff' }}>
+      <main style={{ minHeight: '100vh', paddingTop: 120, textAlign: 'center', color: 'var(--ink)' }}>
         <BlurredCyberHubBackground />
         <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 12 }}>Requirement Not Found</h2>
         <Link href="/corporate/dashboard" className="btn-primary">
@@ -490,18 +490,18 @@ export default function SpecificRFPInquiryPage() {
         paddingTop: 96,
         paddingBottom: 60,
         position: 'relative',
-        background: '#0B0F17',
+        background: '#FFF7EC',
       }}
     >
       <BlurredCyberHubBackground />
 
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 10 }}>
         {/* ── BREADCRUMB NAVIGATION (User Requirement) ── */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', marginBottom: 20, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: '#7A7169', marginBottom: 20, flexWrap: 'wrap' }}>
           <Link
             href="/corporate/dashboard"
             style={{
-              color: isNightMode ? '#ffffff' : '#0f172a',
+              color: '#1D1A17',
               textDecoration: 'none',
               fontWeight: 700,
               display: 'flex',
@@ -516,11 +516,11 @@ export default function SpecificRFPInquiryPage() {
             {CATEGORY_LABELS[rfp.category]}
           </span>
           <ChevronRight size={13} />
-          <span style={{ color: isNightMode ? 'rgba(255,255,255,0.8)' : '#334155', fontWeight: 600 }}>
+          <span style={{ color: '#4A443D', fontWeight: 600 }}>
             {rfpTitle}
           </span>
           <ChevronRight size={13} />
-          <span style={{ color: '#10b981', fontWeight: 800 }}>
+          <span style={{ color: '#1E9E5A', fontWeight: 800 }}>
             Bids ({bids.length})
           </span>
         </div>
@@ -533,10 +533,10 @@ export default function SpecificRFPInquiryPage() {
             borderRadius: 20,
             padding: '26px 30px',
             marginBottom: 28,
-            background: isNightMode ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.95)',
-            border: isNightMode ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.1)',
+            background: 'var(--paper)',
+            border: '1px solid rgba(235, 223, 204, 0.95)',
             backdropFilter: 'blur(16px)',
-            boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
+            boxShadow: '0 16px 40px rgba(60, 30, 0, 0.18)',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 18 }}>
@@ -559,20 +559,20 @@ export default function SpecificRFPInquiryPage() {
 
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                  <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                  <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 800, color: '#1D1A17' }}>
                     {rfpTitle}
                   </h1>
                   {rfp.status === 'awarded' ? (
-                    <span style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(34,197,94,0.18)', color: '#22c55e', fontSize: 11, fontWeight: 800 }}>
+                    <span style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(34,197,94,0.18)', color: '#12854A', fontSize: 11, fontWeight: 800 }}>
                       ● Contract Awarded
                     </span>
                   ) : (
-                    <span style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(16,185,129,0.18)', color: '#10b981', fontSize: 11, fontWeight: 800 }}>
+                    <span style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(30, 158, 90,0.18)', color: '#1E9E5A', fontSize: 11, fontWeight: 800 }}>
                       ● Live Reverse Auction ({bids.length} Proposals)
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: 13, color: isNightMode ? 'rgba(255,255,255,0.6)' : '#64748b' }}>
+                <div style={{ fontSize: 13, color: '#7A7169' }}>
                   Posted by {rfp.companyName} · Submitted on {formatDate(rfp.submittedAt)}
                 </div>
               </div>
@@ -587,7 +587,7 @@ export default function SpecificRFPInquiryPage() {
                 textAlign: 'right',
               }}
             >
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', textTransform: 'uppercase' }}>Target Budget Cap</div>
+              <div style={{ fontSize: 11, color: '#7A7169', textTransform: 'uppercase' }}>Target Budget Cap</div>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 800, color: catTheme.primary }}>
                 {formatCurrency(rfp.totalBudget)}
               </div>
@@ -601,37 +601,37 @@ export default function SpecificRFPInquiryPage() {
               gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
               gap: 14,
               paddingTop: 16,
-              borderTop: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+              borderTop: '1px solid rgba(235, 223, 204, 0.9)',
             }}
           >
             <div>
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>Headcount</div>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <div style={{ fontSize: 11, color: '#7A7169' }}>Headcount</div>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: '#1D1A17' }}>
                 {rfp.universal.persons} Attendees
               </div>
             </div>
             <div>
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>Date & Schedule</div>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <div style={{ fontSize: 11, color: '#7A7169' }}>Date & Schedule</div>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: '#1D1A17' }}>
                 {formatDate(rfp.universal.startDate)}
               </div>
             </div>
             <div>
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>Time Slot</div>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <div style={{ fontSize: 11, color: '#7A7169' }}>Time Slot</div>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: '#1D1A17' }}>
                 {rfp.universal.timeSlot || 'Full Day'}
               </div>
             </div>
             <div>
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>Office Location</div>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <div style={{ fontSize: 11, color: '#7A7169' }}>Office Location</div>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: '#1D1A17' }}>
                 {rfp.universal.officeAddress || 'DLF Cyber City'}
               </div>
             </div>
           </div>
 
           {rfp.universal.notes && (
-            <div style={{ marginTop: 14, fontSize: 12.5, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#475569', background: isNightMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)', padding: '10px 14px', borderRadius: 10 }}>
+            <div style={{ marginTop: 14, fontSize: 12.5, color: '#4A443D', background: 'rgba(235, 223, 204, 0.9)', padding: '10px 14px', borderRadius: 10 }}>
               <strong>Requirement Notes:</strong> {rfp.universal.notes}
             </div>
           )}
@@ -641,16 +641,16 @@ export default function SpecificRFPInquiryPage() {
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
             <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: '#1D1A17' }}>
                 Vendor Proposals & Reverse-Bidding ({bids.length})
               </h2>
-              <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
+              <div style={{ fontSize: 12, color: '#7A7169' }}>
                 Click any proposal row to open the Level 3 Decision Dossier.
               </div>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ fontSize: 12, color: '#7A7169', display: 'flex', alignItems: 'center', gap: 4 }}>
                 <SlidersHorizontal size={13} /> Sort By:
               </span>
               <select
@@ -672,15 +672,15 @@ export default function SpecificRFPInquiryPage() {
                 textAlign: 'center',
                 padding: '60px 20px',
                 borderRadius: 20,
-                background: isNightMode ? 'rgba(11, 15, 23, 0.9)' : 'rgba(255,255,255,0.9)',
-                border: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+                background: 'var(--paper)',
+                border: '1px solid rgba(235, 223, 204, 0.9)',
               }}
             >
               <Clock size={36} style={{ margin: '0 auto 10px', opacity: 0.5 }} />
-              <h3 style={{ fontSize: 17, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a', marginBottom: 4 }}>
+              <h3 style={{ fontSize: 17, fontWeight: 700, color: '#1D1A17', marginBottom: 4 }}>
                 Awaiting Incoming Proposals
               </h3>
-              <p style={{ color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', fontSize: 13 }}>
+              <p style={{ color: '#7A7169', fontSize: 13 }}>
                 This requirement is live in the vendor pool. Verified vendors from DLF Cyber City will submit bids shortly.
               </p>
             </div>
@@ -700,15 +700,11 @@ export default function SpecificRFPInquiryPage() {
                       borderRadius: 16,
                       padding: '20px 24px',
                       background: isAccepted
-                        ? 'rgba(16, 185, 129, 0.12)'
-                        : isNightMode
-                        ? 'rgba(11, 15, 23, 0.92)'
-                        : 'rgba(255, 255, 255, 0.95)',
+                        ? 'rgba(30, 158, 90, 0.12)'
+                        : 'rgba(255, 255, 255, 0.96)',
                       border: isAccepted
-                        ? '2px solid #10b981'
-                        : isNightMode
-                        ? '1px solid rgba(255, 255, 255, 0.1)'
-                        : '1px solid rgba(0, 0, 0, 0.08)',
+                        ? '2px solid #1E9E5A'
+                        : '1px solid rgba(235, 223, 204, 0.9)',
                       backdropFilter: 'blur(12px)',
                       cursor: 'pointer',
                       display: 'flex',
@@ -716,7 +712,7 @@ export default function SpecificRFPInquiryPage() {
                       alignItems: 'center',
                       flexWrap: 'wrap',
                       gap: 16,
-                      boxShadow: isAccepted ? '0 12px 32px rgba(16, 185, 129, 0.25)' : 'none',
+                      boxShadow: isAccepted ? '0 12px 32px rgba(30, 158, 90, 0.25)' : 'none',
                     }}
                   >
                     {/* Left: Vendor & Distance */}
@@ -726,11 +722,11 @@ export default function SpecificRFPInquiryPage() {
                           width: 44,
                           height: 44,
                           borderRadius: 12,
-                          background: 'rgba(249, 115, 22, 0.15)',
+                          background: 'rgba(255, 107, 44, 0.15)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#f97316',
+                          color: '#FF6B2C',
                           fontWeight: 800,
                           fontSize: 16,
                           flexShrink: 0,
@@ -741,10 +737,10 @@ export default function SpecificRFPInquiryPage() {
 
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-                          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 16, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 16, color: '#1D1A17' }}>
                             {bid.vendorCompany}
                           </span>
-                          <span style={{ fontSize: 10.5, padding: '2px 7px', borderRadius: 999, background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', fontWeight: 800 }}>
+                          <span style={{ fontSize: 10.5, padding: '2px 7px', borderRadius: 999, background: 'rgba(30, 158, 90, 0.15)', color: '#1E9E5A', fontWeight: 800 }}>
                             GST Verified
                           </span>
                           <VendorTrustBadge
@@ -755,7 +751,7 @@ export default function SpecificRFPInquiryPage() {
                           />
                         </div>
 
-                        <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.65)' : '#64748b', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
+                        <div style={{ fontSize: 12, color: '#7A7169', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                           <span>Rep: <strong>{bid.vendorName}</strong></span>
                           <span>•</span>
                           <span>
@@ -782,8 +778,8 @@ export default function SpecificRFPInquiryPage() {
                                   fontSize: 10.5,
                                   padding: '1px 6px',
                                   borderRadius: 6,
-                                  background: 'rgba(249, 115, 22, 0.1)',
-                                  color: '#fb923c',
+                                  background: 'rgba(255, 107, 44, 0.1)',
+                                  color: '#FF8F5C',
                                   fontWeight: 600,
                                 }}
                               >
@@ -801,8 +797,8 @@ export default function SpecificRFPInquiryPage() {
                         style={{
                           padding: '4px 10px',
                           borderRadius: 999,
-                          background: bid.matchPercentage >= 90 ? 'rgba(16, 185, 129, 0.18)' : 'rgba(245, 158, 11, 0.18)',
-                          color: bid.matchPercentage >= 90 ? '#10b981' : '#f59e0b',
+                          background: bid.matchPercentage >= 90 ? 'rgba(30, 158, 90, 0.18)' : 'rgba(245, 158, 11, 0.18)',
+                          color: bid.matchPercentage >= 90 ? '#1E9E5A' : '#A66A00',
                           fontSize: 12,
                           fontWeight: 800,
                           display: 'flex',
@@ -814,10 +810,10 @@ export default function SpecificRFPInquiryPage() {
                       </div>
 
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b', textTransform: 'uppercase' }}>
+                        <div style={{ fontSize: 10.5, color: '#7A7169', textTransform: 'uppercase' }}>
                           Quotation
                         </div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: isAccepted ? '#10b981' : catTheme.primary }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: isAccepted ? '#1E9E5A' : catTheme.primary }}>
                           {formatCurrency(bid.totalPrice)}
                         </div>
                       </div>
@@ -829,7 +825,7 @@ export default function SpecificRFPInquiryPage() {
                         }}
                         className="btn-primary"
                         style={{
-                          background: isAccepted ? '#10b981' : catTheme.primary,
+                          background: isAccepted ? '#1E9E5A' : catTheme.primary,
                           padding: '8px 16px',
                           fontSize: 12.5,
                           display: 'inline-flex',

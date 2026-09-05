@@ -12,7 +12,7 @@ import { PreviewFooter } from '@/components/venture/PreviewFooter';
 
 export default function TermsOfServicePage() {
   return (
-    <div style={{ background: '#0B0F17', color: '#ffffff', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: '#FFF7EC', color: 'var(--ink)', minHeight: '100vh', position: 'relative' }}>
       <BlurredCyberHubBackground />
 
       {/* Top Header */}
@@ -22,19 +22,19 @@ export default function TermsOfServicePage() {
           top: 0,
           zIndex: 50,
           padding: '16px 24px',
-          background: 'rgba(5, 7, 14, 0.92)',
+          background: 'rgba(29, 26, 23, 0.45)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: '1px solid var(--line)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#34d399', fontSize: 13, fontWeight: 700 }}>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#137A43', fontSize: 13, fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Back to Marketplace Homepage</span>
         </Link>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>
+        <span style={{ fontSize: 12, color: 'var(--ink-2)', fontWeight: 600 }}>
           Community of Employees (COE) Terms of Service
         </span>
       </header>
@@ -42,22 +42,22 @@ export default function TermsOfServicePage() {
       {/* Main Content Container */}
       <main style={{ maxWidth: 960, margin: '0 auto', padding: '60px 24px 100px', position: 'relative', zIndex: 10 }}>
         {/* Title */}
-        <div style={{ marginBottom: 40, borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 24 }}>
+        <div style={{ marginBottom: 40, borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 999, background: 'rgba(168, 85, 247, 0.15)', color: '#a855f7', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
             <Scale size={14} /> TERMS OF PLATFORM USE & REVERSE-AUCTION RULES
           </div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', marginBottom: 10 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', marginBottom: 10 }}>
             Marketplace Terms of Service
           </h1>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
+          <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>
             Effective Date: 1st January 2026 · Governed by the Indian Contract Act, 1872 & IT Act, 2000
           </p>
         </div>
 
         {/* Legal Text Body */}
-        <div style={{ display: 'grid', gap: 28, fontSize: 14.5, color: 'rgba(255,255,255,0.8)', lineHeight: 1.75 }}>
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12 }}>
+        <div style={{ display: 'grid', gap: 28, fontSize: 14.5, color: 'var(--ink)', lineHeight: 1.75 }}>
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12 }}>
               1. Nature of Platform & Non-Liability Clause
             </h2>
             <p>
@@ -65,8 +65,8 @@ export default function TermsOfServicePage() {
             </p>
           </section>
 
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12 }}>
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12 }}>
               2. Vendor Obligations & Anti-Collusion Rules
             </h2>
             <p>
@@ -74,8 +74,8 @@ export default function TermsOfServicePage() {
             </p>
           </section>
 
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12 }}>
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12 }}>
               3. Governing Law and Jurisdiction
             </h2>
             <p>

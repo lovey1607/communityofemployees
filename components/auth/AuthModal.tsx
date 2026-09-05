@@ -38,7 +38,6 @@ export function AuthModal() {
     loginWithPassword,
     registerUser,
     requestPasswordReset,
-    isNightMode,
   } = useStore();
 
   const [mode, setMode] = useState<Mode>('signin');
@@ -54,7 +53,6 @@ export function AuthModal() {
   const [category, setCategory] = useState<CategoryType>('food');
   const [serviceArea, setServiceArea] = useState('Gurugram');
 
-  const dark = isNightMode;
   const emailPolicy = useMemo(
     () => (email.includes('@') ? checkWorkEmail(email) : null),
     [email]
@@ -120,14 +118,14 @@ export function AuthModal() {
   };
 
   // ─── Shared styles ─────────────────────────────────────────
-  const text = dark ? '#e8ecf5' : '#111827';
-  const muted = dark ? '#8b95ab' : '#5b6478';
+  const text = 'var(--ink)';
+  const muted = 'var(--muted)';
   const fieldStyle: React.CSSProperties = {
     width: '100%',
     padding: '12px 14px',
     borderRadius: 11,
-    border: dark ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(0,0,0,0.14)',
-    background: dark ? 'rgba(255,255,255,0.04)' : '#fff',
+    border: '1px solid var(--line)',
+    background: 'var(--paper)',
     color: text,
     fontSize: 14,
     outline: 'none',
@@ -159,8 +157,8 @@ export function AuthModal() {
         cursor: 'pointer',
         fontSize: 13,
         fontWeight: 600,
-        color: mode === value ? '#0B0F17' : muted,
-        background: mode === value ? '#f97316' : 'transparent',
+        color: mode === value ? '#FFFFFF' : muted,
+        background: mode === value ? 'var(--saffron)' : 'transparent',
         transition: 'all .18s ease',
       }}
     >
@@ -178,11 +176,11 @@ export function AuthModal() {
         style={{
           width: '100%',
           maxWidth: 520,
-          background: dark ? '#0B0F17' : '#ffffff',
-          border: dark ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(0,0,0,0.12)',
+          background: 'var(--paper)',
+          border: '1px solid var(--line)',
           borderRadius: 24,
           padding: 28,
-          boxShadow: '0 32px 90px rgba(0,0,0,0.85)',
+          boxShadow: '0 32px 90px rgba(60, 30, 0, 0.18)',
           position: 'relative',
           maxHeight: '90vh',
           overflowY: 'auto',
@@ -205,7 +203,7 @@ export function AuthModal() {
           <X size={18} />
         </button>
 
-        <p style={{ margin: '0 0 4px', fontSize: 11, letterSpacing: '.16em', color: '#f97316', textTransform: 'uppercase' }}>
+        <p style={{ margin: '0 0 4px', fontSize: 11, letterSpacing: '.16em', color: 'var(--saffron)', textTransform: 'uppercase' }}>
           Community of Employees
         </p>
         <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700, color: text }}>
@@ -225,7 +223,7 @@ export function AuthModal() {
             gap: 4,
             padding: 4,
             borderRadius: 12,
-            background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            background: 'var(--cream-2)',
             marginBottom: 20,
           }}
         >
@@ -245,9 +243,9 @@ export function AuthModal() {
               marginBottom: 16,
               fontSize: 13,
               lineHeight: 1.5,
-              color: notice.tone === 'ok' ? '#34d399' : '#fb7185',
-              background: notice.tone === 'ok' ? 'rgba(52,211,153,0.10)' : 'rgba(251,113,133,0.10)',
-              border: `1px solid ${notice.tone === 'ok' ? 'rgba(52,211,153,0.3)' : 'rgba(251,113,133,0.3)'}`,
+              color: notice.tone === 'ok' ? '#137A43' : '#B3261E',
+              background: notice.tone === 'ok' ? 'rgba(30, 158, 90, 0.10)' : 'rgba(194, 50, 28, 0.09)',
+              border: `1px solid ${notice.tone === 'ok' ? 'rgba(30, 158, 90, 0.3)' : 'rgba(194, 50, 28, 0.28)'}`,
             }}
           >
             {notice.tone === 'ok' ? <CheckCircle2 size={16} style={{ flexShrink: 0, marginTop: 1 }} /> : <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: 1 }} />}
@@ -274,12 +272,12 @@ export function AuthModal() {
                     borderRadius: 12,
                     cursor: 'pointer',
                     textAlign: 'left',
-                    border: role === value ? '1px solid #f97316' : dark ? '1px solid rgba(255,255,255,0.13)' : '1px solid rgba(0,0,0,0.13)',
-                    background: role === value ? 'rgba(249,115,22,0.10)' : 'transparent',
+                    border: role === value ? '1px solid var(--saffron)' : '1px solid var(--line)',
+                    background: role === value ? 'rgba(255, 107, 44,0.10)' : 'transparent',
                     color: text,
                   }}
                 >
-                  <Icon size={17} color={role === value ? '#f97316' : muted} />
+                  <Icon size={17} color={role === value ? '#FF6B2C' : muted} />
                   <span style={{ display: 'block', marginTop: 7, fontSize: 13, fontWeight: 600 }}>{label}</span>
                 </button>
               ))}
@@ -304,7 +302,7 @@ export function AuthModal() {
               />
             </div>
             {showWorkEmailHint && (
-              <p style={{ margin: '7px 0 0', fontSize: 12, color: '#fbbf24', display: 'flex', gap: 6 }}>
+              <p style={{ margin: '7px 0 0', fontSize: 12, color: '#A66A00', display: 'flex', gap: 6 }}>
                 <Info size={13} style={{ flexShrink: 0, marginTop: 1 }} />
                 {emailPolicy?.message}
               </p>
@@ -401,8 +399,8 @@ export function AuthModal() {
               borderRadius: 12,
               border: 'none',
               cursor: loading ? 'wait' : 'pointer',
-              background: '#f97316',
-              color: '#0B0F17',
+              background: 'var(--saffron)',
+              color: '#FFFFFF',
               fontSize: 14,
               fontWeight: 700,
               display: 'flex',

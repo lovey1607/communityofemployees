@@ -27,7 +27,7 @@ export function Skeleton({
         width: width ?? '100%',
         height: height ?? '1rem',
         borderRadius,
-        background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 100%)',
+        background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.9) 100%)',
         backgroundSize: '200% 100%',
         ...style,
       }}

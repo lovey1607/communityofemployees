@@ -16,9 +16,9 @@ function AmbientParticleConstellation({ count = 280 }: { count?: number }) {
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
-    const emerald = new THREE.Color('#10b981');
-    const cyan = new THREE.Color('#0ea5e9');
-    const amber = new THREE.Color('#f97316');
+    const emerald = new THREE.Color('#1E9E5A');
+    const cyan = new THREE.Color('#2E6BFF');
+    const amber = new THREE.Color('#FF6B2C');
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
@@ -69,7 +69,7 @@ function SubtleHorizonGrid() {
 
   return (
     <group ref={gridRef} position={[0, -5.5, -8]} rotation={[-Math.PI * 0.38, 0, 0]}>
-      <gridHelper args={[40, 24, '#10b981', 'rgba(255,255,255,0.06)']} />
+      <gridHelper args={[40, 24, '#1E9E5A', 'rgba(255, 255, 255, 0.9)']} />
     </group>
   );
 }
@@ -87,7 +87,7 @@ export function Hero3DCanvas() {
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(ellipse at 50% 20%, rgba(16,185,129,0.08) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse at 50% 20%, rgba(30, 158, 90,0.08) 0%, transparent 60%)',
         }}
       />
     );

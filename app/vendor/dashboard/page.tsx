@@ -47,7 +47,7 @@ const GURUGRAM_LOCALITIES = [
 // One vendor account = one listing. This modal used to mint an extra vendor
 // record client-side; it now updates the signed-in vendor's own listing.
 function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
-  const { updateVendorProfile, isNightMode } = useStore();
+  const { updateVendorProfile } = useStore();
   const [venueName, setVenueName] = useState('');
   const [category, setCategory] = useState<CategoryType>('sports');
   const [timings, setTimings] = useState('6:00 AM - 11:00 PM');
@@ -110,24 +110,24 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
           maxWidth: 640,
           maxHeight: '90vh',
           overflowY: 'auto',
-          background: isNightMode ? '#0B0F17' : '#ffffff',
-          border: isNightMode ? '1px solid rgba(249, 115, 22, 0.35)' : '1px solid rgba(0, 0, 0, 0.12)',
+          background: '#ffffff',
+          border: '1px solid rgba(235, 223, 204, 0.95)',
           borderRadius: 24,
           padding: '28px',
           backdropFilter: 'blur(20px)',
-          boxShadow: '0 32px 90px rgba(0,0,0,0.85)',
+          boxShadow: '0 32px 90px rgba(60, 30, 0, 0.18)',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(249, 115, 22, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f97316' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(255, 107, 44, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FF6B2C' }}>
               <Plus size={20} />
             </div>
             <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: '#1D1A17' }}>
                 Update your venue details
               </h2>
-              <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
+              <div style={{ fontSize: 12, color: '#7A7169' }}>
                 Publish a new sports arena, banquet hall, or party lounge in Gurugram
               </div>
             </div>
@@ -140,7 +140,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14, marginBottom: 14 }}>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Venue / Facility Name *
               </label>
               <input
@@ -152,7 +152,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
               />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Service Category *
               </label>
               <select
@@ -171,7 +171,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14, marginBottom: 14 }}>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Gurugram Locality / Area *
               </label>
               <select
@@ -185,7 +185,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
               </select>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Starting Cost (₹/Person)
               </label>
               <input
@@ -201,7 +201,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 14, marginBottom: 14 }}>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Full Facility / Venue Address *
               </label>
               <input
@@ -213,7 +213,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
               />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Operating Hours / Timings
               </label>
               <input
@@ -228,7 +228,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
 
           {/* Amenities Tag Manager */}
           <div style={{ marginBottom: 14 }}>
-            <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+            <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
               Featured Amenities & Services
             </label>
             <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
@@ -255,9 +255,9 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
                   style={{
                     padding: '3px 8px',
                     borderRadius: 999,
-                    background: 'rgba(249, 115, 22, 0.15)',
-                    border: '1px solid rgba(249, 115, 22, 0.3)',
-                    color: isNightMode ? '#ffffff' : '#0f172a',
+                    background: 'rgba(255, 107, 44, 0.15)',
+                    border: '1px solid rgba(255, 107, 44, 0.3)',
+                    color: '#1D1A17',
                     fontSize: 11,
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -265,7 +265,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
                   }}
                 >
                   {a}
-                  <button type="button" onClick={() => handleRemoveAmenity(a)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 0 }}>
+                  <button type="button" onClick={() => handleRemoveAmenity(a)} style={{ background: 'none', border: 'none', color: 'var(--ink-2)', cursor: 'pointer', padding: 0 }}>
                     <X size={10} />
                   </button>
                 </span>
@@ -274,7 +274,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <div style={{ marginBottom: 14 }}>
-            <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+            <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
               Venue Description & Corporate Highlights
             </label>
             <textarea
@@ -288,18 +288,18 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 14, marginBottom: 18 }}>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Direct Booking Contact (10 Digits) *
               </label>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <span style={{
                   padding: '9px 12px',
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.12)',
+                  background: 'var(--cream-2)',
+                  border: '1px solid var(--line)',
                   borderRight: 'none',
                   borderTopLeftRadius: 10,
                   borderBottomLeftRadius: 10,
-                  color: 'rgba(255,255,255,0.8)',
+                  color: 'var(--ink)',
                   fontSize: 12.5,
                   fontWeight: 800,
                 }}>+91</span>
@@ -315,7 +315,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
               </div>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 GSTIN Number (15 Digits) *
               </label>
               <input className="input-base" maxLength={15} required value={gstNumber} onChange={(e) => setGstNumber(e.target.value.toUpperCase())} />
@@ -332,7 +332,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
               className="btn-primary"
               style={{
                 flex: 2,
-                background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+                background: 'linear-gradient(135deg, #FF6B2C 0%, #D9541C 100%)',
                 opacity: (!isPhoneValid || !venueName.trim() || !address.trim()) ? 0.4 : 1,
               }}
             >
@@ -353,7 +353,7 @@ function EditVendorProfileModal({
   profile: VendorProfile;
   onClose: () => void;
 }) {
-  const { updateVendorProfile, changePassword, isNightMode } = useStore();
+  const { updateVendorProfile, changePassword } = useStore();
   const router = useRouter();
   const [tab, setTab] = useState<'profile' | 'security' | 'danger'>('profile');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -464,24 +464,24 @@ function EditVendorProfileModal({
           maxWidth: 640,
           maxHeight: '90vh',
           overflowY: 'auto',
-          background: isNightMode ? '#0B0F17' : '#ffffff',
-          border: isNightMode ? '1px solid rgba(249, 115, 22, 0.35)' : '1px solid rgba(0, 0, 0, 0.12)',
+          background: '#ffffff',
+          border: '1px solid rgba(235, 223, 204, 0.95)',
           borderRadius: 24,
           padding: '28px',
           backdropFilter: 'blur(20px)',
-          boxShadow: '0 32px 90px rgba(0,0,0,0.85)',
+          boxShadow: '0 32px 90px rgba(60, 30, 0, 0.18)',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(249, 115, 22, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f97316' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(255, 107, 44, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FF6B2C' }}>
               <Edit2 size={20} />
             </div>
             <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: '#1D1A17' }}>
                 Vendor Settings & Security
               </h2>
-              <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
+              <div style={{ fontSize: 12, color: '#7A7169' }}>
                 Manage {profile.companyName} profile, venue timings, and credentials
               </div>
             </div>
@@ -492,7 +492,7 @@ function EditVendorProfileModal({
         </div>
 
         {/* Tab Switcher */}
-        <div style={{ display: 'flex', gap: 8, padding: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 12, marginBottom: 20 }}>
+        <div style={{ display: 'flex', gap: 8, padding: 4, background: 'var(--cream-2)', borderRadius: 12, marginBottom: 20 }}>
           <button
             type="button"
             onClick={() => setTab('profile')}
@@ -502,8 +502,8 @@ function EditVendorProfileModal({
               borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
-              background: tab === 'profile' ? '#f97316' : 'transparent',
-              color: tab === 'profile' ? '#ffffff' : 'rgba(255,255,255,0.6)',
+              background: tab === 'profile' ? '#FF6B2C' : 'transparent',
+              color: tab === 'profile' ? '#ffffff' : 'var(--ink-2)',
               fontSize: 12,
               fontWeight: 700,
             }}
@@ -519,8 +519,8 @@ function EditVendorProfileModal({
               borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
-              background: tab === 'security' ? '#10b981' : 'transparent',
-              color: tab === 'security' ? '#ffffff' : 'rgba(255,255,255,0.6)',
+              background: tab === 'security' ? '#1E9E5A' : 'transparent',
+              color: tab === 'security' ? '#ffffff' : 'var(--ink-2)',
               fontSize: 12,
               fontWeight: 700,
             }}
@@ -536,8 +536,8 @@ function EditVendorProfileModal({
               borderRadius: 8,
               border: 'none',
               cursor: 'pointer',
-              background: tab === 'danger' ? '#ef4444' : 'transparent',
-              color: tab === 'danger' ? '#ffffff' : 'rgba(255,255,255,0.6)',
+              background: tab === 'danger' ? '#C2321C' : 'transparent',
+              color: tab === 'danger' ? '#ffffff' : 'var(--ink-2)',
               fontSize: 12,
               fontWeight: 700,
             }}
@@ -550,7 +550,7 @@ function EditVendorProfileModal({
         {tab === 'profile' && (
           <form onSubmit={handleSubmitProfile}>
             <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Venue / Business Name *
               </label>
               <input className="input-base" required value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
@@ -558,7 +558,7 @@ function EditVendorProfileModal({
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14, marginBottom: 14 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   Gurugram Locality / Area *
                 </label>
                 <select
@@ -572,7 +572,7 @@ function EditVendorProfileModal({
                 </select>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   Average Cost (₹/Person)
                 </label>
                 <input className="input-base" type="number" required value={avgCost} onChange={(e) => setAvgCost(Number(e.target.value))} />
@@ -581,13 +581,13 @@ function EditVendorProfileModal({
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14, marginBottom: 14 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   Full Facility Address *
                 </label>
                 <input className="input-base" required value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   Operating Hours / Timings
                 </label>
                 <input className="input-base" required value={timings} onChange={(e) => setTimings(e.target.value)} />
@@ -596,7 +596,7 @@ function EditVendorProfileModal({
 
             {/* Featured Amenities */}
             <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Featured Amenities & Facilities
               </label>
               <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
@@ -623,9 +623,9 @@ function EditVendorProfileModal({
                     style={{
                       padding: '3px 8px',
                       borderRadius: 999,
-                      background: 'rgba(249, 115, 22, 0.15)',
-                      border: '1px solid rgba(249, 115, 22, 0.3)',
-                      color: isNightMode ? '#ffffff' : '#0f172a',
+                      background: 'rgba(255, 107, 44, 0.15)',
+                      border: '1px solid rgba(255, 107, 44, 0.3)',
+                      color: '#1D1A17',
                       fontSize: 11,
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -633,7 +633,7 @@ function EditVendorProfileModal({
                     }}
                   >
                     {a}
-                    <button type="button" onClick={() => handleRemoveAmenity(a)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 0 }}>
+                    <button type="button" onClick={() => handleRemoveAmenity(a)} style={{ background: 'none', border: 'none', color: 'var(--ink-2)', cursor: 'pointer', padding: 0 }}>
                       <X size={10} />
                     </button>
                   </span>
@@ -642,7 +642,7 @@ function EditVendorProfileModal({
             </div>
 
             <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Description & Corporate Highlights
               </label>
               <textarea
@@ -655,24 +655,24 @@ function EditVendorProfileModal({
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 14, marginBottom: 14 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   Primary Contact Person *
                 </label>
                 <input className="input-base" required value={vendorName} onChange={(e) => setVendorName(e.target.value)} />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   Mobile Number (10 Digits) *
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span style={{
                     padding: '9px 12px',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'var(--cream-2)',
+                    border: '1px solid var(--line)',
                     borderRight: 'none',
                     borderTopLeftRadius: 10,
                     borderBottomLeftRadius: 10,
-                    color: 'rgba(255,255,255,0.8)',
+                    color: 'var(--ink)',
                     fontSize: 12.5,
                     fontWeight: 800,
                   }}>+91</span>
@@ -691,13 +691,13 @@ function EditVendorProfileModal({
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 18 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   GSTIN Number (15 Digits) *
                 </label>
                 <input className="input-base" maxLength={15} required value={gstNumber} onChange={(e) => setGstNumber(e.target.value.toUpperCase())} />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+                <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                   Company Landline / Support
                 </label>
                 <input className="input-base" value={companyMobile} onChange={(e) => setCompanyMobile(e.target.value)} />
@@ -706,7 +706,7 @@ function EditVendorProfileModal({
 
             {/* Past Corporate Clients Tags */}
             <div style={{ marginBottom: 20 }}>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Past Corporate Clients & References
               </label>
               <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
@@ -733,9 +733,9 @@ function EditVendorProfileModal({
                     style={{
                       padding: '3px 8px',
                       borderRadius: 999,
-                      background: 'rgba(16, 185, 129, 0.15)',
-                      border: '1px solid rgba(16, 185, 129, 0.3)',
-                      color: isNightMode ? '#ffffff' : '#0f172a',
+                      background: 'rgba(30, 158, 90, 0.15)',
+                      border: '1px solid rgba(30, 158, 90, 0.3)',
+                      color: '#1D1A17',
                       fontSize: 11,
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -743,7 +743,7 @@ function EditVendorProfileModal({
                     }}
                   >
                     {client}
-                    <button type="button" onClick={() => handleRemoveClient(client)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 0 }}>
+                    <button type="button" onClick={() => handleRemoveClient(client)} style={{ background: 'none', border: 'none', color: 'var(--ink-2)', cursor: 'pointer', padding: 0 }}>
                       <X size={10} />
                     </button>
                   </span>
@@ -755,7 +755,7 @@ function EditVendorProfileModal({
               <button type="button" onClick={onClose} className="btn-ghost" style={{ flex: 1 }}>
                 Cancel
               </button>
-              <button type="submit" className="btn-primary" style={{ flex: 2, background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)' }}>
+              <button type="submit" className="btn-primary" style={{ flex: 2, background: 'linear-gradient(135deg, #FF6B2C 0%, #D9541C 100%)' }}>
                 Save Profile & Venue Details
               </button>
             </div>
@@ -765,17 +765,17 @@ function EditVendorProfileModal({
         {/* Tab 2: Security & Password */}
         {tab === 'security' && (
           <form onSubmit={handleChangePassword}>
-            <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)', marginBottom: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#10b981', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(30, 158, 90, 0.08)', border: '1px solid rgba(30, 158, 90, 0.25)', marginBottom: 16 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#1E9E5A', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
                 <ShieldCheck size={16} /> Account Security & Password
               </div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>
+              <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>
                 Changing your password signs you out everywhere else.
               </div>
             </div>
 
             <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Current Password
               </label>
               <input
@@ -788,7 +788,7 @@ function EditVendorProfileModal({
             </div>
 
             <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 New Password
               </label>
               <input
@@ -802,7 +802,7 @@ function EditVendorProfileModal({
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 5 }}>
+              <label style={{ display: 'block', fontSize: 11.5, fontWeight: 700, color: '#4A443D', marginBottom: 5 }}>
                 Confirm New Password
               </label>
               <input
@@ -823,7 +823,7 @@ function EditVendorProfileModal({
                 type="submit"
                 disabled={passwordLoading || !newPassword}
                 className="btn-primary"
-                style={{ flex: 2, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                style={{ flex: 2, background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)' }}
               >
                 {passwordLoading ? 'Updating…' : 'Update Password & Save'}
               </button>
@@ -834,22 +834,22 @@ function EditVendorProfileModal({
         {/* Tab 3: Danger Zone */}
         {tab === 'danger' && (
           <div>
-            <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', marginBottom: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#ef4444', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(194, 50, 28, 0.1)', border: '1px solid rgba(194, 50, 28, 0.3)', marginBottom: 16 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#C2321C', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
                 <AlertTriangle size={16} /> Danger Zone: Delete Account
               </div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 }}>
+              <div style={{ fontSize: 12, color: 'var(--ink-2)', lineHeight: 1.5 }}>
                 Deleting your account will permanently remove your vendor profile, all submitted bids, and venue listings from the COE Portal.
               </div>
             </div>
 
             {showDeleteConfirm ? (
-              <div style={{ padding: '14px', borderRadius: 12, background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', marginBottom: 14 }}>
-                <p style={{ fontSize: 13, color: '#ffffff', marginBottom: 12, fontWeight: 600 }}>
+              <div style={{ padding: '14px', borderRadius: 12, background: 'rgba(194, 50, 28,0.15)', border: '1px solid rgba(194, 50, 28,0.4)', marginBottom: 14 }}>
+                <p style={{ fontSize: 13, color: 'var(--ink)', marginBottom: 12, fontWeight: 600 }}>
                   Are you absolutely sure you want to delete this vendor account?
                 </p>
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <button onClick={() => setShowDeleteConfirm(false)} style={{ flex: 1, padding: '8px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: '#ffffff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                  <button onClick={() => setShowDeleteConfirm(false)} style={{ flex: 1, padding: '8px', borderRadius: 10, border: '1px solid var(--line)', background: 'var(--cream-2)', color: 'var(--ink)', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
                   <DeleteAccountButton label="Yes, delete my account" />
                 </div>
               </div>
@@ -857,7 +857,7 @@ function EditVendorProfileModal({
               <button
                 type="button"
                 onClick={() => setShowDeleteConfirm(true)}
-                style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+                style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(194, 50, 28,0.4)', background: 'rgba(194, 50, 28,0.08)', color: '#C2321C', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
               >
                 <Trash2 size={15} /> Delete Vendor Account & All Data
               </button>
@@ -879,7 +879,7 @@ function ReviseBidModal({
   rfp?: RFP;
   onClose: () => void;
 }) {
-  const { reviseBid, isNightMode } = useStore();
+  const { reviseBid } = useStore();
   const catTheme = THEMES[bid.category];
 
   const [price, setPrice] = useState(bid.totalPrice);
@@ -902,13 +902,13 @@ function ReviseBidModal({
         style={{
           width: '100%',
           maxWidth: 520,
-          background: isNightMode ? '#0B0F17' : '#ffffff',
-          border: isNightMode ? `1px solid ${catTheme.primary}44` : '1px solid rgba(0,0,0,0.12)',
+          background: '#ffffff',
+          border: '1px solid rgba(235, 223, 204, 0.95)',
           borderRadius: 24,
           padding: '28px',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          boxShadow: '0 32px 90px rgba(0,0,0,0.8)',
+          boxShadow: '0 32px 90px rgba(60, 30, 0, 0.18)',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
@@ -917,10 +917,10 @@ function ReviseBidModal({
               <RefreshCw size={18} />
             </div>
             <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 800, color: '#1D1A17' }}>
                 Revise Live Quotation
               </h2>
-              <div style={{ fontSize: 11.5, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
+              <div style={{ fontSize: 11.5, color: '#7A7169' }}>
                 Adjust price or terms in the live reverse-bidding auction
               </div>
             </div>
@@ -928,8 +928,8 @@ function ReviseBidModal({
           <button
             onClick={onClose}
             style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--cream-2)',
+              border: '1px solid var(--line)',
               borderRadius: 8,
               width: 32,
               height: 32,
@@ -937,7 +937,7 @@ function ReviseBidModal({
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              color: isNightMode ? '#ffffff' : '#0f172a',
+              color: '#1D1A17',
             }}
           >
             <X size={16} />
@@ -946,20 +946,20 @@ function ReviseBidModal({
 
         <form onSubmit={handleSubmit}>
           {rfp && (
-            <div style={{ background: isNightMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)', borderRadius: 12, padding: '12px 14px', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ background: 'rgba(235, 223, 204, 0.9)', borderRadius: 12, padding: '12px 14px', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>Corporate Budget Target</div>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>{formatCurrency(rfp.totalBudget)}</div>
+                <div style={{ fontSize: 11, color: '#7A7169' }}>Corporate Budget Target</div>
+                <div style={{ fontSize: 13.5, fontWeight: 700, color: '#1D1A17' }}>{formatCurrency(rfp.totalBudget)}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>Your Current Quote</div>
+                <div style={{ fontSize: 11, color: '#7A7169' }}>Your Current Quote</div>
                 <div style={{ fontSize: 13.5, fontWeight: 700, color: catTheme.primary }}>{formatCurrency(bid.totalPrice)}</div>
               </div>
             </div>
           )}
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 6 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#4A443D', marginBottom: 6 }}>
               New Binding Quotation Amount (₹)
             </label>
             <div style={{ position: 'relative' }}>
@@ -976,7 +976,7 @@ function ReviseBidModal({
           </div>
 
           <div style={{ marginBottom: 20 }}>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.7)' : '#334155', marginBottom: 6 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#4A443D', marginBottom: 6 }}>
               Updated Pitch / SLA Offer
             </label>
             <textarea
@@ -1009,7 +1009,7 @@ function ReviseBidModal({
 
 // ─── Itemized Bid Submit Modal ─────────────────────────────────
 function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
-  const { submitBid, currentUser, currentVendorProfile, bids, isNightMode } = useStore();
+  const { submitBid, currentUser, currentVendorProfile, bids } = useStore();
   const catTheme = THEMES[rfp.category];
 
   const myExistingBid = bids.find(
@@ -1059,12 +1059,12 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
           width: '100%',
           maxWidth: 620,
           maxHeight: '90vh',
-          background: isNightMode ? '#0B0F17' : '#ffffff',
-          border: isNightMode ? `1px solid ${catTheme.primary}44` : '1px solid rgba(0,0,0,0.12)',
+          background: '#ffffff',
+          border: '1px solid rgba(235, 223, 204, 0.95)',
           borderRadius: 24,
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          boxShadow: '0 32px 90px rgba(0,0,0,0.8)',
+          boxShadow: '0 32px 90px rgba(60, 30, 0, 0.18)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -1073,7 +1073,7 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
         <div
           style={{
             padding: '20px 24px',
-            borderBottom: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+            borderBottom: '1px solid rgba(235, 223, 204, 0.9)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -1088,7 +1088,7 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
               <div style={{ fontSize: 11, color: catTheme.primary, fontWeight: 800, textTransform: 'uppercase' }}>
                 Live Reverse-Bidding
               </div>
-              <h2 style={{ fontSize: 18, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a', fontFamily: 'var(--font-display)' }}>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: '#1D1A17', fontFamily: 'var(--font-display)' }}>
                 {CATEGORY_LABELS[rfp.category]} · {rfp.companyName}
               </h2>
             </div>
@@ -1096,8 +1096,8 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
           <button
             onClick={onClose}
             style={{
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'var(--cream-2)',
+              border: '1px solid var(--line)',
               borderRadius: 8,
               width: 32,
               height: 32,
@@ -1105,7 +1105,7 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              color: isNightMode ? 'rgba(255,255,255,0.7)' : '#0f172a',
+              color: '#1D1A17',
             }}
           >
             <X size={16} />
@@ -1116,10 +1116,10 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
           {submitted || myExistingBid ? (
             <div style={{ textAlign: 'center', padding: '36px 0' }}>
               <div style={{ fontSize: 48, marginBottom: 12 }}>✅</div>
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a', marginBottom: 6, fontFamily: 'var(--font-display)' }}>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#1D1A17', marginBottom: 6, fontFamily: 'var(--font-display)' }}>
                 Quotation Live in Reverse Auction!
               </h3>
-              <p style={{ color: isNightMode ? 'rgba(255,255,255,0.6)' : '#64748b', fontSize: 13, maxWidth: 420, margin: '0 auto 20px' }}>
+              <p style={{ color: '#7A7169', fontSize: 13, maxWidth: 420, margin: '0 auto 20px' }}>
                 Your proposal has been submitted to Corporate Procurement. Competitor bids remain strictly hidden.
               </p>
               <div
@@ -1143,8 +1143,8 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
               {/* Event Specs Banner */}
               <div
                 style={{
-                  background: isNightMode ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.035)',
-                  border: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+                  background: 'rgba(0,0,0,0.035)',
+                  border: '1px solid rgba(235, 223, 204, 0.9)',
                   borderRadius: 14,
                   padding: '14px',
                   marginBottom: 18,
@@ -1154,19 +1154,19 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>Date</div>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                  <div style={{ fontSize: 10.5, color: '#7A7169' }}>Date</div>
+                  <div style={{ fontSize: 12.5, fontWeight: 700, color: '#1D1A17' }}>
                     {formatDate(rfp.universal.startDate)}
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>Attendees</div>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                  <div style={{ fontSize: 10.5, color: '#7A7169' }}>Attendees</div>
+                  <div style={{ fontSize: 12.5, fontWeight: 700, color: '#1D1A17' }}>
                     {rfp.universal.persons} Pax
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 10.5, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>Corporate Budget</div>
+                  <div style={{ fontSize: 10.5, color: '#7A7169' }}>Corporate Budget</div>
                   <div style={{ fontSize: 13, fontWeight: 800, color: catTheme.primary }}>
                     {formatCurrency(rfp.totalBudget)}
                   </div>
@@ -1174,7 +1174,7 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
               </div>
 
               {/* Line Items Builder */}
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', fontWeight: 800, marginBottom: 8, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 11, color: '#7A7169', fontWeight: 800, marginBottom: 8, textTransform: 'uppercase' }}>
                 Itemized Price Breakdown
               </div>
 
@@ -1204,7 +1204,7 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
                     <button
                       type="button"
                       onClick={() => removeLine(i)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 4 }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-2)', padding: 4 }}
                     >
                       <Trash2 size={14} />
                     </button>
@@ -1228,13 +1228,13 @@ function SubmitBidModal({ rfp, onClose }: { rfp: RFP; onClose: () => void }) {
                   marginBottom: 16,
                 }}
               >
-                <span style={{ fontSize: 12.5, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>Total Quotation</span>
+                <span style={{ fontSize: 12.5, fontWeight: 700, color: '#1D1A17' }}>Total Quotation</span>
                 <span style={{ fontSize: 20, fontWeight: 800, color: catTheme.primary, fontFamily: 'var(--font-display)' }}>
                   {formatCurrency(totalPrice)}
                 </span>
               </div>
 
-              <div style={{ fontSize: 11, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', fontWeight: 800, marginBottom: 6, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 11, color: '#7A7169', fontWeight: 800, marginBottom: 6, textTransform: 'uppercase' }}>
                 Proposal & SLA Commitments
               </div>
               <textarea
@@ -1277,7 +1277,6 @@ export default function VendorDashboard() {
     rfpList,
     bids,
     withdrawBid,
-    isNightMode,
   } = useStore();
 
   const [activeTab, setActiveTab] = useState<'available' | 'my-bids'>('available');
@@ -1292,14 +1291,14 @@ export default function VendorDashboard() {
   const vendor = currentVendorProfile;
   if (!vendor) {
     return (
-      <main style={{ minHeight: '100vh', paddingTop: 140, background: '#0B0F17', textAlign: 'center', color: 'rgba(255,255,255,0.7)' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 8 }}>Finish setting up your listing</h1>
+      <main style={{ minHeight: '100vh', paddingTop: 140, background: '#FFF7EC', textAlign: 'center', color: 'var(--ink-2)' }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>Finish setting up your listing</h1>
         <p style={{ fontSize: 14 }}>
           Complete your vendor profile and we&apos;ll start showing you matching requirements.
         </p>
         <Link
           href="/vendor/onboarding"
-          style={{ display: 'inline-block', marginTop: 18, padding: '11px 20px', borderRadius: 11, background: '#f97316', color: '#0B0F17', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
+          style={{ display: 'inline-block', marginTop: 18, padding: '11px 20px', borderRadius: 11, background: '#FF6B2C', color: '#FFF7EC', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
         >
           Complete profile
         </Link>
@@ -1320,7 +1319,7 @@ export default function VendorDashboard() {
         paddingTop: 96,
         paddingBottom: 60,
         position: 'relative',
-        background: '#0B0F17',
+        background: '#FFF7EC',
       }}
     >
       <BlurredCyberHubBackground />
@@ -1334,8 +1333,8 @@ export default function VendorDashboard() {
             borderRadius: 20,
             padding: '22px 28px',
             marginBottom: 20,
-            background: isNightMode ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.95)',
-            border: isNightMode ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.1)',
+            background: 'var(--paper)',
+            border: '1px solid rgba(235, 223, 204, 0.95)',
             backdropFilter: 'blur(12px)',
             display: 'flex',
             justifyContent: 'space-between',
@@ -1350,12 +1349,12 @@ export default function VendorDashboard() {
                 width: 54,
                 height: 54,
                 borderRadius: 14,
-                background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+                background: 'linear-gradient(135deg, #FF6B2C 0%, #D9541C 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#ffffff',
-                boxShadow: '0 8px 24px rgba(249, 115, 22, 0.35)',
+                boxShadow: '0 8px 24px rgba(255, 107, 44, 0.35)',
                 fontSize: 24,
                 fontWeight: 800,
                 fontFamily: 'var(--font-display)',
@@ -1367,7 +1366,7 @@ export default function VendorDashboard() {
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 21, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 21, fontWeight: 800, color: '#1D1A17' }}>
                   {vendor.companyName}
                 </h1>
                 {vendor.status === 'approved' ? (
@@ -1376,8 +1375,8 @@ export default function VendorDashboard() {
                       fontSize: 10.5,
                       padding: '2px 8px',
                       borderRadius: 999,
-                      background: 'rgba(16, 185, 129, 0.18)',
-                      color: '#10b981',
+                      background: 'rgba(30, 158, 90, 0.18)',
+                      color: '#1E9E5A',
                       fontWeight: 800,
                       display: 'flex',
                       alignItems: 'center',
@@ -1392,8 +1391,8 @@ export default function VendorDashboard() {
                       fontSize: 10.5,
                       padding: '2px 8px',
                       borderRadius: 999,
-                      background: 'rgba(239, 68, 68, 0.18)',
-                      color: '#ef4444',
+                      background: 'rgba(194, 50, 28, 0.18)',
+                      color: '#C2321C',
                       fontWeight: 800,
                       display: 'flex',
                       alignItems: 'center',
@@ -1408,8 +1407,8 @@ export default function VendorDashboard() {
                       fontSize: 10.5,
                       padding: '2px 8px',
                       borderRadius: 999,
-                      background: 'rgba(234, 179, 8, 0.18)',
-                      color: '#eab308',
+                      background: 'rgba(178, 58, 122, 0.18)',
+                      color: '#B23A7A',
                       fontWeight: 800,
                       display: 'flex',
                       alignItems: 'center',
@@ -1424,8 +1423,8 @@ export default function VendorDashboard() {
                     fontSize: 10.5,
                     padding: '2px 8px',
                     borderRadius: 999,
-                    background: 'rgba(249, 115, 22, 0.18)',
-                    color: '#f97316',
+                    background: 'rgba(255, 107, 44, 0.18)',
+                    color: '#FF6B2C',
                     fontWeight: 800,
                     textTransform: 'uppercase',
                   }}
@@ -1443,7 +1442,7 @@ export default function VendorDashboard() {
               </div>
 
               {/* Venue Metadata Chips */}
-              <div style={{ fontSize: 12.5, color: isNightMode ? 'rgba(255, 255, 255, 0.7)' : '#334155', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
+              <div style={{ fontSize: 12.5, color: '#4A443D', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                 <span>👤 <strong>{vendor.vendorName}</strong></span>
                 <span>•</span>
                 <span>📞 {vendor.mobile}</span>
@@ -1459,21 +1458,21 @@ export default function VendorDashboard() {
                     is shown as "not set" rather than filled with a plausible
                     default they never entered. */}
                 {vendor.timings && (
-                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)' }}>
+                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'var(--cream-2)', color: 'var(--ink)' }}>
                     ⏰ {vendor.timings}
                   </span>
                 )}
                 {vendor.avgCostPerPerson ? (
-                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(16,185,129,0.12)', color: '#34d399', fontWeight: 700 }}>
+                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(30, 158, 90,0.12)', color: '#137A43', fontWeight: 700 }}>
                     💰 Avg {formatCurrency(vendor.avgCostPerPerson)}/pax
                   </span>
                 ) : (
-                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}>
+                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'var(--cream-2)', color: 'var(--ink-2)' }}>
                     💰 Typical spend not set
                   </span>
                 )}
                 {vendor.amenities && vendor.amenities.length > 0 && (
-                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(249,115,22,0.12)', color: '#fb923c' }}>
+                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(255, 107, 44,0.12)', color: '#FF8F5C' }}>
                     ✨ {vendor.amenities.slice(0, 3).join(' · ')}
                   </span>
                 )}
@@ -1488,7 +1487,7 @@ export default function VendorDashboard() {
               style={{
                 padding: '9px 16px',
                 fontSize: 13,
-                background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+                background: 'linear-gradient(135deg, #FF6B2C 0%, #D9541C 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
@@ -1515,8 +1514,8 @@ export default function VendorDashboard() {
             style={{
               padding: '14px 18px',
               borderRadius: 14,
-              background: vendor.status === 'rejected' ? 'rgba(239,68,68,0.1)' : 'rgba(234,179,8,0.1)',
-              border: vendor.status === 'rejected' ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(234,179,8,0.3)',
+              background: vendor.status === 'rejected' ? 'rgba(194, 50, 28,0.1)' : 'rgba(178, 58, 122,0.1)',
+              border: vendor.status === 'rejected' ? '1px solid rgba(194, 50, 28,0.3)' : '1px solid rgba(178, 58, 122,0.3)',
               marginBottom: 20,
               display: 'flex',
               alignItems: 'center',
@@ -1526,8 +1525,8 @@ export default function VendorDashboard() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              {vendor.status === 'rejected' ? <AlertCircle size={17} color="#ef4444" /> : <Clock size={17} color="#eab308" />}
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)' }}>
+              {vendor.status === 'rejected' ? <AlertCircle size={17} color="#C2321C" /> : <Clock size={17} color="#B23A7A" />}
+              <span style={{ fontSize: 13, color: 'var(--ink)' }}>
                 {vendor.status === 'rejected'
                   ? 'Your vendor partner KYC verification was rejected by Super Admin. Please update your GSTIN.'
                   : `Your GSTIN (${vendor.gstNumber}) and business credentials have been submitted for Super Admin KYC verification.`}
@@ -1538,8 +1537,8 @@ export default function VendorDashboard() {
                 fontSize: 11,
                 padding: '3px 9px',
                 borderRadius: 999,
-                background: vendor.status === 'rejected' ? 'rgba(239,68,68,0.2)' : 'rgba(234,179,8,0.2)',
-                color: vendor.status === 'rejected' ? '#ef4444' : '#eab308',
+                background: vendor.status === 'rejected' ? 'rgba(194, 50, 28,0.2)' : 'rgba(178, 58, 122,0.2)',
+                color: vendor.status === 'rejected' ? '#C2321C' : '#B23A7A',
                 fontWeight: 800,
                 textTransform: 'uppercase',
               }}
@@ -1556,9 +1555,9 @@ export default function VendorDashboard() {
             style={{
               padding: '10px 20px',
               borderRadius: 12,
-              border: activeTab === 'available' ? '1px solid #f97316' : isNightMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
-              background: activeTab === 'available' ? 'rgba(249, 115, 22, 0.2)' : isNightMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
-              color: activeTab === 'available' ? '#ffffff' : isNightMode ? 'rgba(255,255,255,0.65)' : '#64748b',
+              border: activeTab === 'available' ? '1px solid #FF6B2C' : '1px solid rgba(235, 223, 204, 0.95)',
+              background: activeTab === 'available' ? 'rgba(255, 107, 44, 0.2)' : 'rgba(235, 223, 204, 0.9)',
+              color: activeTab === 'available' ? 'var(--ink)' : '#7A7169',
               fontSize: 13.5,
               fontWeight: activeTab === 'available' ? 800 : 600,
               cursor: 'pointer',
@@ -1568,7 +1567,7 @@ export default function VendorDashboard() {
             }}
           >
             <span>Live Corporate RFPs (Available to Bid)</span>
-            <span style={{ fontSize: 11, background: '#f97316', color: '#000', padding: '1px 7px', borderRadius: 999, fontWeight: 800 }}>
+            <span style={{ fontSize: 11, background: '#FF6B2C', color: '#ffffff', padding: '1px 7px', borderRadius: 999, fontWeight: 800 }}>
               {openRFPs.length}
             </span>
           </button>
@@ -1578,9 +1577,9 @@ export default function VendorDashboard() {
             style={{
               padding: '10px 20px',
               borderRadius: 12,
-              border: activeTab === 'my-bids' ? '1px solid #10b981' : isNightMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
-              background: activeTab === 'my-bids' ? 'rgba(16, 185, 129, 0.2)' : isNightMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
-              color: activeTab === 'my-bids' ? '#ffffff' : isNightMode ? 'rgba(255,255,255,0.65)' : '#64748b',
+              border: activeTab === 'my-bids' ? '1px solid #1E9E5A' : '1px solid rgba(235, 223, 204, 0.95)',
+              background: activeTab === 'my-bids' ? 'rgba(30, 158, 90, 0.2)' : 'rgba(235, 223, 204, 0.9)',
+              color: activeTab === 'my-bids' ? 'var(--ink)' : '#7A7169',
               fontSize: 13.5,
               fontWeight: activeTab === 'my-bids' ? 800 : 600,
               cursor: 'pointer',
@@ -1590,7 +1589,7 @@ export default function VendorDashboard() {
             }}
           >
             <span>My Active Bids & Bidding History</span>
-            <span style={{ fontSize: 11, background: 'rgba(16, 185, 129, 0.3)', color: '#10b981', padding: '1px 7px', borderRadius: 999, fontWeight: 800 }}>
+            <span style={{ fontSize: 11, background: 'rgba(30, 158, 90, 0.3)', color: '#1E9E5A', padding: '1px 7px', borderRadius: 999, fontWeight: 800 }}>
               {myBids.length}
             </span>
           </button>
@@ -1605,15 +1604,15 @@ export default function VendorDashboard() {
                   textAlign: 'center',
                   padding: '60px 20px',
                   borderRadius: 20,
-                  background: isNightMode ? 'rgba(11, 15, 23, 0.9)' : 'rgba(255,255,255,0.9)',
-                  border: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
+                  background: 'var(--paper)',
+                  border: '1px solid rgba(235, 223, 204, 0.9)',
                 }}
               >
                 <Clock size={40} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a', marginBottom: 6 }}>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: '#1D1A17', marginBottom: 6 }}>
                   No Open RFPs in {CATEGORY_LABELS[vendor.category]}
                 </h3>
-                <p style={{ color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b', fontSize: 13 }}>
+                <p style={{ color: '#7A7169', fontSize: 13 }}>
                   New corporate requirements from DLF Cyber City stream in continuously.
                 </p>
               </div>
@@ -1630,8 +1629,8 @@ export default function VendorDashboard() {
                       borderRadius: 18,
                       padding: '22px 24px',
                       marginBottom: 16,
-                      background: isNightMode ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.95)',
-                      border: myBid ? '1.5px solid #10b981' : isNightMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+                      background: 'var(--paper)',
+                      border: myBid ? '1.5px solid #1E9E5A' : '1px solid rgba(235, 223, 204, 0.9)',
                       backdropFilter: 'blur(12px)',
                     }}
                   >
@@ -1642,14 +1641,14 @@ export default function VendorDashboard() {
                         </div>
                         <div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 18, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 18, color: '#1D1A17' }}>
                               {rfp.companyName}
                             </h3>
-                            <span style={{ fontSize: 10.5, padding: '2px 7px', borderRadius: 999, background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', fontWeight: 800 }}>
+                            <span style={{ fontSize: 10.5, padding: '2px 7px', borderRadius: 999, background: 'rgba(30, 158, 90, 0.15)', color: '#1E9E5A', fontWeight: 800 }}>
                               Verified Enterprise
                             </span>
                           </div>
-                          <div style={{ fontSize: 12.5, color: isNightMode ? 'rgba(255, 255, 255, 0.55)' : '#64748b' }}>
+                          <div style={{ fontSize: 12.5, color: '#7A7169' }}>
                             {CATEGORY_LABELS[rfp.category]} · Posted on {formatDate(rfp.submittedAt)}
                           </div>
                         </div>
@@ -1660,8 +1659,8 @@ export default function VendorDashboard() {
                           style={{
                             padding: '5px 12px',
                             borderRadius: 999,
-                            background: 'rgba(16, 185, 129, 0.2)',
-                            color: '#10b981',
+                            background: 'rgba(30, 158, 90, 0.2)',
+                            color: '#1E9E5A',
                             fontSize: 12,
                             fontWeight: 800,
                             display: 'flex',
@@ -1677,8 +1676,8 @@ export default function VendorDashboard() {
                           style={{
                             padding: '5px 12px',
                             borderRadius: 999,
-                            background: 'rgba(249, 115, 22, 0.18)',
-                            color: '#f97316',
+                            background: 'rgba(255, 107, 44, 0.18)',
+                            color: '#FF6B2C',
                             fontSize: 12,
                             fontWeight: 800,
                             display: 'flex',
@@ -1693,28 +1692,28 @@ export default function VendorDashboard() {
                     </div>
 
                     <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginBottom: 14 }}>
-                      <span style={{ fontSize: 12.5, color: isNightMode ? 'rgba(255, 255, 255, 0.7)' : '#475569', display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <Users size={14} color="#f97316" />
+                      <span style={{ fontSize: 12.5, color: '#4A443D', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Users size={14} color="#FF6B2C" />
                         {rfp.universal.persons} Attendees
                       </span>
-                      <span style={{ fontSize: 12.5, color: isNightMode ? 'rgba(255, 255, 255, 0.7)' : '#475569', display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <Calendar size={14} color="#f97316" />
+                      <span style={{ fontSize: 12.5, color: '#4A443D', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Calendar size={14} color="#FF6B2C" />
                         {formatDate(rfp.universal.startDate)} ({rfp.universal.timeSlot || 'Full Day'})
                       </span>
-                      <span style={{ fontSize: 12.5, color: isNightMode ? 'rgba(255, 255, 255, 0.7)' : '#475569', display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <DollarSign size={14} color="#10b981" />
+                      <span style={{ fontSize: 12.5, color: '#4A443D', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <DollarSign size={14} color="#1E9E5A" />
                         Target Budget: <strong>{formatCurrency(rfp.totalBudget)}</strong>
                       </span>
                     </div>
 
                     {rfp.universal.notes && (
-                      <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.6)' : '#64748b', background: isNightMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)', padding: '8px 12px', borderRadius: 8, marginBottom: 14 }}>
+                      <div style={{ fontSize: 12, color: '#7A7169', background: 'rgba(235, 223, 204, 0.9)', padding: '8px 12px', borderRadius: 8, marginBottom: 14 }}>
                         {rfp.universal.notes}
                       </div>
                     )}
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ fontSize: 11.5, color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <div style={{ fontSize: 11.5, color: '#7A7169', display: 'flex', alignItems: 'center', gap: 5 }}>
                         <Lock size={12} /> Blind reverse-bidding protocol active
                       </div>
 
@@ -1730,9 +1729,9 @@ export default function VendorDashboard() {
                           style={{
                             padding: '8px 16px',
                             borderRadius: 10,
-                            border: '1px solid rgba(234,179,8,0.4)',
-                            background: 'rgba(234,179,8,0.12)',
-                            color: '#eab308',
+                            border: '1px solid rgba(178, 58, 122,0.4)',
+                            background: 'rgba(178, 58, 122,0.12)',
+                            color: '#B23A7A',
                             fontSize: 12.5,
                             fontWeight: 700,
                             cursor: 'pointer',
@@ -1748,7 +1747,7 @@ export default function VendorDashboard() {
                         <button
                           onClick={() => setRevisingBid(myBid)}
                           className="btn-ghost"
-                          style={{ borderColor: '#10b981', color: '#10b981', padding: '8px 16px', fontSize: 12.5 }}
+                          style={{ borderColor: '#1E9E5A', color: '#1E9E5A', padding: '8px 16px', fontSize: 12.5 }}
                         >
                           <RefreshCw size={13} /> Revise My Quote
                         </button>
@@ -1756,7 +1755,7 @@ export default function VendorDashboard() {
                         <button
                           onClick={() => setSelectedRFP(rfp)}
                           className="btn-primary"
-                          style={{ background: '#f97316', padding: '8px 18px', fontSize: 13 }}
+                          style={{ background: '#FF6B2C', padding: '8px 18px', fontSize: 13 }}
                         >
                           Submit Bid <ChevronRight size={14} />
                         </button>
@@ -1775,22 +1774,22 @@ export default function VendorDashboard() {
             style={{
               borderRadius: 20,
               padding: '24px',
-              background: isNightMode ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.95)',
-              border: isNightMode ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.1)',
+              background: 'var(--paper)',
+              border: '1px solid rgba(235, 223, 204, 0.95)',
               backdropFilter: 'blur(12px)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: '#1D1A17' }}>
                 Active Reverse-Bidding Live Tracker
               </h3>
-              <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
+              <div style={{ fontSize: 12, color: '#7A7169' }}>
                 Total Quotations: {myBids.length}
               </div>
             </div>
 
             {myBids.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '40px 0', color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b' }}>
+              <div style={{ textAlign: 'center', padding: '40px 0', color: '#7A7169' }}>
                 <Clock size={32} style={{ margin: '0 auto 10px', opacity: 0.5 }} />
                 <div>You haven't submitted any bids yet.</div>
               </div>
@@ -1798,7 +1797,7 @@ export default function VendorDashboard() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
                   <thead>
-                    <tr style={{ borderBottom: isNightMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)', color: isNightMode ? 'rgba(255,255,255,0.45)' : '#64748b', fontSize: 11.5, textTransform: 'uppercase' }}>
+                    <tr style={{ borderBottom: '1px solid rgba(235, 223, 204, 0.95)', color: '#7A7169', fontSize: 11.5, textTransform: 'uppercase' }}>
                       <th style={{ padding: '10px 12px' }}>Event / Corporate</th>
                       <th style={{ padding: '10px 12px' }}>Your Live Quote</th>
                       <th style={{ padding: '10px 12px' }}>Match %</th>
@@ -1812,22 +1811,22 @@ export default function VendorDashboard() {
                       const isAwarded = bid.status === 'accepted';
 
                       return (
-                        <tr key={bid.id} style={{ borderBottom: isNightMode ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)' }}>
+                        <tr key={bid.id} style={{ borderBottom: '1px solid rgba(235, 223, 204, 0.9)' }}>
                           <td style={{ padding: '14px 12px' }}>
-                            <div style={{ fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+                            <div style={{ fontWeight: 700, color: '#1D1A17' }}>
                               {targetRfp?.companyName || 'Corporate Client'}
                             </div>
-                            <div style={{ fontSize: 11.5, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
+                            <div style={{ fontSize: 11.5, color: '#7A7169' }}>
                               {CATEGORY_LABELS[bid.category]} · {formatDate(bid.submittedAt)}
                             </div>
                           </td>
 
-                          <td style={{ padding: '14px 12px', fontWeight: 800, fontSize: 15, color: isAwarded ? '#10b981' : '#f97316' }}>
+                          <td style={{ padding: '14px 12px', fontWeight: 800, fontSize: 15, color: isAwarded ? '#1E9E5A' : '#FF6B2C' }}>
                             {formatCurrency(bid.totalPrice)}
                           </td>
 
                           <td style={{ padding: '14px 12px' }}>
-                            <span style={{ padding: '2px 8px', borderRadius: 999, background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', fontWeight: 800, fontSize: 11.5 }}>
+                            <span style={{ padding: '2px 8px', borderRadius: 999, background: 'rgba(30, 158, 90, 0.15)', color: '#1E9E5A', fontWeight: 800, fontSize: 11.5 }}>
                               ⚡ {bid.matchPercentage}%
                             </span>
                           </td>
@@ -1840,8 +1839,8 @@ export default function VendorDashboard() {
                                 fontSize: 11,
                                 fontWeight: 700,
                                 background: isAwarded ? 'rgba(34, 197, 94, 0.2)' : 'rgba(245, 158, 11, 0.2)',
-                                color: isAwarded ? '#22c55e' : '#f59e0b',
-                                border: `1px solid ${isAwarded ? '#22c55e' : '#f59e0b'}44`,
+                                color: isAwarded ? '#12854A' : '#A66A00',
+                                border: `1px solid ${isAwarded ? '#12854A' : '#A66A00'}44`,
                               }}
                             >
                               {isAwarded ? '🎉 Awarded' : '● In Review'}
@@ -1853,13 +1852,13 @@ export default function VendorDashboard() {
                               <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
                                 <button
                                   onClick={() => setRevisingBid(bid)}
-                                  style={{ padding: '6px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', color: isNightMode ? '#ffffff' : '#0f172a', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'var(--font-body)' }}
+                                  style={{ padding: '6px 12px', borderRadius: 8, background: 'var(--cream-2)', border: '1px solid var(--line)', color: '#1D1A17', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'var(--font-body)' }}
                                 >
                                   <RefreshCw size={12} /> Revise
                                 </button>
                                 <button
                                   onClick={() => setConfirmWithdrawBid(bid)}
-                                  style={{ padding: '6px 10px', borderRadius: 8, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'var(--font-body)' }}
+                                  style={{ padding: '6px 10px', borderRadius: 8, background: 'rgba(194, 50, 28,0.08)', border: '1px solid rgba(194, 50, 28,0.3)', color: '#C2321C', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'var(--font-body)' }}
                                 >
                                   <Trash2 size={12} /> Withdraw
                                 </button>
@@ -1915,20 +1914,20 @@ export default function VendorDashboard() {
       {/* Withdraw Bid Confirm */}
       <AnimatePresence>
         {confirmWithdrawBid && (
-          <div style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(5,8,20,0.8)', backdropFilter: 'blur(12px)' }} onClick={() => setConfirmWithdrawBid(null)}>
+          <div style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(29, 26, 23, 0.45)', backdropFilter: 'blur(12px)' }} onClick={() => setConfirmWithdrawBid(null)}>
             <motion.div
               initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.92, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              style={{ width: '100%', maxWidth: 400, borderRadius: 20, background: '#0B0F17', border: '1.5px solid rgba(239,68,68,0.35)', padding: '28px', boxShadow: '0 32px 80px rgba(0,0,0,0.9)' }}
+              style={{ width: '100%', maxWidth: 400, borderRadius: 20, background: '#FFF7EC', border: '1.5px solid rgba(194, 50, 28,0.35)', padding: '28px', boxShadow: '0 32px 80px rgba(60, 30, 0, 0.18)' }}
             >
               <div style={{ fontSize: 36, textAlign: 'center', marginBottom: 12 }}>🏳️</div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: '#ffffff', textAlign: 'center', marginBottom: 10 }}>Withdraw This Bid?</h3>
-              <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.65)', textAlign: 'center', marginBottom: 22, lineHeight: 1.5 }}>
-                Your quote of <strong style={{ color: '#ffffff' }}>{formatCurrency(confirmWithdrawBid.totalPrice)}</strong> will be permanently retracted from the live auction.
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 800, color: 'var(--ink)', textAlign: 'center', marginBottom: 10 }}>Withdraw This Bid?</h3>
+              <p style={{ fontSize: 13.5, color: 'var(--ink-2)', textAlign: 'center', marginBottom: 22, lineHeight: 1.5 }}>
+                Your quote of <strong style={{ color: 'var(--ink)' }}>{formatCurrency(confirmWithdrawBid.totalPrice)}</strong> will be permanently retracted from the live auction.
               </p>
               <div style={{ display: 'flex', gap: 10 }}>
-                <button onClick={() => setConfirmWithdrawBid(null)} style={{ flex: 1, padding: '10px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Keep Bid</button>
-                <button onClick={() => { withdrawBid(confirmWithdrawBid.id); setConfirmWithdrawBid(null); }} style={{ flex: 2, padding: '10px', borderRadius: 12, border: 'none', background: '#ef4444', color: '#ffffff', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Yes, Withdraw</button>
+                <button onClick={() => setConfirmWithdrawBid(null)} style={{ flex: 1, padding: '10px', borderRadius: 12, border: '1px solid var(--line)', background: 'var(--cream-2)', color: 'var(--ink)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Keep Bid</button>
+                <button onClick={() => { withdrawBid(confirmWithdrawBid.id); setConfirmWithdrawBid(null); }} style={{ flex: 2, padding: '10px', borderRadius: 12, border: 'none', background: '#C2321C', color: '#ffffff', fontSize: 13.5, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>Yes, Withdraw</button>
               </div>
             </motion.div>
           </div>

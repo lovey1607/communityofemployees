@@ -44,7 +44,7 @@ const CATEGORY_CONFIGS: Record<EventCategoryKey, CategoryPreset> = {
     minCost: 500,
     maxCost: 8000,
     typicalBrokerMargin: 0.28,
-    color: '#10b981',
+    color: '#1E9E5A',
   },
   food: {
     label: 'Founders Dinners & Mixers',
@@ -58,7 +58,7 @@ const CATEGORY_CONFIGS: Record<EventCategoryKey, CategoryPreset> = {
     minCost: 1000,
     maxCost: 10000,
     typicalBrokerMargin: 0.32,
-    color: '#f97316',
+    color: '#FF6B2C',
   },
   trips: {
     label: 'Leadership Offsites',
@@ -72,7 +72,7 @@ const CATEGORY_CONFIGS: Record<EventCategoryKey, CategoryPreset> = {
     minCost: 4000,
     maxCost: 35000,
     typicalBrokerMargin: 0.25,
-    color: '#0ea5e9',
+    color: '#2E6BFF',
   },
   gifts: {
     label: 'Rewards & Hampers',
@@ -91,7 +91,7 @@ const CATEGORY_CONFIGS: Record<EventCategoryKey, CategoryPreset> = {
 };
 
 export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
-  const { isNightMode } = useStore();
+  useStore();
   const [activeCategory, setActiveCategory] = useState<EventCategoryKey>('sports');
   const config = CATEGORY_CONFIGS[activeCategory];
 
@@ -126,16 +126,10 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
       <div
         style={{
           borderRadius: 22,
-          background: isNightMode
-            ? 'linear-gradient(145deg, rgba(11,15,25,0.94) 0%, rgba(15,23,42,0.9) 100%)'
-            : 'linear-gradient(145deg, rgba(255,255,255,0.96) 0%, rgba(248,250,252,0.92) 100%)',
-          border: isNightMode
-            ? '1.5px solid rgba(16, 185, 129, 0.28)'
-            : '1.5px solid rgba(16, 185, 129, 0.2)',
+          background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(248,250,252,0.92) 100%)',
+          border: '1.5px solid rgba(30, 158, 90, 0.2)',
           padding: '22px 24px',
-          boxShadow: isNightMode
-            ? '0 24px 70px rgba(0,0,0,0.85), 0 0 40px rgba(16,185,129,0.06)'
-            : '0 20px 50px rgba(0,0,0,0.08), 0 0 30px rgba(16,185,129,0.05)',
+          boxShadow: '0 20px 50px rgba(235, 223, 204, 0.9), 0 0 30px rgba(30, 158, 90,0.05)',
           backdropFilter: 'blur(30px)',
           WebkitBackdropFilter: 'blur(30px)',
           position: 'relative',
@@ -153,7 +147,7 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
             borderRadius: '50%',
             background: config.color,
             filter: 'blur(60px)',
-            opacity: isNightMode ? 0.15 : 0.08,
+            opacity: 0.08,
             pointerEvents: 'none',
           }}
         />
@@ -161,8 +155,8 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
         {/* ── 1. Header: Live Title & Segmented Category Pills ── */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
-            <span style={{ fontSize: 11, fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1E9E5A', boxShadow: '0 0 8px #1E9E5A' }} />
+            <span style={{ fontSize: 11, fontWeight: 800, color: '#1E9E5A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               REVERSE-AUCTION ROI
             </span>
           </div>
@@ -172,10 +166,10 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
             style={{
               display: 'flex',
               gap: 3,
-              background: isNightMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+              background: 'rgba(235, 223, 204, 0.9)',
               padding: 3,
               borderRadius: 10,
-              border: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)',
+              border: '1px solid rgba(235, 223, 204, 0.9)',
             }}
           >
             {(Object.keys(CATEGORY_CONFIGS) as EventCategoryKey[]).map((catKey) => {
@@ -191,7 +185,7 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
                     borderRadius: 7,
                     border: 'none',
                     background: active ? item.color : 'transparent',
-                    color: active ? '#ffffff' : isNightMode ? 'rgba(255,255,255,0.6)' : '#64748b',
+                    color: active ? 'var(--ink)' : '#7A7169',
                     fontSize: 11,
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -215,10 +209,10 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
           {/* Slider 1: Headcount */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, fontWeight: 700, marginBottom: 5 }}>
-              <span style={{ color: isNightMode ? 'rgba(255,255,255,0.7)' : '#475569', display: 'flex', alignItems: 'center', gap: 5 }}>
-                <Users size={12} color="#10b981" /> Event Headcount
+              <span style={{ color: '#4A443D', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <Users size={12} color="#1E9E5A" /> Event Headcount
               </span>
-              <span style={{ color: '#10b981', fontWeight: 900, fontFamily: 'var(--font-display)', background: 'rgba(16,185,129,0.12)', padding: '2px 7px', borderRadius: 6 }}>
+              <span style={{ color: '#1E9E5A', fontWeight: 900, fontFamily: 'var(--font-display)', background: 'rgba(30, 158, 90,0.12)', padding: '2px 7px', borderRadius: 6 }}>
                 {headcount} Pax
               </span>
             </div>
@@ -231,11 +225,11 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               onChange={(e) => setHeadcount(Number(e.target.value))}
               style={{
                 width: '100%',
-                accentColor: '#10b981',
+                accentColor: '#1E9E5A',
                 height: 5,
                 borderRadius: 999,
                 cursor: 'pointer',
-                background: `linear-gradient(90deg, #10b981 ${headcountPct}%, rgba(255,255,255,0.12) ${headcountPct}%)`,
+                background: `linear-gradient(90deg, #1E9E5A ${headcountPct}%, rgba(255, 255, 255, 0.9) ${headcountPct}%)`,
               }}
             />
           </div>
@@ -243,10 +237,10 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
           {/* Slider 2: Annual Events */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, fontWeight: 700, marginBottom: 5 }}>
-              <span style={{ color: isNightMode ? 'rgba(255,255,255,0.7)' : '#475569', display: 'flex', alignItems: 'center', gap: 5 }}>
-                <Calendar size={12} color="#0ea5e9" /> Annual Frequency
+              <span style={{ color: '#4A443D', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <Calendar size={12} color="#2E6BFF" /> Annual Frequency
               </span>
-              <span style={{ color: '#0ea5e9', fontWeight: 900, fontFamily: 'var(--font-display)', background: 'rgba(14,165,233,0.12)', padding: '2px 7px', borderRadius: 6 }}>
+              <span style={{ color: '#2E6BFF', fontWeight: 900, fontFamily: 'var(--font-display)', background: 'rgba(46, 107, 255,0.12)', padding: '2px 7px', borderRadius: 6 }}>
                 {eventsPerYear} Events / yr
               </span>
             </div>
@@ -259,11 +253,11 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               onChange={(e) => setEventsPerYear(Number(e.target.value))}
               style={{
                 width: '100%',
-                accentColor: '#0ea5e9',
+                accentColor: '#2E6BFF',
                 height: 5,
                 borderRadius: 999,
                 cursor: 'pointer',
-                background: `linear-gradient(90deg, #0ea5e9 ${eventsPct}%, rgba(255,255,255,0.12) ${eventsPct}%)`,
+                background: `linear-gradient(90deg, #2E6BFF ${eventsPct}%, rgba(255, 255, 255, 0.9) ${eventsPct}%)`,
               }}
             />
           </div>
@@ -271,10 +265,10 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
           {/* Slider 3: Target Budget */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, fontWeight: 700, marginBottom: 5 }}>
-              <span style={{ color: isNightMode ? 'rgba(255,255,255,0.7)' : '#475569', display: 'flex', alignItems: 'center', gap: 5 }}>
-                <DollarSign size={12} color="#f97316" /> Target Budget / Person
+              <span style={{ color: '#4A443D', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <DollarSign size={12} color="#FF6B2C" /> Target Budget / Person
               </span>
-              <span style={{ color: '#f97316', fontWeight: 900, fontFamily: 'var(--font-display)', background: 'rgba(249,115,22,0.12)', padding: '2px 7px', borderRadius: 6 }}>
+              <span style={{ color: '#FF6B2C', fontWeight: 900, fontFamily: 'var(--font-display)', background: 'rgba(255, 107, 44,0.12)', padding: '2px 7px', borderRadius: 6 }}>
                 {formatCurrency(costPerHead)}
               </span>
             </div>
@@ -287,11 +281,11 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               onChange={(e) => setCostPerHead(Number(e.target.value))}
               style={{
                 width: '100%',
-                accentColor: '#f97316',
+                accentColor: '#FF6B2C',
                 height: 5,
                 borderRadius: 999,
                 cursor: 'pointer',
-                background: `linear-gradient(90deg, #f97316 ${costPct}%, rgba(255,255,255,0.12) ${costPct}%)`,
+                background: `linear-gradient(90deg, #FF6B2C ${costPct}%, rgba(255, 255, 255, 0.9) ${costPct}%)`,
               }}
             />
           </div>
@@ -302,40 +296,38 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
           style={{
             borderRadius: 16,
             padding: '14px 16px',
-            background: isNightMode
-              ? 'linear-gradient(145deg, rgba(16,185,129,0.15) 0%, rgba(14,165,233,0.08) 100%)'
-              : 'linear-gradient(145deg, rgba(16,185,129,0.1) 0%, rgba(14,165,233,0.05) 100%)',
-            border: '1px solid rgba(16,185,129,0.3)',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
+            background: 'linear-gradient(145deg, rgba(30, 158, 90,0.1) 0%, rgba(46, 107, 255,0.05) 100%)',
+            border: '1px solid rgba(30, 158, 90,0.3)',
+            boxShadow: '0 8px 24px rgba(235, 223, 204, 0.95)',
             textAlign: 'center',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-            <span style={{ fontSize: 10, fontWeight: 800, color: isNightMode ? '#34d399' : '#059669', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <span style={{ fontSize: 10, fontWeight: 800, color: '#12854A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               PROJECTED ANNUAL DIRECT SAVINGS
             </span>
-            <span style={{ fontSize: 11, fontWeight: 800, color: '#10b981', background: 'rgba(16,185,129,0.2)', padding: '2px 7px', borderRadius: 5 }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: '#1E9E5A', background: 'rgba(30, 158, 90,0.2)', padding: '2px 7px', borderRadius: 5 }}>
               ⚡ {savingsPercent}% Saved
             </span>
           </div>
 
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 900, color: isNightMode ? '#ffffff' : '#0f172a', letterSpacing: '-0.02em', margin: '3px 0' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 900, color: '#1D1A17', letterSpacing: '-0.02em', margin: '3px 0' }}>
             {formatCurrency(annualSavings)}
           </div>
 
           {/* Slim Visual Comparison Bar */}
-          <div style={{ marginTop: 8, paddingTop: 8, borderTop: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)' }}>
+          <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(235, 223, 204, 0.9)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, marginBottom: 4 }}>
-              <span style={{ color: '#f87171', fontWeight: 700 }}>Legacy Broker: {formatCurrency(legacyAgencySpend)}</span>
-              <span style={{ color: '#10b981', fontWeight: 800 }}>COE Direct: {formatCurrency(coeDirectSpend)}</span>
+              <span style={{ color: '#E0705C', fontWeight: 700 }}>Legacy Broker: {formatCurrency(legacyAgencySpend)}</span>
+              <span style={{ color: '#1E9E5A', fontWeight: 800 }}>COE Direct: {formatCurrency(coeDirectSpend)}</span>
             </div>
-            <div style={{ height: 5, borderRadius: 999, background: 'rgba(255,255,255,0.1)', overflow: 'hidden', display: 'flex' }}>
-              <div style={{ width: `${Math.round((coeDirectSpend / legacyAgencySpend) * 100)}%`, background: '#10b981', transition: 'width 0.2s ease' }} />
-              <div style={{ width: `${Math.round((annualSavings / legacyAgencySpend) * 100)}%`, background: 'rgba(239,68,68,0.5)', transition: 'width 0.2s ease' }} />
+            <div style={{ height: 5, borderRadius: 999, background: 'var(--cream-2)', overflow: 'hidden', display: 'flex' }}>
+              <div style={{ width: `${Math.round((coeDirectSpend / legacyAgencySpend) * 100)}%`, background: '#1E9E5A', transition: 'width 0.2s ease' }} />
+              <div style={{ width: `${Math.round((annualSavings / legacyAgencySpend) * 100)}%`, background: 'rgba(194, 50, 28,0.5)', transition: 'width 0.2s ease' }} />
             </div>
             {/* Say what the model assumes. A savings figure with an unstated
                 assumption behind it is a claim, not an estimate. */}
-            <p style={{ margin: '8px 0 0', fontSize: 10, lineHeight: 1.5, color: isNightMode ? 'rgba(255,255,255,0.42)' : '#94a3b8' }}>
+            <p style={{ margin: '8px 0 0', fontSize: 10, lineHeight: 1.5, color: '#7A7169' }}>
               Estimate. Assumes a {Math.round(config.typicalBrokerMargin * 100)}% agency margin on this
               category and a 2% platform fee. Your actual saving depends on the bids you get.
             </p>
@@ -351,7 +343,7 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
             padding: '11px',
             borderRadius: 11,
             border: 'none',
-            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+            background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
             color: '#ffffff',
             fontSize: 13,
             fontWeight: 800,
@@ -360,7 +352,7 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
             justifyContent: 'center',
             gap: 6,
             textDecoration: 'none',
-            boxShadow: '0 4px 18px rgba(16,185,129,0.35)',
+            boxShadow: '0 4px 18px rgba(30, 158, 90,0.35)',
             transition: 'transform 0.15s ease',
           }}
         >
@@ -376,27 +368,23 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
     <div
       style={{
         borderRadius: 24,
-        background: isNightMode
-          ? 'linear-gradient(145deg, rgba(11,15,23,0.95) 0%, rgba(13,19,33,0.9) 100%)'
-          : '#ffffff',
-        border: isNightMode
-          ? '1.5px solid rgba(16, 185, 129, 0.25)'
-          : '1.5px solid rgba(0,0,0,0.08)',
+        background: '#ffffff',
+        border: '1.5px solid rgba(235, 223, 204, 0.9)',
         padding: '36px',
-        boxShadow: isNightMode ? '0 24px 80px rgba(0,0,0,0.8)' : '0 16px 40px rgba(0,0,0,0.06)',
+        boxShadow: '0 16px 40px rgba(235, 223, 204, 0.9)',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 26 }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 800, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 800, color: '#137A43', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
             <Sparkles size={13} /> LIVE ROI & SAVINGS SIMULATOR
           </div>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 900, color: isNightMode ? '#ffffff' : '#0f172a' }}>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 900, color: '#1D1A17' }}>
             Interactive Corporate Procurement Calculator
           </h3>
         </div>
 
-        <div style={{ display: 'flex', gap: 6, background: isNightMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', padding: 4, borderRadius: 12 }}>
+        <div style={{ display: 'flex', gap: 6, background: 'rgba(235, 223, 204, 0.9)', padding: 4, borderRadius: 12 }}>
           {(Object.keys(CATEGORY_CONFIGS) as EventCategoryKey[]).map((catKey) => {
             const item = CATEGORY_CONFIGS[catKey];
             const active = activeCategory === catKey;
@@ -409,7 +397,7 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
                   borderRadius: 9,
                   border: active ? `1px solid ${item.color}55` : '1px solid transparent',
                   background: active ? `${item.color}22` : 'transparent',
-                  color: active ? '#ffffff' : isNightMode ? 'rgba(255,255,255,0.6)' : '#64748b',
+                  color: active ? 'var(--ink)' : '#7A7169',
                   fontSize: 12,
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -430,10 +418,10 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
         <div>
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <label style={{ fontSize: 12.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.8)' : '#334155' }}>
+              <label style={{ fontSize: 12.5, fontWeight: 700, color: '#4A443D' }}>
                 Average Event Headcount (Pax)
               </label>
-              <span style={{ fontSize: 15, fontWeight: 900, color: '#10b981', fontFamily: 'var(--font-display)' }}>
+              <span style={{ fontSize: 15, fontWeight: 900, color: '#1E9E5A', fontFamily: 'var(--font-display)' }}>
                 {headcount} Guests
               </span>
             </div>
@@ -444,16 +432,16 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               step="10"
               value={headcount}
               onChange={(e) => setHeadcount(Number(e.target.value))}
-              style={{ width: '100%', accentColor: '#10b981', cursor: 'pointer' }}
+              style={{ width: '100%', accentColor: '#1E9E5A', cursor: 'pointer' }}
             />
           </div>
 
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <label style={{ fontSize: 12.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.8)' : '#334155' }}>
+              <label style={{ fontSize: 12.5, fontWeight: 700, color: '#4A443D' }}>
                 Annual Events in this Category
               </label>
-              <span style={{ fontSize: 15, fontWeight: 900, color: '#0ea5e9', fontFamily: 'var(--font-display)' }}>
+              <span style={{ fontSize: 15, fontWeight: 900, color: '#2E6BFF', fontFamily: 'var(--font-display)' }}>
                 {eventsPerYear} Events / Year
               </span>
             </div>
@@ -464,16 +452,16 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               step="1"
               value={eventsPerYear}
               onChange={(e) => setEventsPerYear(Number(e.target.value))}
-              style={{ width: '100%', accentColor: '#0ea5e9', cursor: 'pointer' }}
+              style={{ width: '100%', accentColor: '#2E6BFF', cursor: 'pointer' }}
             />
           </div>
 
           <div style={{ marginBottom: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <label style={{ fontSize: 12.5, fontWeight: 700, color: isNightMode ? 'rgba(255,255,255,0.8)' : '#334155' }}>
+              <label style={{ fontSize: 12.5, fontWeight: 700, color: '#4A443D' }}>
                 Target Budget per Person
               </label>
-              <span style={{ fontSize: 15, fontWeight: 900, color: '#f97316', fontFamily: 'var(--font-display)' }}>
+              <span style={{ fontSize: 15, fontWeight: 900, color: '#FF6B2C', fontFamily: 'var(--font-display)' }}>
                 {formatCurrency(costPerHead)}
               </span>
             </div>
@@ -484,7 +472,7 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               step="250"
               value={costPerHead}
               onChange={(e) => setCostPerHead(Number(e.target.value))}
-              style={{ width: '100%', accentColor: '#f97316', cursor: 'pointer' }}
+              style={{ width: '100%', accentColor: '#FF6B2C', cursor: 'pointer' }}
             />
           </div>
         </div>
@@ -493,39 +481,39 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
           style={{
             borderRadius: 20,
             padding: '24px',
-            background: isNightMode ? 'linear-gradient(145deg, rgba(16,185,129,0.18) 0%, rgba(14,165,233,0.08) 100%)' : 'rgba(16,185,129,0.06)',
-            border: '1.5px solid rgba(16,185,129,0.35)',
+            background: 'rgba(30, 158, 90,0.06)',
+            border: '1.5px solid rgba(30, 158, 90,0.35)',
             textAlign: 'center',
           }}
         >
-          <div style={{ fontSize: 11, fontWeight: 800, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#137A43', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
             Projected Annual Direct Savings
           </div>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 900, color: isNightMode ? '#ffffff' : '#0f172a', lineHeight: 1 }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 900, color: '#1D1A17', lineHeight: 1 }}>
             {formatCurrency(annualSavings)}
           </div>
-          <div style={{ fontSize: 13, color: '#10b981', fontWeight: 800, marginTop: 4 }}>
+          <div style={{ fontSize: 13, color: '#1E9E5A', fontWeight: 800, marginTop: 4 }}>
             💸 {savingsPercent}% Net Cost Compression
           </div>
 
-          <div style={{ margin: '18px 0', padding: '14px 0', borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ margin: '18px 0', padding: '14px 0', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 8 }}>
-              <span style={{ color: '#f87171', fontWeight: 700 }}>Legacy Broker: {formatCurrency(legacyAgencySpend)}</span>
-              <span style={{ color: '#10b981', fontWeight: 700 }}>COE Direct: {formatCurrency(coeDirectSpend)}</span>
+              <span style={{ color: '#E0705C', fontWeight: 700 }}>Legacy Broker: {formatCurrency(legacyAgencySpend)}</span>
+              <span style={{ color: '#1E9E5A', fontWeight: 700 }}>COE Direct: {formatCurrency(coeDirectSpend)}</span>
             </div>
-            <div style={{ height: 8, borderRadius: 999, background: 'rgba(255,255,255,0.1)', overflow: 'hidden', display: 'flex' }}>
-              <div style={{ width: `${Math.round((coeDirectSpend / legacyAgencySpend) * 100)}%`, background: '#10b981' }} />
-              <div style={{ width: `${Math.round((annualSavings / legacyAgencySpend) * 100)}%`, background: 'rgba(239,68,68,0.6)' }} />
+            <div style={{ height: 8, borderRadius: 999, background: 'var(--cream-2)', overflow: 'hidden', display: 'flex' }}>
+              <div style={{ width: `${Math.round((coeDirectSpend / legacyAgencySpend) * 100)}%`, background: '#1E9E5A' }} />
+              <div style={{ width: `${Math.round((annualSavings / legacyAgencySpend) * 100)}%`, background: 'rgba(194, 50, 28,0.6)' }} />
             </div>
-            <p style={{ margin: '10px 0 0', fontSize: 10.5, lineHeight: 1.55, color: isNightMode ? 'rgba(255,255,255,0.42)' : '#94a3b8' }}>
+            <p style={{ margin: '10px 0 0', fontSize: 10.5, lineHeight: 1.55, color: '#7A7169' }}>
               Estimate. Assumes a {Math.round(config.typicalBrokerMargin * 100)}% agency margin on this
               category and a 2% platform fee. Your actual saving depends on the bids you get.
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.8)' : '#64748b', marginBottom: 18 }}>
-            <Clock size={14} color="#0ea5e9" />
-            <span>Saves roughly <strong style={{ color: isNightMode ? '#ffffff' : '#0f172a' }}>{hoursSaved} hours</strong> of chasing quotes (about half a day per event)</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 12, color: '#7A7169', marginBottom: 18 }}>
+            <Clock size={14} color="#2E6BFF" />
+            <span>Saves roughly <strong style={{ color: '#1D1A17' }}>{hoursSaved} hours</strong> of chasing quotes (about half a day per event)</span>
           </div>
 
           <a
@@ -535,7 +523,7 @@ export function SavingsCalculator({ compact = false }: { compact?: boolean }) {
               padding: '12px',
               borderRadius: 11,
               border: 'none',
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
               color: '#ffffff',
               fontSize: 13,
               fontWeight: 800,

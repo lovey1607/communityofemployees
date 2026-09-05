@@ -19,13 +19,11 @@ export function DeleteAccountButton({
   style?: React.CSSProperties;
 }) {
   const router = useRouter();
-  const { deleteAccount, isNightMode } = useStore();
+  const { deleteAccount } = useStore();
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-
-  const dark = isNightMode;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +49,7 @@ export function DeleteAccountButton({
           padding: '8px',
           borderRadius: 10,
           border: 'none',
-          background: '#ef4444',
+          background: '#C2321C',
           color: '#ffffff',
           fontSize: 12.5,
           fontWeight: 700,
@@ -71,8 +69,8 @@ export function DeleteAccountButton({
             style={{
               width: '100%',
               maxWidth: 420,
-              background: dark ? '#0B0F17' : '#ffffff',
-              border: dark ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(0,0,0,0.12)',
+              background: 'var(--paper)',
+              border: '1px solid var(--line)',
               borderRadius: 20,
               padding: 24,
               position: 'relative',
@@ -84,19 +82,19 @@ export function DeleteAccountButton({
               onClick={() => setOpen(false)}
               style={{
                 position: 'absolute', top: 14, right: 14, background: 'none',
-                border: 'none', color: '#8b95ab', cursor: 'pointer',
+                border: 'none', color: 'var(--muted)', cursor: 'pointer',
               }}
             >
               <X size={17} />
             </button>
 
             <div style={{ display: 'flex', gap: 9, alignItems: 'center', marginBottom: 10 }}>
-              <AlertTriangle size={18} color="#ef4444" />
-              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: dark ? '#e8ecf5' : '#111827' }}>
+              <AlertTriangle size={18} color="#C2321C" />
+              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: 'var(--ink)' }}>
                 Close your account
               </h3>
             </div>
-            <p style={{ margin: '0 0 16px', fontSize: 13, lineHeight: 1.6, color: dark ? '#8b95ab' : '#5b6478' }}>
+            <p style={{ margin: '0 0 16px', fontSize: 13, lineHeight: 1.6, color: 'var(--muted)' }}>
               Your open requirements are cancelled and any live bids withdrawn. Records already
               awarded stay on file. This cannot be undone — enter your password to confirm.
             </p>
@@ -112,15 +110,15 @@ export function DeleteAccountButton({
                 width: '100%',
                 padding: '11px 13px',
                 borderRadius: 10,
-                border: dark ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(0,0,0,0.14)',
-                background: dark ? 'rgba(255,255,255,0.04)' : '#fff',
-                color: dark ? '#e8ecf5' : '#111827',
+                border: '1px solid var(--line)',
+                background: 'var(--paper)',
+                color: 'var(--ink)',
                 fontSize: 14,
                 marginBottom: 12,
               }}
             />
             {error && (
-              <p style={{ margin: '0 0 12px', fontSize: 12.5, color: '#fb7185' }}>{error}</p>
+              <p style={{ margin: '0 0 12px', fontSize: 12.5, color: '#B3261E' }}>{error}</p>
             )}
 
             <div style={{ display: 'flex', gap: 10 }}>
@@ -129,8 +127,8 @@ export function DeleteAccountButton({
                 onClick={() => setOpen(false)}
                 style={{
                   flex: 1, padding: '10px', borderRadius: 10, cursor: 'pointer',
-                  border: dark ? '1px solid rgba(255,255,255,0.16)' : '1px solid rgba(0,0,0,0.16)',
-                  background: 'transparent', color: dark ? '#e8ecf5' : '#111827',
+                  border: '1px solid var(--line)',
+                  background: 'transparent', color: 'var(--ink)',
                   fontSize: 13, fontWeight: 600,
                 }}
               >
@@ -141,7 +139,7 @@ export function DeleteAccountButton({
                 disabled={busy}
                 style={{
                   flex: 1, padding: '10px', borderRadius: 10, border: 'none',
-                  background: '#ef4444', color: '#fff', fontSize: 13, fontWeight: 700,
+                  background: '#C2321C', color: '#ffffff', fontSize: 13, fontWeight: 700,
                   cursor: busy ? 'wait' : 'pointer', opacity: busy ? 0.6 : 1,
                 }}
               >

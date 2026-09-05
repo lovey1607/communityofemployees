@@ -2,80 +2,68 @@
 // lib/roleTheme.ts — one source of truth for surface and role colour.
 //
 // Before this file the palette lived as ~400 hardcoded hex literals across
-// the app, including FOUR different near-blacks used as "the background"
-// (#0B0F17, #050814, #0b0d12, #05070E). Screens sat on visibly different
-// grounds depending on who built them.
+// the app, including FOUR different near-blacks used as "the background".
+// Screens sat on visibly different grounds depending on who built them.
 //
-// Role colour is deliberately kept — an employee, a vendor and an admin each
-// keep their own accent, because in a three-sided marketplace it is genuinely
-// useful to know at a glance whose side of the product you are looking at.
-// What changes is that they now sit on ONE shared ground, with one set of
-// surface, border and text values.
+// The app now runs on the cream/saffron system introduced with the landing
+// page. There is one ground (warm off-white), one set of surfaces, and four
+// role accents. Role colour is deliberately kept — an employee, a vendor and
+// an admin each keep their own accent, because in a three-sided marketplace
+// it is genuinely useful to know at a glance whose side of the product you
+// are looking at. What changed is that they now sit on ONE shared ground.
+//
+// These values mirror the CSS custom properties in app/globals.css. Change
+// them in both places or, better, read the variable where CSS will do.
 //
 // lib/themes.ts is a different thing and stays: those are the five *category*
 // atmospheres (sports, food, trips, gifts, dress) used for the category modal
 // and hero backdrops, not chrome.
 // ============================================================
 
-/** The shared ground everything sits on, dark mode. */
+/** The shared ground everything sits on. */
 export const SURFACE = {
-  /** Page background. The one true near-black. */
-  ground: '#0B0F17',
-  /** Slightly raised: cards, panels, nav bars. */
-  raised: 'rgba(255, 255, 255, 0.035)',
+  /** Page background. The one true cream. */
+  ground: '#FFF7EC',
+  /** A warmer step of the ground, for inset strips and tab rails. */
+  groundAlt: '#FFEFD9',
+  /** Raised: cards, panels, nav bars. */
+  raised: '#FFFFFF',
   /** Raised again: modals, popovers, anything floating. */
-  overlay: '#0F131C',
+  overlay: '#FFFFFF',
   /** Hairlines and card edges. */
-  border: 'rgba(255, 255, 255, 0.09)',
+  border: '#EBDFCC',
   /** A border that needs to be seen — focused inputs, active tabs. */
-  borderStrong: 'rgba(255, 255, 255, 0.16)',
+  borderStrong: '#D8C6AC',
   /** Backdrop behind a modal. */
-  scrim: 'rgba(5, 7, 14, 0.82)',
-} as const;
-
-/** The same, for light mode. */
-export const SURFACE_LIGHT = {
-  ground: '#f7f8fa',
-  raised: 'rgba(255, 255, 255, 0.9)',
-  overlay: '#ffffff',
-  border: 'rgba(15, 23, 42, 0.10)',
-  borderStrong: 'rgba(15, 23, 42, 0.18)',
-  scrim: 'rgba(15, 23, 42, 0.35)',
+  scrim: 'rgba(29, 26, 23, 0.42)',
 } as const;
 
 /** Text, in descending order of emphasis. */
 export const TEXT = {
-  primary: '#ffffff',
-  secondary: 'rgba(255, 255, 255, 0.68)',
-  muted: 'rgba(255, 255, 255, 0.46)',
-  faint: 'rgba(255, 255, 255, 0.28)',
-  onAccent: '#0B0F17',
-} as const;
-
-export const TEXT_LIGHT = {
-  primary: '#0f172a',
-  secondary: '#475569',
-  muted: '#64748b',
-  faint: '#94a3b8',
-  onAccent: '#ffffff',
+  primary: '#1D1A17',
+  secondary: '#4A443D',
+  muted: '#7A7169',
+  faint: '#A79C90',
+  /** Readable on a solid saffron/turf/sky/berry accent. */
+  onAccent: '#FFFFFF',
 } as const;
 
 /**
- * Status colour, separate from role colour on purpose. A vendor's orange
- * accent must never be mistaken for a warning, so nothing below is reused
- * as a role accent.
+ * Status colour, separate from role colour on purpose. A vendor's blue accent
+ * must never be mistaken for an info badge, so nothing below is reused as a
+ * role accent. All of these are contrast-checked against the cream ground.
  */
 export const STATUS = {
-  success: '#22c55e',
-  successBg: 'rgba(34, 197, 94, 0.12)',
-  warning: '#fbbf24',
-  warningBg: 'rgba(251, 191, 36, 0.12)',
-  danger: '#ef4444',
-  dangerBg: 'rgba(239, 68, 68, 0.12)',
-  info: '#38bdf8',
-  infoBg: 'rgba(56, 189, 248, 0.12)',
-  neutral: 'rgba(255, 255, 255, 0.46)',
-  neutralBg: 'rgba(255, 255, 255, 0.06)',
+  success: '#137A43',
+  successBg: 'rgba(30, 158, 90, 0.12)',
+  warning: '#8A6100',
+  warningBg: 'rgba(255, 200, 61, 0.20)',
+  danger: '#B3261E',
+  dangerBg: 'rgba(194, 50, 28, 0.10)',
+  info: '#2E6BFF',
+  infoBg: 'rgba(46, 107, 255, 0.10)',
+  neutral: '#7A7169',
+  neutralBg: 'rgba(29, 26, 23, 0.06)',
 } as const;
 
 export type Role = 'public' | 'corporate' | 'vendor' | 'admin';
@@ -83,8 +71,8 @@ export type Role = 'public' | 'corporate' | 'vendor' | 'admin';
 export interface RolePalette {
   /** The accent itself. */
   accent: string;
-  /** A lighter step, for text on dark grounds where the accent is too dim. */
-  accentSoft: string;
+  /** A deeper step, for accent-coloured text that must stay readable on cream. */
+  accentInk: string;
   /** Tinted fill for chips, badges and hover states. */
   tint: string;
   /** Tinted border to match. */
@@ -96,51 +84,46 @@ export interface RolePalette {
 }
 
 /**
- * The three role accents are unchanged from what the app already used —
- * emerald for employees, orange for vendors, gold for admins — so nobody has
- * to relearn the product. They are now defined once instead of 300 times.
+ * Four accents, one per side of the product. Public keeps the saffron the
+ * landing page is built around; employees get turf green; vendors get sky
+ * blue; admins get berry. Vendor is no longer the same orange as public —
+ * that ambiguity was flagged in the previous revision of this file and is
+ * resolved here now that the landing design is settled.
  */
 export const ROLE_THEME: Record<Role, RolePalette> = {
   public: {
-    accent: '#f97316',
-    accentSoft: '#fb923c',
-    tint: 'rgba(249, 115, 22, 0.12)',
-    tintBorder: 'rgba(249, 115, 22, 0.32)',
-    onAccent: '#0B0F17',
+    accent: '#FF6B2C',
+    accentInk: '#C2481A',
+    tint: 'rgba(255, 107, 44, 0.12)',
+    tintBorder: 'rgba(255, 107, 44, 0.30)',
+    onAccent: '#FFFFFF',
     label: 'Community of Employees',
   },
   corporate: {
-    accent: '#10b981',
-    accentSoft: '#34d399',
-    tint: 'rgba(16, 185, 129, 0.12)',
-    tintBorder: 'rgba(16, 185, 129, 0.32)',
-    onAccent: '#03140d',
+    accent: '#1E9E5A',
+    accentInk: '#137A43',
+    tint: 'rgba(30, 158, 90, 0.12)',
+    tintBorder: 'rgba(30, 158, 90, 0.30)',
+    onAccent: '#FFFFFF',
     label: 'For your team',
   },
   vendor: {
-    accent: '#f97316',
-    accentSoft: '#fb923c',
-    tint: 'rgba(249, 115, 22, 0.12)',
-    tintBorder: 'rgba(249, 115, 22, 0.32)',
-    onAccent: '#170a02',
+    accent: '#2E6BFF',
+    accentInk: '#1F4FCC',
+    tint: 'rgba(46, 107, 255, 0.10)',
+    tintBorder: 'rgba(46, 107, 255, 0.28)',
+    onAccent: '#FFFFFF',
     label: 'Vendor',
   },
   admin: {
-    accent: '#eab308',
-    accentSoft: '#facc15',
-    tint: 'rgba(234, 179, 8, 0.12)',
-    tintBorder: 'rgba(234, 179, 8, 0.32)',
-    onAccent: '#161104',
+    accent: '#B23A7A',
+    accentInk: '#8E2C60',
+    tint: 'rgba(178, 58, 122, 0.10)',
+    tintBorder: 'rgba(178, 58, 122, 0.28)',
+    onAccent: '#FFFFFF',
     label: 'Admin',
   },
 };
-
-/**
- * NOTE — one thing left deliberately unresolved: `public` and `vendor` are
- * currently the same orange, so a public marketing surface and a vendor
- * surface read as the same "side" of the product. Worth splitting once the
- * landing design is settled; changing it here changes it everywhere.
- */
 
 export function roleTheme(role: Role | string | null | undefined): RolePalette {
   if (role === 'corporate' || role === 'vendor' || role === 'admin') return ROLE_THEME[role];
@@ -155,11 +138,11 @@ export function rfpStatusStyle(status: string): { label: string; color: string; 
     case 'open':
       return { label: 'Open — awaiting bids', color: STATUS.success, background: STATUS.successBg };
     case 'bid-received':
-      return { label: 'Bids received', color: ROLE_THEME.vendor.accentSoft, background: ROLE_THEME.vendor.tint };
+      return { label: 'Bids received', color: ROLE_THEME.vendor.accentInk, background: ROLE_THEME.vendor.tint };
     case 'awarded':
       return { label: 'Awarded', color: STATUS.info, background: STATUS.infoBg };
     case 'completed':
-      return { label: 'Completed', color: '#a78bfa', background: 'rgba(167, 139, 250, 0.12)' };
+      return { label: 'Completed', color: ROLE_THEME.admin.accentInk, background: ROLE_THEME.admin.tint };
     case 'cancelled':
       return { label: 'Withdrawn', color: STATUS.neutral, background: STATUS.neutralBg };
     default:

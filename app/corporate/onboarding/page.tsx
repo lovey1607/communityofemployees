@@ -53,7 +53,7 @@ const GURUGRAM_CORPORATE_HUBS = [
 
 export default function CorporateOnboardingPage() {
   const router = useRouter();
-  const { saveCorporateProfile, currentUser, isNightMode } = useStore();
+  const { saveCorporateProfile, currentUser } = useStore();
 
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
@@ -99,7 +99,7 @@ export default function CorporateOnboardingPage() {
     display: 'block',
     fontSize: 11,
     fontWeight: 700,
-    color: 'rgba(255,255,255,0.6)',
+    color: 'var(--ink-2)',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     marginBottom: 6,
@@ -114,7 +114,7 @@ export default function CorporateOnboardingPage() {
         justifyContent: 'center',
         padding: '24px',
         position: 'relative',
-        background: '#05060e',
+        background: 'var(--cream)',
       }}
     >
       <BlurredCyberHubBackground />
@@ -134,16 +134,16 @@ export default function CorporateOnboardingPage() {
                     width: 32,
                     height: 32,
                     borderRadius: '50%',
-                    background: s <= step ? '#10b981' : 'rgba(255,255,255,0.1)',
-                    border: s === step ? '2px solid #10b981' : '2px solid transparent',
+                    background: s <= step ? '#1E9E5A' : 'var(--cream-2)',
+                    border: s === step ? '2px solid #1E9E5A' : '2px solid transparent',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: 13,
                     fontWeight: 800,
-                    color: s <= step ? '#ffffff' : 'rgba(255,255,255,0.4)',
+                    color: s <= step ? '#ffffff' : 'var(--ink-2)',
                     transition: 'all 0.3s ease',
-                    boxShadow: s === step ? '0 0 16px rgba(16,185,129,0.4)' : 'none',
+                    boxShadow: s === step ? '0 0 16px rgba(30, 158, 90,0.4)' : 'none',
                   }}
                 >
                   {s}
@@ -153,7 +153,7 @@ export default function CorporateOnboardingPage() {
                     style={{
                       height: 2,
                       width: 48,
-                      background: s < step ? '#10b981' : 'rgba(255,255,255,0.1)',
+                      background: s < step ? '#1E9E5A' : 'var(--cream-2)',
                       borderRadius: 2,
                       transition: 'background 0.3s ease',
                     }}
@@ -169,9 +169,9 @@ export default function CorporateOnboardingPage() {
           style={{
             borderRadius: 24,
             overflow: 'hidden',
-            background: '#0B0F17',
-            border: '1.5px solid rgba(16, 185, 129, 0.25)',
-            boxShadow: '0 40px 100px rgba(0,0,0,0.85)',
+            background: '#FFF7EC',
+            border: '1.5px solid rgba(30, 158, 90, 0.25)',
+            boxShadow: '0 40px 100px rgba(60, 30, 0, 0.18)',
           }}
         >
           {/* Header */}
@@ -179,8 +179,8 @@ export default function CorporateOnboardingPage() {
             <div
               style={{
                 padding: '28px 28px 20px',
-                background: 'linear-gradient(145deg, rgba(16,185,129,0.12) 0%, transparent 60%)',
-                borderBottom: '1px solid rgba(16,185,129,0.15)',
+                background: 'linear-gradient(145deg, rgba(30, 158, 90,0.12) 0%, transparent 60%)',
+                borderBottom: '1px solid rgba(30, 158, 90,0.15)',
               }}
             >
               <div
@@ -188,14 +188,14 @@ export default function CorporateOnboardingPage() {
                   width: 44,
                   height: 44,
                   borderRadius: 14,
-                  background: 'rgba(16,185,129,0.18)',
-                  border: '1px solid rgba(16,185,129,0.35)',
+                  background: 'rgba(30, 158, 90,0.18)',
+                  border: '1px solid rgba(30, 158, 90,0.35)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#10b981',
+                  color: '#1E9E5A',
                   marginBottom: 12,
-                  boxShadow: '0 6px 20px rgba(16,185,129,0.2)',
+                  boxShadow: '0 6px 20px rgba(30, 158, 90,0.2)',
                 }}
               >
                 {step === 1 ? <User size={22} /> : step === 2 ? <Building2 size={22} /> : <Briefcase size={22} />}
@@ -205,7 +205,7 @@ export default function CorporateOnboardingPage() {
                   fontFamily: 'var(--font-display)',
                   fontSize: 22,
                   fontWeight: 800,
-                  color: '#ffffff',
+                  color: 'var(--ink)',
                   letterSpacing: '-0.02em',
                   marginBottom: 4,
                 }}
@@ -214,7 +214,7 @@ export default function CorporateOnboardingPage() {
                 {step === 2 && 'Company Entity & Workplace Location'}
                 {step === 3 && 'Procurement Role & Sourcing Capacity'}
               </h1>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>
+              <p style={{ fontSize: 13, color: 'var(--ink-2)' }}>
                 Step {step} of 3 — Enterprise Procurement Registration
               </p>
             </div>
@@ -223,8 +223,8 @@ export default function CorporateOnboardingPage() {
               style={{
                 padding: '36px 28px 24px',
                 textAlign: 'center',
-                background: 'linear-gradient(145deg, rgba(234,179,8,0.15) 0%, transparent 70%)',
-                borderBottom: '1px solid rgba(234,179,8,0.2)',
+                background: 'linear-gradient(145deg, rgba(178, 58, 122,0.15) 0%, transparent 70%)',
+                borderBottom: '1px solid rgba(178, 58, 122,0.2)',
               }}
             >
               <div
@@ -232,22 +232,22 @@ export default function CorporateOnboardingPage() {
                   width: 56,
                   height: 56,
                   borderRadius: 18,
-                  background: 'rgba(234,179,8,0.18)',
-                  border: '1.5px solid rgba(234,179,8,0.4)',
+                  background: 'rgba(178, 58, 122,0.18)',
+                  border: '1.5px solid rgba(178, 58, 122,0.4)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#eab308',
+                  color: '#B23A7A',
                   margin: '0 auto 16px',
-                  boxShadow: '0 8px 24px rgba(234,179,8,0.25)',
+                  boxShadow: '0 8px 24px rgba(178, 58, 122,0.25)',
                 }}
               >
                 <Clock size={28} />
               </div>
-              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 800, color: '#ffffff', marginBottom: 6 }}>
+              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 800, color: 'var(--ink)', marginBottom: 6 }}>
                 Registration Submitted!
               </h1>
-              <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.65)', maxWidth: 420, margin: '0 auto' }}>
+              <p style={{ fontSize: 13.5, color: 'var(--ink-2)', maxWidth: 420, margin: '0 auto' }}>
                 Your corporate account has been registered and is now queued for Super Admin review.
               </p>
             </div>
@@ -275,7 +275,7 @@ export default function CorporateOnboardingPage() {
                     type="email"
                     disabled
                     value={currentUser?.email || ''}
-                    style={{ opacity: 0.6, cursor: 'not-allowed', background: 'rgba(255,255,255,0.03)' }}
+                    style={{ opacity: 0.6, cursor: 'not-allowed', background: 'var(--cream-2)' }}
                   />
                 </div>
                 <div>
@@ -284,12 +284,12 @@ export default function CorporateOnboardingPage() {
                     <span
                       style={{
                         padding: '11px 14px',
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1px solid rgba(255,255,255,0.12)',
+                        background: 'var(--cream-2)',
+                        border: '1px solid var(--line)',
                         borderRight: 'none',
                         borderTopLeftRadius: 10,
                         borderBottomLeftRadius: 10,
-                        color: 'rgba(255,255,255,0.8)',
+                        color: 'var(--ink)',
                         fontSize: 13,
                         fontWeight: 800,
                       }}
@@ -306,7 +306,7 @@ export default function CorporateOnboardingPage() {
                       onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     />
                   </div>
-                  <div style={{ fontSize: 11, color: isMobileValid ? '#10b981' : 'rgba(255,255,255,0.4)', marginTop: 4, fontWeight: 600 }}>
+                  <div style={{ fontSize: 11, color: isMobileValid ? '#1E9E5A' : 'var(--ink-2)', marginTop: 4, fontWeight: 600 }}>
                     {isMobileValid ? '✅ Valid 10-digit Indian mobile number' : `${mobile.length}/10 digits (Must start with 6, 7, 8, or 9)`}
                   </div>
                 </div>
@@ -447,7 +447,7 @@ export default function CorporateOnboardingPage() {
                   </div>
                 </div>
 
-                <div style={{ padding: '12px 14px', borderRadius: 12, background: 'rgba(234,179,8,0.08)', border: '1px solid rgba(234,179,8,0.2)', fontSize: 12, color: 'rgba(255,255,255,0.65)', lineHeight: 1.4 }}>
+                <div style={{ padding: '12px 14px', borderRadius: 12, background: 'rgba(178, 58, 122,0.08)', border: '1px solid rgba(178, 58, 122,0.2)', fontSize: 12, color: 'var(--ink-2)', lineHeight: 1.4 }}>
                   ℹ️ Post-submission, your company profile will be reviewed by COE Admin before full Verified Corporate status is unlocked.
                 </div>
 
@@ -460,8 +460,8 @@ export default function CorporateOnboardingPage() {
                     style={{
                       flex: 2,
                       opacity: canStep3 && !loading ? 1 : 0.4,
-                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                      boxShadow: '0 8px 24px rgba(16,185,129,0.3)',
+                      background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
+                      boxShadow: '0 8px 24px rgba(30, 158, 90,0.3)',
                     }}
                   >
                     {loading ? 'Submitting Application…' : 'Submit for Admin Verification'}
@@ -474,14 +474,14 @@ export default function CorporateOnboardingPage() {
             {/* Step 4: Verification Submitted Confirmation */}
             {step === 4 && (
               <div style={{ display: 'grid', gap: 16 }}>
-                <div style={{ padding: '16px', borderRadius: 16, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: 8 }}>
+                <div style={{ padding: '16px', borderRadius: 16, background: 'var(--cream-2)', border: '1px solid var(--line)' }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-2)', textTransform: 'uppercase', marginBottom: 8 }}>
                     Summary of Submitted Application
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>{officeCompanyName}</div>
-                  <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.65)' }}>{name} · {position} ({department})</div>
-                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>📍 {officeAddress}</div>
-                  <div style={{ fontSize: 12, color: '#eab308', marginTop: 6, fontWeight: 700 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', marginBottom: 2 }}>{officeCompanyName}</div>
+                  <div style={{ fontSize: 12.5, color: 'var(--ink-2)' }}>{name} · {position} ({department})</div>
+                  <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 4 }}>📍 {officeAddress}</div>
+                  <div style={{ fontSize: 12, color: '#B23A7A', marginTop: 6, fontWeight: 700 }}>
                     Status: ⏳ Pending Verification by Super Admin
                   </div>
                 </div>
@@ -507,7 +507,7 @@ export default function CorporateOnboardingPage() {
           </div>
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: 14, fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 600 }}>
+        <p style={{ textAlign: 'center', marginTop: 14, fontSize: 12, color: 'var(--ink-2)', fontWeight: 600 }}>
           Logged in as: {currentUser?.email}
         </p>
       </motion.div>

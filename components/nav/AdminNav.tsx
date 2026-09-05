@@ -9,12 +9,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
-import { OfficeLightSwitch } from '@/components/OfficeLightSwitch';
 import { Shield, LogOut } from 'lucide-react';
 
 export function AdminNav() {
   const router = useRouter();
-  const { logout, isNightMode } = useStore();
+  const { logout } = useStore();
 
   const handleLogout = () => {
     logout();
@@ -36,10 +35,10 @@ export function AdminNav() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: isNightMode ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.94)',
+        background: 'var(--paper)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: isNightMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+        borderBottom: '1px solid rgba(235, 223, 204, 0.9)',
       }}
     >
       {/* Left: Brand + Role Badge */}
@@ -51,15 +50,15 @@ export function AdminNav() {
                 width: 36,
                 height: 36,
                 borderRadius: 10,
-                background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)',
+                background: 'linear-gradient(135deg, #B23A7A 0%, #8E2C61 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 16,
                 fontWeight: 800,
-                color: '#0B0F17',
+                color: '#FFF7EC',
                 fontFamily: 'var(--font-display)',
-                boxShadow: '0 4px 16px rgba(234, 179, 8, 0.35)',
+                boxShadow: '0 4px 16px rgba(178, 58, 122, 0.35)',
               }}
             >
               <Shield size={18} />
@@ -70,15 +69,15 @@ export function AdminNav() {
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
                   fontSize: 17,
-                  color: isNightMode ? '#ffffff' : '#0f172a',
+                  color: '#1D1A17',
                   letterSpacing: '-0.02em',
                   display: 'block',
                   lineHeight: 1.1,
                 }}
               >
-                COE<span style={{ color: '#eab308' }}> Admin Center</span>
+                COE<span style={{ color: '#B23A7A' }}> Admin Center</span>
               </span>
-              <span style={{ fontSize: 9.5, color: '#eab308', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: 9.5, color: '#B23A7A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Master Governance & Analytics
               </span>
             </div>
@@ -88,7 +87,6 @@ export function AdminNav() {
 
       {/* Center: Office Lights */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <OfficeLightSwitch />
       </div>
 
       {/* Right: Admin Pill & Logout */}
@@ -100,12 +98,12 @@ export function AdminNav() {
             gap: 8,
             padding: '6px 12px',
             borderRadius: 12,
-            background: 'rgba(234, 179, 8, 0.12)',
-            border: '1px solid rgba(234, 179, 8, 0.3)',
+            background: 'rgba(178, 58, 122, 0.12)',
+            border: '1px solid rgba(178, 58, 122, 0.3)',
           }}
         >
-          <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#eab308', boxShadow: '0 0 6px #eab308' }} />
-          <div style={{ fontSize: 12, fontWeight: 800, color: '#eab308', textTransform: 'uppercase' }}>
+          <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#B23A7A', boxShadow: '0 0 6px #B23A7A' }} />
+          <div style={{ fontSize: 12, fontWeight: 800, color: '#B23A7A', textTransform: 'uppercase' }}>
             Super Admin
           </div>
         </div>
@@ -114,7 +112,7 @@ export function AdminNav() {
         <button
           onClick={handleLogout}
           className="btn-ghost"
-          style={{ padding: '7px 10px', fontSize: 12, color: 'rgba(239,68,68,0.8)' }}
+          style={{ padding: '7px 10px', fontSize: 12, color: 'rgba(194, 50, 28,0.8)' }}
           title="Logout of Super Admin"
         >
           <LogOut size={14} />

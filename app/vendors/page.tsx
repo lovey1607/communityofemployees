@@ -14,16 +14,16 @@ export default function VendorsPage() {
   return (
     <>
       <PublicNav />
-      <main style={{ minHeight: '100vh', paddingTop: 104, paddingBottom: 64, background: '#0B0F17', position: 'relative' }}>
+      <main style={{ minHeight: '100vh', paddingTop: 104, paddingBottom: 64, background: '#FFF7EC', position: 'relative' }}>
         <BlurredCyberHubBackground />
         <div style={{ position: 'relative', zIndex: 10, maxWidth: 1180, margin: '0 auto', padding: '0 24px' }}>
-          <p style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '.16em', color: '#f97316', textTransform: 'uppercase' }}>
+          <p style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '.16em', color: '#FF6B2C', textTransform: 'uppercase' }}>
             Currently live in Gurgaon
           </p>
-          <h1 style={{ margin: '0 0 8px', fontSize: 30, fontWeight: 800, color: '#fff', lineHeight: 1.2 }}>
+          <h1 style={{ margin: '0 0 8px', fontSize: 30, fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2 }}>
             Who&apos;s near your office
           </h1>
-          <p style={{ margin: '0 0 26px', fontSize: 14.5, color: 'rgba(255,255,255,0.6)', maxWidth: 620, lineHeight: 1.6 }}>
+          <p style={{ margin: '0 0 26px', fontSize: 14.5, color: 'var(--ink-2)', maxWidth: 620, lineHeight: 1.6 }}>
             Every vendor here has been through admin review. Turf near Cyber City, banquets off Golf
             Course Road, caterers who actually deliver to Udyog Vihar by 1pm.
           </p>

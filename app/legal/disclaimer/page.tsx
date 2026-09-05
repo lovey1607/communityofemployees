@@ -12,7 +12,7 @@ import { PreviewFooter } from '@/components/venture/PreviewFooter';
 
 export default function LegalDisclaimerPage() {
   return (
-    <div style={{ background: '#0B0F17', color: '#ffffff', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: '#FFF7EC', color: 'var(--ink)', minHeight: '100vh', position: 'relative' }}>
       <BlurredCyberHubBackground />
 
       {/* Top Header */}
@@ -22,19 +22,19 @@ export default function LegalDisclaimerPage() {
           top: 0,
           zIndex: 50,
           padding: '16px 24px',
-          background: 'rgba(5, 7, 14, 0.92)',
+          background: 'rgba(29, 26, 23, 0.45)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: '1px solid var(--line)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#34d399', fontSize: 13, fontWeight: 700 }}>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#137A43', fontSize: 13, fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Back to Marketplace Homepage</span>
         </Link>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>
+        <span style={{ fontSize: 12, color: 'var(--ink-2)', fontWeight: 600 }}>
           Community of Employees (COE) Legal Compliance
         </span>
       </header>
@@ -42,24 +42,24 @@ export default function LegalDisclaimerPage() {
       {/* Main Content Container */}
       <main style={{ maxWidth: 960, margin: '0 auto', padding: '60px 24px 100px', position: 'relative', zIndex: 10 }}>
         {/* Title */}
-        <div style={{ marginBottom: 40, borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 24 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 999, background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
+        <div style={{ marginBottom: 40, borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 999, background: 'rgba(30, 158, 90, 0.15)', color: '#137A43', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
             <ShieldCheck size={14} /> STATUTORY INTERMEDIARY SAFE HARBOR NOTICE
           </div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', marginBottom: 10 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', marginBottom: 10 }}>
             Platform Disclaimer & Intermediary Policy
           </h1>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
+          <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>
             Effective Date: 1st January 2026 · Governed under the Laws of the Republic of India
           </p>
         </div>
 
         {/* Legal Text Body */}
-        <div style={{ display: 'grid', gap: 32, fontSize: 14.5, color: 'rgba(255,255,255,0.8)', lineHeight: 1.75 }}>
+        <div style={{ display: 'grid', gap: 32, fontSize: 14.5, color: 'var(--ink)', lineHeight: 1.75 }}>
           {/* Section 1 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#10b981' }}>1.</span> Electronic Intermediary Status (Section 79, IT Act, 2000)
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#137A43' }}>1.</span> Electronic Intermediary Status (Section 79, IT Act, 2000)
             </h2>
             <p>
               Community of Employees (&quot;COE&quot;, &quot;Platform&quot;) operates solely as a technology and communication intermediary as defined under <strong>Section 2(1)(w)</strong> of the Information Technology Act, 2000 (as amended) and complies strictly with the <strong>Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021</strong>.
@@ -70,9 +70,9 @@ export default function LegalDisclaimerPage() {
           </section>
 
           {/* Section 2 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#f97316' }}>2.</span> No Ownership, Operation, or Principal-Agent Relationship
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#FF6B2C' }}>2.</span> No Ownership, Operation, or Principal-Agent Relationship
             </h2>
             <p>
               COE is <strong>not</strong> an event management company, venue operator, real estate broker, caterer, sports organizer, or hospitality provider. Every venue, sports turf, or banquet space listed on the Platform is owned, operated, and maintained by an independent statutory business entity (Pvt Ltd, Partnership, Proprietorship, or LLP).
@@ -83,9 +83,9 @@ export default function LegalDisclaimerPage() {
           </section>
 
           {/* Section 3 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#0ea5e9' }}>3.</span> Direct B2B Contracting & Invoicing
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#2E6BFF' }}>3.</span> Direct B2B Contracting & Invoicing
             </h2>
             <p>
               All contracts, bookings, pricing terms, service level agreements (SLAs), and event execution parameters formed as an outcome of a reverse auction are legally binding contracts entered into <strong>directly between the Corporate Buyer and the respective Vendor Entity</strong> under the Indian Contract Act, 1872.
@@ -96,9 +96,9 @@ export default function LegalDisclaimerPage() {
           </section>
 
           {/* Section 4 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#eab308' }}>4.</span> Limitation of Liability
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#B23A7A' }}>4.</span> Limitation of Liability
             </h2>
             <p>
               To the maximum extent permitted under applicable Indian law, COE, its founders, directors, employees, and affiliates shall not be liable for:
@@ -112,14 +112,14 @@ export default function LegalDisclaimerPage() {
           </section>
 
           {/* Section 5 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ color: '#a855f7' }}>5.</span> Grievance Redressal Officer (Rule 3(2) IT Rules, 2021)
             </h2>
             <p>
               In accordance with the Information Technology Act, 2000 and the Rules made thereunder, the name and contact details of the Grievance Officer are provided below:
             </p>
-            <div style={{ marginTop: 12, padding: '16px', borderRadius: 12, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ marginTop: 12, padding: '16px', borderRadius: 12, background: 'var(--cream-2)', border: '1px solid var(--line)' }}>
               <div><strong>Grievance Officer:</strong> Legal & Compliance Desk</div>
               <div style={{ marginTop: 4 }}><strong>Entity:</strong> Community of Employees (COE)</div>
               <div style={{ marginTop: 4 }}><strong>Address:</strong> DLF Cyber City, Building 10B, Phase II, Gurugram, Haryana 122002</div>

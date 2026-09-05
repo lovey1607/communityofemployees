@@ -9,13 +9,12 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
-import { OfficeLightSwitch } from '@/components/OfficeLightSwitch';
 import { Building2, Plus, LogOut, ShieldCheck, User } from 'lucide-react';
 
 export function CorporateNav() {
   const router = useRouter();
   const pathname = usePathname();
-  const { currentCorporateProfile, currentUser, openModal, logout, isNightMode, theme } = useStore();
+  const { currentCorporateProfile, currentUser, openModal, logout, theme } = useStore();
 
   const handleLogout = () => {
     logout();
@@ -40,10 +39,10 @@ export function CorporateNav() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: isNightMode ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.94)',
+        background: 'var(--paper)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: isNightMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+        borderBottom: '1px solid rgba(235, 223, 204, 0.9)',
       }}
     >
       {/* Left: Brand + Role Badge + Home Link */}
@@ -55,7 +54,7 @@ export function CorporateNav() {
                 width: 36,
                 height: 36,
                 borderRadius: 10,
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -63,7 +62,7 @@ export function CorporateNav() {
                 fontWeight: 800,
                 color: '#ffffff',
                 fontFamily: 'var(--font-display)',
-                boxShadow: '0 4px 16px rgba(16, 185, 129, 0.35)',
+                boxShadow: '0 4px 16px rgba(30, 158, 90, 0.35)',
               }}
             >
               C
@@ -74,15 +73,15 @@ export function CorporateNav() {
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
                   fontSize: 17,
-                  color: isNightMode ? '#ffffff' : '#0f172a',
+                  color: '#1D1A17',
                   letterSpacing: '-0.02em',
                   display: 'block',
                   lineHeight: 1.1,
                 }}
               >
-                COE<span style={{ color: '#10b981' }}> Corporate</span>
+                COE<span style={{ color: '#1E9E5A' }}> Corporate</span>
               </span>
-              <span style={{ fontSize: 9.5, color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: 9.5, color: '#1E9E5A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Demand & Procurement Hub
               </span>
             </div>
@@ -94,9 +93,9 @@ export function CorporateNav() {
           style={{
             padding: '5px 12px',
             borderRadius: 8,
-            border: isNightMode ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.1)',
-            background: isNightMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
-            color: isNightMode ? 'rgba(255, 255, 255, 0.8)' : '#334155',
+            border: '1px solid rgba(235, 223, 204, 0.95)',
+            background: 'rgba(235, 223, 204, 0.9)',
+            color: '#4A443D',
             fontSize: 12,
             fontWeight: 700,
             textDecoration: 'none',
@@ -114,7 +113,6 @@ export function CorporateNav() {
 
       {/* Center: Office Lights */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <OfficeLightSwitch />
       </div>
 
       {/* Right: Quick Actions, Profile & Logout */}
@@ -137,13 +135,13 @@ export function CorporateNav() {
             gap: 8,
             padding: '6px 12px',
             borderRadius: 12,
-            background: isNightMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+            background: 'rgba(235, 223, 204, 0.9)',
             border: `1px solid ${
               currentCorporateProfile?.status === 'approved'
-                ? 'rgba(16, 185, 129, 0.3)'
+                ? 'rgba(30, 158, 90, 0.3)'
                 : currentCorporateProfile?.status === 'rejected'
-                ? 'rgba(239, 68, 68, 0.3)'
-                : 'rgba(234, 179, 8, 0.3)'
+                ? 'rgba(194, 50, 28, 0.3)'
+                : 'rgba(178, 58, 122, 0.3)'
             }`,
             textDecoration: 'none',
             cursor: 'pointer',
@@ -158,34 +156,34 @@ export function CorporateNav() {
               borderRadius: '50%',
               background:
                 currentCorporateProfile?.status === 'approved'
-                  ? '#10b981'
+                  ? '#1E9E5A'
                   : currentCorporateProfile?.status === 'rejected'
-                  ? '#ef4444'
-                  : '#eab308',
+                  ? '#C2321C'
+                  : '#B23A7A',
               boxShadow: `0 0 6px ${
                 currentCorporateProfile?.status === 'approved'
-                  ? '#10b981'
+                  ? '#1E9E5A'
                   : currentCorporateProfile?.status === 'rejected'
-                  ? '#ef4444'
-                  : '#eab308'
+                  ? '#C2321C'
+                  : '#B23A7A'
               }`,
             }}
           />
           <div style={{ textAlign: 'left' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a', lineHeight: 1.1 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#1D1A17', lineHeight: 1.1 }}>
               {company}
             </div>
-            <div style={{ fontSize: 10, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
+            <div style={{ fontSize: 10, color: '#7A7169' }}>
               {name} ·{' '}
               <span
                 style={{
                   fontWeight: 700,
                   color:
                     currentCorporateProfile?.status === 'approved'
-                      ? '#10b981'
+                      ? '#1E9E5A'
                       : currentCorporateProfile?.status === 'rejected'
-                      ? '#ef4444'
-                      : '#eab308',
+                      ? '#C2321C'
+                      : '#B23A7A',
                 }}
               >
                 {currentCorporateProfile?.status === 'approved'
@@ -202,7 +200,7 @@ export function CorporateNav() {
         <button
           onClick={handleLogout}
           className="btn-ghost"
-          style={{ padding: '7px 10px', fontSize: 12, color: 'rgba(239,68,68,0.8)' }}
+          style={{ padding: '7px 10px', fontSize: 12, color: 'rgba(194, 50, 28,0.8)' }}
           title="Logout of Corporate Account"
         >
           <LogOut size={14} />

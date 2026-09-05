@@ -215,7 +215,11 @@ export const useStore = create<COEStore>()(
       theme: DEFAULT_THEME,
       modalOpen: false,
       gravitySettled: false,
-      isNightMode: true,
+      // The product is light-only now: the cream design has no dark
+      // counterpart, and a half-designed dark mode is worse than none.
+      // The flag stays so the ~260 `isNightMode ? dark : light` branches
+      // across the app keep resolving — always to the light one.
+      isNightMode: false,
 
       currentUser: null,
       currentCorporateProfile: null,
@@ -234,8 +238,8 @@ export const useStore = create<COEStore>()(
       toasts: [],
 
       // ─── Day/Night ──────────────────────────────────────────
-      toggleNightMode: () => set((state) => ({ isNightMode: !state.isNightMode })),
-      setNightMode: (isNight) => set({ isNightMode: isNight }),
+      toggleNightMode: () => undefined,
+      setNightMode: () => undefined,
       setHoveredCategory: (cat) => set({ hoveredCategory: cat }),
 
       selectCategory: (category) =>
@@ -742,7 +746,7 @@ export const useStore = create<COEStore>()(
       name: 'coe-ui-preferences-v1',
       // Only cosmetic preferences survive a reload. Identity and business data
       // are fetched from the server every time.
-      partialize: (state) => ({ isNightMode: state.isNightMode }),
+      partialize: () => ({}),
     }
   )
 );

@@ -12,7 +12,7 @@ import { PreviewFooter } from '@/components/venture/PreviewFooter';
 
 export default function PrivacyPolicyPage() {
   return (
-    <div style={{ background: '#0B0F17', color: '#ffffff', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: '#FFF7EC', color: 'var(--ink)', minHeight: '100vh', position: 'relative' }}>
       <BlurredCyberHubBackground />
 
       {/* Top Header */}
@@ -22,19 +22,19 @@ export default function PrivacyPolicyPage() {
           top: 0,
           zIndex: 50,
           padding: '16px 24px',
-          background: 'rgba(5, 7, 14, 0.92)',
+          background: 'rgba(29, 26, 23, 0.45)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: '1px solid var(--line)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#34d399', fontSize: 13, fontWeight: 700 }}>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#137A43', fontSize: 13, fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Back to Marketplace Homepage</span>
         </Link>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>
+        <span style={{ fontSize: 12, color: 'var(--ink-2)', fontWeight: 600 }}>
           Community of Employees (COE) Data Protection
         </span>
       </header>
@@ -42,24 +42,24 @@ export default function PrivacyPolicyPage() {
       {/* Main Content Container */}
       <main style={{ maxWidth: 960, margin: '0 auto', padding: '60px 24px 100px', position: 'relative', zIndex: 10 }}>
         {/* Title */}
-        <div style={{ marginBottom: 40, borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 24 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 999, background: 'rgba(14, 165, 233, 0.15)', color: '#0ea5e9', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
+        <div style={{ marginBottom: 40, borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 999, background: 'rgba(46, 107, 255, 0.15)', color: '#2E6BFF', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 12 }}>
             <Lock size={14} /> DPDP ACT, 2023 COMPLIANT PRIVACY NOTICE
           </div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', marginBottom: 10 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', marginBottom: 10 }}>
             Enterprise Privacy & Data Protection Policy
           </h1>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
+          <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>
             Effective Date: 1st January 2026 · Compliant with Digital Personal Data Protection (DPDP) Act, 2023
           </p>
         </div>
 
         {/* Legal Text Body */}
-        <div style={{ display: 'grid', gap: 28, fontSize: 14.5, color: 'rgba(255,255,255,0.8)', lineHeight: 1.75 }}>
+        <div style={{ display: 'grid', gap: 28, fontSize: 14.5, color: 'var(--ink)', lineHeight: 1.75 }}>
           {/* Section 1 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#0ea5e9' }}>1.</span> Information We Collect
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#2E6BFF' }}>1.</span> Information We Collect
             </h2>
             <p>
               Community of Employees (&quot;COE&quot;) collects only necessary corporate procurement information to facilitate reverse auctions:
@@ -72,9 +72,9 @@ export default function PrivacyPolicyPage() {
           </section>
 
           {/* Section 2 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#10b981' }}>2.</span> Purpose Limitation & Processing
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#137A43' }}>2.</span> Purpose Limitation & Processing
             </h2>
             <p>
               Under Section 6 of the DPDP Act, 2023, data is processed strictly for the specified purpose of enabling B2B reverse auctions, vendor statutory KYC validation, and auction contract facilitation. We do not sell, rent, or trade corporate or vendor data to third-party advertisers.
@@ -82,9 +82,9 @@ export default function PrivacyPolicyPage() {
           </section>
 
           {/* Section 3 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#f97316' }}>3.</span> How Bids Are Kept Confidential
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#FF6B2C' }}>3.</span> How Bids Are Kept Confidential
             </h2>
             <p>
               While a requirement is open for bids, a vendor can see the requirement and their own
@@ -101,9 +101,9 @@ export default function PrivacyPolicyPage() {
           </section>
 
           {/* Section 4 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#38bdf8' }}>4.</span> Cookies, Sessions and Location
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#2E6BFF' }}>4.</span> Cookies, Sessions and Location
             </h2>
             <ul style={{ paddingLeft: 20, display: 'grid', gap: 8 }}>
               <li>
@@ -127,9 +127,9 @@ export default function PrivacyPolicyPage() {
           </section>
 
           {/* Section 5 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#fbbf24' }}>5.</span> How Long We Keep Things
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ color: '#A66A00' }}>5.</span> How Long We Keep Things
             </h2>
             <ul style={{ paddingLeft: 20, display: 'grid', gap: 8 }}>
               <li><strong>Account and profile:</strong> for as long as the account is open.</li>
@@ -145,8 +145,8 @@ export default function PrivacyPolicyPage() {
           </section>
 
           {/* Section 6 */}
-          <section style={{ padding: '24px', borderRadius: 16, background: 'rgba(11,15,23,0.85)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <section style={{ padding: '24px', borderRadius: 16, background: 'var(--paper)', border: '1px solid var(--line)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ color: '#a855f7' }}>6.</span> Your Rights, and Getting In Touch
             </h2>
             <p>

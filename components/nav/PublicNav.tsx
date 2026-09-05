@@ -10,7 +10,6 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
-import { OfficeLightSwitch } from '@/components/OfficeLightSwitch';
 import { Building2, Store } from 'lucide-react';
 
 // The inline demo login modal that used to live here (autofilled shared
@@ -19,7 +18,7 @@ import { Building2, Store } from 'lucide-react';
 
 // ─── Public Navbar Component ────────────────────────────────
 export function PublicNav() {
-  const { isNightMode, openAuthModal } = useStore();
+  const { openAuthModal } = useStore();
 
   return (
     <>
@@ -37,12 +36,10 @@ export function PublicNav() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: isNightMode ? 'rgba(11, 15, 23, 0.85)' : 'rgba(255, 255, 255, 0.9)',
+          background: 'var(--paper)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          borderBottom: isNightMode
-            ? '1px solid rgba(255, 255, 255, 0.08)'
-            : '1px solid rgba(0, 0, 0, 0.07)',
+          borderBottom: '1px solid rgba(235, 223, 204, 0.9)',
         }}
       >
         {/* Left: Logo + Brand */}
@@ -53,7 +50,7 @@ export function PublicNav() {
                 width: 38,
                 height: 38,
                 borderRadius: 11,
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: 'linear-gradient(135deg, #1E9E5A 0%, #12854A 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -61,7 +58,7 @@ export function PublicNav() {
                 fontWeight: 800,
                 color: '#ffffff',
                 fontFamily: 'var(--font-display)',
-                boxShadow: '0 4px 16px rgba(16,185,129,0.4)',
+                boxShadow: '0 4px 16px rgba(30, 158, 90,0.4)',
                 flexShrink: 0,
               }}
             >
@@ -73,18 +70,18 @@ export function PublicNav() {
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
                   fontSize: 18,
-                  color: isNightMode ? '#ffffff' : '#0f172a',
+                  color: '#1D1A17',
                   letterSpacing: '-0.02em',
                   display: 'block',
                   lineHeight: 1.1,
                 }}
               >
-                COE<span style={{ color: '#10b981' }}> Portal</span>
+                COE<span style={{ color: '#1E9E5A' }}> Portal</span>
               </span>
               <span
                 style={{
                   fontSize: 9.5,
-                  color: isNightMode ? 'rgba(255,255,255,0.45)' : '#94a3b8',
+                  color: '#7A7169',
                   fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
@@ -97,7 +94,6 @@ export function PublicNav() {
         </Link>
 
         {/* Center: Office Lights Toggle */}
-        <OfficeLightSwitch />
 
         {/* Right: Two Login Buttons (no admin) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -111,9 +107,9 @@ export function PublicNav() {
               gap: 7,
               padding: '8px 18px',
               borderRadius: 12,
-              background: 'rgba(16, 185, 129, 0.12)',
-              border: '1.5px solid rgba(16, 185, 129, 0.45)',
-              color: '#10b981',
+              background: 'rgba(30, 158, 90, 0.12)',
+              border: '1.5px solid rgba(30, 158, 90, 0.45)',
+              color: '#1E9E5A',
               fontSize: 13,
               fontWeight: 700,
               cursor: 'pointer',
@@ -121,11 +117,11 @@ export function PublicNav() {
               fontFamily: 'var(--font-body)',
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(16, 185, 129, 0.22)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 16px rgba(16,185,129,0.2)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(30, 158, 90, 0.22)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 16px rgba(30, 158, 90,0.2)';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(16, 185, 129, 0.12)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(30, 158, 90, 0.12)';
               (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
             }}
           >
@@ -143,9 +139,9 @@ export function PublicNav() {
               gap: 7,
               padding: '8px 18px',
               borderRadius: 12,
-              background: 'rgba(249, 115, 22, 0.12)',
-              border: '1.5px solid rgba(249, 115, 22, 0.45)',
-              color: '#f97316',
+              background: 'rgba(255, 107, 44, 0.12)',
+              border: '1.5px solid rgba(255, 107, 44, 0.45)',
+              color: '#FF6B2C',
               fontSize: 13,
               fontWeight: 700,
               cursor: 'pointer',
@@ -153,11 +149,11 @@ export function PublicNav() {
               fontFamily: 'var(--font-body)',
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(249, 115, 22, 0.22)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 16px rgba(249,115,22,0.2)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255, 107, 44, 0.22)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 16px rgba(255, 107, 44,0.2)';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(249, 115, 22, 0.12)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255, 107, 44, 0.12)';
               (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
             }}
           >

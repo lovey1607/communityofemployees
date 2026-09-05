@@ -37,34 +37,34 @@ function ResetPasswordInner() {
 
   const field: React.CSSProperties = {
     width: '100%', padding: '12px 14px', borderRadius: 11, marginBottom: 12,
-    border: '1px solid rgba(255,255,255,0.14)', background: 'rgba(255,255,255,0.04)',
-    color: '#e8ecf5', fontSize: 14,
+    border: '1px solid var(--line)', background: 'var(--cream-2)',
+    color: 'var(--ink)', fontSize: 14,
   };
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0B0F17', padding: 24 }}>
+    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#FFF7EC', padding: 24 }}>
       <BlurredCyberHubBackground />
       <div
         style={{
           position: 'relative', zIndex: 10, width: '100%', maxWidth: 420,
-          background: 'rgba(11,15,23,0.92)', border: '1px solid rgba(255,255,255,0.12)',
+          background: 'var(--paper)', border: '1px solid var(--line)',
           borderRadius: 22, padding: 32,
         }}
       >
-        <p style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '.16em', color: '#f97316', textTransform: 'uppercase' }}>
+        <p style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '.16em', color: '#FF6B2C', textTransform: 'uppercase' }}>
           Community of Employees
         </p>
-        <h1 style={{ margin: '0 0 16px', fontSize: 21, fontWeight: 700, color: '#fff' }}>Set a new password</h1>
+        <h1 style={{ margin: '0 0 16px', fontSize: 21, fontWeight: 700, color: 'var(--ink)' }}>Set a new password</h1>
 
         {done ? (
           <>
-            <p style={{ fontSize: 14, color: '#34d399', lineHeight: 1.6 }}>
+            <p style={{ fontSize: 14, color: '#137A43', lineHeight: 1.6 }}>
               Password updated. Every existing session has been signed out. Taking you back…
             </p>
-            <Link href="/" style={{ color: '#f97316', fontSize: 14 }}>Back to COE</Link>
+            <Link href="/" style={{ color: '#FF6B2C', fontSize: 14 }}>Back to COE</Link>
           </>
         ) : !token ? (
-          <p style={{ fontSize: 14, color: '#fb7185' }}>That link is missing its reset code.</p>
+          <p style={{ fontSize: 14, color: '#B3261E' }}>That link is missing its reset code.</p>
         ) : (
           <form onSubmit={submit}>
             <input
@@ -75,15 +75,15 @@ function ResetPasswordInner() {
               type="password" required autoComplete="new-password" value={confirm}
               onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm new password" style={field}
             />
-            <p style={{ margin: '0 0 14px', fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>
+            <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--ink-2)' }}>
               10+ characters, with a number or symbol somewhere in there.
             </p>
-            {error && <p style={{ margin: '0 0 12px', fontSize: 13, color: '#fb7185' }}>{error}</p>}
+            {error && <p style={{ margin: '0 0 12px', fontSize: 13, color: '#B3261E' }}>{error}</p>}
             <button
               type="submit" disabled={busy}
               style={{
                 width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-                background: '#f97316', color: '#0B0F17', fontWeight: 700, fontSize: 14,
+                background: '#FF6B2C', color: '#FFF7EC', fontWeight: 700, fontSize: 14,
                 cursor: busy ? 'wait' : 'pointer', opacity: busy ? 0.6 : 1,
               }}
             >

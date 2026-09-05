@@ -174,20 +174,20 @@ export function GooglePlacesAutocomplete({
               display: 'block',
               fontSize: 11.5,
               fontWeight: 700,
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: 'var(--ink-2)',
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
             }}
           >
-            {label} {required && <span style={{ color: '#ef4444' }}>*</span>}
+            {label} {required && <span style={{ color: '#C2321C' }}>*</span>}
           </label>
 
           <span
             style={{
               fontSize: 10.5,
-              color: isApiKeyActive ? '#10b981' : '#fbbf24',
-              background: isApiKeyActive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(234, 179, 8, 0.14)',
-              border: isApiKeyActive ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(234, 179, 8, 0.35)',
+              color: isApiKeyActive ? '#1E9E5A' : '#A66A00',
+              background: isApiKeyActive ? 'rgba(30, 158, 90, 0.12)' : 'rgba(178, 58, 122, 0.14)',
+              border: isApiKeyActive ? '1px solid rgba(30, 158, 90, 0.3)' : '1px solid rgba(178, 58, 122, 0.35)',
               padding: '2px 8px',
               borderRadius: 999,
               cursor: 'pointer',
@@ -205,12 +205,12 @@ export function GooglePlacesAutocomplete({
           >
             {isApiKeyActive ? (
               <>
-                <CheckCircle2 size={11} color="#10b981" />
+                <CheckCircle2 size={11} color="#1E9E5A" />
                 <span>Google Places connected</span>
               </>
             ) : (
               <>
-                <Key size={11} color="#fbbf24" />
+                <Key size={11} color="#A66A00" />
                 <span>Built-in Gurugram directory</span>
               </>
             )}
@@ -226,7 +226,7 @@ export function GooglePlacesAutocomplete({
             left: 14,
             top: '50%',
             transform: 'translateY(-50%)',
-            color: 'rgba(255, 255, 255, 0.45)',
+            color: 'var(--ink-2)',
             pointerEvents: 'none',
             display: 'flex',
             alignItems: 'center',
@@ -241,7 +241,7 @@ export function GooglePlacesAutocomplete({
           style={{
             paddingLeft: 38,
             paddingRight: inputValue ? 38 : 14,
-            borderColor: isOpen && suggestions.length > 0 ? 'rgba(249, 115, 22, 0.6)' : undefined,
+            borderColor: isOpen && suggestions.length > 0 ? 'rgba(255, 107, 44, 0.6)' : undefined,
           }}
           placeholder={placeholder}
           value={inputValue}
@@ -269,7 +269,7 @@ export function GooglePlacesAutocomplete({
               right: 12,
               top: '50%',
               transform: 'translateY(-50%)',
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: 'var(--cream-2)',
               border: 'none',
               borderRadius: '50%',
               width: 20,
@@ -277,7 +277,7 @@ export function GooglePlacesAutocomplete({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'rgba(255, 255, 255, 0.6)',
+              color: 'var(--ink-2)',
               cursor: 'pointer',
             }}
           >
@@ -300,10 +300,10 @@ export function GooglePlacesAutocomplete({
               left: 0,
               right: 0,
               zIndex: 200,
-              background: '#0B0F17',
-              border: '1.5px solid rgba(249, 115, 22, 0.4)',
+              background: '#FFF7EC',
+              border: '1.5px solid rgba(255, 107, 44, 0.4)',
               borderRadius: 16,
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.9), 0 0 25px rgba(249, 115, 22, 0.15)',
+              boxShadow: '0 20px 60px rgba(60, 30, 0, 0.18), 0 0 25px rgba(255, 107, 44, 0.15)',
               overflow: 'hidden',
               maxHeight: 290,
               overflowY: 'auto',
@@ -312,16 +312,16 @@ export function GooglePlacesAutocomplete({
             <div
               style={{
                 padding: '8px 14px',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                borderBottom: '1px solid var(--line)',
                 fontSize: 10.5,
                 fontWeight: 700,
-                color: 'rgba(255, 255, 255, 0.45)',
+                color: 'var(--ink-2)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--cream-2)',
               }}
             >
               <span>Verified Google Places in India</span>
@@ -334,7 +334,7 @@ export function GooglePlacesAutocomplete({
                 onClick={() => handleSelectSuggestion(place)}
                 style={{
                   padding: '12px 14px',
-                  borderBottom: idx < suggestions.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+                  borderBottom: idx < suggestions.length - 1 ? '1px solid var(--line)' : 'none',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'flex-start',
@@ -342,7 +342,7 @@ export function GooglePlacesAutocomplete({
                   transition: 'background 0.15s ease',
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.background = 'rgba(249, 115, 22, 0.12)';
+                  (e.currentTarget as HTMLDivElement).style.background = 'rgba(255, 107, 44, 0.12)';
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLDivElement).style.background = 'transparent';
@@ -353,12 +353,12 @@ export function GooglePlacesAutocomplete({
                     width: 32,
                     height: 32,
                     borderRadius: 10,
-                    background: 'rgba(249, 115, 22, 0.15)',
-                    border: '1px solid rgba(249, 115, 22, 0.3)',
+                    background: 'rgba(255, 107, 44, 0.15)',
+                    border: '1px solid rgba(255, 107, 44, 0.3)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#f97316',
+                    color: '#FF6B2C',
                     flexShrink: 0,
                     marginTop: 2,
                   }}
@@ -368,7 +368,7 @@ export function GooglePlacesAutocomplete({
 
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 13.5, fontWeight: 800, color: '#ffffff' }}>
+                    <span style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--ink)' }}>
                       {place.name}
                     </span>
 
@@ -378,8 +378,8 @@ export function GooglePlacesAutocomplete({
                           fontSize: 9.5,
                           padding: '1px 6px',
                           borderRadius: 4,
-                          background: 'rgba(255, 255, 255, 0.08)',
-                          color: 'rgba(255, 255, 255, 0.65)',
+                          background: 'var(--cream-2)',
+                          color: 'var(--ink-2)',
                           fontWeight: 600,
                         }}
                       >
@@ -394,17 +394,17 @@ export function GooglePlacesAutocomplete({
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: 3,
-                          color: '#fbbf24',
+                          color: '#A66A00',
                           fontWeight: 700,
-                          background: 'rgba(234, 179, 8, 0.12)',
+                          background: 'rgba(178, 58, 122, 0.12)',
                           padding: '1px 6px',
                           borderRadius: 4,
                         }}
                       >
-                        <Star size={10} fill="#fbbf24" color="#fbbf24" />
+                        <Star size={10} fill="#A66A00" color="#A66A00" />
                         {place.rating.toFixed(1)}
                         {place.user_ratings_total !== undefined && place.user_ratings_total > 0 && (
-                          <span style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: 9.5, fontWeight: 500 }}>
+                          <span style={{ color: 'var(--ink-2)', fontSize: 9.5, fontWeight: 500 }}>
                             ({place.user_ratings_total.toLocaleString()} reviews)
                           </span>
                         )}
@@ -412,12 +412,12 @@ export function GooglePlacesAutocomplete({
                     )}
                   </div>
 
-                  <div style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.6)', lineHeight: 1.35 }}>
+                  <div style={{ fontSize: 12, color: 'var(--ink-2)', lineHeight: 1.35 }}>
                     {place.formatted_address}
                   </div>
                 </div>
 
-                <ArrowRight size={14} color="#f97316" style={{ marginTop: 8, opacity: 0.6, flexShrink: 0 }} />
+                <ArrowRight size={14} color="#FF6B2C" style={{ marginTop: 8, opacity: 0.6, flexShrink: 0 }} />
               </div>
             ))}
           </motion.div>
@@ -432,9 +432,9 @@ export function GooglePlacesAutocomplete({
             id="auto-sync-name"
             checked={autoSyncName}
             onChange={(e) => setAutoSyncName(e.target.checked)}
-            style={{ accentColor: '#f97316', cursor: 'pointer' }}
+            style={{ accentColor: '#FF6B2C', cursor: 'pointer' }}
           />
-          <label htmlFor="auto-sync-name" style={{ fontSize: 11.5, color: 'rgba(255, 255, 255, 0.6)', cursor: 'pointer' }}>
+          <label htmlFor="auto-sync-name" style={{ fontSize: 11.5, color: 'var(--ink-2)', cursor: 'pointer' }}>
             {autoSyncNameLabel}
           </label>
         </div>
@@ -449,8 +449,8 @@ export function GooglePlacesAutocomplete({
             marginTop: 10,
             padding: '14px 18px',
             borderRadius: 16,
-            background: 'rgba(16, 185, 129, 0.08)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
+            background: 'rgba(30, 158, 90, 0.08)',
+            border: '1px solid rgba(30, 158, 90, 0.3)',
             display: 'flex',
             alignItems: 'flex-start',
             gap: 12,
@@ -461,12 +461,12 @@ export function GooglePlacesAutocomplete({
               width: 34,
               height: 34,
               borderRadius: 10,
-              background: 'rgba(16, 185, 129, 0.2)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
+              background: 'rgba(30, 158, 90, 0.2)',
+              border: '1px solid rgba(30, 158, 90, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#10b981',
+              color: '#1E9E5A',
               flexShrink: 0,
               marginTop: 2,
             }}
@@ -476,7 +476,7 @@ export function GooglePlacesAutocomplete({
 
           <div style={{ flex: 1, fontSize: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
-              <span style={{ fontWeight: 800, color: '#ffffff', fontSize: 14 }}>
+              <span style={{ fontWeight: 800, color: 'var(--ink)', fontSize: 14 }}>
                 {selectedPlace.name || 'Verified Google Location'}
               </span>
 
@@ -487,18 +487,18 @@ export function GooglePlacesAutocomplete({
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: 3,
-                    color: '#fbbf24',
+                    color: '#A66A00',
                     fontWeight: 700,
-                    background: 'rgba(234, 179, 8, 0.15)',
+                    background: 'rgba(178, 58, 122, 0.15)',
                     padding: '2px 8px',
                     borderRadius: 999,
-                    border: '1px solid rgba(234, 179, 8, 0.3)',
+                    border: '1px solid rgba(178, 58, 122, 0.3)',
                   }}
                 >
-                  <Star size={11} fill="#fbbf24" color="#fbbf24" />
+                  <Star size={11} fill="#A66A00" color="#A66A00" />
                   {selectedPlace.rating.toFixed(1)} / 5.0
                   {selectedPlace.user_ratings_total !== undefined && selectedPlace.user_ratings_total > 0 && (
-                    <span style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 10 }}>
+                    <span style={{ color: 'var(--ink-2)', fontSize: 10 }}>
                       ({selectedPlace.user_ratings_total.toLocaleString()} Verified Google Reviews)
                     </span>
                   )}
@@ -506,7 +506,7 @@ export function GooglePlacesAutocomplete({
               )}
             </div>
 
-            <div style={{ color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.45 }}>
+            <div style={{ color: 'var(--ink-2)', lineHeight: 1.45 }}>
               {selectedPlace.formatted_address || inputValue}
             </div>
 
@@ -518,12 +518,12 @@ export function GooglePlacesAutocomplete({
                   gap: 12,
                   marginTop: 6,
                   fontSize: 10.5,
-                  color: 'rgba(255, 255, 255, 0.5)',
+                  color: 'var(--ink-2)',
                   flexWrap: 'wrap',
                 }}
               >
                 <span>
-                  Place ID: <strong style={{ color: '#34d399', fontFamily: 'monospace' }}>{selectedPlace.place_id}</strong>
+                  Place ID: <strong style={{ color: '#137A43', fontFamily: 'monospace' }}>{selectedPlace.place_id}</strong>
                 </span>
                 {selectedPlace.lat && selectedPlace.lng && (
                   <span>

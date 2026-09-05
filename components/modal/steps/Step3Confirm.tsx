@@ -65,7 +65,7 @@ export function Step3Confirm({
 
   useEffect(() => {
     if (submitted) {
-      const colors = [theme.primary, theme.accent, '#ffffff', '#fbbf24', '#f472b6', '#38bdf8'];
+      const colors = [theme.primary, theme.accent, '#ffffff', '#A66A00', '#f472b6', '#6D97FF'];
       setConfetti(
         Array.from({ length: 50 }, (_, i) => ({
           color: colors[i % colors.length],
@@ -125,14 +125,14 @@ export function Step3Confirm({
                 fontFamily: 'var(--font-display)',
                 fontSize: 24,
                 fontWeight: 800,
-                color: 'white',
+                color: 'var(--ink)',
                 marginBottom: 10,
               }}
             >
               Requirements Live in Vendor Pool!
             </h3>
 
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, maxWidth: 420, margin: '0 auto 28px', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--ink-2)', fontSize: 14, maxWidth: 420, margin: '0 auto 28px', lineHeight: 1.6 }}>
               Top vendors matching your timing ({universal.timeSlot || 'Flexible'}) and budget are submitting itemized bids.
               Track and approve incoming bids on your Corporate Dashboard.
             </p>
@@ -171,7 +171,7 @@ export function Step3Confirm({
 
   return (
     <div>
-      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 18 }}>
+      <p style={{ color: 'var(--ink-2)', fontSize: 14, marginBottom: 18 }}>
         Review your complete event requirements and timing details before publishing to vendors.
       </p>
 
@@ -196,8 +196,8 @@ export function Step3Confirm({
       {/* Category specifications */}
       <div
         style={{
-          background: 'rgba(255,255,255,0.035)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'var(--cream-2)',
+          border: '1px solid var(--line)',
           borderRadius: 12,
           padding: '14px 16px',
           marginBottom: 14,
@@ -210,14 +210,14 @@ export function Step3Confirm({
               display: 'flex',
               justifyContent: 'space-between',
               padding: '6px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.05)',
+              borderBottom: '1px solid var(--line)',
               gap: 16,
             }}
           >
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', flexShrink: 0 }}>
+            <span style={{ fontSize: 12, color: 'var(--ink-2)', flexShrink: 0 }}>
               {camelToTitle(key)}
             </span>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', textAlign: 'right', fontWeight: 500 }}>
+            <span style={{ fontSize: 13, color: 'var(--ink)', textAlign: 'right', fontWeight: 500 }}>
               {val || '—'}
             </span>
           </div>
@@ -227,7 +227,7 @@ export function Step3Confirm({
       {/* Universal & Time Period Summary */}
       <div
         style={{
-          background: `linear-gradient(135deg, ${theme.primary}12 0%, rgba(255,255,255,0.02) 100%)`,
+          background: `linear-gradient(135deg, ${theme.primary}12 0%, rgba(255, 255, 255, 0.9) 100%)`,
           border: `1px solid ${theme.primary}28`,
           borderRadius: 14,
           padding: '16px',
@@ -247,8 +247,8 @@ export function Step3Confirm({
           ['Total Outlay', formatCurrency((universal.persons || 0) * (universal.budgetPerPerson || 0))],
         ].map(([label, val]) => (
           <div key={label} style={{ padding: '4px 0' }}>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 2 }}>{label}</div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>{val}</div>
+            <div style={{ fontSize: 11, color: 'var(--ink-2)', marginBottom: 2 }}>{label}</div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>{val}</div>
           </div>
         ))}
       </div>
@@ -259,8 +259,8 @@ export function Step3Confirm({
           style={{
             padding: '14px 18px',
             borderRadius: 14,
-            background: 'rgba(239,68,68,0.1)',
-            border: '1px solid rgba(239,68,68,0.3)',
+            background: 'rgba(194, 50, 28,0.1)',
+            border: '1px solid rgba(194, 50, 28,0.3)',
             marginBottom: 20,
             display: 'flex',
             alignItems: 'center',
@@ -269,12 +269,12 @@ export function Step3Confirm({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Lock size={18} color="#ef4444" />
+            <Lock size={18} color="#C2321C" />
             <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>
                 Corporate Registration Required
               </div>
-              <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.6)' }}>
+              <div style={{ fontSize: 11.5, color: 'var(--ink-2)' }}>
                 Please sign in or register as a Corporate to publish this RFP.
               </div>
             </div>
@@ -290,7 +290,7 @@ export function Step3Confirm({
             style={{
               padding: '6px 14px',
               fontSize: 12,
-              background: '#10b981',
+              background: '#1E9E5A',
               flexShrink: 0,
             }}
           >
@@ -304,20 +304,20 @@ export function Step3Confirm({
           style={{
             padding: '14px 18px',
             borderRadius: 14,
-            background: 'rgba(249,115,22,0.1)',
-            border: '1px solid rgba(249,115,22,0.3)',
+            background: 'rgba(255, 107, 44,0.1)',
+            border: '1px solid rgba(255, 107, 44,0.3)',
             marginBottom: 20,
             display: 'flex',
             alignItems: 'center',
             gap: 10,
           }}
         >
-          <AlertTriangle size={18} color="#f97316" />
+          <AlertTriangle size={18} color="#FF6B2C" />
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>
               Vendor Account Active
             </div>
-            <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.6)' }}>
+            <div style={{ fontSize: 11.5, color: 'var(--ink-2)' }}>
               You are logged in as a Vendor ({currentUser.email}). RFPs can only be posted by verified Corporate accounts.
             </div>
           </div>
@@ -329,20 +329,20 @@ export function Step3Confirm({
           style={{
             padding: '14px 18px',
             borderRadius: 14,
-            background: 'rgba(234,179,8,0.1)',
-            border: '1px solid rgba(234,179,8,0.3)',
+            background: 'rgba(178, 58, 122,0.1)',
+            border: '1px solid rgba(178, 58, 122,0.3)',
             marginBottom: 20,
             display: 'flex',
             alignItems: 'center',
             gap: 10,
           }}
         >
-          <Clock size={18} color="#eab308" />
+          <Clock size={18} color="#B23A7A" />
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>
               Corporate Verification Pending
             </div>
-            <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.6)' }}>
+            <div style={{ fontSize: 11.5, color: 'var(--ink-2)' }}>
               Your profile for <strong>{currentCorporateProfile?.officeCompanyName}</strong> is awaiting review by the COE Admin team. You can publish RFPs once approved.
             </div>
           </div>
@@ -354,17 +354,17 @@ export function Step3Confirm({
           style={{
             padding: '12px 16px',
             borderRadius: 12,
-            background: 'rgba(16,185,129,0.08)',
-            border: '1px solid rgba(16,185,129,0.25)',
+            background: 'rgba(30, 158, 90,0.08)',
+            border: '1px solid rgba(30, 158, 90,0.25)',
             marginBottom: 20,
             display: 'flex',
             alignItems: 'center',
             gap: 10,
           }}
         >
-          <ShieldCheck size={16} color="#10b981" />
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>
-            Publishing as: <strong style={{ color: '#10b981' }}>{currentCorporateProfile?.officeCompanyName}</strong> ({currentCorporateProfile?.name})
+          <ShieldCheck size={16} color="#1E9E5A" />
+          <div style={{ fontSize: 12, color: 'var(--ink)' }}>
+            Publishing as: <strong style={{ color: '#1E9E5A' }}>{currentCorporateProfile?.officeCompanyName}</strong> ({currentCorporateProfile?.name})
           </div>
         </div>
       )}
@@ -374,8 +374,8 @@ export function Step3Confirm({
         disabled={!isApproved}
         className="btn-primary"
         style={{
-          background: isApproved ? theme.primary : 'rgba(255,255,255,0.12)',
-          color: isApproved ? '#ffffff' : 'rgba(255,255,255,0.4)',
+          background: isApproved ? theme.primary : 'var(--cream-2)',
+          color: isApproved ? 'var(--ink)' : 'var(--ink-2)',
           cursor: isApproved ? 'pointer' : 'not-allowed',
           width: '100%',
           padding: '14px',

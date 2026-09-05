@@ -48,7 +48,7 @@ const GURUGRAM_LOCALITIES = [
 
 export default function VendorOnboardingPage() {
   const router = useRouter();
-  const { saveVendorProfile, currentUser, isNightMode } = useStore();
+  const { saveVendorProfile, currentUser } = useStore();
 
   const [step, setStep] = useState(1);
   const [category, setCategory] = useState<CategoryType | ''>('');
@@ -113,13 +113,13 @@ export default function VendorOnboardingPage() {
     display: 'block',
     fontSize: 11,
     fontWeight: 700,
-    color: 'rgba(255,255,255,0.6)',
+    color: 'var(--ink-2)',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     marginBottom: 6,
   };
 
-  const catColor = '#f97316';
+  const catColor = '#FF6B2C';
 
   return (
     <main
@@ -130,7 +130,7 @@ export default function VendorOnboardingPage() {
         justifyContent: 'center',
         padding: '24px',
         position: 'relative',
-        background: '#05060e',
+        background: 'var(--cream)',
       }}
     >
       <BlurredCyberHubBackground />
@@ -149,13 +149,13 @@ export default function VendorOnboardingPage() {
                   width: 32,
                   height: 32,
                   borderRadius: '50%',
-                  background: s <= step ? catColor : 'rgba(255,255,255,0.1)',
+                  background: s <= step ? catColor : 'var(--cream-2)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: 13,
                   fontWeight: 800,
-                  color: s <= step ? '#ffffff' : 'rgba(255,255,255,0.4)',
+                  color: s <= step ? '#ffffff' : 'var(--ink-2)',
                   boxShadow: s === step ? `0 0 16px ${catColor}55` : 'none',
                   transition: 'all 0.3s ease',
                 }}
@@ -167,7 +167,7 @@ export default function VendorOnboardingPage() {
                   style={{
                     height: 2,
                     width: 48,
-                    background: s < step ? catColor : 'rgba(255,255,255,0.1)',
+                    background: s < step ? catColor : 'var(--cream-2)',
                     borderRadius: 2,
                     transition: 'background 0.3s ease',
                   }}
@@ -181,9 +181,9 @@ export default function VendorOnboardingPage() {
           style={{
             borderRadius: 24,
             overflow: 'hidden',
-            background: '#0B0F17',
+            background: '#FFF7EC',
             border: `1.5px solid ${catColor}28`,
-            boxShadow: '0 40px 100px rgba(0,0,0,0.85)',
+            boxShadow: '0 40px 100px rgba(60, 30, 0, 0.18)',
           }}
         >
           {/* Header */}
@@ -216,7 +216,7 @@ export default function VendorOnboardingPage() {
                 fontFamily: 'var(--font-display)',
                 fontSize: 22,
                 fontWeight: 800,
-                color: '#ffffff',
+                color: 'var(--ink)',
                 letterSpacing: '-0.02em',
                 marginBottom: 4,
               }}
@@ -226,7 +226,7 @@ export default function VendorOnboardingPage() {
               {step === 3 && '3. Legal GST & Corporate KYC'}
               {step === 4 && 'KYC Application Complete'}
             </h1>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>
+            <p style={{ fontSize: 13, color: 'var(--ink-2)' }}>
               {step <= 3 ? `Step ${step} of 3 — Verified Gurugram Vendor Registration` : 'Profile Created Successfully'}
             </p>
           </div>
@@ -251,9 +251,9 @@ export default function VendorOnboardingPage() {
                         style={{
                           padding: '10px 14px',
                           borderRadius: 12,
-                          border: category === cat.id ? `1.5px solid ${catColor}` : '1px solid rgba(255,255,255,0.12)',
-                          background: category === cat.id ? `${catColor}20` : 'rgba(255,255,255,0.04)',
-                          color: category === cat.id ? '#ffffff' : 'rgba(255,255,255,0.7)',
+                          border: category === cat.id ? `1.5px solid ${catColor}` : '1px solid var(--line)',
+                          background: category === cat.id ? `${catColor}20` : 'var(--cream-2)',
+                          color: category === cat.id ? 'var(--ink)' : 'var(--ink-2)',
                           fontSize: 13,
                           fontWeight: 700,
                           cursor: 'pointer',
@@ -269,7 +269,7 @@ export default function VendorOnboardingPage() {
                           <span style={{ fontSize: 18 }}>{cat.icon}</span>
                           <div>
                             <div>{cat.label}</div>
-                            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', fontWeight: 500 }}>{cat.desc}</div>
+                            <div style={{ fontSize: 11, color: 'var(--ink-2)', fontWeight: 500 }}>{cat.desc}</div>
                           </div>
                         </div>
                         {category === cat.id && <CheckCircle2 size={16} color={catColor} />}
@@ -298,12 +298,12 @@ export default function VendorOnboardingPage() {
                     <span
                       style={{
                         padding: '11px 14px',
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1px solid rgba(255,255,255,0.12)',
+                        background: 'var(--cream-2)',
+                        border: '1px solid var(--line)',
                         borderRight: 'none',
                         borderTopLeftRadius: 10,
                         borderBottomLeftRadius: 10,
-                        color: 'rgba(255,255,255,0.8)',
+                        color: 'var(--ink)',
                         fontSize: 13,
                         fontWeight: 800,
                       }}
@@ -320,7 +320,7 @@ export default function VendorOnboardingPage() {
                       onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     />
                   </div>
-                  <div style={{ fontSize: 11, color: isMobileValid ? '#10b981' : 'rgba(255,255,255,0.4)', marginTop: 4, fontWeight: 600 }}>
+                  <div style={{ fontSize: 11, color: isMobileValid ? '#1E9E5A' : 'var(--ink-2)', marginTop: 4, fontWeight: 600 }}>
                     {isMobileValid ? '✅ Valid 10-digit Indian mobile number' : `${mobile.length}/10 digits (Must start with 6, 7, 8, or 9)`}
                   </div>
                 </div>
@@ -426,7 +426,7 @@ export default function VendorOnboardingPage() {
                   <div>
                     <label style={labelStyle}>GSTIN Number (15 Characters)</label>
                     <input className="input-base" placeholder="07AAAAA0000A1Z5" maxLength={15} value={gstNumber} onChange={(e) => setGstNumber(e.target.value.toUpperCase())} />
-                    <div style={{ fontSize: 11, color: gstNumber.length === 15 ? '#10b981' : 'rgba(255,255,255,0.35)', marginTop: 4, fontWeight: 600 }}>
+                    <div style={{ fontSize: 11, color: gstNumber.length === 15 ? '#1E9E5A' : 'var(--ink-2)', marginTop: 4, fontWeight: 600 }}>
                       {gstNumber.length}/15 — {gstNumber.length === 15 ? '✅ Valid length' : 'Must be exactly 15 characters'}
                     </div>
                   </div>
@@ -452,7 +452,7 @@ export default function VendorOnboardingPage() {
                       {pastClients.map((c) => (
                         <span key={c} style={{ padding: '3px 8px', borderRadius: 999, background: `${catColor}18`, border: `1px solid ${catColor}30`, color: '#ffffff', fontSize: 11, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                           {c}
-                          <button type="button" onClick={() => setPastClients(pastClients.filter((x) => x !== c))} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 0 }}><X size={10} /></button>
+                          <button type="button" onClick={() => setPastClients(pastClients.filter((x) => x !== c))} style={{ background: 'none', border: 'none', color: 'var(--ink-2)', cursor: 'pointer', padding: 0 }}><X size={10} /></button>
                         </span>
                       ))}
                     </div>
@@ -460,7 +460,7 @@ export default function VendorOnboardingPage() {
                 </div>
 
                 {/* Disclaimer */}
-                <div style={{ padding: '12px 14px', borderRadius: 12, background: `${catColor}08`, border: `1px solid ${catColor}20`, fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>
+                <div style={{ padding: '12px 14px', borderRadius: 12, background: `${catColor}08`, border: `1px solid ${catColor}20`, fontSize: 12, color: 'var(--ink-2)' }}>
                   ⚠️ Your GSTIN will be verified by the COE Admin team. Live bidding is enabled only after Super Admin approval.
                 </div>
 
@@ -470,7 +470,7 @@ export default function VendorOnboardingPage() {
                     disabled={!canStep3 || loading}
                     onClick={handleFinish}
                     className="btn-primary"
-                    style={{ flex: 2, opacity: canStep3 && !loading ? 1 : 0.4, background: `linear-gradient(135deg, ${catColor} 0%, #ea580c 100%)`, boxShadow: `0 8px 24px ${catColor}30` }}
+                    style={{ flex: 2, opacity: canStep3 && !loading ? 1 : 0.4, background: `linear-gradient(135deg, ${catColor} 0%, #D9541C 100%)`, boxShadow: `0 8px 24px ${catColor}30` }}
                   >
                     {loading ? 'Submitting for KYC…' : 'Submit for Admin Verification'} {!loading && <ArrowRight size={15} />}
                   </button>
@@ -481,14 +481,14 @@ export default function VendorOnboardingPage() {
             {/* Step 4: Submission Confirmation */}
             {step === 4 && (
               <div style={{ display: 'grid', gap: 16 }}>
-                <div style={{ padding: '16px', borderRadius: 16, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: 8 }}>
+                <div style={{ padding: '16px', borderRadius: 16, background: 'var(--cream-2)', border: '1px solid var(--line)' }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-2)', textTransform: 'uppercase', marginBottom: 8 }}>
                     Summary of Submitted Vendor Details
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>{companyName}</div>
-                  <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.65)' }}>{vendorName} · GSTIN: {gstNumber}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>📍 {address}</div>
-                  <div style={{ fontSize: 12, color: '#eab308', marginTop: 6, fontWeight: 700 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', marginBottom: 2 }}>{companyName}</div>
+                  <div style={{ fontSize: 12.5, color: 'var(--ink-2)' }}>{vendorName} · GSTIN: {gstNumber}</div>
+                  <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 4 }}>📍 {address}</div>
+                  <div style={{ fontSize: 12, color: '#B23A7A', marginTop: 6, fontWeight: 700 }}>
                     Status: ⏳ Pending KYC Verification by Super Admin
                   </div>
                 </div>
@@ -504,7 +504,7 @@ export default function VendorOnboardingPage() {
                   <button
                     onClick={() => router.push('/vendor/dashboard')}
                     className="btn-primary"
-                    style={{ flex: 1, padding: '12px', fontSize: 13, background: `linear-gradient(135deg, ${catColor} 0%, #ea580c 100%)` }}
+                    style={{ flex: 1, padding: '12px', fontSize: 13, background: `linear-gradient(135deg, ${catColor} 0%, #D9541C 100%)` }}
                   >
                     Explore Dashboard <ArrowRight size={14} />
                   </button>
@@ -514,7 +514,7 @@ export default function VendorOnboardingPage() {
           </div>
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: 14, fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 600 }}>
+        <p style={{ textAlign: 'center', marginTop: 14, fontSize: 12, color: 'var(--ink-2)', fontWeight: 600 }}>
           Logged in as: {currentUser?.email}
         </p>
       </motion.div>
