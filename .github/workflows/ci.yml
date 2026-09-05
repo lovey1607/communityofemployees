@@ -1,0 +1,130 @@
+# ============================================================
+# CI — every check that exists, on every pull request.
+#
+# The point of this file is that the suites stop being something a person
+# remembers to run. Two of the three defects that reached the browser during
+# this build (a modal that reported success on a rejected requirement, and a
+# palette migration that turned four dashboards unreadable) were only ever
+# caught by running the browser suite by hand.
+#
+# It stands up a real PostgreSQL, runs the migrations against it, boots the
+# production build, and drives the whole thing — so a green tick here means
+# the app actually served the flow, not that it compiled.
+# ============================================================
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: coe_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # Throwaway database and secret, alive only for the length of this job.
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/coe_ci
+      DATABASE_SSL: 'off'
+      AUTH_SECRET: ci-only-not-a-real-secret-000000000000000000
+      APP_URL: http://127.0.0.1:3000
+      BASE_URL: http://127.0.0.1:3000
+      # Fast hashing: CI is not a password-strength benchmark, and the default
+      # of 12 makes the seed step dominate the run.
+      BCRYPT_ROUNDS: '4'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Migrate
+        run: npm run db:migrate
+
+      - name: Seed
+        # Writes seed/fixtures.json on first run, so the credentials below are
+        # deterministic within this job and never leave it.
+        run: npm run db:seed
+
+      - name: Read seeded credentials
+        id: creds
+        run: |
+          node -e "
+            const a = require('./seed/fixtures.json').accounts;
+            const pick = (r) => a.filter((x) => x.role === r);
+            const [admin] = pick('admin');
+            const vendors = pick('vendor');
+            const out = {
+              TEST_ADMIN_EMAIL: admin.email,
+              TEST_ADMIN_PASSWORD: admin.password,
+              TEST_VENDOR_EMAIL: vendors[0].email,
+              TEST_VENDOR_PASSWORD: vendors[0].password,
+              TEST_VENDOR2_EMAIL: vendors[1].email,
+              TEST_VENDOR2_PASSWORD: vendors[1].password,
+            };
+            // Masked so a failing step cannot print them into a public log.
+            for (const [k, v] of Object.entries(out)) {
+              console.log('::add-mask::' + v);
+              console.log(k + '=' + v);
+            }
+          " >> "$GITHUB_ENV"
+
+      - name: Start the server
+        run: |
+          npm run start &
+          npx wait-on http://127.0.0.1:3000 --timeout 60000
+
+      - name: API suite (66 checks)
+        run: npm run test:api
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser suite (33 checks)
+        run: npm run test:e2e
+
+      - name: Contrast audit
+        # Reported, never gating: text over a CSS gradient is a known false
+        # positive, so a number here is for a human to read, not a wall.
+        continue-on-error: true
+        run: npm run test:contrast
+
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-screenshots
+          path: /tmp/coe-e2e
+          if-no-files-found: ignore
+          retention-days: 7

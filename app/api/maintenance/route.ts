@@ -4,9 +4,15 @@
 // consumed/expired one-time tokens are deleted, stale rate-limit counters are
 // dropped, and audit rows older than the stated window are removed.
 //
-// Auth: an admin session, or a CRON_SECRET in the x-cron-secret header (for
-// a scheduled job — e.g. a Vercel cron). Without CRON_SECRET set, only an
-// admin can run it.
+// Auth: an admin session, or CRON_SECRET presented one of two ways —
+//   · `x-cron-secret: <secret>`            (any scheduler)
+//   · `authorization: Bearer <secret>`     (how Vercel Cron sends it)
+// Without CRON_SECRET set, only an admin can run it.
+//
+// Exported as both POST and GET because Vercel Cron issues a GET. The work is
+// identical; GET is not cacheable here (force-dynamic, and vercel.json sends
+// no-store for /api/*), and it is authenticated, so it is not an open
+// side-effecting GET.
 
 import { sql } from 'drizzle-orm';
 import { db } from '@/lib/db';
@@ -21,9 +27,10 @@ export const dynamic = 'force-dynamic';
 
 const AUDIT_RETENTION_MONTHS = 24;
 
-export const POST = route(async (request) => {
-  const provided = request.headers.get('x-cron-secret');
+const handler = route(async (request) => {
   const expected = process.env.CRON_SECRET;
+  const bearer = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? null;
+  const provided = request.headers.get('x-cron-secret') ?? bearer;
   const viaCron = Boolean(expected && provided && safeEqual(provided, expected));
 
   let actor = null;
@@ -63,3 +70,6 @@ export const POST = route(async (request) => {
 
   return jsonOk(result);
 });
+
+export const POST = handler;
+export const GET = handler;
