@@ -43,3 +43,6 @@ next-env.d.ts
 
 # local seed fixtures — may contain development passwords
 /seed/fixtures.json
+
+# local dev database created by scripts/local-setup.sh
+/.localdb

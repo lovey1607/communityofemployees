@@ -9,7 +9,20 @@ Next.js 16 (App Router) · React 19 · TypeScript · PostgreSQL + Drizzle · Tai
 
 ## Running it locally
 
-You need **PostgreSQL 14 or newer** and Node 20+.
+The fast path — one command, from a fresh clone:
+
+```bash
+./scripts/local-setup.sh
+npm run dev            # → http://localhost:3000
+```
+
+It checks Node, finds a PostgreSQL (an existing `DATABASE_URL`, a Docker
+container, or a local Postgres.app/Homebrew install — and tells you your options
+if it finds none), generates `.env.local` with a fresh `AUTH_SECRET`, installs,
+migrates, seeds, and prints your local logins. Re-running it is safe: it never
+overwrites an existing `.env.local`, database, or fixture file.
+
+Doing it by hand instead — you need **PostgreSQL 14 or newer** and Node 20+:
 
 ```bash
 npm install
@@ -41,13 +54,15 @@ There is deliberately no shared default password and no seeded admin login in co
 
 | Command | What it does |
 | --- | --- |
+| `./scripts/local-setup.sh` | One-shot local setup (database, env, install, migrate, seed) |
 | `npm run dev` | Dev server |
 | `npm run build` / `npm run start` | Production build / serve |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run db:migrate` | Apply `drizzle/*.sql` once each, in a transaction |
 | `npm run db:seed` | Local development data |
 | `npm run db:reset` | Drop all app tables (refuses with `NODE_ENV=production`) |
-| `npm run test:api` | End-to-end API tests against a running server |
+| `npm run test:api` | API tests against a running server (66 checks) |
+| `npm run test:e2e` | Browser walkthrough of the whole flow (27 checks + screenshots) |
 
 Running the tests:
 
