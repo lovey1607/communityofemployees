@@ -11,7 +11,7 @@
  *
  * Deliberately refuses to run against a production database.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import bcrypt from 'bcryptjs';
@@ -279,7 +279,28 @@ async function main() {
         'seed/fixtures.json (gitignored) and re-run.\n'
     );
   } else {
-    console.log('Passwords came from seed/fixtures.json — see that file.\n');
+    console.log('Named-account passwords came from seed/fixtures.json — see that file.\n');
+  }
+
+  // The venue and pilot-company accounts get a fresh random password each,
+  // which previously existed only in memory: they were created, announced as
+  // a count, and then unusable, because nothing ever wrote them down. They go
+  // to a gitignored file next to the fixtures.
+  const bulk = created.filter((a) => a.role !== 'admin' && a.role.includes('('));
+  if (bulk.length > 0) {
+    const outPath = join(process.cwd(), 'seed', 'generated-logins.json');
+    const existing: Record<string, { role: string; password: string }> = existsSync(outPath)
+      ? (JSON.parse(readFileSync(outPath, 'utf8')) as Record<string, { role: string; password: string }>)
+      : {};
+    for (const account of bulk) {
+      existing[account.email] = { role: account.role, password: account.password };
+    }
+    writeFileSync(outPath, `${JSON.stringify(existing, null, 2)}\n`, { mode: 0o600 });
+    console.log(
+      `${bulk.length} venue / pilot-company logins written to seed/generated-logins.json\n` +
+        '(gitignored, chmod 600). These are placeholder accounts for businesses that\n' +
+        'have not signed up — see data/pilot-companies.ts before using them anywhere.\n'
+    );
   }
 }
 

@@ -47,3 +47,4 @@ next-env.d.ts
 # local dev database created by scripts/local-setup.sh
 /.localdb
 /.pgsql
+seed/generated-logins.json
