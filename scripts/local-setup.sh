@@ -25,72 +25,123 @@ NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
 [ "$NODE_MAJOR" -ge 20 ] || die "Node $(node -v) is too old — this needs Node 20 or newer. https://nodejs.org"
 ok "Node $(node -v)"
 
-# ── 2. Database ─────────────────────────────────────────────
+# ── 2. Dependencies ─────────────────────────────────────────
+# Before the database, so that a later prune cannot remove anything we set up.
+if [ ! -d node_modules ]; then
+  bold "Installing dependencies (this one takes a minute)"
+  npm install --no-audit --no-fund
+  echo
+else
+  ok "Dependencies already installed"
+fi
+
+# ── 3. Database ─────────────────────────────────────────────
+# Order of preference: something you already have, then Docker, then a
+# PostgreSQL installed on this machine, and finally a private copy of
+# PostgreSQL fetched through npm — so this works with nothing but Node.
 DB_URL=""
+PGPORT=5433
+
+start_cluster() {           # $1 = directory holding initdb/pg_ctl
+  local BIN="$1"
+  local PGDATA="$ROOT/.localdb"
+  # PG_VERSION is what initdb writes last; an empty or half-made directory
+  # is not a cluster, and initdb refuses to run into one either way.
+  if [ ! -f "$PGDATA/PG_VERSION" ]; then
+    mkdir -p "$PGDATA"
+    "$BIN/initdb" -D "$PGDATA" -U postgres --auth=trust >/dev/null
+    ok "Created a PostgreSQL cluster in .localdb"
+  fi
+  # Keep the socket inside the project: the system socket directory is not
+  # writable for a normal user on some machines, and this keeps the whole
+  # cluster self-contained and disposable.
+  local PGOPTS="-p $PGPORT -k $PGDATA"
+  if ! "$BIN/pg_ctl" -D "$PGDATA" -o "$PGOPTS" -l "$PGDATA/server.log" status >/dev/null 2>&1; then
+    "$BIN/pg_ctl" -D "$PGDATA" -o "$PGOPTS" -l "$PGDATA/server.log" -w start >/dev/null 2>&1 \
+      || { echo; tail -3 "$PGDATA/server.log" 2>/dev/null; die "PostgreSQL would not start — see .localdb/server.log"; }
+  fi
+  ok "PostgreSQL running on port $PGPORT (stop it with: npm run db:stop)"
+  # initdb always creates a database called postgres; using it avoids needing
+  # createdb, which the npm-fetched build does not ship.
+  DB_URL="postgresql://postgres@127.0.0.1:$PGPORT/postgres"
+}
+
+# Where a system PostgreSQL might be hiding on macOS.
+find_system_pg() {
+  local d
+  for d in "$(dirname "$(command -v pg_ctl 2>/dev/null || echo /nonexistent/x)")" \
+           /Applications/Postgres.app/Contents/Versions/latest/bin \
+           /opt/homebrew/bin /usr/local/bin /opt/homebrew/opt/postgresql@16/bin; do
+    if [ -x "$d/pg_ctl" ] && [ -x "$d/initdb" ]; then echo "$d"; return 0; fi
+  done
+  return 1
+}
+
+# Where the npm-fetched build lands. It is deliberately installed OUTSIDE the
+# project's node_modules — a later `npm install` prunes anything not listed in
+# package.json, which would throw the database binaries away.
+PG_HOME="$ROOT/.pgsql"
+find_bundled_pg() {
+  local d
+  for d in "$PG_HOME"/node_modules/@embedded-postgres/*/native/bin; do
+    if [ -x "$d/pg_ctl" ] && [ -x "$d/initdb" ]; then echo "$d"; return 0; fi
+  done
+  return 1
+}
+
 if [ -f .env.local ] && grep -q '^DATABASE_URL=.\+' .env.local; then
   DB_URL="$(grep '^DATABASE_URL=' .env.local | head -1 | cut -d= -f2-)"
   ok "Using the DATABASE_URL already in .env.local"
+  # A cluster we made earlier needs starting again after a reboot.
+  if printf '%s' "$DB_URL" | grep -q "127.0.0.1:$PGPORT" && [ -d "$ROOT/.localdb" ]; then
+    if BIN="$(find_bundled_pg || find_system_pg)"; then
+      "$BIN/pg_ctl" -D "$ROOT/.localdb" -o "-p $PGPORT -k $ROOT/.localdb" \
+        -l "$ROOT/.localdb/server.log" -w start >/dev/null 2>&1 && ok "Restarted your local PostgreSQL" || true
+    fi
+  fi
+
 elif [ -n "${DATABASE_URL:-}" ]; then
   DB_URL="$DATABASE_URL"
   ok "Using DATABASE_URL from your environment"
+
 elif command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
-  if [ -z "$(docker ps -q -f name=^coe-postgres$)" ]; then
-    if [ -n "$(docker ps -aq -f name=^coe-postgres$)" ]; then
-      docker start coe-postgres >/dev/null
-      ok "Restarted the coe-postgres container"
-    else
-      docker run -d --name coe-postgres -e POSTGRES_PASSWORD=coelocal \
-        -e POSTGRES_DB=coe -p 5433:5432 postgres:16 >/dev/null
-      ok "Started a Postgres 16 container (coe-postgres) on port 5433"
-      printf "    waiting for it to accept connections"
-      for _ in $(seq 1 40); do
-        docker exec coe-postgres pg_isready -q >/dev/null 2>&1 && break
-        printf "."; sleep 1
-      done
-      echo
-    fi
-  else
+  if [ -n "$(docker ps -q -f name=^coe-postgres$)" ]; then
     ok "The coe-postgres container is already running"
+  elif [ -n "$(docker ps -aq -f name=^coe-postgres$)" ]; then
+    docker start coe-postgres >/dev/null
+    ok "Restarted the coe-postgres container"
+  else
+    docker run -d --name coe-postgres -e POSTGRES_PASSWORD=coelocal \
+      -e POSTGRES_DB=coe -p $PGPORT:5432 postgres:16 >/dev/null
+    ok "Started a PostgreSQL 16 container (coe-postgres) on port $PGPORT"
+    printf "    waiting for it to accept connections"
+    for _ in $(seq 1 40); do
+      docker exec coe-postgres pg_isready -q >/dev/null 2>&1 && break
+      printf "."; sleep 1
+    done
+    echo
   fi
-  DB_URL="postgresql://postgres:coelocal@127.0.0.1:5433/coe"
-elif command -v initdb >/dev/null 2>&1 && command -v pg_ctl >/dev/null 2>&1; then
-  PGDATA="$ROOT/.localdb"
-  if [ ! -d "$PGDATA" ]; then
-    initdb -D "$PGDATA" -U postgres --auth=trust >/dev/null
-    ok "Created a Postgres cluster in .localdb"
-  fi
-  # Keep the unix socket inside the project. The system default
-  # (/var/run/postgresql) is not writable for a normal user on some setups,
-  # and this keeps the whole cluster self-contained and easy to throw away.
-  PGOPTS="-p 5433 -k $PGDATA"
-  pg_ctl -D "$PGDATA" -o "$PGOPTS" -l "$PGDATA/server.log" status >/dev/null 2>&1 \
-    || pg_ctl -D "$PGDATA" -o "$PGOPTS" -l "$PGDATA/server.log" start >/dev/null \
-    || { echo; sed -n '$p' "$PGDATA/server.log" 2>/dev/null; die "Postgres would not start — see $PGDATA/server.log"; }
-  sleep 2
-  createdb -h 127.0.0.1 -p 5433 -U postgres coe 2>/dev/null || true
-  ok "Local Postgres running on port 5433"
-  DB_URL="postgresql://postgres@127.0.0.1:5433/coe"
+  DB_URL="postgresql://postgres:coelocal@127.0.0.1:$PGPORT/coe"
+
+elif BIN="$(find_system_pg)"; then
+  ok "Found PostgreSQL at $BIN"
+  start_cluster "$BIN"
+
 else
-  cat <<'NODB'
-
-  No PostgreSQL found. Pick whichever is least hassle:
-
-    A. Postgres.app   — download from https://postgresapp.com, open it,
-                        click Initialize, then re-run this script.
-
-    B. Docker Desktop — https://docker.com/products/docker-desktop
-                        start it, then re-run this script.
-
-    C. A free cloud database — sign up at https://neon.tech, copy the
-       connection string, and re-run with it:
-
-         DATABASE_URL='postgresql://...' ./scripts/local-setup.sh
-
-NODB
-  die "Need a database before we can go further."
+  if ! BIN="$(find_bundled_pg)"; then
+    bold "No PostgreSQL on this machine — fetching a private copy"
+    echo "  (about 100 MB, used only by this project, removed with node_modules)"
+    echo
+    mkdir -p "$PG_HOME"
+    npm install --prefix "$PG_HOME" --no-audit --no-fund embedded-postgres >/dev/null 2>&1 \
+      || die "Could not fetch PostgreSQL. Check your internet connection, or install Postgres.app from https://postgresapp.com and re-run."
+    BIN="$(find_bundled_pg)" || die "The PostgreSQL download did not include binaries for this platform. Install Postgres.app from https://postgresapp.com and re-run."
+    ok "Fetched PostgreSQL"
+  fi
+  start_cluster "$BIN"
 fi
 
-# ── 3. .env.local ───────────────────────────────────────────
+# ── 4. .env.local ───────────────────────────────────────────
 if [ ! -f .env.local ]; then
   SECRET="$(node -e 'console.log(require("crypto").randomBytes(32).toString("hex"))')"
   cat > .env.local <<ENVEOF
@@ -104,7 +155,7 @@ else
   ok ".env.local already exists, leaving it alone"
 fi
 
-# ── 4. Seed credentials you can actually read later ─────────
+# ── 5. Seed credentials you can actually read later ─────────
 mkdir -p seed
 if [ ! -f seed/fixtures.json ]; then
   node -e '
@@ -129,16 +180,13 @@ else
   ok "seed/fixtures.json already exists, keeping your passwords"
 fi
 
-# ── 5. Install, migrate, seed ───────────────────────────────
-echo
-bold "Installing dependencies (this one takes a minute)"
-npm install --no-audit --no-fund
+# ── 6. Migrate and seed ─────────────────────────────────────
 echo
 bold "Setting up the database"
 npm run db:migrate
 npm run db:seed >/dev/null
 
-# ── 6. Done ─────────────────────────────────────────────────
+# ── 7. Done ─────────────────────────────────────────────────
 echo
 bold "Ready. Start it with:"
 echo
