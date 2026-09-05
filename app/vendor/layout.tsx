@@ -13,11 +13,12 @@ import { useStore } from '@/store/useStore';
 export default function VendorLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { currentUser, currentVendorProfile } = useStore();
+  const { currentUser, currentVendorProfile, hydrated, loadRfps, loadMyBids } = useStore();
 
   const isOnboarding = pathname === '/vendor/onboarding';
 
   useEffect(() => {
+    if (!hydrated) return;
     if (!currentUser) {
       router.push('/');
       return;
@@ -28,7 +29,14 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
     if (!isOnboarding && !currentVendorProfile?.isCompleted) {
       router.push('/vendor/onboarding');
     }
-  }, [currentUser, currentVendorProfile, router, isOnboarding]);
+  }, [hydrated, currentUser, currentVendorProfile, router, isOnboarding]);
+
+  useEffect(() => {
+    if (hydrated && currentUser?.role === 'vendor') {
+      void loadRfps();
+      void loadMyBids();
+    }
+  }, [hydrated, currentUser, loadRfps, loadMyBids]);
 
   if (isOnboarding) return <>{children}</>;
 

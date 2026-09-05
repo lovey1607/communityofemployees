@@ -68,7 +68,7 @@ export function Step2Universal({
 
   return (
     <div>
-      <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13.5, marginBottom: 20 }}>
+      <p style={{ color: 'var(--ink-2)', fontSize: 13.5, marginBottom: 20 }}>
         Specify your event schedule, headcount, budget parameters, and procurement instructions.
       </p>
 
@@ -105,7 +105,7 @@ export function Step2Universal({
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14, marginBottom: 16 }}>
         <div>
-          <label style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+          <label style={{ fontSize: 12, color: 'var(--ink-2)', fontWeight: 600, display: 'block', marginBottom: 6 }}>
             Timing Flexibility
           </label>
           <RadioGroup
@@ -115,7 +115,7 @@ export function Step2Universal({
           />
         </div>
         <div>
-          <label style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+          <label style={{ fontSize: 12, color: 'var(--ink-2)', fontWeight: 600, display: 'block', marginBottom: 6 }}>
             Procurement Timeline
           </label>
           <RadioGroup
@@ -139,8 +139,8 @@ export function Step2Universal({
           required
         />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>
-            Budget per Person (INR) <span style={{ color: '#ef4444' }}>*</span>
+          <label style={{ fontSize: 12.5, color: 'var(--ink-2)', fontWeight: 600 }}>
+            Budget per Person (INR) <span style={{ color: '#C2321C' }}>*</span>
           </label>
           <div style={{ position: 'relative' }}>
             <span
@@ -173,7 +173,7 @@ export function Step2Universal({
       {(value.persons || 0) > 0 && (value.budgetPerPerson || 0) > 0 && (
         <div
           style={{
-            background: `linear-gradient(135deg, ${theme.primary}15 0%, rgba(255,255,255,0.03) 100%)`,
+            background: `linear-gradient(135deg, ${theme.primary}15 0%, rgba(255, 255, 255, 0.9) 100%)`,
             border: `1px solid ${theme.primary}44`,
             borderRadius: 14,
             padding: '14px 18px',
@@ -185,10 +185,10 @@ export function Step2Universal({
           }}
         >
           <div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+            <div style={{ fontSize: 11, color: 'var(--ink-2)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
               Estimated Total Budget Outlay
             </div>
-            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>
+            <div style={{ fontSize: 12.5, color: 'var(--ink-2)', marginTop: 2 }}>
               {value.persons} Attendees × ₹{(value.budgetPerPerson || 0).toLocaleString('en-IN')}
             </div>
           </div>

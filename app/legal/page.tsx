@@ -19,7 +19,7 @@ export default function MasterLegalPage() {
   };
 
   return (
-    <div style={{ background: '#0a0d14', color: '#e2e8f0', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div style={{ background: 'var(--cream)', color: 'var(--ink-2)', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Sticky Navigation */}
       <header
         style={{
@@ -27,8 +27,8 @@ export default function MasterLegalPage() {
           top: 0,
           zIndex: 50,
           padding: '14px 24px',
-          background: '#070a10',
-          borderBottom: '1px solid #1e293b',
+          background: 'var(--paper)',
+          borderBottom: '1px solid var(--line)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -41,7 +41,7 @@ export default function MasterLegalPage() {
             display: 'flex',
             alignItems: 'center',
             gap: 8,
-            color: '#10b981',
+            color: '#137A43',
             fontSize: 13,
             fontWeight: 700,
           }}
@@ -56,9 +56,9 @@ export default function MasterLegalPage() {
             style={{
               padding: '6px 12px',
               borderRadius: 6,
-              background: '#1e293b',
-              border: '1px solid #334155',
-              color: '#cbd5e1',
+              background: 'var(--ink)',
+              border: '1px solid var(--ink)',
+              color: '#ffffff',
               fontSize: 12,
               fontWeight: 600,
               cursor: 'pointer',
@@ -78,21 +78,21 @@ export default function MasterLegalPage() {
         {/* Document Header Box */}
         <div
           style={{
-            background: '#0f172a',
-            border: '1px solid #1e293b',
+            background: 'var(--paper)',
+            border: '1px solid var(--line)',
             borderRadius: 12,
             padding: '36px 32px',
             marginBottom: 36,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#10b981', fontSize: 11.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#137A43', fontSize: 11.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
             <Scale size={16} /> STATUTORY COMPLIANCE & LEGAL NOTICE
           </div>
           <h1
             style={{
               fontSize: 'clamp(24px, 3vw, 32px)',
               fontWeight: 800,
-              color: '#ffffff',
+              color: 'var(--ink)',
               lineHeight: 1.3,
               marginBottom: 12,
               letterSpacing: '-0.02em',
@@ -100,7 +100,7 @@ export default function MasterLegalPage() {
           >
             Privacy, Platform Liability & Intermediary Policy
           </h1>
-          <div style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6 }}>
+          <div style={{ fontSize: 13, color: '#7A7169', lineHeight: 1.6 }}>
             <strong>Entity:</strong> Community of Employees (COE)<br />
             <strong>Jurisdiction:</strong> Republic of India (Applicable to Delhi NCR Pilot & Pan-India Operations)<br />
             <strong>Effective Date:</strong> 1st January 2026 · Version 2.1 (DPDP Act, 2023 & IT Rules, 2021 Compliant)
@@ -114,12 +114,12 @@ export default function MasterLegalPage() {
             gap: 28,
             fontSize: 14,
             lineHeight: 1.8,
-            color: '#cbd5e1',
+            color: 'var(--ink-2)',
           }}
         >
           {/* Clause 1 */}
-          <section style={{ borderBottom: '1px solid #1e293b', paddingBottom: 24 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+          <section style={{ borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               1. Statutory Intermediary Status (Section 79, IT Act, 2000)
             </h2>
             <p>
@@ -131,8 +131,8 @@ export default function MasterLegalPage() {
           </section>
 
           {/* Clause 2 */}
-          <section style={{ borderBottom: '1px solid #1e293b', paddingBottom: 24 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+          <section style={{ borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               2. Nature of Platform & Non-Operator Disclaimer
             </h2>
             <p>
@@ -146,8 +146,8 @@ export default function MasterLegalPage() {
           </section>
 
           {/* Clause 3 */}
-          <section style={{ borderBottom: '1px solid #1e293b', paddingBottom: 24 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+          <section style={{ borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               3. On-Ground Service Execution, Licenses & Statutory Permits
             </h2>
             <p>
@@ -165,8 +165,8 @@ export default function MasterLegalPage() {
           </section>
 
           {/* Clause 4 */}
-          <section style={{ borderBottom: '1px solid #1e293b', paddingBottom: 24 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+          <section style={{ borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               4. Direct B2B Contracting & Invoicing (Indian Contract Act, 1872)
             </h2>
             <p>
@@ -178,8 +178,8 @@ export default function MasterLegalPage() {
           </section>
 
           {/* Clause 5 */}
-          <section style={{ borderBottom: '1px solid #1e293b', paddingBottom: 24 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+          <section style={{ borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               5. Privacy Policy & Digital Personal Data Protection (DPDP) Act, 2023
             </h2>
             <p>
@@ -194,8 +194,8 @@ export default function MasterLegalPage() {
           </section>
 
           {/* Clause 6 */}
-          <section style={{ borderBottom: '1px solid #1e293b', paddingBottom: 24 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+          <section style={{ borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               6. Limitation of Liability & Force Majeure
             </h2>
             <p>
@@ -209,14 +209,14 @@ export default function MasterLegalPage() {
           </section>
 
           {/* Clause 7 */}
-          <section style={{ borderBottom: '1px solid #1e293b', paddingBottom: 24 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+          <section style={{ borderBottom: '1px solid var(--line)', paddingBottom: 24 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               7. Statutory Grievance Redressal Officer (Rule 3(2), IT Rules 2021)
             </h2>
             <p>
               For grievances, legal notices, or compliance inquiries, the designated Grievance Officer under the Information Technology Act, 2000 is:
             </p>
-            <div style={{ marginTop: 12, padding: '16px 20px', borderRadius: 8, background: '#0f172a', border: '1px solid #1e293b', fontSize: 13 }}>
+            <div style={{ marginTop: 12, padding: '16px 20px', borderRadius: 8, background: 'var(--cream-2)', border: '1px solid var(--line)', fontSize: 13 }}>
               <div><strong>Designation:</strong> Grievance Redressal & Legal Compliance Officer</div>
               <div style={{ marginTop: 4 }}><strong>Organization:</strong> Community of Employees (COE)</div>
               <div style={{ marginTop: 4 }}><strong>Office:</strong> Building 10B, DLF Cyber City, Phase II, Gurugram, Haryana 122002</div>
@@ -227,7 +227,7 @@ export default function MasterLegalPage() {
 
           {/* Clause 8 */}
           <section>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 10 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', marginBottom: 10 }}>
               8. Governing Law & Exclusive Jurisdiction
             </h2>
             <p>

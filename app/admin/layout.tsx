@@ -17,12 +17,13 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { currentUser } = useStore();
+  const { currentUser, hydrated, loadAdminData } = useStore();
   const [authorized, setAuthorized] = useState(false);
 
   const isLoginPage = pathname === '/admin/login';
 
   useEffect(() => {
+    if (!hydrated) return;
     if (!isLoginPage) {
       // If logged in as wrong role, redirect to their correct dashboard
       if (currentUser && currentUser.role !== 'admin') {
@@ -37,7 +38,11 @@ export default function AdminLayout({
       }
     }
     setAuthorized(true);
-  }, [currentUser, router, isLoginPage]);
+  }, [hydrated, currentUser, router, isLoginPage]);
+
+  useEffect(() => {
+    if (hydrated && !isLoginPage && currentUser?.role === 'admin') void loadAdminData();
+  }, [hydrated, currentUser, isLoginPage, loadAdminData]);
 
   // Login page: render without any admin nav chrome
   if (isLoginPage) {

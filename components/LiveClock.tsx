@@ -64,7 +64,7 @@ export function LiveClock() {
       <div
         style={{
           fontSize: 11,
-          color: 'rgba(255,255,255,0.35)',
+          color: 'var(--ink-2)',
           letterSpacing: '0.05em',
           fontFamily: 'var(--font-body)',
         }}

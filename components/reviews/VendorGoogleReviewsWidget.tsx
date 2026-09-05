@@ -24,8 +24,8 @@ interface VendorGoogleReviewsWidgetProps {
 export function VendorGoogleReviewsWidget({
   placeId,
   vendorName = 'Vendor Partner',
-  fallbackRating = 4.8,
-  fallbackTotalReviews = 48,
+  fallbackRating,
+  fallbackTotalReviews,
   compact = false,
 }: VendorGoogleReviewsWidgetProps) {
   const [details, setDetails] = useState<GooglePlaceDetails | null>(null);
@@ -45,11 +45,8 @@ export function VendorGoogleReviewsWidget({
 
     async function fetchPlaceDetails() {
       try {
-        const storedKey = typeof window !== 'undefined' ? localStorage.getItem('coe_google_maps_key') : null;
-        const headers: HeadersInit = {};
-        if (storedKey) headers['x-google-maps-key'] = storedKey;
-
-        const res = await fetch(`/api/places/details?placeId=${encodeURIComponent(placeId!)}`, { headers });
+        // The Google key is server configuration; the browser never holds it.
+        const res = await fetch(`/api/places/details?placeId=${encodeURIComponent(placeId!)}`);
         if (!res.ok) {
           throw new Error(`Failed to fetch place details (HTTP ${res.status})`);
         }
@@ -57,7 +54,7 @@ export function VendorGoogleReviewsWidget({
         if (isMounted) {
           if (data.success && data.place) {
             setDetails(data.place);
-            setIsKeyMissing(Boolean(data.isApiKeyMissing));
+            setIsKeyMissing(data.reviewsAvailable === false);
           } else {
             setError(data.error || 'Unable to load Google reviews');
           }
@@ -81,8 +78,11 @@ export function VendorGoogleReviewsWidget({
     };
   }, [placeId]);
 
-  const rating = details?.rating ?? fallbackRating;
-  const userRatingsTotal = details?.user_ratings_total ?? fallbackTotalReviews;
+  // Never invent a score. If Google has not given us one, `rating` is null
+  // and the UI says the rating is unavailable rather than showing a number
+  // nobody earned.
+  const rating: number | null = details?.rating ?? fallbackRating ?? null;
+  const userRatingsTotal: number | null = details?.user_ratings_total ?? fallbackTotalReviews ?? null;
   const reviews: GooglePlaceReview[] = details?.reviews || [];
 
   // Render Skeleton while loading
@@ -92,8 +92,8 @@ export function VendorGoogleReviewsWidget({
         style={{
           borderRadius: 18,
           padding: '20px',
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          background: 'var(--cream-2)',
+          border: '1px solid var(--line)',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
@@ -124,19 +124,25 @@ export function VendorGoogleReviewsWidget({
           gap: 6,
           padding: '4px 10px',
           borderRadius: 999,
-          background: 'rgba(234, 179, 8, 0.12)',
-          border: '1px solid rgba(234, 179, 8, 0.35)',
-          color: '#fbbf24',
+          background: 'rgba(178, 58, 122, 0.12)',
+          border: '1px solid rgba(178, 58, 122, 0.35)',
+          color: '#A66A00',
           fontSize: 12,
           fontWeight: 700,
         }}
-        title={`Verified Google Business: ${rating} / 5.0 (${userRatingsTotal} reviews)`}
+        title={
+          rating === null
+            ? 'No Google rating available for this listing'
+            : `Google rating: ${rating} / 5.0 (${userRatingsTotal ?? 0} reviews)`
+        }
       >
-        <Star size={13} fill="#fbbf24" color="#fbbf24" />
-        <span>{rating.toFixed(1)}</span>
-        <span style={{ fontSize: 10.5, color: 'rgba(255, 255, 255, 0.65)', fontWeight: 500 }}>
-          ({userRatingsTotal})
-        </span>
+        <Star size={13} fill="#A66A00" color="#A66A00" />
+        <span>{rating === null ? 'Not rated' : rating.toFixed(1)}</span>
+        {userRatingsTotal !== null && (
+          <span style={{ fontSize: 10.5, color: 'var(--ink-2)', fontWeight: 500 }}>
+            ({userRatingsTotal})
+          </span>
+        )}
       </div>
     );
   }
@@ -146,9 +152,9 @@ export function VendorGoogleReviewsWidget({
       style={{
         borderRadius: 18,
         padding: '22px',
-        background: 'rgba(11, 15, 23, 0.95)',
-        border: '1px solid rgba(255, 255, 255, 0.12)',
-        boxShadow: '0 16px 40px rgba(0, 0, 0, 0.6)',
+        background: 'var(--paper)',
+        border: '1px solid var(--line)',
+        boxShadow: '0 16px 40px rgba(60, 30, 0, 0.18)',
         backdropFilter: 'blur(16px)',
       }}
     >
@@ -161,7 +167,7 @@ export function VendorGoogleReviewsWidget({
           flexWrap: 'wrap',
           gap: 14,
           paddingBottom: 18,
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          borderBottom: '1px solid var(--line)',
           marginBottom: 16,
         }}
       >
@@ -176,7 +182,7 @@ export function VendorGoogleReviewsWidget({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
+              boxShadow: '0 4px 14px rgba(60, 30, 0, 0.18)',
               flexShrink: 0,
             }}
           >
@@ -202,12 +208,12 @@ export function VendorGoogleReviewsWidget({
 
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-              <span style={{ fontSize: 15, fontWeight: 800, color: '#ffffff' }}>
+              <span style={{ fontSize: 15, fontWeight: 800, color: 'var(--ink)' }}>
                 {details?.name || vendorName}
               </span>
-              <ShieldCheck size={16} color="#10b981" />
+              <ShieldCheck size={16} color="#1E9E5A" />
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>
               Verified Google Business Profile · Gurugram Enterprise
             </div>
           </div>
@@ -218,9 +224,9 @@ export function VendorGoogleReviewsWidget({
           style={{
             padding: '8px 16px',
             borderRadius: 14,
-            background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.2) 0%, rgba(202, 138, 4, 0.1) 100%)',
-            border: '1.5px solid rgba(234, 179, 8, 0.45)',
-            boxShadow: '0 4px 16px rgba(234, 179, 8, 0.15)',
+            background: 'linear-gradient(135deg, rgba(178, 58, 122, 0.2) 0%, rgba(202, 138, 4, 0.1) 100%)',
+            border: '1.5px solid rgba(178, 58, 122, 0.45)',
+            boxShadow: '0 4px 16px rgba(178, 58, 122, 0.15)',
             textAlign: 'right',
           }}
         >
@@ -235,11 +241,13 @@ export function VendorGoogleReviewsWidget({
               color: '#fef08a',
             }}
           >
-            <Star size={18} fill="#facc15" color="#facc15" />
-            <span>{rating.toFixed(1)} / 5.0</span>
+            <Star size={18} fill="#D46BA4" color="#B23A7A" />
+            <span>{rating === null ? 'Not rated yet' : `${rating.toFixed(1)} / 5.0`}</span>
           </div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255, 255, 255, 0.7)', marginTop: 2 }}>
-            {userRatingsTotal} Verified Google Reviews
+          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-2)', marginTop: 2 }}>
+            {userRatingsTotal === null
+              ? 'Google reviews not connected'
+              : `${userRatingsTotal} Google reviews`}
           </div>
         </div>
       </div>
@@ -261,11 +269,13 @@ export function VendorGoogleReviewsWidget({
             marginBottom: 12,
           }}
         >
-          <div style={{ fontSize: 11.5, fontWeight: 800, color: 'rgba(255, 255, 255, 0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            Real-World Customer Reviews & Feedback
+          <div style={{ fontSize: 11.5, fontWeight: 800, color: 'var(--ink-2)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            Reviews from Google
           </div>
-          <div style={{ fontSize: 11, color: 'rgba(255, 255, 255, 0.4)' }}>
-            Showing {Math.min(5, reviews.length)} of {userRatingsTotal}
+          <div style={{ fontSize: 11, color: 'var(--ink-2)' }}>
+            {userRatingsTotal === null
+              ? '—'
+              : `Showing ${Math.min(5, reviews.length)} of ${userRatingsTotal}`}
           </div>
         </div>
 
@@ -274,19 +284,21 @@ export function VendorGoogleReviewsWidget({
             style={{
               padding: '24px 18px',
               borderRadius: 14,
-              background: 'rgba(255, 255, 255, 0.025)',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
+              background: 'var(--cream-2)',
+              border: '1px solid var(--line)',
               textAlign: 'center',
-              color: 'rgba(255, 255, 255, 0.65)',
+              color: 'var(--ink-2)',
               fontSize: 13,
             }}
           >
-            <CheckCircle size={22} color="#10b981" style={{ margin: '0 auto 8px', opacity: 0.8 }} />
-            <div style={{ fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>
-              Verified Google Business Profile
+            <CheckCircle size={22} color="#1E9E5A" style={{ margin: '0 auto 8px', opacity: 0.8 }} />
+            <div style={{ fontWeight: 700, color: 'var(--ink)', marginBottom: 2 }}>
+              {isKeyMissing ? 'Google reviews not connected' : 'No public Google reviews yet'}
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.5)' }}>
-              No public reviews yet · Ready for enterprise procurement
+            <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>
+              {isKeyMissing
+                ? 'This deployment has no Google Places key configured, so live reviews are unavailable.'
+                : 'COE ratings from completed events appear on the vendor profile.'}
             </div>
           </div>
         ) : (
@@ -308,8 +320,8 @@ export function VendorGoogleReviewsWidget({
                 style={{
                   borderRadius: 12,
                   padding: '14px 16px',
-                  background: 'rgba(255, 255, 255, 0.035)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  background: 'var(--cream-2)',
+                  border: '1px solid var(--line)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -330,7 +342,7 @@ export function VendorGoogleReviewsWidget({
                     >
                       {rev.author_name.charAt(0)}
                     </div>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>
                       {rev.author_name}
                     </span>
                   </div>
@@ -341,18 +353,18 @@ export function VendorGoogleReviewsWidget({
                         <Star
                           key={sIdx}
                           size={11}
-                          fill={sIdx < rev.rating ? '#facc15' : 'transparent'}
-                          color={sIdx < rev.rating ? '#facc15' : 'rgba(255,255,255,0.2)'}
+                          fill={sIdx < rev.rating ? '#D46BA4' : 'transparent'}
+                          color={sIdx < rev.rating ? '#D46BA4' : 'rgba(255, 255, 255, 0.9)'}
                         />
                       ))}
                     </div>
-                    <span style={{ fontSize: 10.5, color: 'rgba(255, 255, 255, 0.45)' }}>
+                    <span style={{ fontSize: 10.5, color: 'var(--ink-2)' }}>
                       {rev.relative_time_description}
                     </span>
                   </div>
                 </div>
 
-                <p style={{ fontSize: 12.5, color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: 12.5, color: 'var(--ink)', lineHeight: 1.5, margin: 0 }}>
                   &ldquo;{rev.text}&rdquo;
                 </p>
               </motion.div>
@@ -366,22 +378,22 @@ export function VendorGoogleReviewsWidget({
         style={{
           marginTop: 16,
           paddingTop: 12,
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          borderTop: '1px solid var(--line)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           fontSize: 11,
-          color: 'rgba(255, 255, 255, 0.5)',
+          color: 'var(--ink-2)',
         }}
       >
         <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <MapPin size={13} color="#f97316" />
+          <MapPin size={13} color="#FF6B2C" />
           <span>{details?.formatted_address || 'Gurugram, Haryana'}</span>
         </span>
 
         {/* Powered by Google Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700, color: '#ffffff' }}>
-          <span style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.4)', fontWeight: 500 }}>powered by</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700, color: 'var(--ink)' }}>
+          <span style={{ fontSize: 10.5, color: 'var(--ink-2)', fontWeight: 500 }}>powered by</span>
           <span style={{ letterSpacing: '0.02em', fontSize: 12 }}>
             <span style={{ color: '#4285F4' }}>G</span>
             <span style={{ color: '#EA4335' }}>o</span>

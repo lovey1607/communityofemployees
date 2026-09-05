@@ -10,9 +10,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import { BlurredCyberHubBackground } from '@/components/canvas/BlurredCyberHubBackground';
-import { Shield, Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
-
-const ADMIN_CREDS = { email: 'admin@coe.com', pass: 'test1234' };
+import { Shield, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -24,43 +22,33 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = (e?: React.FormEvent) => {
+  const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setError('');
     const loginEmail = email.trim();
-    const loginPass = password;
 
     if (!loginEmail || !loginEmail.includes('@')) {
       setError('Enter a valid email address.');
       return;
     }
-    if (!loginPass) {
+    if (!password) {
       setError('Please enter your password.');
       return;
     }
 
     setLoading(true);
-    setTimeout(() => {
-      const ok = loginWithPassword(loginEmail, loginPass, 'admin');
-      setLoading(false);
-      if (ok) {
-        router.push('/admin/dashboard');
-      } else {
-        setError('Invalid credentials or insufficient permissions.');
-      }
-    }, 400);
-  };
-
-  const handleQuickLogin = () => {
-    setEmail(ADMIN_CREDS.email);
-    setPassword(ADMIN_CREDS.pass);
-    setLoading(true);
-    setTimeout(() => {
-      const ok = loginWithPassword(ADMIN_CREDS.email, ADMIN_CREDS.pass, 'admin');
-      setLoading(false);
-      if (ok) router.push('/admin/dashboard');
-      else setError('Quick login failed.');
-    }, 350);
+    const result = await loginWithPassword(loginEmail, password);
+    setLoading(false);
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
+    // The server decides what an admin is; this only picks where to land.
+    if (useStore.getState().currentUser?.role !== 'admin') {
+      setError('That account does not have admin access.');
+      return;
+    }
+    router.push('/admin/dashboard');
   };
 
   return (
@@ -71,7 +59,7 @@ export default function AdminLoginPage() {
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        background: '#05060e',
+        background: 'var(--cream)',
         padding: '24px',
       }}
     >
@@ -89,7 +77,7 @@ export default function AdminLoginPage() {
           zIndex: 1,
           fontSize: 'clamp(60px, 14vw, 160px)',
           fontWeight: 900,
-          color: 'rgba(234, 179, 8, 0.025)',
+          color: 'rgba(178, 58, 122, 0.025)',
           fontFamily: 'var(--font-display)',
           letterSpacing: '-0.04em',
           userSelect: 'none',
@@ -114,17 +102,17 @@ export default function AdminLoginPage() {
           style={{
             borderRadius: 24,
             overflow: 'hidden',
-            background: '#0B0F17',
-            border: '1.5px solid rgba(234, 179, 8, 0.25)',
-            boxShadow: '0 40px 100px rgba(0,0,0,0.9), 0 0 60px rgba(234,179,8,0.06)',
+            background: '#FFF7EC',
+            border: '1.5px solid rgba(178, 58, 122, 0.25)',
+            boxShadow: '0 40px 100px rgba(60, 30, 0, 0.18), 0 0 60px rgba(178, 58, 122,0.06)',
           }}
         >
           {/* Header */}
           <div
             style={{
               padding: '32px 32px 24px',
-              background: 'linear-gradient(145deg, rgba(234, 179, 8, 0.1) 0%, transparent 70%)',
-              borderBottom: '1px solid rgba(234, 179, 8, 0.15)',
+              background: 'linear-gradient(145deg, rgba(178, 58, 122, 0.1) 0%, transparent 70%)',
+              borderBottom: '1px solid rgba(178, 58, 122, 0.15)',
               textAlign: 'center',
             }}
           >
@@ -134,14 +122,14 @@ export default function AdminLoginPage() {
                 width: 56,
                 height: 56,
                 borderRadius: 16,
-                background: 'rgba(234, 179, 8, 0.15)',
-                border: '1px solid rgba(234, 179, 8, 0.35)',
+                background: 'rgba(178, 58, 122, 0.15)',
+                border: '1px solid rgba(178, 58, 122, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#eab308',
+                color: '#B23A7A',
                 margin: '0 auto 16px',
-                boxShadow: '0 8px 24px rgba(234,179,8,0.2)',
+                boxShadow: '0 8px 24px rgba(178, 58, 122,0.2)',
               }}
             >
               <Shield size={26} />
@@ -152,14 +140,14 @@ export default function AdminLoginPage() {
                 fontFamily: 'var(--font-display)',
                 fontSize: 24,
                 fontWeight: 800,
-                color: '#ffffff',
+                color: 'var(--ink)',
                 letterSpacing: '-0.025em',
                 marginBottom: 6,
               }}
             >
               Super Admin Access
             </h1>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>
+            <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.5 }}>
               Restricted platform governance portal.
               <br />
               Unauthorised access is monitored and logged.
@@ -176,7 +164,7 @@ export default function AdminLoginPage() {
                     display: 'block',
                     fontSize: 11,
                     fontWeight: 700,
-                    color: 'rgba(255,255,255,0.55)',
+                    color: 'var(--ink-2)',
                     textTransform: 'uppercase',
                     letterSpacing: '0.06em',
                     marginBottom: 6,
@@ -192,7 +180,7 @@ export default function AdminLoginPage() {
                       left: 13,
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: '#eab308',
+                      color: '#B23A7A',
                     }}
                   />
                   <input
@@ -200,7 +188,7 @@ export default function AdminLoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@coe.com"
+                    placeholder="you@communityofemployees.com"
                     style={{ paddingLeft: 36, fontSize: 13.5 }}
                   />
                 </div>
@@ -213,7 +201,7 @@ export default function AdminLoginPage() {
                     display: 'block',
                     fontSize: 11,
                     fontWeight: 700,
-                    color: 'rgba(255,255,255,0.55)',
+                    color: 'var(--ink-2)',
                     textTransform: 'uppercase',
                     letterSpacing: '0.06em',
                     marginBottom: 6,
@@ -229,7 +217,7 @@ export default function AdminLoginPage() {
                       left: 13,
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: '#eab308',
+                      color: '#B23A7A',
                     }}
                   />
                   <input
@@ -250,7 +238,7 @@ export default function AdminLoginPage() {
                       transform: 'translateY(-50%)',
                       background: 'none',
                       border: 'none',
-                      color: 'rgba(255,255,255,0.4)',
+                      color: 'var(--ink-2)',
                       cursor: 'pointer',
                       display: 'flex',
                     }}
@@ -267,9 +255,9 @@ export default function AdminLoginPage() {
                     marginBottom: 14,
                     padding: '9px 14px',
                     borderRadius: 10,
-                    background: 'rgba(239, 68, 68, 0.12)',
-                    border: '1px solid rgba(239, 68, 68, 0.3)',
-                    color: '#f87171',
+                    background: 'rgba(194, 50, 28, 0.12)',
+                    border: '1px solid rgba(194, 50, 28, 0.3)',
+                    color: '#E0705C',
                     fontSize: 12.5,
                     fontWeight: 600,
                   }}
@@ -286,8 +274,8 @@ export default function AdminLoginPage() {
                   padding: '13px',
                   borderRadius: 12,
                   border: 'none',
-                  background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)',
-                  color: '#050814',
+                  background: 'linear-gradient(135deg, #B23A7A 0%, #8E2C61 100%)',
+                  color: '#FFF7EC',
                   fontSize: 14,
                   fontWeight: 800,
                   cursor: loading ? 'not-allowed' : 'pointer',
@@ -296,7 +284,7 @@ export default function AdminLoginPage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: 8,
-                  boxShadow: '0 8px 24px rgba(234,179,8,0.3)',
+                  boxShadow: '0 8px 24px rgba(178, 58, 122,0.3)',
                   fontFamily: 'var(--font-body)',
                   transition: 'all 0.2s ease',
                 }}
@@ -312,8 +300,8 @@ export default function AdminLoginPage() {
                 marginTop: 20,
                 borderRadius: 12,
                 padding: '12px 14px',
-                background: 'rgba(234, 179, 8, 0.06)',
-                border: '1px solid rgba(234, 179, 8, 0.18)',
+                background: 'rgba(178, 58, 122, 0.06)',
+                border: '1px solid rgba(178, 58, 122, 0.18)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -323,34 +311,16 @@ export default function AdminLoginPage() {
                 style={{
                   fontSize: 10.5,
                   fontWeight: 800,
-                  color: '#eab308',
+                  color: '#B23A7A',
                   textTransform: 'uppercase',
                   letterSpacing: '0.06em',
                 }}
               >
-                🔑 Demo Access
+                Restricted
               </span>
-              <button
-                type="button"
-                onClick={handleQuickLogin}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 5,
-                  background: 'rgba(234,179,8,0.18)',
-                  border: '1px solid rgba(234,179,8,0.35)',
-                  borderRadius: 8,
-                  padding: '4px 10px',
-                  color: '#eab308',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  fontFamily: 'var(--font-body)',
-                }}
-              >
-                <Sparkles size={11} />
-                <span>1-Click Auto Login</span>
-              </button>
+              <span style={{ fontSize: 11, color: 'var(--ink-2)', fontWeight: 600 }}>
+                Admin accounts are created by an existing admin.
+              </span>
             </div>
           </div>
         </div>
@@ -361,7 +331,7 @@ export default function AdminLoginPage() {
             textAlign: 'center',
             marginTop: 16,
             fontSize: 11.5,
-            color: 'rgba(255,255,255,0.25)',
+            color: 'var(--ink-2)',
             fontWeight: 600,
           }}
         >

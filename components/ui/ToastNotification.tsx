@@ -34,20 +34,20 @@ export function ToastContainer() {
           const isWarning = t.type === 'warning';
 
           const iconColor = isSuccess
-            ? '#10b981'
+            ? '#1E9E5A'
             : isError
-            ? '#ef4444'
+            ? '#C2321C'
             : isWarning
-            ? '#f59e0b'
-            : '#38bdf8';
+            ? '#A66A00'
+            : '#6D97FF';
 
           const borderColor = isSuccess
-            ? 'rgba(16, 185, 129, 0.4)'
+            ? 'rgba(30, 158, 90, 0.4)'
             : isError
-            ? 'rgba(239, 68, 68, 0.4)'
+            ? 'rgba(194, 50, 28, 0.4)'
             : isWarning
             ? 'rgba(245, 158, 11, 0.4)'
-            : 'rgba(56, 189, 248, 0.4)';
+            : 'rgba(109, 151, 255, 0.4)';
 
           return (
             <motion.div
@@ -57,13 +57,13 @@ export function ToastContainer() {
               exit={{ opacity: 0, scale: 0.9, y: -10 }}
               transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
               style={{
-                background: 'rgba(7, 12, 28, 0.94)',
+                background: 'var(--paper)',
                 border: `1px solid ${borderColor}`,
                 borderRadius: 14,
                 padding: '14px 18px',
                 backdropFilter: 'blur(28px)',
                 WebkitBackdropFilter: 'blur(28px)',
-                boxShadow: '0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08) inset',
+                boxShadow: '0 16px 40px rgba(60, 30, 0, 0.16)',
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: 12,
@@ -83,7 +83,7 @@ export function ToastContainer() {
                   style={{
                     fontSize: 13.5,
                     fontWeight: 700,
-                    color: '#ffffff',
+                    color: 'var(--ink)',
                     fontFamily: 'var(--font-display)',
                     marginBottom: 2,
                   }}
@@ -93,7 +93,7 @@ export function ToastContainer() {
                 <div
                   style={{
                     fontSize: 12.5,
-                    color: 'rgba(255, 255, 255, 0.75)',
+                    color: 'var(--ink-2)',
                     lineHeight: 1.45,
                     fontFamily: 'var(--font-body)',
                   }}
@@ -108,7 +108,7 @@ export function ToastContainer() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'rgba(255, 255, 255, 0.4)',
+                  color: 'var(--ink-2)',
                   cursor: 'pointer',
                   padding: 2,
                   display: 'flex',

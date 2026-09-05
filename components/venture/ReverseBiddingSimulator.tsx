@@ -1,7 +1,9 @@
 'use client';
 // ============================================================
 // components/venture/ReverseBiddingSimulator.tsx
-// Interactive Live Reverse-Auction Engine Visualizer
+// Interactive walkthrough of the reverse-auction flow.
+// Everything in here is illustrative sample data, clearly labelled as such —
+// it is not, and must not be made to look like, real platform activity.
 // Real-time price drops, competitive bid ticks, and savings tally
 // ============================================================
 
@@ -187,9 +189,9 @@ export function ReverseBiddingSimulator() {
     <div
       style={{
         borderRadius: 28,
-        background: 'rgba(11, 15, 23, 0.85)',
-        border: '1.5px solid rgba(16, 185, 129, 0.25)',
-        boxShadow: '0 30px 100px rgba(0,0,0,0.8), 0 0 60px rgba(16,185,129,0.08)',
+        background: 'var(--paper)',
+        border: '1.5px solid rgba(30, 158, 90, 0.25)',
+        boxShadow: '0 30px 100px rgba(60, 30, 0, 0.18), 0 0 60px rgba(30, 158, 90,0.08)',
         backdropFilter: 'blur(20px)',
         overflow: 'hidden',
       }}
@@ -198,8 +200,8 @@ export function ReverseBiddingSimulator() {
       <div
         style={{
           padding: '24px 28px',
-          background: 'linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(14,165,233,0.06) 100%)',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(135deg, rgba(30, 158, 90,0.12) 0%, rgba(46, 107, 255,0.06) 100%)',
+          borderBottom: '1px solid var(--line)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -213,13 +215,13 @@ export function ReverseBiddingSimulator() {
               width: 44,
               height: 44,
               borderRadius: 14,
-              background: 'rgba(16,185,129,0.2)',
-              border: '1px solid rgba(16,185,129,0.4)',
+              background: 'rgba(30, 158, 90,0.2)',
+              border: '1px solid rgba(30, 158, 90,0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#10b981',
-              boxShadow: '0 0 20px rgba(16,185,129,0.3)',
+              color: '#1E9E5A',
+              boxShadow: '0 0 20px rgba(30, 158, 90,0.3)',
             }}
           >
             <Zap size={22} />
@@ -234,25 +236,25 @@ export function ReverseBiddingSimulator() {
                   letterSpacing: '0.08em',
                   padding: '3px 8px',
                   borderRadius: 999,
-                  background: 'rgba(16,185,129,0.2)',
-                  color: '#34d399',
+                  background: 'rgba(30, 158, 90,0.2)',
+                  color: '#137A43',
                 }}
               >
-                LIVE REVERSE-AUCTION ENGINE
+                Worked example · sample data
               </span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#f97316', fontWeight: 700 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f97316', animation: 'pulse 1.5s infinite' }} />
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#FF6B2C', fontWeight: 700 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B2C', animation: 'pulse 1.5s infinite' }} />
                 Real-Time Simulation
               </span>
             </div>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 800, color: '#ffffff', marginTop: 3 }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 800, color: 'var(--ink)', marginTop: 3 }}>
               {scenario.title}
             </h3>
           </div>
         </div>
 
         {/* Scenario Switcher Tabs */}
-        <div style={{ display: 'flex', gap: 6, background: 'rgba(255,255,255,0.05)', padding: 4, borderRadius: 12 }}>
+        <div style={{ display: 'flex', gap: 6, background: 'var(--cream-2)', padding: 4, borderRadius: 12 }}>
           {SCENARIOS.map((s) => (
             <button
               key={s.id}
@@ -260,9 +262,9 @@ export function ReverseBiddingSimulator() {
               style={{
                 padding: '8px 14px',
                 borderRadius: 9,
-                border: activeScenarioId === s.id ? '1px solid rgba(16,185,129,0.4)' : '1px solid transparent',
-                background: activeScenarioId === s.id ? 'rgba(16,185,129,0.2)' : 'transparent',
-                color: activeScenarioId === s.id ? '#ffffff' : 'rgba(255,255,255,0.6)',
+                border: activeScenarioId === s.id ? '1px solid rgba(30, 158, 90,0.4)' : '1px solid transparent',
+                background: activeScenarioId === s.id ? 'rgba(30, 158, 90,0.2)' : 'transparent',
+                color: activeScenarioId === s.id ? 'var(--ink)' : 'var(--ink-2)',
                 fontSize: 12,
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -282,7 +284,7 @@ export function ReverseBiddingSimulator() {
         {/* Left: Live Bidding Stream */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--ink-2)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Competitive Vendor Bids ({activeBids.length} Received)
             </div>
             <button
@@ -297,7 +299,7 @@ export function ReverseBiddingSimulator() {
                 gap: 5,
                 fontSize: 11,
                 fontWeight: 700,
-                color: '#10b981',
+                color: '#1E9E5A',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
@@ -321,41 +323,41 @@ export function ReverseBiddingSimulator() {
                       borderRadius: 18,
                       padding: '16px 18px',
                       background: isCurrentLowest
-                        ? 'linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(11,15,23,0.95) 100%)'
-                        : 'rgba(255,255,255,0.03)',
+                        ? 'linear-gradient(135deg, rgba(30, 158, 90,0.15) 0%, rgba(255, 255, 255, 0.96) 100%)'
+                        : 'rgba(255, 255, 255, 0.9)',
                       border: isCurrentLowest
-                        ? '1.5px solid rgba(16,185,129,0.45)'
-                        : '1px solid rgba(255,255,255,0.08)',
-                      boxShadow: isCurrentLowest ? '0 8px 30px rgba(16,185,129,0.15)' : 'none',
+                        ? '1.5px solid rgba(30, 158, 90,0.45)'
+                        : '1px solid var(--line)',
+                      boxShadow: isCurrentLowest ? '0 8px 30px rgba(30, 158, 90,0.15)' : 'none',
                       position: 'relative',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <h4 style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 800, color: '#ffffff' }}>
+                          <h4 style={{ fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 800, color: 'var(--ink)' }}>
                             {bid.vendorName}
                           </h4>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 11, color: '#eab308', fontWeight: 800 }}>
-                            <Star size={11} fill="#eab308" /> {bid.rating}
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 11, color: '#B23A7A', fontWeight: 800 }}>
+                            <Star size={11} fill="#B23A7A" /> {bid.rating}
                           </span>
                         </div>
-                        <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                        <div style={{ fontSize: 11.5, color: 'var(--ink-2)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
                           <MapPin size={11} /> {bid.locality}
                         </div>
                       </div>
 
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 900, color: isCurrentLowest ? '#34d399' : '#ffffff' }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 900, color: isCurrentLowest ? '#5CD48F' : 'var(--ink)' }}>
                           {formatCurrency(bid.bidAmount)}
                         </div>
-                        <div style={{ fontSize: 10.5, color: isCurrentLowest ? '#10b981' : 'rgba(255,255,255,0.4)', fontWeight: 700 }}>
+                        <div style={{ fontSize: 10.5, color: isCurrentLowest ? '#1E9E5A' : 'var(--ink-2)', fontWeight: 700 }}>
                           {isCurrentLowest ? '🔥 LOWEST QUOTE' : `+${formatCurrency(bid.bidAmount - lowestBid)}`}
                         </div>
                       </div>
                     </div>
 
-                    <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4, marginBottom: 10 }}>
+                    <p style={{ fontSize: 12, color: 'var(--ink-2)', lineHeight: 1.4, marginBottom: 10 }}>
                       "{bid.proposalHighlight}"
                     </p>
 
@@ -368,9 +370,9 @@ export function ReverseBiddingSimulator() {
                             fontWeight: 700,
                             padding: '2px 8px',
                             borderRadius: 6,
-                            background: 'rgba(255,255,255,0.06)',
-                            color: 'rgba(255,255,255,0.75)',
-                            border: '1px solid rgba(255,255,255,0.08)',
+                            background: 'var(--cream-2)',
+                            color: 'var(--ink-2)',
+                            border: '1px solid var(--line)',
                           }}
                         >
                           {am}
@@ -384,17 +386,17 @@ export function ReverseBiddingSimulator() {
                           marginTop: 10,
                           padding: '6px 10px',
                           borderRadius: 8,
-                          background: 'rgba(16,185,129,0.2)',
-                          border: '1px solid rgba(16,185,129,0.4)',
+                          background: 'rgba(30, 158, 90,0.2)',
+                          border: '1px solid rgba(30, 158, 90,0.4)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
                         }}
                       >
-                        <span style={{ fontSize: 11, fontWeight: 800, color: '#34d399', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ fontSize: 11, fontWeight: 800, color: '#137A43', display: 'flex', alignItems: 'center', gap: 4 }}>
                           <CheckCircle2 size={13} /> 100% Contract Awarded & Price Locked
                         </span>
-                        <span style={{ fontSize: 10.5, fontWeight: 700, color: '#ffffff' }}>
+                        <span style={{ fontSize: 10.5, fontWeight: 700, color: 'var(--ink)' }}>
                           GST Ready Invoice
                         </span>
                       </div>
@@ -413,52 +415,52 @@ export function ReverseBiddingSimulator() {
             style={{
               borderRadius: 20,
               padding: '22px',
-              background: 'linear-gradient(145deg, rgba(16,185,129,0.15) 0%, rgba(14,165,233,0.08) 100%)',
-              border: '1.5px solid rgba(16,185,129,0.3)',
-              boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+              background: 'linear-gradient(145deg, rgba(30, 158, 90,0.15) 0%, rgba(46, 107, 255,0.08) 100%)',
+              border: '1.5px solid rgba(30, 158, 90,0.3)',
+              boxShadow: '0 12px 40px rgba(60, 30, 0, 0.18)',
             }}
           >
-            <div style={{ fontSize: 11, fontWeight: 800, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: '#137A43', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
               Enterprise Cost Compression
             </div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1 }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1 }}>
               {formatCurrency(savings)}
             </div>
-            <div style={{ fontSize: 13, color: '#34d399', fontWeight: 700, marginTop: 4 }}>
+            <div style={{ fontSize: 13, color: '#137A43', fontWeight: 700, marginTop: 4 }}>
               💸 {savingsPercent}% Direct Savings Achieved
             </div>
 
-            <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid var(--line)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
-                <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', fontWeight: 700 }}>Starting RFP Budget</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: '#ffffff', marginTop: 2 }}>{formatCurrency(scenario.initialBudget)}</div>
+                <div style={{ fontSize: 10.5, color: 'var(--ink-2)', textTransform: 'uppercase', fontWeight: 700 }}>Starting RFP Budget</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--ink)', marginTop: 2 }}>{formatCurrency(scenario.initialBudget)}</div>
               </div>
               <div>
-                <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', fontWeight: 700 }}>Winning Reverse-Quote</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: '#34d399', marginTop: 2 }}>{formatCurrency(lowestBid)}</div>
+                <div style={{ fontSize: 10.5, color: 'var(--ink-2)', textTransform: 'uppercase', fontWeight: 700 }}>Winning Reverse-Quote</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: '#137A43', marginTop: 2 }}>{formatCurrency(lowestBid)}</div>
               </div>
             </div>
           </div>
 
           {/* Turnaround & Trust Metrics */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <div style={{ padding: '14px', borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div style={{ color: '#0ea5e9', marginBottom: 6 }}><Clock size={18} /></div>
-              <div style={{ fontSize: 18, fontWeight: 900, color: '#ffffff', fontFamily: 'var(--font-display)' }}>4.2 Hours</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>Avg Turnaround Time</div>
+            <div style={{ padding: '14px', borderRadius: 14, background: 'var(--cream-2)', border: '1px solid var(--line)' }}>
+              <div style={{ color: '#2E6BFF', marginBottom: 6 }}><Clock size={18} /></div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--ink)', fontFamily: 'var(--font-display)' }}>4.2 Hours</div>
+              <div style={{ fontSize: 11, color: 'var(--ink-2)', fontWeight: 600 }}>Avg Turnaround Time</div>
             </div>
 
-            <div style={{ padding: '14px', borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div style={{ color: '#10b981', marginBottom: 6 }}><ShieldCheck size={18} /></div>
-              <div style={{ fontSize: 18, fontWeight: 900, color: '#ffffff', fontFamily: 'var(--font-display)' }}>100% KYC</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>Verified Gurugram Venues</div>
+            <div style={{ padding: '14px', borderRadius: 14, background: 'var(--cream-2)', border: '1px solid var(--line)' }}>
+              <div style={{ color: '#1E9E5A', marginBottom: 6 }}><ShieldCheck size={18} /></div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--ink)', fontFamily: 'var(--font-display)' }}>100% KYC</div>
+              <div style={{ fontSize: 11, color: 'var(--ink-2)', fontWeight: 600 }}>Verified Gurugram Venues</div>
             </div>
           </div>
 
           {/* Corporate Client Bar */}
-          <div style={{ padding: '12px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', fontSize: 11.5, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ padding: '12px 14px', borderRadius: 14, background: 'var(--cream-2)', border: '1px solid var(--line)', fontSize: 11.5, color: 'var(--ink-2)', display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ fontSize: 16 }}>🏢</span>
-            <span>Corporate Buyer: <strong style={{ color: '#ffffff' }}>{scenario.corporateClient}</strong></span>
+            <span>Corporate Buyer: <strong style={{ color: 'var(--ink)' }}>{scenario.corporateClient}</strong></span>
           </div>
         </div>
       </div>

@@ -9,13 +9,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
-import { OfficeLightSwitch } from '@/components/OfficeLightSwitch';
 import { Store, LogOut, ShieldCheck } from 'lucide-react';
 import { CATEGORY_LABELS } from '@/lib/themes';
 
 export function VendorNav() {
   const router = useRouter();
-  const { currentVendorProfile, logout, isNightMode } = useStore();
+  const { currentVendorProfile, logout } = useStore();
 
   const handleLogout = () => {
     logout();
@@ -40,10 +39,10 @@ export function VendorNav() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: isNightMode ? 'rgba(11, 15, 23, 0.92)' : 'rgba(255, 255, 255, 0.94)',
+        background: 'var(--paper)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: isNightMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+        borderBottom: '1px solid rgba(235, 223, 204, 0.9)',
       }}
     >
       {/* Left: Brand + Role Badge + Home Link */}
@@ -55,7 +54,7 @@ export function VendorNav() {
                 width: 36,
                 height: 36,
                 borderRadius: 10,
-                background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+                background: 'linear-gradient(135deg, #FF6B2C 0%, #D9541C 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -63,7 +62,7 @@ export function VendorNav() {
                 fontWeight: 800,
                 color: '#ffffff',
                 fontFamily: 'var(--font-display)',
-                boxShadow: '0 4px 16px rgba(249, 115, 22, 0.35)',
+                boxShadow: '0 4px 16px rgba(255, 107, 44, 0.35)',
               }}
             >
               V
@@ -74,15 +73,15 @@ export function VendorNav() {
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
                   fontSize: 17,
-                  color: isNightMode ? '#ffffff' : '#0f172a',
+                  color: '#1D1A17',
                   letterSpacing: '-0.02em',
                   display: 'block',
                   lineHeight: 1.1,
                 }}
               >
-                COE<span style={{ color: '#f97316' }}> Vendor Hub</span>
+                COE<span style={{ color: '#FF6B2C' }}> Vendor Hub</span>
               </span>
-              <span style={{ fontSize: 9.5, color: '#f97316', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: 9.5, color: '#FF6B2C', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 {CATEGORY_LABELS[category]} · Live Auctions
               </span>
             </div>
@@ -94,9 +93,9 @@ export function VendorNav() {
           style={{
             padding: '5px 12px',
             borderRadius: 8,
-            border: isNightMode ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.1)',
-            background: isNightMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
-            color: isNightMode ? 'rgba(255, 255, 255, 0.8)' : '#334155',
+            border: '1px solid rgba(235, 223, 204, 0.95)',
+            background: 'rgba(235, 223, 204, 0.9)',
+            color: '#4A443D',
             fontSize: 12,
             fontWeight: 700,
             textDecoration: 'none',
@@ -114,7 +113,6 @@ export function VendorNav() {
 
       {/* Center: Office Lights */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <OfficeLightSwitch />
       </div>
 
         {/* Right: Vendor Profile Pill & Logout */}
@@ -127,13 +125,13 @@ export function VendorNav() {
               gap: 8,
               padding: '6px 12px',
               borderRadius: 12,
-              background: isNightMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+              background: 'rgba(235, 223, 204, 0.9)',
               border: `1px solid ${
                 currentVendorProfile?.status === 'approved'
-                  ? 'rgba(16, 185, 129, 0.3)'
+                  ? 'rgba(30, 158, 90, 0.3)'
                   : currentVendorProfile?.status === 'rejected'
-                  ? 'rgba(239, 68, 68, 0.3)'
-                  : 'rgba(234, 179, 8, 0.3)'
+                  ? 'rgba(194, 50, 28, 0.3)'
+                  : 'rgba(178, 58, 122, 0.3)'
               }`,
               textDecoration: 'none',
               cursor: 'pointer',
@@ -148,21 +146,21 @@ export function VendorNav() {
                 borderRadius: '50%',
                 background:
                   currentVendorProfile?.status === 'approved'
-                    ? '#10b981'
+                    ? '#1E9E5A'
                     : currentVendorProfile?.status === 'rejected'
-                    ? '#ef4444'
-                    : '#eab308',
+                    ? '#C2321C'
+                    : '#B23A7A',
                 boxShadow: `0 0 6px ${
                   currentVendorProfile?.status === 'approved'
-                    ? '#10b981'
+                    ? '#1E9E5A'
                     : currentVendorProfile?.status === 'rejected'
-                    ? '#ef4444'
-                    : '#eab308'
+                    ? '#C2321C'
+                    : '#B23A7A'
                 }`,
               }}
             />
             <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: isNightMode ? '#ffffff' : '#0f172a', lineHeight: 1.1 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#1D1A17', lineHeight: 1.1 }}>
                 {company}
               </div>
               <div
@@ -171,10 +169,10 @@ export function VendorNav() {
                   fontWeight: 700,
                   color:
                     currentVendorProfile?.status === 'approved'
-                      ? '#10b981'
+                      ? '#1E9E5A'
                       : currentVendorProfile?.status === 'rejected'
-                      ? '#ef4444'
-                      : '#eab308',
+                      ? '#C2321C'
+                      : '#B23A7A',
                 }}
               >
                 {currentVendorProfile?.status === 'approved'
@@ -190,7 +188,7 @@ export function VendorNav() {
         <button
           onClick={handleLogout}
           className="btn-ghost"
-          style={{ padding: '7px 10px', fontSize: 12, color: 'rgba(239,68,68,0.8)' }}
+          style={{ padding: '7px 10px', fontSize: 12, color: 'rgba(194, 50, 28,0.8)' }}
           title="Logout of Vendor Account"
         >
           <LogOut size={14} />

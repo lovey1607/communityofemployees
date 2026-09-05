@@ -58,10 +58,6 @@ export function GooglePlacesAutocomplete({
   );
   const [autoSyncName, setAutoSyncName] = useState(true);
   const [isApiKeyActive, setIsApiKeyActive] = useState(false);
-  const [showKeyModal, setShowKeyModal] = useState(false);
-  const [keyInput, setKeyInput] = useState('');
-  const [keySaving, setKeySaving] = useState(false);
-  const [keySuccess, setKeySuccess] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -73,12 +69,20 @@ export function GooglePlacesAutocomplete({
     }
   }, [value]);
 
-  // Check stored key or initial status
+  // Whether live Google Places is available is server configuration, not
+  // something the visitor can set. (This component used to POST a key the
+  // user typed to an endpoint that wrote it into the server's .env file.)
   useEffect(() => {
-    const storedKey = typeof window !== 'undefined' ? localStorage.getItem('coe_google_maps_key') : null;
-    if (storedKey) {
-      setIsApiKeyActive(true);
-    }
+    let cancelled = false;
+    fetch('/api/config/google-key')
+      .then((r) => r.json())
+      .then((d) => {
+        if (!cancelled) setIsApiKeyActive(Boolean(d.isConfigured));
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Close dropdown on outside click
@@ -102,13 +106,7 @@ export function GooglePlacesAutocomplete({
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        const storedKey = typeof window !== 'undefined' ? localStorage.getItem('coe_google_maps_key') : null;
-        const headers: HeadersInit = {};
-        if (storedKey) headers['x-google-maps-key'] = storedKey;
-
-        const res = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(inputValue.trim())}`, {
-          headers,
-        });
+        const res = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(inputValue.trim())}`);
         if (res.ok) {
           const data = await res.json();
           if (data.success && Array.isArray(data.predictions)) {
@@ -166,36 +164,6 @@ export function GooglePlacesAutocomplete({
     inputRef.current?.focus();
   };
 
-  const handleSaveApiKey = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!keyInput.trim()) return;
-    setKeySaving(true);
-    try {
-      const res = await fetch('/api/config/google-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey: keyInput.trim() }),
-      });
-      if (res.ok) {
-        localStorage.setItem('coe_google_maps_key', keyInput.trim());
-        setIsApiKeyActive(true);
-        setKeySuccess(true);
-        setTimeout(() => {
-          setShowKeyModal(false);
-          setKeySuccess(false);
-          // Refetch suggestions with new key
-          if (inputValue) {
-            setInputValue((prev) => prev);
-          }
-        }, 1200);
-      }
-    } catch (err) {
-      console.error('Failed to save API key:', err);
-    } finally {
-      setKeySaving(false);
-    }
-  };
-
   return (
     <div ref={containerRef} style={{ width: '100%', position: 'relative' }}>
       {/* Label Bar */}
@@ -206,22 +174,20 @@ export function GooglePlacesAutocomplete({
               display: 'block',
               fontSize: 11.5,
               fontWeight: 700,
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: 'var(--ink-2)',
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
             }}
           >
-            {label} {required && <span style={{ color: '#ef4444' }}>*</span>}
+            {label} {required && <span style={{ color: '#C2321C' }}>*</span>}
           </label>
 
-          <button
-            type="button"
-            onClick={() => setShowKeyModal(true)}
+          <span
             style={{
               fontSize: 10.5,
-              color: isApiKeyActive ? '#10b981' : '#fbbf24',
-              background: isApiKeyActive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(234, 179, 8, 0.14)',
-              border: isApiKeyActive ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(234, 179, 8, 0.35)',
+              color: isApiKeyActive ? '#1E9E5A' : '#A66A00',
+              background: isApiKeyActive ? 'rgba(30, 158, 90, 0.12)' : 'rgba(178, 58, 122, 0.14)',
+              border: isApiKeyActive ? '1px solid rgba(30, 158, 90, 0.3)' : '1px solid rgba(178, 58, 122, 0.35)',
               padding: '2px 8px',
               borderRadius: 999,
               cursor: 'pointer',
@@ -231,20 +197,24 @@ export function GooglePlacesAutocomplete({
               fontWeight: 700,
               transition: 'all 0.2s ease',
             }}
-            title="Click to connect your Google Cloud API key for 100% live Google reviews"
+            title={
+              isApiKeyActive
+                ? 'Live Google Places data is connected'
+                : 'Showing the built-in Gurugram directory — set GOOGLE_MAPS_API_KEY to enable live Google Places'
+            }
           >
             {isApiKeyActive ? (
               <>
-                <CheckCircle2 size={11} color="#10b981" />
-                <span>Google Places Live API Connected</span>
+                <CheckCircle2 size={11} color="#1E9E5A" />
+                <span>Google Places connected</span>
               </>
             ) : (
               <>
-                <Key size={11} color="#fbbf24" />
-                <span>Connect Google API Key (Live Ratings)</span>
+                <Key size={11} color="#A66A00" />
+                <span>Built-in Gurugram directory</span>
               </>
             )}
-          </button>
+          </span>
         </div>
       )}
 
@@ -256,7 +226,7 @@ export function GooglePlacesAutocomplete({
             left: 14,
             top: '50%',
             transform: 'translateY(-50%)',
-            color: 'rgba(255, 255, 255, 0.45)',
+            color: 'var(--ink-2)',
             pointerEvents: 'none',
             display: 'flex',
             alignItems: 'center',
@@ -271,7 +241,7 @@ export function GooglePlacesAutocomplete({
           style={{
             paddingLeft: 38,
             paddingRight: inputValue ? 38 : 14,
-            borderColor: isOpen && suggestions.length > 0 ? 'rgba(249, 115, 22, 0.6)' : undefined,
+            borderColor: isOpen && suggestions.length > 0 ? 'rgba(255, 107, 44, 0.6)' : undefined,
           }}
           placeholder={placeholder}
           value={inputValue}
@@ -299,7 +269,7 @@ export function GooglePlacesAutocomplete({
               right: 12,
               top: '50%',
               transform: 'translateY(-50%)',
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: 'var(--cream-2)',
               border: 'none',
               borderRadius: '50%',
               width: 20,
@@ -307,7 +277,7 @@ export function GooglePlacesAutocomplete({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'rgba(255, 255, 255, 0.6)',
+              color: 'var(--ink-2)',
               cursor: 'pointer',
             }}
           >
@@ -330,10 +300,10 @@ export function GooglePlacesAutocomplete({
               left: 0,
               right: 0,
               zIndex: 200,
-              background: '#0B0F17',
-              border: '1.5px solid rgba(249, 115, 22, 0.4)',
+              background: '#FFF7EC',
+              border: '1.5px solid rgba(255, 107, 44, 0.4)',
               borderRadius: 16,
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.9), 0 0 25px rgba(249, 115, 22, 0.15)',
+              boxShadow: '0 20px 60px rgba(60, 30, 0, 0.18), 0 0 25px rgba(255, 107, 44, 0.15)',
               overflow: 'hidden',
               maxHeight: 290,
               overflowY: 'auto',
@@ -342,16 +312,16 @@ export function GooglePlacesAutocomplete({
             <div
               style={{
                 padding: '8px 14px',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                borderBottom: '1px solid var(--line)',
                 fontSize: 10.5,
                 fontWeight: 700,
-                color: 'rgba(255, 255, 255, 0.45)',
+                color: 'var(--ink-2)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--cream-2)',
               }}
             >
               <span>Verified Google Places in India</span>
@@ -364,7 +334,7 @@ export function GooglePlacesAutocomplete({
                 onClick={() => handleSelectSuggestion(place)}
                 style={{
                   padding: '12px 14px',
-                  borderBottom: idx < suggestions.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+                  borderBottom: idx < suggestions.length - 1 ? '1px solid var(--line)' : 'none',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'flex-start',
@@ -372,7 +342,7 @@ export function GooglePlacesAutocomplete({
                   transition: 'background 0.15s ease',
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.background = 'rgba(249, 115, 22, 0.12)';
+                  (e.currentTarget as HTMLDivElement).style.background = 'rgba(255, 107, 44, 0.12)';
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLDivElement).style.background = 'transparent';
@@ -383,12 +353,12 @@ export function GooglePlacesAutocomplete({
                     width: 32,
                     height: 32,
                     borderRadius: 10,
-                    background: 'rgba(249, 115, 22, 0.15)',
-                    border: '1px solid rgba(249, 115, 22, 0.3)',
+                    background: 'rgba(255, 107, 44, 0.15)',
+                    border: '1px solid rgba(255, 107, 44, 0.3)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#f97316',
+                    color: '#FF6B2C',
                     flexShrink: 0,
                     marginTop: 2,
                   }}
@@ -398,7 +368,7 @@ export function GooglePlacesAutocomplete({
 
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 13.5, fontWeight: 800, color: '#ffffff' }}>
+                    <span style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--ink)' }}>
                       {place.name}
                     </span>
 
@@ -408,8 +378,8 @@ export function GooglePlacesAutocomplete({
                           fontSize: 9.5,
                           padding: '1px 6px',
                           borderRadius: 4,
-                          background: 'rgba(255, 255, 255, 0.08)',
-                          color: 'rgba(255, 255, 255, 0.65)',
+                          background: 'var(--cream-2)',
+                          color: 'var(--ink-2)',
                           fontWeight: 600,
                         }}
                       >
@@ -424,17 +394,17 @@ export function GooglePlacesAutocomplete({
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: 3,
-                          color: '#fbbf24',
+                          color: '#A66A00',
                           fontWeight: 700,
-                          background: 'rgba(234, 179, 8, 0.12)',
+                          background: 'rgba(178, 58, 122, 0.12)',
                           padding: '1px 6px',
                           borderRadius: 4,
                         }}
                       >
-                        <Star size={10} fill="#fbbf24" color="#fbbf24" />
+                        <Star size={10} fill="#A66A00" color="#A66A00" />
                         {place.rating.toFixed(1)}
                         {place.user_ratings_total !== undefined && place.user_ratings_total > 0 && (
-                          <span style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: 9.5, fontWeight: 500 }}>
+                          <span style={{ color: 'var(--ink-2)', fontSize: 9.5, fontWeight: 500 }}>
                             ({place.user_ratings_total.toLocaleString()} reviews)
                           </span>
                         )}
@@ -442,12 +412,12 @@ export function GooglePlacesAutocomplete({
                     )}
                   </div>
 
-                  <div style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.6)', lineHeight: 1.35 }}>
+                  <div style={{ fontSize: 12, color: 'var(--ink-2)', lineHeight: 1.35 }}>
                     {place.formatted_address}
                   </div>
                 </div>
 
-                <ArrowRight size={14} color="#f97316" style={{ marginTop: 8, opacity: 0.6, flexShrink: 0 }} />
+                <ArrowRight size={14} color="#FF6B2C" style={{ marginTop: 8, opacity: 0.6, flexShrink: 0 }} />
               </div>
             ))}
           </motion.div>
@@ -462,9 +432,9 @@ export function GooglePlacesAutocomplete({
             id="auto-sync-name"
             checked={autoSyncName}
             onChange={(e) => setAutoSyncName(e.target.checked)}
-            style={{ accentColor: '#f97316', cursor: 'pointer' }}
+            style={{ accentColor: '#FF6B2C', cursor: 'pointer' }}
           />
-          <label htmlFor="auto-sync-name" style={{ fontSize: 11.5, color: 'rgba(255, 255, 255, 0.6)', cursor: 'pointer' }}>
+          <label htmlFor="auto-sync-name" style={{ fontSize: 11.5, color: 'var(--ink-2)', cursor: 'pointer' }}>
             {autoSyncNameLabel}
           </label>
         </div>
@@ -479,8 +449,8 @@ export function GooglePlacesAutocomplete({
             marginTop: 10,
             padding: '14px 18px',
             borderRadius: 16,
-            background: 'rgba(16, 185, 129, 0.08)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
+            background: 'rgba(30, 158, 90, 0.08)',
+            border: '1px solid rgba(30, 158, 90, 0.3)',
             display: 'flex',
             alignItems: 'flex-start',
             gap: 12,
@@ -491,12 +461,12 @@ export function GooglePlacesAutocomplete({
               width: 34,
               height: 34,
               borderRadius: 10,
-              background: 'rgba(16, 185, 129, 0.2)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
+              background: 'rgba(30, 158, 90, 0.2)',
+              border: '1px solid rgba(30, 158, 90, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#10b981',
+              color: '#1E9E5A',
               flexShrink: 0,
               marginTop: 2,
             }}
@@ -506,7 +476,7 @@ export function GooglePlacesAutocomplete({
 
           <div style={{ flex: 1, fontSize: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
-              <span style={{ fontWeight: 800, color: '#ffffff', fontSize: 14 }}>
+              <span style={{ fontWeight: 800, color: 'var(--ink)', fontSize: 14 }}>
                 {selectedPlace.name || 'Verified Google Location'}
               </span>
 
@@ -517,18 +487,18 @@ export function GooglePlacesAutocomplete({
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: 3,
-                    color: '#fbbf24',
+                    color: '#A66A00',
                     fontWeight: 700,
-                    background: 'rgba(234, 179, 8, 0.15)',
+                    background: 'rgba(178, 58, 122, 0.15)',
                     padding: '2px 8px',
                     borderRadius: 999,
-                    border: '1px solid rgba(234, 179, 8, 0.3)',
+                    border: '1px solid rgba(178, 58, 122, 0.3)',
                   }}
                 >
-                  <Star size={11} fill="#fbbf24" color="#fbbf24" />
+                  <Star size={11} fill="#A66A00" color="#A66A00" />
                   {selectedPlace.rating.toFixed(1)} / 5.0
                   {selectedPlace.user_ratings_total !== undefined && selectedPlace.user_ratings_total > 0 && (
-                    <span style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 10 }}>
+                    <span style={{ color: 'var(--ink-2)', fontSize: 10 }}>
                       ({selectedPlace.user_ratings_total.toLocaleString()} Verified Google Reviews)
                     </span>
                   )}
@@ -536,7 +506,7 @@ export function GooglePlacesAutocomplete({
               )}
             </div>
 
-            <div style={{ color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.45 }}>
+            <div style={{ color: 'var(--ink-2)', lineHeight: 1.45 }}>
               {selectedPlace.formatted_address || inputValue}
             </div>
 
@@ -548,12 +518,12 @@ export function GooglePlacesAutocomplete({
                   gap: 12,
                   marginTop: 6,
                   fontSize: 10.5,
-                  color: 'rgba(255, 255, 255, 0.5)',
+                  color: 'var(--ink-2)',
                   flexWrap: 'wrap',
                 }}
               >
                 <span>
-                  Place ID: <strong style={{ color: '#34d399', fontFamily: 'monospace' }}>{selectedPlace.place_id}</strong>
+                  Place ID: <strong style={{ color: '#137A43', fontFamily: 'monospace' }}>{selectedPlace.place_id}</strong>
                 </span>
                 {selectedPlace.lat && selectedPlace.lng && (
                   <span>
@@ -566,102 +536,6 @@ export function GooglePlacesAutocomplete({
         </motion.div>
       )}
 
-      {/* ── API Key Configuration Modal ── */}
-      <AnimatePresence>
-        {showKeyModal && (
-          <div
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 400,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 20,
-              background: 'rgba(5, 8, 20, 0.85)',
-              backdropFilter: 'blur(14px)',
-            }}
-            onClick={() => setShowKeyModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.93, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.93, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                width: '100%',
-                maxWidth: 500,
-                background: '#0B0F17',
-                border: '1.5px solid rgba(234, 179, 8, 0.35)',
-                borderRadius: 22,
-                padding: '26px',
-                boxShadow: '0 30px 90px rgba(0,0,0,0.95)',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(234, 179, 8, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24' }}>
-                    <Key size={18} />
-                  </div>
-                  <div>
-                    <h2 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-display)' }}>
-                      Connect Google Cloud API Key
-                    </h2>
-                    <div style={{ fontSize: 11.5, color: 'rgba(255, 255, 255, 0.5)' }}>
-                      Enables 100% live Google Places reviews & real-time ratings
-                    </div>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowKeyModal(false)}
-                  style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer' }}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-
-              <form onSubmit={handleSaveApiKey}>
-                <div style={{ marginBottom: 14 }}>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: 6 }}>
-                    Google Maps API Key (Places API Enabled)
-                  </label>
-                  <input
-                    className="input-base"
-                    placeholder="AIzaSy..."
-                    value={keyInput}
-                    onChange={(e) => setKeyInput(e.target.value)}
-                    autoFocus
-                  />
-                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 6, lineHeight: 1.4 }}>
-                    Paste your Google Cloud API key with <strong>Places API</strong> and <strong>Maps JavaScript API</strong> enabled.
-                  </div>
-                </div>
-
-                {keySuccess && (
-                  <div style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', fontSize: 12, fontWeight: 700, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Check size={14} /> Key saved and live Google Places API connected!
-                  </div>
-                )}
-
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button type="button" onClick={() => setShowKeyModal(false)} className="btn-ghost" style={{ flex: 1 }}>
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={!keyInput.trim() || keySaving}
-                    className="btn-primary"
-                    style={{ flex: 2, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
-                  >
-                    {keySaving ? 'Connecting…' : 'Save & Connect Live API'}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

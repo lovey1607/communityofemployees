@@ -184,7 +184,19 @@ export interface RFP {
   universal: UniversalFields;
   totalBudget: number;
   submittedAt: string;
-  status: 'open' | 'bid-received' | 'approved' | 'closed';
+  /**
+   * Lifecycle: draft → open → bid-received → awarded → completed,
+   * with cancelled/closed as terminal states. 'bid-received' is a derived
+   * convenience state (an open RFP that has at least one live bid).
+   */
+  status:
+    | 'draft'
+    | 'open'
+    | 'bid-received'
+    | 'awarded'
+    | 'completed'
+    | 'cancelled'
+    | 'closed';
   acceptedBidId?: string;
 }
 
@@ -207,6 +219,14 @@ export interface Bid {
   proposal: string;
   distanceKm: number;
   matchPercentage: number;
+  /** Why the score is what it is — see lib/server/match.ts. */
+  matchFactors?: {
+    key: string;
+    label: string;
+    score: number;
+    weight: number;
+    detail: string;
+  }[];
   submittedAt: string;
   status: 'pending' | 'accepted' | 'rejected';
   place_id?: string;

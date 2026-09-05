@@ -48,7 +48,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
               height: 6,
               width: isCurrent ? 24 : 8,
               borderRadius: 3,
-              background: isCurrent ? theme.primary : isDone ? theme.accent : 'rgba(255,255,255,0.18)',
+              background: isCurrent ? theme.primary : isDone ? theme.accent : 'var(--cream-2)',
               transition: 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)',
               boxShadow: isCurrent ? `0 0 10px ${theme.primary}` : 'none',
             }}
@@ -73,6 +73,7 @@ export function CategoryModal() {
     urgency: 'Upcoming Month',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [direction, setDirection] = useState(1);
 
   const effectiveCategory: CategoryType = activeCategory || 'food';
@@ -148,13 +149,22 @@ export function CategoryModal() {
       return;
     }
 
-    // All clear — submit
-    submitRFP({
-      category: effectiveCategory,
-      categoryDetails: categoryDetails as CategoryDetails,
-      universal: universal as UniversalFields,
-    });
-    setSubmitted(true);
+    // All clear — submit.
+    //
+    // This used to call submitRFP() without awaiting and flip straight to the
+    // confirmation screen, so a requirement the server had rejected still
+    // showed "posted" and then never appeared anywhere. The success screen now
+    // waits for the server to actually accept it.
+    setSubmitting(true);
+    void (async () => {
+      const result = await submitRFP({
+        category: effectiveCategory,
+        categoryDetails: categoryDetails as CategoryDetails,
+        universal: universal as UniversalFields,
+      });
+      setSubmitting(false);
+      if (result.success) setSubmitted(true);
+    })();
   };
 
   const renderStep1 = () => {
@@ -207,12 +217,12 @@ export function CategoryModal() {
               width: '100%',
               maxWidth: 680,
               maxHeight: '92vh',
-              background: 'rgba(7, 10, 24, 0.94)',
+              background: 'var(--paper)',
               border: `1px solid ${effectiveTheme.primary}44`,
               borderRadius: 24,
               backdropFilter: 'blur(36px)',
               WebkitBackdropFilter: 'blur(36px)',
-              boxShadow: `0 32px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.1) inset`,
+              boxShadow: '0 32px 90px rgba(60, 30, 0, 0.20)',
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
@@ -222,7 +232,7 @@ export function CategoryModal() {
             <div
               style={{
                 padding: '20px 24px 16px',
-                borderBottom: '1px solid rgba(255,255,255,0.08)',
+                borderBottom: '1px solid var(--line)',
                 background: `linear-gradient(135deg, ${effectiveTheme.primary}18 0%, transparent 100%)`,
                 flexShrink: 0,
               }}
@@ -253,7 +263,7 @@ export function CategoryModal() {
                         fontFamily: 'var(--font-display)',
                         fontSize: 18,
                         fontWeight: 800,
-                        color: '#ffffff',
+                        color: 'var(--ink)',
                         letterSpacing: '-0.02em',
                       }}
                     >
@@ -269,8 +279,8 @@ export function CategoryModal() {
                     onClick={handleClose}
                     aria-label="Close modal"
                     style={{
-                      background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(255,255,255,0.15)',
+                      background: 'var(--cream-2)',
+                      border: '1px solid var(--line)',
                       borderRadius: 10,
                       width: 32,
                       height: 32,
@@ -278,7 +288,7 @@ export function CategoryModal() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       cursor: 'pointer',
-                      color: 'rgba(255,255,255,0.7)',
+                      color: 'var(--ink-2)',
                       transition: 'all 0.2s',
                     }}
                   >
@@ -301,9 +311,9 @@ export function CategoryModal() {
                         style={{
                           padding: '5px 12px',
                           borderRadius: 999,
-                          border: isSelected ? `1.5px solid ${catTheme.primary}` : '1px solid rgba(255,255,255,0.12)',
-                          background: isSelected ? `${catTheme.primary}25` : 'rgba(255,255,255,0.05)',
-                          color: isSelected ? '#ffffff' : 'rgba(255,255,255,0.65)',
+                          border: isSelected ? `1.5px solid ${catTheme.primary}` : '1px solid var(--line)',
+                          background: isSelected ? catTheme.primary : 'var(--cream-2)',
+                          color: isSelected ? '#ffffff' : 'var(--ink-2)',
                           fontSize: 12,
                           fontWeight: isSelected ? 800 : 600,
                           cursor: 'pointer',
@@ -380,11 +390,11 @@ export function CategoryModal() {
               <div
                 style={{
                   padding: '16px 28px',
-                  borderTop: '1px solid rgba(255,255,255,0.08)',
+                  borderTop: '1px solid var(--line)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  background: 'rgba(0, 0, 0, 0.25)',
+                  background: 'rgba(122, 113, 105, 0.3)',
                   flexShrink: 0,
                 }}
               >
@@ -413,6 +423,7 @@ export function CategoryModal() {
                       padding: '10px 22px',
                       fontSize: 13.5,
                       background: effectiveTheme.primary,
+                      color: '#ffffff',
                     }}
                   >
                     <span>Continue</span>
@@ -422,7 +433,7 @@ export function CategoryModal() {
                   <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={!isApproved}
+                    disabled={!isApproved || submitting}
                     className="btn-primary"
                     style={{
                       display: 'flex',
@@ -430,16 +441,14 @@ export function CategoryModal() {
                       gap: 8,
                       padding: '10px 24px',
                       fontSize: 13.5,
-                      background: isApproved
-                        ? `linear-gradient(135deg, ${effectiveTheme.primary} 0%, ${effectiveTheme.accent} 100%)`
-                        : 'rgba(255,255,255,0.12)',
-                      color: isApproved ? '#ffffff' : 'rgba(255,255,255,0.4)',
+                      background: isApproved ? effectiveTheme.primary : 'var(--cream-2)',
+                      color: isApproved ? '#ffffff' : 'var(--muted)',
                       cursor: isApproved ? 'pointer' : 'not-allowed',
-                      boxShadow: isApproved ? `0 0 20px ${effectiveTheme.primary}60` : 'none',
+                      boxShadow: isApproved ? `0 8px 20px ${effectiveTheme.primary}45` : 'none',
                     }}
                   >
                     <Sparkles size={16} />
-                    <span>{isApproved ? 'Publish Corporate RFP' : 'Sign in as Corporate to Publish'}</span>
+                    <span>{submitting ? 'Publishing…' : isApproved ? 'Publish Corporate RFP' : 'Sign in as Corporate to Publish'}</span>
                   </button>
                 )}
               </div>

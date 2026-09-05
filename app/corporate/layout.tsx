@@ -13,11 +13,14 @@ import { useStore } from '@/store/useStore';
 export default function CorporateLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { currentUser, currentCorporateProfile } = useStore();
+  const { currentUser, currentCorporateProfile, hydrated, loadRfps } = useStore();
 
   const isOnboarding = pathname === '/corporate/onboarding';
 
   useEffect(() => {
+    // Wait for the server to answer "who am I" before redirecting anywhere,
+    // otherwise a signed-in user is bounced to "/" on first paint.
+    if (!hydrated) return;
     if (!currentUser) {
       router.push('/');
       return;
@@ -28,7 +31,11 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
     if (!isOnboarding && !currentCorporateProfile?.isCompleted) {
       router.push('/corporate/onboarding');
     }
-  }, [currentUser, currentCorporateProfile, router, isOnboarding]);
+  }, [hydrated, currentUser, currentCorporateProfile, router, isOnboarding]);
+
+  useEffect(() => {
+    if (hydrated && currentUser?.role === 'corporate') void loadRfps();
+  }, [hydrated, currentUser, loadRfps]);
 
   if (isOnboarding) return <>{children}</>;
 

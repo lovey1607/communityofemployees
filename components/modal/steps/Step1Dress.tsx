@@ -19,7 +19,7 @@ export function Step1Dress({
 }) {
   return (
     <div>
-      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginBottom: 20 }}>
+      <p style={{ color: 'var(--ink-2)', fontSize: 14, marginBottom: 20 }}>
         Design and source premium branded merchandise for your team.
       </p>
 

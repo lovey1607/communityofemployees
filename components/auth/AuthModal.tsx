@@ -1,626 +1,440 @@
 'use client';
 // ============================================================
 // components/auth/AuthModal.tsx
-// Production Enterprise Authentication Portal
-// Email + Password & OTP Access for Verified Corporate & Vendor Partners
+// Sign in · Create account · Forgot password.
+//
+// Rewritten against the real backend. What went: the simulated OTP (a code
+// the browser generated and then checked against itself) and the venue
+// picker that filled in a shared demo login. Both were props for a
+// prototype and neither authenticates anything.
 // ============================================================
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@/store/useStore';
-import { UserRole } from '@/lib/types';
-import { GURUGRAM_PRESEEDED_VENUES, GurugramVenue } from '@/data/venues';
+import { CategoryType } from '@/lib/types';
+import { checkWorkEmail } from '@/lib/emailDomains';
 import {
-  Mail, KeyRound, Building2, Store,
-  ArrowRight, X, Sparkles, CheckCircle2, Star, Clock, MapPin, Search, ChevronDown, Lock, Info
+  Mail, KeyRound, Building2, Store, ArrowRight, X, Lock, Info, CheckCircle2, AlertTriangle,
 } from 'lucide-react';
+
+type Mode = 'signin' | 'signup' | 'forgot';
+type SignupRole = 'corporate' | 'vendor';
+
+const CATEGORIES: { value: CategoryType; label: string }[] = [
+  { value: 'sports', label: 'Sports & tournaments' },
+  { value: 'food', label: 'Food, parties & venues' },
+  { value: 'trips', label: 'Trips & offsites' },
+  { value: 'gifts', label: 'Gifting & hampers' },
+  { value: 'dress', label: 'Merchandise & apparel' },
+];
 
 export function AuthModal() {
   const router = useRouter();
-  const { authModalOpen, closeAuthModal, sendOtp, verifyOtp, loginWithPassword, isNightMode } = useStore();
+  const {
+    authModalOpen,
+    closeAuthModal,
+    loginWithPassword,
+    registerUser,
+    requestPasswordReset,
+  } = useStore();
 
-  const [role, setRole] = useState<UserRole>('vendor');
+  const [mode, setMode] = useState<Mode>('signin');
+  const [role, setRole] = useState<SignupRole>('corporate');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [authMode, setAuthMode] = useState<'password' | 'otp'>('password');
-  const [otp, setOtp] = useState('');
-  const [step, setStep] = useState<'email' | 'otp'>('email');
   const [loading, setLoading] = useState(false);
-  const [selectedVenueCategory, setSelectedVenueCategory] = useState<'all' | 'sports' | 'food'>('all');
-  const [venueSearchQuery, setVenueSearchQuery] = useState('');
-  const [showVenuePicker, setShowVenuePicker] = useState(false);
+  const [notice, setNotice] = useState<{ tone: 'ok' | 'error'; text: string } | null>(null);
+
+  // Vendor signup extras
+  const [companyName, setCompanyName] = useState('');
+  const [gstNumber, setGstNumber] = useState('');
+  const [category, setCategory] = useState<CategoryType>('food');
+  const [serviceArea, setServiceArea] = useState('Gurugram');
+
+  const emailPolicy = useMemo(
+    () => (email.includes('@') ? checkWorkEmail(email) : null),
+    [email]
+  );
+  const showWorkEmailHint = mode === 'signup' && role === 'corporate' && emailPolicy?.ok === false;
 
   if (!authModalOpen) return null;
 
-  const handleSendOtp = (e: React.FormEvent) => {
+  const resetNotice = () => setNotice(null);
+
+  const routeForRole = (userRole?: string) => {
+    if (userRole === 'corporate') return '/corporate/dashboard';
+    if (userRole === 'vendor') return '/vendor/dashboard';
+    if (userRole === 'admin') return '/admin/dashboard';
+    return '/';
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !email.includes('@')) return;
-
+    resetNotice();
     setLoading(true);
-    setTimeout(() => {
-      sendOtp(email, role);
-      setStep('otp');
-      setLoading(false);
-    }, 400);
+    const result = await loginWithPassword(email, password);
+    setLoading(false);
+    if (!result.success) {
+      setNotice({ tone: 'error', text: result.message });
+      return;
+    }
+    closeAuthModal();
+    router.push(routeForRole(useStore.getState().currentUser?.role));
   };
 
-  const handlePasswordLogin = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !email.includes('@')) return;
-
+    resetNotice();
     setLoading(true);
-    setTimeout(() => {
-      const ok = loginWithPassword(email, password, role);
-      setLoading(false);
-      if (ok) {
-        closeAuthModal();
-        if (role === 'corporate') router.push('/corporate/dashboard');
-        else if (role === 'vendor') router.push('/vendor/dashboard');
-        else router.push('/admin/dashboard');
-      }
-    }, 350);
+    const result =
+      role === 'corporate'
+        ? await registerUser({ role: 'corporate', email, password })
+        : await registerUser({
+            role: 'vendor',
+            email,
+            password,
+            companyName,
+            gstNumber,
+            category,
+            serviceAreas: serviceArea
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean),
+          });
+    setLoading(false);
+    setNotice({ tone: result.success ? 'ok' : 'error', text: result.message });
+    if (result.success) setPassword('');
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleForgot = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!otp) return;
-
+    resetNotice();
     setLoading(true);
-    setTimeout(() => {
-      const res = verifyOtp(email, otp);
-      setLoading(false);
-      if (res.success) {
-        if (res.isNewUser) {
-          if (res.role === 'corporate') router.push('/corporate/onboarding');
-          else if (res.role === 'vendor') router.push('/vendor/onboarding');
-          else router.push('/admin/dashboard');
-        } else {
-          if (res.role === 'corporate') router.push('/corporate/dashboard');
-          else if (res.role === 'vendor') router.push('/vendor/dashboard');
-          else router.push('/admin/dashboard');
-        }
-      }
-    }, 400);
+    const result = await requestPasswordReset(email);
+    setLoading(false);
+    setNotice({ tone: 'ok', text: result.message });
   };
 
-  const handleSelectVenue = (venue: GurugramVenue) => {
-    setEmail(venue.email);
-    setShowVenuePicker(false);
+  // ─── Shared styles ─────────────────────────────────────────
+  const text = 'var(--ink)';
+  const muted = 'var(--muted)';
+  const fieldStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px 14px',
+    borderRadius: 11,
+    border: '1px solid var(--line)',
+    background: 'var(--paper)',
+    color: text,
+    fontSize: 14,
+    outline: 'none',
   };
+  const labelStyle: React.CSSProperties = {
+    display: 'block',
+    fontSize: 12,
+    fontWeight: 600,
+    letterSpacing: '0.04em',
+    textTransform: 'uppercase',
+    color: muted,
+    marginBottom: 6,
+  };
+  const fieldWrap: React.CSSProperties = { marginBottom: 14 };
 
-  const sportsCount = GURUGRAM_PRESEEDED_VENUES.filter((v) => v.category === 'sports').length;
-  const foodCount = GURUGRAM_PRESEEDED_VENUES.filter((v) => v.category === 'food').length;
-
-  const filteredVenues = GURUGRAM_PRESEEDED_VENUES.filter((v) => {
-    const matchesCat = selectedVenueCategory === 'all' || v.category === selectedVenueCategory;
-    const matchesSearch =
-      v.name.toLowerCase().includes(venueSearchQuery.toLowerCase()) ||
-      v.locality.toLowerCase().includes(venueSearchQuery.toLowerCase()) ||
-      v.email.toLowerCase().includes(venueSearchQuery.toLowerCase());
-    return matchesCat && matchesSearch;
-  });
+  const tab = (value: Mode, label: string) => (
+    <button
+      key={value}
+      type="button"
+      onClick={() => {
+        setMode(value);
+        resetNotice();
+      }}
+      style={{
+        flex: 1,
+        padding: '9px 10px',
+        borderRadius: 9,
+        border: 'none',
+        cursor: 'pointer',
+        fontSize: 13,
+        fontWeight: 600,
+        color: mode === value ? '#FFFFFF' : muted,
+        background: mode === value ? 'var(--saffron)' : 'transparent',
+        transition: 'all .18s ease',
+      }}
+    >
+      {label}
+    </button>
+  );
 
   return (
     <div className="modal-overlay" onClick={closeAuthModal}>
       <motion.div
         initial={{ scale: 0.93, opacity: 0, y: 15 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.93, opacity: 0, y: 15 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: 560,
-          background: isNightMode ? '#0B0F17' : '#ffffff',
-          border: isNightMode ? '1px solid rgba(255, 255, 255, 0.14)' : '1px solid rgba(0, 0, 0, 0.12)',
+          maxWidth: 520,
+          background: 'var(--paper)',
+          border: '1px solid var(--line)',
           borderRadius: 24,
-          padding: '28px',
-          backdropFilter: 'blur(36px)',
-          WebkitBackdropFilter: 'blur(36px)',
-          boxShadow: '0 32px 90px rgba(0,0,0,0.85)',
+          padding: 28,
+          boxShadow: '0 32px 90px rgba(60, 30, 0, 0.18)',
           position: 'relative',
           maxHeight: '90vh',
           overflowY: 'auto',
         }}
       >
-        {/* Close Button */}
         <button
           onClick={closeAuthModal}
+          aria-label="Close"
           style={{
             position: 'absolute',
-            top: 20,
-            right: 20,
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: 10,
-            width: 32,
-            height: 32,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            top: 18,
+            right: 18,
+            background: 'transparent',
+            border: 'none',
+            color: muted,
             cursor: 'pointer',
-            color: isNightMode ? '#ffffff' : '#0f172a',
+            padding: 4,
           }}
         >
-          <X size={16} />
+          <X size={18} />
         </button>
 
-        {/* Modal Header */}
-        <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 14,
-              background: 'linear-gradient(135deg, #10b981 0%, #0ea5e9 100%)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#050814',
-              marginBottom: 10,
-              boxShadow: '0 4px 20px rgba(16, 185, 129, 0.4)',
-            }}
-          >
-            <KeyRound size={22} />
-          </div>
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 22,
-              fontWeight: 800,
-              color: isNightMode ? '#ffffff' : '#0f172a',
-              marginBottom: 4,
-            }}
-          >
-            Sign In to COE Portal
-          </h2>
-          <p style={{ fontSize: 13, color: isNightMode ? 'rgba(255,255,255,0.6)' : '#64748b' }}>
-            Enterprise Reverse-Bidding & Verified Delhi NCR Marketplace
-          </p>
-        </div>
+        <p style={{ margin: '0 0 4px', fontSize: 11, letterSpacing: '.16em', color: 'var(--saffron)', textTransform: 'uppercase' }}>
+          Community of Employees
+        </p>
+        <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700, color: text }}>
+          {mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create your account' : 'Reset your password'}
+        </h2>
+        <p style={{ margin: '0 0 20px', fontSize: 13, color: muted, lineHeight: 1.55 }}>
+          {mode === 'signin'
+            ? 'Currently live in Gurgaon.'
+            : mode === 'signup'
+              ? 'Confirm your email, then an admin reviews your account before it goes live.'
+              : "We'll email you a link to set a new password."}
+        </p>
 
-        {/* ── Role Selection Tabs ── */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 6,
-            background: isNightMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
-            border: isNightMode ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)',
-            borderRadius: 14,
+            display: 'flex',
+            gap: 4,
             padding: 4,
-            marginBottom: 18,
+            borderRadius: 12,
+            background: 'var(--cream-2)',
+            marginBottom: 20,
           }}
         >
-          {[
-            { id: 'vendor' as UserRole, label: 'Vendor / Partner Hub', icon: Store, color: '#f97316' },
-            { id: 'corporate' as UserRole, label: 'Corporate Procurement', icon: Building2, color: '#10b981' },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const active = role === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => {
-                  setRole(tab.id);
-                  setStep('email');
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 6,
-                  padding: '9px 8px',
-                  borderRadius: 10,
-                  border: 'none',
-                  background: active ? (tab.color || '#10b981') : 'transparent',
-                  color: active ? '#ffffff' : isNightMode ? 'rgba(255,255,255,0.6)' : '#64748b',
-                  fontSize: 12.5,
-                  fontWeight: active ? 700 : 500,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  fontFamily: 'var(--font-display)',
-                }}
-              >
-                <Icon size={14} />
-                {tab.label}
-              </button>
-            );
-          })}
+          {tab('signin', 'Sign in')}
+          {tab('signup', 'Create account')}
+          {tab('forgot', 'Forgot')}
         </div>
 
-        {/* ── Admin Activation & Verified Partner Notice ── */}
-        <div
-          style={{
-            padding: '12px 14px',
-            borderRadius: 14,
-            background: role === 'vendor' ? 'rgba(249, 115, 22, 0.08)' : 'rgba(16, 185, 129, 0.08)',
-            border: role === 'vendor' ? '1px solid rgba(249, 115, 22, 0.25)' : '1px solid rgba(16, 185, 129, 0.25)',
-            marginBottom: 18,
-            fontSize: 12,
-            lineHeight: 1.5,
-            color: isNightMode ? 'rgba(255,255,255,0.8)' : '#334155',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, color: role === 'vendor' ? '#f97316' : '#10b981', marginBottom: 3 }}>
-            <Info size={14} />
-            <span>{role === 'vendor' ? 'Verified Venue Partner Access' : 'Corporate Account Activation'}</span>
-          </div>
-          <div>
-            To activate your verified account or request access credentials, please reach out to admin via email at{' '}
-            <a
-              href="mailto:contact@communityofemployees.com"
-              style={{ color: role === 'vendor' ? '#f97316' : '#10b981', fontWeight: 700, textDecoration: 'underline' }}
-            >
-              contact@communityofemployees.com
-            </a>
-          </div>
-        </div>
-
-        {/* ── Verified NCR Partner Directory Browser (Vendor Tab) ── */}
-        {role === 'vendor' && (
+        {notice && (
           <div
             style={{
-              marginBottom: 18,
-              borderRadius: 14,
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              overflow: 'hidden',
+              display: 'flex',
+              gap: 9,
+              alignItems: 'flex-start',
+              padding: '11px 13px',
+              borderRadius: 11,
+              marginBottom: 16,
+              fontSize: 13,
+              lineHeight: 1.5,
+              color: notice.tone === 'ok' ? '#137A43' : '#B3261E',
+              background: notice.tone === 'ok' ? 'rgba(30, 158, 90, 0.10)' : 'rgba(194, 50, 28, 0.09)',
+              border: `1px solid ${notice.tone === 'ok' ? 'rgba(30, 158, 90, 0.3)' : 'rgba(194, 50, 28, 0.28)'}`,
             }}
           >
-            <div
-              onClick={() => setShowVenuePicker(!showVenuePicker)}
-              style={{
-                padding: '11px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
-                background: 'rgba(255, 255, 255, 0.02)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Building2 size={15} color="#f97316" />
-                <div>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: '#ffffff' }}>
-                    Browse Verified Delhi NCR Venues ({GURUGRAM_PRESEEDED_VENUES.length} Listed)
-                  </div>
-                  <div style={{ fontSize: 11, color: 'rgba(255, 255, 255, 0.5)' }}>
-                    {sportsCount} Sports Complexes & {foodCount} Food / Nightclubs
-                  </div>
-                </div>
-              </div>
-              <ChevronDown
-                size={16}
-                color="#f97316"
-                style={{
-                  transform: showVenuePicker ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s ease',
-                }}
-              />
-            </div>
-
-            <AnimatePresence>
-              {showVenuePicker && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  style={{ overflow: 'hidden' }}
-                >
-                  <div style={{ padding: '12px 14px 14px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    {/* Category Pills & Search */}
-                    <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedVenueCategory('all')}
-                        style={{
-                          padding: '4px 9px',
-                          borderRadius: 6,
-                          fontSize: 11,
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          border: 'none',
-                          background: selectedVenueCategory === 'all' ? '#f97316' : 'rgba(255,255,255,0.08)',
-                          color: '#ffffff',
-                        }}
-                      >
-                        All ({GURUGRAM_PRESEEDED_VENUES.length})
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedVenueCategory('sports')}
-                        style={{
-                          padding: '4px 9px',
-                          borderRadius: 6,
-                          fontSize: 11,
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          border: 'none',
-                          background: selectedVenueCategory === 'sports' ? '#0ea5e9' : 'rgba(255,255,255,0.08)',
-                          color: '#ffffff',
-                        }}
-                      >
-                        🏆 Sports ({sportsCount})
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedVenueCategory('food')}
-                        style={{
-                          padding: '4px 9px',
-                          borderRadius: 6,
-                          fontSize: 11,
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          border: 'none',
-                          background: selectedVenueCategory === 'food' ? '#10b981' : 'rgba(255,255,255,0.08)',
-                          color: '#ffffff',
-                        }}
-                      >
-                        🥂 Food/Lounges ({foodCount})
-                      </button>
-
-                      <div style={{ flex: 1, minWidth: 130, position: 'relative' }}>
-                        <Search size={12} style={{ position: 'absolute', left: 7, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)' }} />
-                        <input
-                          type="text"
-                          placeholder="Search venue name..."
-                          value={venueSearchQuery}
-                          onChange={(e) => setVenueSearchQuery(e.target.value)}
-                          style={{
-                            width: '100%',
-                            padding: '3px 6px 3px 24px',
-                            borderRadius: 6,
-                            background: 'rgba(255,255,255,0.06)',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            color: '#ffffff',
-                            fontSize: 11,
-                            outline: 'none',
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Scrollable Venue List */}
-                    <div style={{ maxHeight: 180, overflowY: 'auto', display: 'grid', gap: 5 }}>
-                      {filteredVenues.map((v) => (
-                        <div
-                          key={v.id}
-                          onClick={() => handleSelectVenue(v)}
-                          style={{
-                            padding: '7px 10px',
-                            borderRadius: 8,
-                            background: 'rgba(255, 255, 255, 0.03)',
-                            border: '1px solid rgba(255, 255, 255, 0.06)',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            transition: 'all 0.15s ease',
-                          }}
-                          onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLDivElement).style.background = 'rgba(249, 115, 22, 0.12)';
-                            (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(249, 115, 22, 0.3)';
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLDivElement).style.background = 'rgba(255, 255, 255, 0.03)';
-                            (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                          }}
-                        >
-                          <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                              <span style={{ fontSize: 12.5, fontWeight: 700, color: '#ffffff' }}>{v.name}</span>
-                              <span style={{ fontSize: 10, color: '#fbbf24', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 2 }}>
-                                <Star size={9} fill="#fbbf24" /> {v.rating.toFixed(1)}
-                              </span>
-                            </div>
-                            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>
-                              <span>📍 {v.locality}</span> · <span>⏰ {v.timings}</span>
-                            </div>
-                          </div>
-
-                          <span style={{ fontSize: 11, color: '#f97316', fontWeight: 700 }}>
-                            Select →
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {notice.tone === 'ok' ? <CheckCircle2 size={16} style={{ flexShrink: 0, marginTop: 1 }} /> : <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: 1 }} />}
+            <span>{notice.text}</span>
           </div>
         )}
 
-        {/* ── Standard Email + Password / OTP Form ── */}
-        <form onSubmit={handlePasswordLogin}>
-          <div style={{ marginBottom: 14 }}>
-            <label
-              style={{
-                display: 'block',
-                fontSize: 11.5,
-                fontWeight: 700,
-                color: isNightMode ? 'rgba(255,255,255,0.7)' : '#475569',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                marginBottom: 6,
-              }}
-            >
-              {role === 'vendor' ? 'Venue Partner Email' : 'Corporate Work Email'}
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Mail
-                size={16}
-                style={{
-                  position: 'absolute',
-                  left: 14,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: isNightMode ? 'rgba(255,255,255,0.4)' : '#94a3b8',
-                }}
-              />
-              <input
-                type="email"
-                required
-                placeholder={role === 'corporate' ? 'name@company.com' : 'partner@venue.com'}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-base"
-                style={{ paddingLeft: 40 }}
-              />
-            </div>
-          </div>
-
-          {/* Password Mode */}
-          {authMode === 'password' && (
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                <label
-                  style={{
-                    fontSize: 11.5,
-                    fontWeight: 700,
-                    color: isNightMode ? 'rgba(255,255,255,0.7)' : '#475569',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                  }}
-                >
-                  Password
-                </label>
+        <form onSubmit={mode === 'signin' ? handleSignIn : mode === 'signup' ? handleSignUp : handleForgot}>
+          {mode === 'signup' && (
+            <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+              {(
+                [
+                  { value: 'corporate' as const, label: 'I work at a company', Icon: Building2 },
+                  { value: 'vendor' as const, label: 'I supply services', Icon: Store },
+                ]
+              ).map(({ value, label, Icon }) => (
                 <button
+                  key={value}
                   type="button"
-                  onClick={() => setAuthMode('otp')}
+                  onClick={() => setRole(value)}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#10b981',
-                    fontSize: 11.5,
-                    fontWeight: 700,
+                    flex: 1,
+                    padding: '13px 12px',
+                    borderRadius: 12,
                     cursor: 'pointer',
+                    textAlign: 'left',
+                    border: role === value ? '1px solid var(--saffron)' : '1px solid var(--line)',
+                    background: role === value ? 'rgba(255, 107, 44,0.10)' : 'transparent',
+                    color: text,
                   }}
                 >
-                  Sign in with OTP instead
+                  <Icon size={17} color={role === value ? '#FF6B2C' : muted} />
+                  <span style={{ display: 'block', marginTop: 7, fontSize: 13, fontWeight: 600 }}>{label}</span>
                 </button>
-              </div>
-              <div style={{ position: 'relative' }}>
-                <Lock
-                  size={16}
-                  style={{
-                    position: 'absolute',
-                    left: 14,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: isNightMode ? 'rgba(255,255,255,0.4)' : '#94a3b8',
-                  }}
-                />
-                <input
-                  type="password"
-                  required
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="input-base"
-                  style={{ paddingLeft: 40 }}
-                />
-              </div>
+              ))}
             </div>
           )}
 
-          {/* OTP Mode */}
-          {authMode === 'otp' && (
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                <label
-                  style={{
-                    fontSize: 11.5,
-                    fontWeight: 700,
-                    color: isNightMode ? 'rgba(255,255,255,0.7)' : '#475569',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                  }}
-                >
-                  One-Time Password (OTP)
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setAuthMode('password')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#10b981',
-                    fontSize: 11.5,
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                  }}
-                >
-                  Sign in with Password instead
-                </button>
-              </div>
+          <div style={fieldWrap}>
+            <label style={labelStyle} htmlFor="auth-email">
+              {mode === 'signup' && role === 'corporate' ? 'Work email' : 'Email'}
+            </label>
+            <div style={{ position: 'relative' }}>
+              <Mail size={15} style={{ position: 'absolute', left: 13, top: 14, color: muted }} />
+              <input
+                id="auth-email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={mode === 'signup' && role === 'corporate' ? 'you@yourcompany.com' : 'you@example.com'}
+                style={{ ...fieldStyle, paddingLeft: 36 }}
+              />
+            </div>
+            {showWorkEmailHint && (
+              <p style={{ margin: '7px 0 0', fontSize: 12, color: '#A66A00', display: 'flex', gap: 6 }}>
+                <Info size={13} style={{ flexShrink: 0, marginTop: 1 }} />
+                {emailPolicy?.message}
+              </p>
+            )}
+          </div>
 
-              {step === 'email' ? (
-                <button
-                  type="button"
-                  onClick={handleSendOtp}
-                  disabled={!email || loading}
-                  className="btn-primary"
-                  style={{ width: '100%', padding: '11px', fontSize: 13 }}
-                >
-                  {loading ? 'Sending OTP…' : 'Send Verification OTP →'}
-                </button>
-              ) : (
-                <div style={{ display: 'grid', gap: 10 }}>
-                  <input
-                    type="text"
-                    maxLength={6}
-                    placeholder="Enter 6-digit OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    className="input-base"
-                    style={{ textAlign: 'center', letterSpacing: '0.2em', fontSize: 16, fontWeight: 800 }}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleVerifyOtp}
-                    disabled={!otp || loading}
-                    className="btn-primary"
-                    style={{ width: '100%', padding: '11px', fontSize: 13 }}
-                  >
-                    {loading ? 'Verifying OTP…' : 'Verify & Enter Portal →'}
-                  </button>
-                </div>
+          {mode !== 'forgot' && (
+            <div style={fieldWrap}>
+              <label style={labelStyle} htmlFor="auth-password">Password</label>
+              <div style={{ position: 'relative' }}>
+                <KeyRound size={15} style={{ position: 'absolute', left: 13, top: 14, color: muted }} />
+                <input
+                  id="auth-password"
+                  type="password"
+                  autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={mode === 'signup' ? 'At least 10 characters' : 'Your password'}
+                  style={{ ...fieldStyle, paddingLeft: 36 }}
+                />
+              </div>
+              {mode === 'signup' && (
+                <p style={{ margin: '7px 0 0', fontSize: 12, color: muted }}>
+                  10+ characters, with a number or symbol somewhere in there.
+                </p>
               )}
             </div>
           )}
 
-          {authMode === 'password' && (
-            <button
-              type="submit"
-              disabled={!email || !password || loading}
-              style={{
-                width: '100%',
-                padding: '13px',
-                borderRadius: 12,
-                border: 'none',
-                background: role === 'vendor' ? 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                color: '#ffffff',
-                fontSize: 13.5,
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-                boxShadow: role === 'vendor' ? '0 6px 20px rgba(249,115,22,0.35)' : '0 6px 20px rgba(16,185,129,0.35)',
-                opacity: (!email || !password || loading) ? 0.5 : 1,
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <span>{loading ? 'Authenticating…' : 'Sign In to Portal'}</span>
-              {!loading && <ArrowRight size={15} />}
-            </button>
+          {mode === 'signup' && role === 'vendor' && (
+            <>
+              <div style={fieldWrap}>
+                <label style={labelStyle} htmlFor="auth-company">Business name</label>
+                <input
+                  id="auth-company"
+                  required
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder="Royal Feast Caterers"
+                  style={fieldStyle}
+                />
+              </div>
+              <div style={fieldWrap}>
+                <label style={labelStyle} htmlFor="auth-gst">GSTIN</label>
+                <input
+                  id="auth-gst"
+                  required
+                  value={gstNumber}
+                  onChange={(e) => setGstNumber(e.target.value.toUpperCase())}
+                  placeholder="06AAACD1234A1ZK"
+                  maxLength={15}
+                  style={{ ...fieldStyle, letterSpacing: '.06em' }}
+                />
+                <p style={{ margin: '7px 0 0', fontSize: 12, color: muted }}>
+                  15 characters. We check the format now and verify it during review.
+                </p>
+              </div>
+              <div style={fieldWrap}>
+                <label style={labelStyle} htmlFor="auth-category">Primary category</label>
+                <select
+                  id="auth-category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value as CategoryType)}
+                  style={fieldStyle}
+                >
+                  {CATEGORIES.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div style={fieldWrap}>
+                <label style={labelStyle} htmlFor="auth-areas">Service areas</label>
+                <input
+                  id="auth-areas"
+                  required
+                  value={serviceArea}
+                  onChange={(e) => setServiceArea(e.target.value)}
+                  placeholder="Cyber City, Golf Course Road, Udyog Vihar"
+                  style={fieldStyle}
+                />
+                <p style={{ margin: '7px 0 0', fontSize: 12, color: muted }}>Comma separated.</p>
+              </div>
+            </>
           )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              width: '100%',
+              marginTop: 6,
+              padding: '13px 18px',
+              borderRadius: 12,
+              border: 'none',
+              cursor: loading ? 'wait' : 'pointer',
+              background: 'var(--saffron)',
+              color: '#FFFFFF',
+              fontSize: 14,
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              opacity: loading ? 0.6 : 1,
+            }}
+          >
+            {loading
+              ? 'Just a moment…'
+              : mode === 'signin'
+                ? 'Sign in'
+                : mode === 'signup'
+                  ? 'Create account'
+                  : 'Send reset link'}
+            {!loading && <ArrowRight size={16} />}
+          </button>
         </form>
+
+        <p
+          style={{
+            margin: '18px 0 0',
+            fontSize: 12,
+            color: muted,
+            display: 'flex',
+            gap: 7,
+            alignItems: 'flex-start',
+            lineHeight: 1.55,
+          }}
+        >
+          <Lock size={13} style={{ flexShrink: 0, marginTop: 2 }} />
+          Sessions are server-side and expire. We never store your password — only a hash of it.
+        </p>
       </motion.div>
     </div>
   );

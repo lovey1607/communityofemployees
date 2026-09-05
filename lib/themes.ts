@@ -1,6 +1,10 @@
 // ============================================================
-// lib/themes.ts — Category-specific theme configurations
-// Sophisticated, mature corporate dark theme (Apple/Stripe inspired)
+// lib/themes.ts — per-category colour.
+//
+// These used to be five near-black page backgrounds that the whole app was
+// repainted with. In the cream design the page ground never changes — only
+// the accent does — so `bg`/`bgGradient` are now soft tints used behind
+// category cards and modals, not a body background.
 // ============================================================
 
 import { CategoryType, ThemeConfig } from './types';
@@ -8,74 +12,74 @@ export type { ThemeConfig } from './types';
 
 export const THEMES: Record<CategoryType, ThemeConfig> = {
   sports: {
-    bg: '#020805',
-    bgGradient: 'radial-gradient(circle at 50% 12%, #082414 0%, #031008 50%, #010503 100%)',
-    primary: '#10b981',
-    accent: '#34d399',
-    text: '#ecfdf5',
-    glass: 'rgba(16, 185, 129, 0.08)',
+    bg: '#DDF5E7',
+    bgGradient: 'linear-gradient(160deg, #1E9E5A, #0C5C34)',
+    primary: '#1E9E5A',
+    accent: '#5CD48F',
+    text: '#0C5C34',
+    glass: 'rgba(30, 158, 90, 0.10)',
     particles: 'grass',
-    envLabel: 'Sports & Corporate Tournaments',
+    envLabel: 'Sports & tournaments',
   },
   food: {
-    bg: '#0a0407',
-    bgGradient: 'radial-gradient(circle at 50% 12%, #2d0e1b 0%, #15060d 50%, #060204 100%)',
-    primary: '#f97316',
-    accent: '#fb7185',
-    text: '#fff7ed',
-    glass: 'rgba(249, 115, 22, 0.08)',
+    bg: '#FFE3D3',
+    bgGradient: 'linear-gradient(160deg, #FF6B2C, #A62B0B)',
+    primary: '#FF6B2C',
+    accent: '#FF8F5C',
+    text: '#8A3210',
+    glass: 'rgba(255, 107, 44, 0.10)',
     particles: 'neon',
-    envLabel: 'Food & Party',
+    envLabel: 'Food & party',
   },
   trips: {
-    bg: '#020712',
-    bgGradient: 'radial-gradient(circle at 50% 12%, #08213e 0%, #041021 50%, #01040a 100%)',
-    primary: '#0ea5e9',
-    accent: '#38bdf8',
-    text: '#f0f9ff',
-    glass: 'rgba(14, 165, 233, 0.08)',
+    bg: '#E1EAFF',
+    bgGradient: 'linear-gradient(160deg, #2E6BFF, #0E2B7A)',
+    primary: '#2E6BFF',
+    accent: '#6D97FF',
+    text: '#183C8C',
+    glass: 'rgba(46, 107, 255, 0.10)',
     particles: 'clouds',
-    envLabel: 'Trips & Corporate Offsites',
+    envLabel: 'Trips & offsites',
   },
   gifts: {
-    bg: '#0a0802',
-    bgGradient: 'radial-gradient(circle at 50% 12%, #322107 0%, #170f03 50%, #050301 100%)',
-    primary: '#eab308',
-    accent: '#fde047',
-    text: '#fefce8',
-    glass: 'rgba(234, 179, 8, 0.08)',
+    bg: '#FFF1C2',
+    bgGradient: 'linear-gradient(160deg, #FFC83D, #B8860B)',
+    primary: '#A66A00',
+    accent: '#FFC83D',
+    text: '#6B4400',
+    glass: 'rgba(255, 200, 61, 0.14)',
     particles: 'ribbons',
-    envLabel: 'Gifts & Executive Rewards',
+    envLabel: 'Gifts & rewards',
   },
   dress: {
-    bg: '#05070e',
-    bgGradient: 'radial-gradient(circle at 50% 12%, #192036 0%, #0d111e 50%, #030408 100%)',
-    primary: '#cbd5e1',
-    accent: '#94a3b8',
-    text: '#ffffff',
-    glass: 'rgba(203, 213, 225, 0.08)',
+    bg: '#F9DDEB',
+    bgGradient: 'linear-gradient(160deg, #B23A7A, #4E1240)',
+    primary: '#B23A7A',
+    accent: '#D46BA4',
+    text: '#7A2453',
+    glass: 'rgba(178, 58, 122, 0.10)',
     particles: 'fabric',
-    envLabel: 'Dress & Custom Merchandise',
+    envLabel: 'Dress & merchandise',
   },
 };
 
 export const DEFAULT_THEME: ThemeConfig = {
-  bg: '#03040a',
-  bgGradient: 'radial-gradient(circle at 50% 12%, #10162f 0%, #070916 50%, #020308 100%)',
-  primary: '#10b981',
-  accent: '#38bdf8',
-  text: '#ffffff',
-  glass: 'rgba(16, 185, 129, 0.08)',
+  bg: '#FFF7EC',
+  bgGradient: 'linear-gradient(160deg, #FF6B2C, #FF3D71)',
+  primary: '#FF6B2C',
+  accent: '#1E9E5A',
+  text: '#1D1A17',
+  glass: 'rgba(255, 107, 44, 0.10)',
   particles: 'fabric',
   envLabel: 'Community of Employees',
 };
 
 export const CATEGORY_LABELS: Record<CategoryType, string> = {
-  sports: 'Sports & Tournaments',
-  food: 'Food & Party',
-  trips: 'Trips & Offsites',
-  gifts: 'Gifts & Rewards',
-  dress: 'Dress & Merchandise',
+  sports: 'Sports & tournaments',
+  food: 'Food & party',
+  trips: 'Trips & offsites',
+  gifts: 'Gifts & rewards',
+  dress: 'Dress & merchandise',
 };
 
 export const CATEGORY_ICONS: Record<CategoryType, string> = {

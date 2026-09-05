@@ -58,7 +58,7 @@ export function Step1Food({
 
   return (
     <div>
-      <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13.5, marginBottom: 20 }}>
+      <p style={{ color: 'var(--ink-2)', fontSize: 13.5, marginBottom: 20 }}>
         Configure your Food & Party requirements — from executive networking dinners to full-scale corporate galas.
       </p>
 
