@@ -43,7 +43,7 @@ const GURUGRAM_LOCALITIES = [
   'Other Gurugram Area',
 ];
 
-// ─── Register New Venue / Facility Modal ──────────────────────
+// ─── Venue / facility details modal ──────────────────────────
 // One vendor account = one listing. This modal used to mint an extra vendor
 // record client-side; it now updates the signed-in vendor's own listing.
 function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
@@ -125,7 +125,7 @@ function RegisterNewVenueModal({ onClose }: { onClose: () => void }) {
             </div>
             <div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: isNightMode ? '#ffffff' : '#0f172a' }}>
-                Register New Venue / Facility
+                Update your venue details
               </h2>
               <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.5)' : '#64748b' }}>
                 Publish a new sports arena, banquet hall, or party lounge in Gurugram
@@ -1448,16 +1448,30 @@ export default function VendorDashboard() {
                 <span>•</span>
                 <span>📞 {vendor.mobile}</span>
                 <span>•</span>
-                <span>📍 {vendor.address.split(',')[0]} (~{vendor.distanceKm} km from Cyber Hub)</span>
+                <span>
+                  📍 {vendor.address ? vendor.address.split(',')[0] : vendor.city || 'Gurugram'}
+                  {vendor.distanceKm > 0 ? ` (~${vendor.distanceKm} km from Cyber Hub)` : ''}
+                </span>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', fontSize: 11 }}>
-                <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)' }}>
-                  ⏰ {vendor.timings || '6:00 AM - 12:00 AM'}
-                </span>
-                <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(16,185,129,0.12)', color: '#34d399', fontWeight: 700 }}>
-                  💰 Avg {formatCurrency(vendor.avgCostPerPerson || 850)}/pax
-                </span>
+                {/* These describe the vendor's own listing, so an empty value
+                    is shown as "not set" rather than filled with a plausible
+                    default they never entered. */}
+                {vendor.timings && (
+                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)' }}>
+                    ⏰ {vendor.timings}
+                  </span>
+                )}
+                {vendor.avgCostPerPerson ? (
+                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(16,185,129,0.12)', color: '#34d399', fontWeight: 700 }}>
+                    💰 Avg {formatCurrency(vendor.avgCostPerPerson)}/pax
+                  </span>
+                ) : (
+                  <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}>
+                    💰 Typical spend not set
+                  </span>
+                )}
                 {vendor.amenities && vendor.amenities.length > 0 && (
                   <span style={{ padding: '2px 7px', borderRadius: 6, background: 'rgba(249,115,22,0.12)', color: '#fb923c' }}>
                     ✨ {vendor.amenities.slice(0, 3).join(' · ')}
@@ -1481,7 +1495,7 @@ export default function VendorDashboard() {
               }}
             >
               <Plus size={15} />
-              Register New Venue
+              Update venue details
             </button>
 
             <button
@@ -1863,7 +1877,7 @@ export default function VendorDashboard() {
         )}
       </div>
 
-      {/* Register New Venue Modal */}
+      {/* Venue details modal */}
       <AnimatePresence>
         {registeringVenue && (
           <RegisterNewVenueModal onClose={() => setRegisteringVenue(false)} />

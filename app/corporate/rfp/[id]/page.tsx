@@ -263,7 +263,12 @@ function VendorProposalDrawer({
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <MapPin size={16} color="#f97316" />
-                <span>Base Hub: <strong>{address}</strong> (~{bid.distanceKm} km from DLF Cyber Hub)</span>
+                <span>
+                  Base Hub: <strong>{address}</strong>
+                  {/* Distance is derived from both saved coordinates; if either
+                      is missing it comes back as 0, which is not a distance. */}
+                  {bid.distanceKm > 0 ? ` (~${bid.distanceKm} km from your office)` : ''}
+                </span>
               </div>
 
               {(vendorProfile?.timings || bid.timings) && (
@@ -753,7 +758,12 @@ export default function SpecificRFPInquiryPage() {
                         <div style={{ fontSize: 12, color: isNightMode ? 'rgba(255,255,255,0.65)' : '#64748b', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                           <span>Rep: <strong>{bid.vendorName}</strong></span>
                           <span>•</span>
-                          <span>📍 {bid.locality || prof?.locality || `${bid.distanceKm} km from DLF Cyber Hub`}</span>
+                          <span>
+                            📍{' '}
+                            {bid.locality ||
+                              prof?.locality ||
+                              (bid.distanceKm > 0 ? `${bid.distanceKm} km from your office` : 'Gurugram')}
+                          </span>
                           {(bid.timings || prof?.timings) && (
                             <>
                               <span>•</span>

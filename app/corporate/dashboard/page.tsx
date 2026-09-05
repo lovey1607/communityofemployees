@@ -392,7 +392,14 @@ export default function CorporateDashboard() {
     ? myRFPs
     : myRFPs.filter((r) => r.category === activeFilter);
 
-  const getBidCount = (rfpId: string) => bids.filter((b) => b.rfpId === rfpId).length;
+  // The list endpoint returns a bidCount per RFP; the `bids` cache is only
+  // populated once a specific requirement has been opened, so prefer the
+  // server's count and fall back to the cache.
+  const getBidCount = (rfpId: string) => {
+    const rfp = rfpList.find((r) => r.id === rfpId) as (RFP & { bidCount?: number }) | undefined;
+    if (typeof rfp?.bidCount === 'number') return rfp.bidCount;
+    return bids.filter((b) => b.rfpId === rfpId).length;
+  };
 
   // Stats
   const totalBudget = myRFPs.reduce((s, r) => s + (r.totalBudget || 0), 0);

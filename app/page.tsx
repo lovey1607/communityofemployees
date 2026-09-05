@@ -23,7 +23,6 @@ import { SavingsCalculator } from '@/components/venture/SavingsCalculator';
 import { ContactSection } from '@/components/venture/ContactSection';
 import { PreviewHeader } from '@/components/venture/PreviewHeader';
 import { PreviewFooter } from '@/components/venture/PreviewFooter';
-import { AuthModal } from '@/components/auth/AuthModal';
 import { CategoryModal } from '@/components/modal/CategoryModal';
 import { useStore } from '@/store/useStore';
 import { GURUGRAM_PRESEEDED_VENUES } from '@/data/venues';
@@ -47,7 +46,8 @@ export default function HomePage() {
       <PreviewHeader />
 
       {/* ── Global Interactive Modals ── */}
-      <AuthModal />
+      {/* AuthModal is rendered once in app/layout.tsx — rendering it here too
+          put two copies of every field on the homepage. */}
       <CategoryModal />
 
       {/* ══════════════════════════════════════════════════════════
