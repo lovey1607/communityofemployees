@@ -5,14 +5,14 @@
 // वीर (veer, brave) → बीयर (beer). One letter, and the compliment becomes the
 // reason everyone actually turns up.
 //
-// The previous version swapped the word and stopped. This one earns its place:
-// the glass fills as the word flips, a punchline lands underneath, and it is
-// clickable — tap it and you get the next line. Fifteen of them, so the person
-// who pokes it four times is rewarded rather than shown the same joke again.
+// The first version drew a small mug next to the word and hoped you'd notice.
+// Nobody did — it read as a blank icon at the bottom-left of the hero. So the
+// glass is gone and the WORD is the glass: amber rises through the letterforms
+// with a foam line riding on top, and वीर becomes बीयर as the level passes it.
+// The pun is drawn rather than described, at a size you can see from the door.
 //
-// Deliberately small and off to one side. It is the bit of the page that
-// sounds like a person rather than a company, and that only works if it
-// doesn't try to be the headline.
+// It pours itself once on arrival, then idles. Tapping pours again and turns
+// the punchline over, so the person who pokes it four times gets four jokes.
 // ============================================================
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -37,83 +37,99 @@ const LINES = [
   'The office ka MVP doesn’t get a trophy. Gets a spreadsheet.',
 ];
 
+const POUR_MS = 900; // how long the amber takes to reach the top
+const FULL_MS = 4200; // how long it stays full before draining
+const CYCLE_MS = 7600;
+
 export function BeerQuip() {
-  const [flipped, setFlipped] = useState(false);
+  const [poured, setPoured] = useState(false);
   const [line, setLine] = useState(0);
   const [reduced, setReduced] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
+  const clearTimers = () => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+  };
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    setReduced(Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches));
+    const r = Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+    setReduced(r);
+    // Reduced motion still gets the joke — it just arrives already poured.
+    if (r) setPoured(true);
   }, []);
 
-  // Flip on a loop, and advance the punchline on the way back — so the line
-  // changes with the word rather than at some unrelated moment.
+  // Pour on arrival, then on a slow loop. The punchline turns over as the
+  // glass drains, so the line changes with the word rather than at some
+  // unrelated moment.
   useEffect(() => {
     if (reduced) return;
-    const loop = () => {
-      const a = setTimeout(() => setFlipped(true), 2600);
+    const pour = () => {
+      const a = setTimeout(() => setPoured(true), 400);
       const b = setTimeout(() => {
-        setFlipped(false);
+        setPoured(false);
         setLine((n) => (n + 1) % LINES.length);
-      }, 6200);
+      }, 400 + POUR_MS + FULL_MS);
       timers.current.push(a, b);
     };
-    loop();
-    const interval = setInterval(loop, 7200);
+    pour();
+    const interval = setInterval(pour, CYCLE_MS);
     return () => {
       clearInterval(interval);
-      timers.current.forEach(clearTimeout);
-      timers.current = [];
+      clearTimers();
     };
   }, [reduced]);
 
+  // A tap always gives you something: a fresh pour and a fresh line.
   const poke = useCallback(() => {
-    setFlipped((f) => !f);
+    clearTimers();
+    setPoured(false);
     setLine((n) => (n + 1) % LINES.length);
+    const t = setTimeout(() => setPoured(true), 90);
+    timers.current.push(t);
   }, []);
+
+  // The word twice, stacked: once as the empty glass, once as the beer inside
+  // it. The second copy is clipped to the level, so the amber climbs through
+  // the letters instead of sitting behind them.
+  const word = (
+    <>
+      <b className="veer">वीर</b>
+      <b className="beer">बीयर</b>
+    </>
+  );
 
   return (
     <button
       type="button"
-      className={`quip2${flipped ? ' flipped' : ''}`}
+      className={`pour${poured ? ' on' : ''}`}
       onClick={poke}
       aria-label="Tu veer hai. Tu beer hai. Tap for another line."
       title="Tap me"
     >
-      <span className="quip2-line" aria-hidden="true">
-        <span className="quip2-tu">Tu</span>
+      <span className="pour-line" aria-hidden="true">
+        <span className="pour-tu">Tu</span>
 
-        <span className="quip2-word">
-          <b className="veer">वीर</b>
-          <b className="beer">बीयर</b>
-          {/* The glass fills as the word flips — the joke, drawn. */}
-          <svg className="quip2-glass" viewBox="0 0 24 32" aria-hidden="true">
-            <defs>
-              <clipPath id="quip-glass-clip">
-                <path d="M4 3 h14 l-1.6 25 a2 2 0 0 1 -2 1.8 h-6.8 a2 2 0 0 1 -2 -1.8 z" />
-              </clipPath>
-            </defs>
-            <rect className="quip2-fill" x="0" y="0" width="24" height="32" clipPath="url(#quip-glass-clip)" />
-            <path
-              className="quip2-outline"
-              d="M4 3 h14 l-1.6 25 a2 2 0 0 1 -2 1.8 h-6.8 a2 2 0 0 1 -2 -1.8 z"
-              fill="none"
-            />
-            <path className="quip2-handle" d="M18 9 h2.5 a2 2 0 0 1 2 2 v5 a2 2 0 0 1 -2 2 h-2.2" fill="none" />
-            <g className="quip2-fizz">
-              <circle cx="9" cy="8" r="1.1" />
-              <circle cx="13" cy="6" r="0.8" />
-              <circle cx="15" cy="9.5" r="0.6" />
-            </g>
-          </svg>
+        <span className="pour-word">
+          <span className="pour-empty">{word}</span>
+          <span className="pour-fill">{word}</span>
+          <span className="pour-foam" />
+          <span className="pour-fizz">
+            <i style={{ left: '14%', animationDelay: '.15s' }} />
+            <i style={{ left: '38%', animationDelay: '.55s' }} />
+            <i style={{ left: '58%', animationDelay: '.3s' }} />
+            <i style={{ left: '78%', animationDelay: '.75s' }} />
+          </span>
         </span>
 
-        <span className="quip2-tu">hai</span>
+        <span className="pour-tu">hai</span>
       </span>
 
-      <span className="quip2-note">{LINES[line]}</span>
+      <span className="pour-note">{LINES[line]}</span>
+      <span className="pour-tap" aria-hidden="true">
+        tap for another
+      </span>
     </button>
   );
 }

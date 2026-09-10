@@ -64,7 +64,7 @@
 @media (max-width:480px){.nav .btn{padding:.55rem .8rem;font-size:.78rem}.logo small{display:none}.logo{font-size:.95rem;white-space:nowrap;min-width:0}.nav .logo span:last-child{font-size:.74rem;line-height:1.1;white-space:normal;max-width:100px}.nav .wrap{gap:.5rem}.nav .logo-badge{flex:none}.chip:nth-child(n+6){display:none}.branch-switch{display:flex;flex-wrap:wrap;border-radius:18px}.branch-switch button{flex:1;text-align:center}}
 
 /* ---------- hero ---------- */
-.hero{padding:clamp(2.5rem,6vw,5rem) 0 clamp(3rem,6vw,5rem);overflow:hidden}
+.hero{padding:clamp(1.6rem,3.6vw,2.9rem) 0 clamp(2.4rem,5vw,4rem);overflow:hidden}
 .sport .art{clip-path:inset(0)}
 .hero-bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
 .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:drift 14s ease-in-out infinite alternate}
@@ -75,7 +75,7 @@
 .hero-top{text-align:center;max-width:820px;margin:0 auto 2.2rem}
 .pill{display:inline-flex;align-items:center;gap:.5rem;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:.4rem .9rem .4rem .5rem;font-size:.82rem;font-weight:500;color:var(--ink-2);box-shadow:var(--shadow);margin-bottom:1.4rem}
 .pill .dot{width:22px;height:22px;border-radius:50%;background:var(--turf-soft);display:grid;place-items:center;font-size:.75rem}
-.hero h1{margin-bottom:1rem}
+.hero h1{margin-bottom:.55rem}
 .hero h1 .line{display:block}
 .hero .lead{margin:0 auto}
 .hero-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:2.2rem}
@@ -396,14 +396,15 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
    line of type rather than a form bolted into a hero.
    ============================================================ */
 .intent-h1{font-size:inherit}
-.intent{display:grid;gap:1.1rem;justify-items:center;width:100%}
+.intent{display:grid;gap:.65rem;justify-items:center;width:100%}
 .intent-line{
   display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;
   gap:.55rem .7rem;font-family:var(--font-display);font-weight:800;
-  font-size:clamp(1.5rem,4.6vw,3.1rem);line-height:1.24;letter-spacing:-.02em;
+  font-size:clamp(1.45rem,4vw,2.7rem);line-height:1.22;letter-spacing:-.02em;
 }
 .intent-fixed{color:var(--ink);white-space:nowrap}
-.intent-slot{position:relative;display:inline-flex;align-items:baseline;max-width:92vw;transition:width .18s var(--ease)}
+.intent-br{flex-basis:100%;height:0}
+.intent-slot{position:relative;display:inline-flex;align-items:baseline;justify-content:center;max-width:88vw;transition:width .18s var(--ease)}
 .intent-rule{position:absolute;left:0;right:0;bottom:-.18em;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--saffron),var(--sun));opacity:.55;transition:opacity .25s}
 .intent-slot:focus-within .intent-rule{opacity:1;height:4px}
 
@@ -411,8 +412,8 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
    readers rather than a div that only a mouse can find. */
 .intent-ghost{
   appearance:none;background:none;border:0;padding:0;margin:0;cursor:text;
-  font:inherit;color:var(--saffron);text-align:left;width:100%;
-  display:inline-flex;align-items:baseline;min-height:1.24em;
+  font:inherit;color:var(--saffron);text-align:center;width:100%;
+  display:inline-flex;align-items:baseline;justify-content:center;min-height:1.24em;
 }
 .intent-typed{white-space:pre-wrap}
 .intent-caret{display:inline-block;width:2px;height:1em;margin-left:2px;background:var(--ink);animation:intent-blink 1s steps(1) infinite;transform:translateY(.1em)}
@@ -420,13 +421,13 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
 
 .intent-input{
   font:inherit;color:var(--saffron);background:none;border:0;outline:0;
-  width:100%;padding:0;letter-spacing:inherit;
+  width:100%;padding:0;letter-spacing:inherit;text-align:center;
 }
 .intent-input::placeholder{color:var(--muted);opacity:.55;font-weight:600}
 
 /* Chips prove the sentence is being read, and reserve their own height so the
    page does not jump the first time one appears. */
-.intent-chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;min-height:2rem;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.intent-chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;min-height:1.65rem;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
 .intent-chips.on{opacity:1;transform:none}
 .intent-chip{background:var(--paper);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:.3rem .75rem;font-size:.82rem;font-weight:700;font-family:var(--font-body);box-shadow:0 2px 8px rgba(60,30,0,.05)}
 .intent-chip.muted{color:var(--muted);font-weight:500;background:transparent;box-shadow:none}
@@ -434,7 +435,7 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
 .intent-actions{display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:.2rem}
 .intent-go{font-size:1rem;padding:.85rem 1.7rem}
 .intent-hint{font-size:.85rem;color:var(--muted);font-family:var(--font-body);font-weight:500}
-.intent-lead{margin-top:.6rem}
+.intent-lead{margin-top:.5rem;margin-bottom:0}
 
 @media (max-width:620px){
   .intent-line{gap:.35rem .5rem}
@@ -442,54 +443,111 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
 }
 
 /* ============================================================
-   THE PUN
-   वीर → बीयर, with the glass filling as it flips. Tap for another line.
+   THE PUN — "the pour"
+   The word IS the glass. Amber climbs through the letterforms with a foam
+   line riding on top, and वीर turns into बीयर as the level passes it.
+
+   The previous version drew a tiny mug beside the word and nobody looked at
+   it. This one is centred, large, and the only warm-amber thing on the page,
+   so the eye finds it on arrival without it competing with the headline.
    ============================================================ */
-.quip2{
-  appearance:none;border:1px solid transparent;background:none;cursor:pointer;
-  margin-top:1.6rem;padding:.6rem 1rem;border-radius:16px;
-  display:grid;gap:.3rem;justify-items:center;font-family:var(--font-body);
-  transition:background .25s,border-color .25s,transform .25s var(--ease);
+.pour{
+  appearance:none;border:1px solid transparent;cursor:pointer;
+  margin:1.15rem auto 0;padding:.75rem 1.5rem .85rem;border-radius:20px;
+  display:grid;gap:.42rem;justify-items:center;justify-self:center;
+  font-family:var(--font-body);text-align:center;
+  background:linear-gradient(180deg,rgba(255,200,61,.16),rgba(255,107,44,.07));
+  border-color:rgba(255,168,60,.22);
+  transition:background .3s,border-color .3s,transform .3s var(--ease),box-shadow .3s;
 }
-.quip2:hover{background:var(--paper);border-color:var(--line);transform:translateY(-2px)}
-.quip2:active{transform:translateY(0) scale(.99)}
-.quip2-line{display:inline-flex;align-items:center;gap:.45rem;font-size:1.12rem;font-weight:700;color:var(--ink-2)}
-.quip2-tu{color:var(--ink-2)}
+.pour:hover{border-color:rgba(255,168,60,.4);transform:translateY(-2px);box-shadow:0 10px 30px rgba(200,110,20,.12)}
+.pour:active{transform:translateY(0) scale(.99)}
+.pour:focus-visible{outline:2px solid var(--saffron);outline-offset:3px}
 
-/* The two words occupy the same box; one slides out as the other slides in. */
-.quip2-word{position:relative;display:inline-grid;align-items:center;height:1.5em;padding-right:1.9em}
-.quip2-word b{grid-area:1/1;color:var(--saffron);font-weight:800;font-size:1.22em;transition:opacity .38s var(--ease),transform .38s var(--ease)}
-.veer{opacity:1;transform:translateY(0)}
-.beer{opacity:0;transform:translateY(60%)}
-.quip2.flipped .veer{opacity:0;transform:translateY(-60%)}
-.quip2.flipped .beer{opacity:1;transform:translateY(0)}
+.pour-line{
+  display:inline-flex;align-items:baseline;gap:.45rem;
+  font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;
+  font-size:clamp(1.35rem,3.4vw,2.05rem);color:var(--ink-2);
+}
+.pour-tu{color:var(--ink-2)}
 
-.quip2-glass{position:absolute;right:0;top:50%;transform:translateY(-50%);width:1.5em;height:2em}
-.quip2-outline,.quip2-handle{stroke:var(--ink-2);stroke-width:1.6;stroke-linejoin:round;opacity:.45;transition:opacity .3s}
-.quip2.flipped .quip2-outline,.quip2.flipped .quip2-handle{opacity:.85}
-/* The fill rises from empty to full, clipped to the glass shape. */
-.quip2-fill{fill:var(--sun);transform:translateY(32px);transition:transform .55s var(--ease) .06s}
-.quip2.flipped .quip2-fill{transform:translateY(7px)}
-.quip2-fizz circle{fill:#fff;opacity:0;transition:opacity .3s}
-.quip2.flipped .quip2-fizz circle{opacity:.9}
-.quip2.flipped .quip2-fizz circle:nth-child(1){animation:fizz 1.6s ease-in-out .5s infinite}
-.quip2.flipped .quip2-fizz circle:nth-child(2){animation:fizz 1.9s ease-in-out .8s infinite}
-.quip2.flipped .quip2-fizz circle:nth-child(3){animation:fizz 1.4s ease-in-out .3s infinite}
-@keyframes fizz{0%{transform:translateY(4px);opacity:0}40%{opacity:.9}100%{transform:translateY(-6px);opacity:0}}
+/* Three stacked copies of the word in one box:
+   .pour-empty  — the glass: outlined, always visible
+   .pour-fill   — the beer: amber, clipped to the level
+   .pour-foam   — the head, riding on the level
+   Both copies hold both words so the swap happens in liquid and in outline
+   at the same instant. */
+.pour-word{position:relative;display:inline-block;line-height:1.25;isolation:isolate}
+.pour-empty,.pour-fill{display:inline-grid;align-items:baseline}
+.pour-empty b,.pour-fill b{
+  grid-area:1/1;font-weight:800;font-size:1.3em;
+  transition:opacity .34s var(--ease) .3s,transform .34s var(--ease) .3s;
+}
+.pour-empty{color:rgba(29,26,23,.26)}
+.pour-fill{
+  position:absolute;inset:0;color:var(--saffron);
+  /* Empty: the level sits below the letters. */
+  clip-path:inset(100% 0 0 0);
+  transition:clip-path .9s cubic-bezier(.32,.72,.3,1);
+}
+.pour.on .pour-fill{clip-path:inset(7% 0 0 0)}
 
-.quip2-note{font-size:.86rem;color:var(--muted);font-weight:500;max-width:34ch;text-align:center;line-height:1.45}
+.pour-empty .beer,.pour-fill .beer{opacity:0;transform:translateY(45%)}
+.pour-empty .veer,.pour-fill .veer{opacity:1;transform:translateY(0)}
+.pour.on .veer{opacity:0;transform:translateY(-45%)}
+.pour.on .beer{opacity:1;transform:translateY(0)}
+
+/* The foam rides the level up and thins out as it reaches the top. */
+.pour-foam{
+  position:absolute;left:-4%;right:-4%;height:.19em;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,253,246,.95),rgba(255,238,200,.35));
+  box-shadow:0 0 12px rgba(255,242,205,.85);
+  top:100%;opacity:0;pointer-events:none;
+  transition:top .9s cubic-bezier(.32,.72,.3,1),opacity .35s ease;
+}
+.pour.on .pour-foam{top:4%;opacity:1}
+
+/* Bubbles, only while there is something for them to rise through. */
+.pour-fizz{position:absolute;inset:0;pointer-events:none}
+.pour-fizz i{
+  position:absolute;bottom:8%;width:.19em;height:.19em;border-radius:50%;
+  background:rgba(255,255,255,.95);opacity:0;
+}
+.pour.on .pour-fizz i{animation:pour-rise 2.1s ease-in-out infinite}
+@keyframes pour-rise{
+  0%{transform:translateY(0) scale(.6);opacity:0}
+  25%{opacity:.95}
+  100%{transform:translateY(-1.15em) scale(1);opacity:0}
+}
+
+.pour-note{
+  font-size:.95rem;color:var(--ink-2);font-weight:600;
+  max-width:38ch;line-height:1.45;
+}
+.pour-tap{
+  font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);opacity:0;transition:opacity .25s;font-weight:700;
+}
+.pour:hover .pour-tap,.pour:focus-visible .pour-tap{opacity:.8}
+
+@media (max-width:620px){
+  .pour{padding:.8rem 1.1rem .9rem;margin-top:1.4rem}
+  .pour-note{font-size:.88rem;max-width:32ch}
+}
 
 @media (prefers-reduced-motion:reduce){
   .intent-caret{animation:none}
-  .quip2-fill,.quip2-word b{transition:none}
-  .quip2-fizz circle{animation:none!important}
+  .pour-fill,.pour-foam,.pour-empty b,.pour-fill b{transition:none}
+  .pour-fizz i{animation:none!important;opacity:0!important}
 }
 
 /* The slot grows and the type steps down as the sentence gets longer, so a
-   45-character requirement is still readable end to end rather than scrolled
-   out of its own input. */
-.intent-lg .intent-line{font-size:clamp(1.5rem,4.6vw,3.1rem)}
-.intent-md .intent-line{font-size:clamp(1.35rem,4vw,2.6rem)}
-.intent-sm .intent-line{font-size:clamp(1.2rem,3.4vw,2.15rem)}
-.intent-xs .intent-line{font-size:clamp(1.05rem,2.9vw,1.8rem)}
+   long requirement is still readable end to end rather than scrolled out of
+   its own input. Ceilings pulled down from the first version: at 3.1rem a
+   25-character example pushed "for our team" onto a third line and the whole
+   headline reflowed on every keystroke. */
+.intent-lg .intent-line{font-size:clamp(1.45rem,4vw,2.7rem)}
+.intent-md .intent-line{font-size:clamp(1.3rem,3.5vw,2.35rem)}
+.intent-sm .intent-line{font-size:clamp(1.15rem,3vw,1.95rem)}
+.intent-xs .intent-line{font-size:clamp(1rem,2.6vw,1.65rem)}
 .intent-line{transition:font-size .25s var(--ease)}

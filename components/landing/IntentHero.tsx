@@ -29,23 +29,37 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { intentConfidence, parseIntent } from '@/lib/parseIntent';
 import { CATEGORY_LABELS } from '@/lib/themes';
 
-/** What the blank types through. Real requirements, in the words people use. */
-const EXAMPLES = [
-  'team outing for 50 people this weekend',
-  'dinner on 20th Sep for 30 folks at Cyber Hub',
-  'box cricket for 6 teams on a Saturday night',
-  'diwali party for 200 at a banquet in Sector 29',
-  'team lunch for 25 near Udyog Vihar',
-  'offsite for 60 people, two days, somewhere with a lawn',
-  'badminton court for 12 on Friday evening',
-  'joining kits for 40 new hires',
-  'farewell dinner for 15 on Golf Course Road',
-  'turf football for 20 on Sunday morning',
-  'client dinner for 8, private room, MG Road',
-  'hoodies for 45 people before the offsite',
-  'high tea for 35 in Cyber City',
-  'cricket tournament for 8 teams next month',
-  'sundowner for 50 on a rooftop',
+/**
+ * What the blank types through. Real requirements, in the words people use.
+ *
+ * Kept SHORT on purpose — every one of these is 25 characters or less. The
+ * first version ran to 54 ("offsite for 60 people, two days, somewhere with a
+ * lawn") and the sentence broke onto three lines, so the headline reflowed on
+ * every keystroke and the hero never sat still. A short example also reads as
+ * an invitation to add detail rather than a spec to match.
+ *
+ * There is a hard test on this: scripts/parse-intent-test.ts fails the build
+ * if any example here exceeds MAX_EXAMPLE_LEN or stops parsing into something
+ * the form can use.
+ */
+export const MAX_EXAMPLE_LEN = 25;
+
+export const EXAMPLES = [
+  'dinner for 30 on Friday',
+  'team outing for 50',
+  'box cricket this Saturday',
+  'diwali party for 200',
+  'team lunch for 25',
+  'offsite for 60, two days',
+  'badminton court for 12',
+  'joining kits for 40',
+  'farewell dinner for 15',
+  'turf football for 20',
+  'client dinner for 8',
+  'hoodies for 45 people',
+  'high tea for 35',
+  'gift hampers for 100',
+  'sundowner for 50',
 ];
 
 const TYPE_MS = 45;
@@ -135,12 +149,18 @@ export function IntentHero({ onStart }: { onStart: (text: string) => void }) {
   // A long sentence in a fixed-width input scrolls, so the start of what you
   // typed disappears — you lose sight of your own requirement mid-thought.
   // Step the type size down instead, and let the slot grow.
-  const len = (owned ? value : typed).length;
-  const size = len > 46 ? 'xs' : len > 34 ? 'sm' : len > 24 ? 'md' : 'lg';
-  // An input cannot wrap, so a fixed width just scrolls the start of the
-  // sentence out of sight. Size it to its own content and let the flex line
-  // wrap the slot onto its own row instead — the text stays whole.
-  const slotCh = Math.min(Math.max(len + 2, 14), 54);
+  // While the examples cycle, the blank is a FIXED-width line and the text
+  // types inside it — the fill-in-the-blank shape the sentence is promising.
+  // Sizing the slot to its content instead (what the first version did) meant
+  // the headline changed width, font size and line count several times a
+  // minute; the page never settled and it read as broken.
+  //
+  // Once the person takes over, the blank may grow — but never shrinks below
+  // the animated width, so taking over doesn't jolt the layout either.
+  const BLANK_CH = MAX_EXAMPLE_LEN + 2;
+  const len = owned ? value.length : MAX_EXAMPLE_LEN;
+  const size = len > 46 ? 'xs' : len > 36 ? 'sm' : 'md';
+  const slotCh = owned ? Math.min(Math.max(len + 2, BLANK_CH), 42) : BLANK_CH;
 
   return (
     <div className={`intent intent-${size}`}>
@@ -179,6 +199,13 @@ export function IntentHero({ onStart }: { onStart: (text: string) => void }) {
           )}
           <span className="intent-rule" aria-hidden="true" />
         </span>
+
+        {/* A forced wrap, so the sentence is ALWAYS two lines.
+            Left to flex, a 15-character example fits on one line and a
+            25-character one does not, so the headline jumped between two
+            and three lines every few seconds and dragged the whole page
+            with it. Fixing the shape costs one empty span. */}
+        <span className="intent-br" aria-hidden="true" />
 
         <span className="intent-fixed">for our team</span>
       </div>

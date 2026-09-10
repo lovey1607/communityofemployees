@@ -10,6 +10,7 @@
 // ============================================================
 
 import { parseIntent } from '../lib/parseIntent';
+import { EXAMPLES, MAX_EXAMPLE_LEN } from '../components/landing/IntentHero';
 
 let passed = 0;
 let failed = 0;
@@ -97,30 +98,20 @@ console.log('\n── Locality and budget ──');
 
 console.log('\n── The real examples shown in the hero ──');
 {
-  // Every rotating example must parse into something useful, or the hero is
-  // advertising a capability the form does not deliver.
-  const examples = [
-    'team outing for 50 people this weekend',
-    'dinner on 20th Sep for 30 folks at Cyber Hub',
-    'box cricket for 6 teams on a Saturday night',
-    'diwali party for 200 at a banquet in Sector 29',
-    'team lunch for 25 near Udyog Vihar',
-    'offsite for 60 people, two days, somewhere with a lawn',
-    'badminton court for 12 on Friday evening',
-    'joining kits for 40 new hires',
-    'farewell dinner for 15 on Golf Course Road',
-    'turf football for 20 on Sunday morning',
-    'client dinner for 8, private room, MG Road',
-    'hoodies for 45 people before the offsite',
-    'high tea for 35 in Cyber City',
-    'cricket tournament for 8 teams next month',
-    'sundowner for 50 on a rooftop',
-  ];
-  for (const text of examples) {
+  // Two things are enforced here, and both have bitten already.
+  //
+  //  1. Every rotating example must parse into something useful, or the hero
+  //     is advertising a capability the form does not deliver.
+  //  2. Every example must be short. A 54-character example broke the
+  //     headline onto three lines and made it reflow on every keystroke.
+  for (const text of EXAMPLES) {
     const p = parseIntent(text, NOW);
     const useful = Boolean(p.category) && (p.headcount !== null || p.date !== null);
-    check(`"${text.slice(0, 46)}…"`, useful,
-      `cat=${p.category} head=${p.headcount} date=${p.date}`);
+    check(`parses: "${text}"`, useful, `cat=${p.category} head=${p.headcount} date=${p.date}`);
+  }
+  for (const text of EXAMPLES) {
+    check(`short enough: "${text}" (${text.length})`, text.length <= MAX_EXAMPLE_LEN,
+      `${text.length} > ${MAX_EXAMPLE_LEN}`);
   }
 }
 
