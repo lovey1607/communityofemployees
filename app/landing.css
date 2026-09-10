@@ -389,3 +389,107 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0;font-size:.88rem;color:
   .rotator,.quip-swap{height:auto}
   .rot-word:not(:first-child),.quip-swap b:not(:first-child){display:none}
 }
+
+/* ============================================================
+   THE INTENT SENTENCE
+   The headline is the input. Sized so the whole sentence still reads as one
+   line of type rather than a form bolted into a hero.
+   ============================================================ */
+.intent-h1{font-size:inherit}
+.intent{display:grid;gap:1.1rem;justify-items:center;width:100%}
+.intent-line{
+  display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;
+  gap:.55rem .7rem;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.5rem,4.6vw,3.1rem);line-height:1.24;letter-spacing:-.02em;
+}
+.intent-fixed{color:var(--ink);white-space:nowrap}
+.intent-slot{position:relative;display:inline-flex;align-items:baseline;max-width:92vw;transition:width .18s var(--ease)}
+.intent-rule{position:absolute;left:0;right:0;bottom:-.18em;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--saffron),var(--sun));opacity:.55;transition:opacity .25s}
+.intent-slot:focus-within .intent-rule{opacity:1;height:4px}
+
+/* Before take-over: a button, so it is reachable by keyboard and screen
+   readers rather than a div that only a mouse can find. */
+.intent-ghost{
+  appearance:none;background:none;border:0;padding:0;margin:0;cursor:text;
+  font:inherit;color:var(--saffron);text-align:left;width:100%;
+  display:inline-flex;align-items:baseline;min-height:1.24em;
+}
+.intent-typed{white-space:pre-wrap}
+.intent-caret{display:inline-block;width:2px;height:1em;margin-left:2px;background:var(--ink);animation:intent-blink 1s steps(1) infinite;transform:translateY(.1em)}
+@keyframes intent-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+.intent-input{
+  font:inherit;color:var(--saffron);background:none;border:0;outline:0;
+  width:100%;padding:0;letter-spacing:inherit;
+}
+.intent-input::placeholder{color:var(--muted);opacity:.55;font-weight:600}
+
+/* Chips prove the sentence is being read, and reserve their own height so the
+   page does not jump the first time one appears. */
+.intent-chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;min-height:2rem;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.intent-chips.on{opacity:1;transform:none}
+.intent-chip{background:var(--paper);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:.3rem .75rem;font-size:.82rem;font-weight:700;font-family:var(--font-body);box-shadow:0 2px 8px rgba(60,30,0,.05)}
+.intent-chip.muted{color:var(--muted);font-weight:500;background:transparent;box-shadow:none}
+
+.intent-actions{display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:.2rem}
+.intent-go{font-size:1rem;padding:.85rem 1.7rem}
+.intent-hint{font-size:.85rem;color:var(--muted);font-family:var(--font-body);font-weight:500}
+.intent-lead{margin-top:.6rem}
+
+@media (max-width:620px){
+  .intent-line{gap:.35rem .5rem}
+  .intent-slot{max-width:92vw}
+}
+
+/* ============================================================
+   THE PUN
+   वीर → बीयर, with the glass filling as it flips. Tap for another line.
+   ============================================================ */
+.quip2{
+  appearance:none;border:1px solid transparent;background:none;cursor:pointer;
+  margin-top:1.6rem;padding:.6rem 1rem;border-radius:16px;
+  display:grid;gap:.3rem;justify-items:center;font-family:var(--font-body);
+  transition:background .25s,border-color .25s,transform .25s var(--ease);
+}
+.quip2:hover{background:var(--paper);border-color:var(--line);transform:translateY(-2px)}
+.quip2:active{transform:translateY(0) scale(.99)}
+.quip2-line{display:inline-flex;align-items:center;gap:.45rem;font-size:1.12rem;font-weight:700;color:var(--ink-2)}
+.quip2-tu{color:var(--ink-2)}
+
+/* The two words occupy the same box; one slides out as the other slides in. */
+.quip2-word{position:relative;display:inline-grid;align-items:center;height:1.5em;padding-right:1.9em}
+.quip2-word b{grid-area:1/1;color:var(--saffron);font-weight:800;font-size:1.22em;transition:opacity .38s var(--ease),transform .38s var(--ease)}
+.veer{opacity:1;transform:translateY(0)}
+.beer{opacity:0;transform:translateY(60%)}
+.quip2.flipped .veer{opacity:0;transform:translateY(-60%)}
+.quip2.flipped .beer{opacity:1;transform:translateY(0)}
+
+.quip2-glass{position:absolute;right:0;top:50%;transform:translateY(-50%);width:1.5em;height:2em}
+.quip2-outline,.quip2-handle{stroke:var(--ink-2);stroke-width:1.6;stroke-linejoin:round;opacity:.45;transition:opacity .3s}
+.quip2.flipped .quip2-outline,.quip2.flipped .quip2-handle{opacity:.85}
+/* The fill rises from empty to full, clipped to the glass shape. */
+.quip2-fill{fill:var(--sun);transform:translateY(32px);transition:transform .55s var(--ease) .06s}
+.quip2.flipped .quip2-fill{transform:translateY(7px)}
+.quip2-fizz circle{fill:#fff;opacity:0;transition:opacity .3s}
+.quip2.flipped .quip2-fizz circle{opacity:.9}
+.quip2.flipped .quip2-fizz circle:nth-child(1){animation:fizz 1.6s ease-in-out .5s infinite}
+.quip2.flipped .quip2-fizz circle:nth-child(2){animation:fizz 1.9s ease-in-out .8s infinite}
+.quip2.flipped .quip2-fizz circle:nth-child(3){animation:fizz 1.4s ease-in-out .3s infinite}
+@keyframes fizz{0%{transform:translateY(4px);opacity:0}40%{opacity:.9}100%{transform:translateY(-6px);opacity:0}}
+
+.quip2-note{font-size:.86rem;color:var(--muted);font-weight:500;max-width:34ch;text-align:center;line-height:1.45}
+
+@media (prefers-reduced-motion:reduce){
+  .intent-caret{animation:none}
+  .quip2-fill,.quip2-word b{transition:none}
+  .quip2-fizz circle{animation:none!important}
+}
+
+/* The slot grows and the type steps down as the sentence gets longer, so a
+   45-character requirement is still readable end to end rather than scrolled
+   out of its own input. */
+.intent-lg .intent-line{font-size:clamp(1.5rem,4.6vw,3.1rem)}
+.intent-md .intent-line{font-size:clamp(1.35rem,4vw,2.6rem)}
+.intent-sm .intent-line{font-size:clamp(1.2rem,3.4vw,2.15rem)}
+.intent-xs .intent-line{font-size:clamp(1.05rem,2.9vw,1.8rem)}
+.intent-line{transition:font-size .25s var(--ease)}
