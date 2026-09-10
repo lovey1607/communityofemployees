@@ -269,3 +269,107 @@ label { color: var(--ink-2); }
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================
+   QUICK RFP — one question at a time.
+   Deliberately roomy. The old form's problem was density, so the fix is
+   space: a large question, a single control, and nothing else competing.
+   ============================================================ */
+.qr-overlay{
+  position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(29,26,23,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.qr-sheet{
+  position:relative;width:100%;max-width:560px;min-height:min(560px,86vh);max-height:92vh;
+  background:var(--paper);border:1px solid var(--line);border-radius:26px;
+  box-shadow:0 40px 100px rgba(60,30,0,.24);display:flex;flex-direction:column;overflow:hidden;
+}
+.qr-progress{height:3px;background:var(--cream-2);flex:none}
+.qr-progress-fill{height:100%;border-radius:0 3px 3px 0;transition:width .4s cubic-bezier(.22,1,.36,1)}
+.qr-close{
+  position:absolute;top:16px;right:16px;z-index:2;width:34px;height:34px;border-radius:10px;
+  border:1px solid var(--line);background:var(--cream-2);color:var(--ink-2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;
+}
+.qr-close:hover{background:var(--cream)}
+
+.qr-step{flex:1;display:flex;overflow-y:auto}
+.qr-q{flex:1;display:flex;flex-direction:column;padding:38px 32px 8px;text-align:center}
+.qr-title{font-family:var(--font-display);font-size:clamp(1.4rem,3.4vw,1.9rem);font-weight:800;color:var(--ink);letter-spacing:-.02em;margin:0 0 .4rem}
+.qr-sub{margin:0 0 1.6rem;font-size:.95rem;color:var(--muted);line-height:1.55}
+.qr-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1rem}
+
+/* Category cards */
+.qr-cards{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;text-align:left}
+.qr-cards .qr-card:first-child{grid-column:1/-1}
+.qr-card{
+  display:grid;gap:.2rem;padding:1rem 1.1rem;border-radius:16px;cursor:pointer;
+  border:1.5px solid var(--line);background:var(--cream-2);transition:transform .2s var(--ease),border-color .2s,background .2s;
+}
+.qr-card:hover{transform:translateY(-2px);background:var(--paper)}
+.qr-card.on{background:var(--paper);box-shadow:0 6px 20px rgba(60,30,0,.08)}
+.qr-card-ic{font-size:1.5rem;line-height:1}
+.qr-card-t{font-weight:800;font-size:.98rem;color:var(--ink)}
+.qr-card-b{font-size:.8rem;color:var(--muted);line-height:1.4}
+
+/* The number under your thumb */
+.qr-big{font-family:var(--font-display);font-size:clamp(3rem,11vw,4.6rem);font-weight:900;line-height:1;color:var(--ink);letter-spacing:-.03em}
+.qr-big-sub{font-size:.9rem;color:var(--muted);margin-top:-.2rem;margin-bottom:.6rem}
+.qr-slider{width:100%;height:28px;background:transparent;cursor:pointer}
+.qr-slider::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--cream-2)}
+.qr-slider::-moz-range-track{height:6px;border-radius:3px;background:var(--cream-2)}
+.qr-slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--paper);border:2px solid currentColor;margin-top:-10px;box-shadow:0 3px 10px rgba(60,30,0,.18)}
+.qr-slider::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--paper);border:2px solid currentColor;box-shadow:0 3px 10px rgba(60,30,0,.18)}
+.qr-marks{display:flex;justify-content:space-between;gap:.3rem}
+.qr-mark{background:none;border:0;padding:.2rem .4rem;font-size:.8rem;color:var(--muted);cursor:pointer;font-weight:700;font-family:var(--font-body);border-radius:6px}
+.qr-mark:hover{color:var(--ink);background:var(--cream-2)}
+
+.qr-total{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-top:.9rem;padding:.85rem 1.1rem;background:var(--cream-2);border-radius:14px;font-size:.9rem;color:var(--ink-2)}
+.qr-total strong{font-family:var(--font-display);font-size:1.35rem;font-weight:900;letter-spacing:-.02em}
+
+/* Date and pills */
+.qr-quick{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.qr-quick-sm{margin-top:.4rem}
+.qr-pill{padding:.6rem 1.05rem;border-radius:999px;border:1.5px solid var(--line);background:var(--cream-2);color:var(--ink-2);font-weight:700;font-size:.9rem;cursor:pointer;font-family:var(--font-body);transition:transform .18s var(--ease),background .2s}
+.qr-pill.sm{padding:.45rem .85rem;font-size:.82rem}
+.qr-pill:hover{transform:translateY(-1px);background:var(--paper)}
+.qr-pill.on{background:var(--paper);font-weight:800}
+.qr-date{width:100%;padding:.9rem 1rem;border-radius:14px;border:1.5px solid var(--line);background:var(--cream-2);color:var(--ink);font-size:1rem;font-family:var(--font-body);margin-top:.8rem}
+
+.qr-text{width:100%;padding:.85rem 1rem;border-radius:14px;border:1.5px solid var(--line);background:var(--cream-2);color:var(--ink);font-size:.95rem;font-family:var(--font-body)}
+.qr-text::placeholder{color:var(--muted)}
+.qr-area{resize:vertical;line-height:1.55}
+
+/* Review */
+.qr-review{display:grid;gap:.5rem;text-align:left}
+.qr-row{display:grid;grid-template-columns:5.5rem 1fr auto;align-items:center;gap:.8rem;padding:.85rem 1rem;border-radius:14px;border:1px solid var(--line);background:var(--cream-2);cursor:pointer;font-family:var(--font-body);transition:background .2s}
+.qr-row:hover{background:var(--paper)}
+.qr-row-l{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}
+.qr-row-v{font-size:.95rem;color:var(--ink);font-weight:600}
+.qr-row-e{font-size:.8rem;color:var(--saffron);font-weight:700}
+.qr-note{margin:1rem 0 0;font-size:.85rem;color:var(--muted);line-height:1.5}
+.qr-error{margin:.8rem 0 0;font-size:.88rem;color:#B3261E;font-weight:600}
+
+/* Footer */
+.qr-foot{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:16px 24px 22px;border-top:1px solid var(--line);background:var(--paper)}
+.qr-back{display:inline-flex;align-items:center;gap:.4rem;background:none;border:0;color:var(--muted);font-weight:700;font-size:.9rem;cursor:pointer;font-family:var(--font-body);padding:.6rem .4rem;border-radius:10px}
+.qr-back:hover{color:var(--ink)}
+.qr-next{display:inline-flex;align-items:center;gap:.5rem;border:0;border-radius:999px;padding:.8rem 1.6rem;color:#fff;font-weight:800;font-size:.95rem;cursor:pointer;font-family:var(--font-body);transition:transform .18s var(--ease),opacity .2s;box-shadow:0 8px 20px rgba(60,30,0,.16)}
+.qr-next:hover{transform:translateY(-2px)}
+.qr-next:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Done */
+.qr-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;padding:40px 32px;text-align:center}
+.qr-done-tick{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;margin-bottom:.4rem}
+.qr-done .qr-next{margin-top:1rem}
+
+@media (max-width:520px){
+  .qr-overlay{padding:0;align-items:flex-end}
+  .qr-sheet{max-width:none;border-radius:22px 22px 0 0;min-height:88vh}
+  .qr-q{padding:32px 20px 8px}
+  .qr-cards{grid-template-columns:1fr}
+  .qr-cards .qr-card:first-child{grid-column:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .qr-card,.qr-pill,.qr-next{transition:none}
+}
