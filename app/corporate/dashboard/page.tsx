@@ -16,7 +16,7 @@ import { CATEGORY_LABELS, THEMES } from '@/lib/themes';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Category3DIcon } from '@/components/ui/Category3DIcons';
 import { BlurredCyberHubBackground } from '@/components/canvas/BlurredCyberHubBackground';
-import { CategoryModal } from '@/components/modal/CategoryModal';
+import { QuickRfp } from '@/components/rfp/QuickRfp';
 import {
   Building2, Calendar, Users, DollarSign,
   Plus, Edit2, X, ChevronRight, ShieldCheck,
@@ -594,7 +594,7 @@ export default function CorporateDashboard() {
       </div>
 
       {/* Modals */}
-      <CategoryModal />
+      <QuickRfp />
 
       <AnimatePresence>
         {showEditProfile && profile && (

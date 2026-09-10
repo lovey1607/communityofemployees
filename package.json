@@ -15,7 +15,8 @@
     "test:contrast": "node scripts/contrast-audit.mjs",
     "db:stop": "node scripts/local-db.mjs stop",
     "db:seed:production": "tsx scripts/seed-production.ts",
-    "admin:password": "tsx scripts/set-admin-password.ts"
+    "admin:password": "tsx scripts/set-admin-password.ts",
+    "test:parse": "tsx scripts/parse-intent-test.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.11",

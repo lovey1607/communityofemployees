@@ -18,6 +18,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@/store/useStore';
 import { GURUGRAM_PRESEEDED_VENUES } from '@/data/venues';
+import { IntentHero } from '@/components/landing/IntentHero';
+import { BeerQuip } from '@/components/landing/BeerQuip';
 import './landing.css';
 
 // ─── Content ────────────────────────────────────────────────
@@ -222,6 +224,33 @@ export default function HomePage() {
   }, []);
 
   // Where a "post it" button should actually take you.
+  // The hero sentence hands its text straight to the requirement flow. The
+  // parse happens there too, so a refresh or a shared link behaves the same as
+  // typing it — the intent lives in the URL, not in a variable that vanishes.
+  const startFromIntent = useCallback(
+    (text: string) => {
+      const q = text.trim() ? `?intent=${encodeURIComponent(text.trim())}` : '';
+      if (currentUser?.role === 'corporate') {
+        router.push(`/corporate/dashboard${q}`);
+      } else if (currentUser?.role === 'vendor') {
+        router.push('/vendor/dashboard');
+      } else if (currentUser?.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        // Not signed in: keep what they wrote so it survives the auth step.
+        if (text.trim()) {
+          try {
+            sessionStorage.setItem('coe.intent', text.trim());
+          } catch {
+            /* private mode — the flow still works, just without the prefill */
+          }
+        }
+        openAuthModal();
+      }
+    },
+    [currentUser, router, openAuthModal]
+  );
+
   const goPost = useCallback(() => {
     if (currentUser?.role === 'corporate') router.push('/corporate/dashboard');
     else if (currentUser?.role === 'vendor') router.push('/vendor/dashboard');
@@ -444,38 +473,16 @@ export default function HomePage() {
               <span className="live-dot" aria-hidden="true" /> Live in Delhi &amp; Delhi NCR
               <span className="pill-sub">· Cyber City to Sohna Road</span>
             </div>
-            <h1 className="rv rv-d1">
-              {/* The first noun cycles through what people actually post, so
-                  the headline shows the range instead of listing it. */}
-              <span className="line">
-                <span className="rotator" aria-hidden="true">
-                  <span className="rot-track">
-                    {ROTATING.map((word) => (
-                      <span className="rot-word" key={word}>
-                        {word}
-                      </span>
-                    ))}
-                  </span>
-                </span>
-                <span className="sr-only">{ROTATING.join(', ')}.</span>
-              </span>
-              <span className="line">
-                Someone has to plan it. <span className="mark">Ab akele nahi.</span>
-              </span>
+            <h1 className="rv rv-d1 intent-h1">
+              {/* The headline IS the input. Someone who has never seen this
+                  product knows the format by the time the second example has
+                  typed itself, which no amount of explanatory copy achieves. */}
+              <IntentHero onStart={startFromIntent} />
             </h1>
-            <p className="lead rv rv-d2">
-              Post what your team needs — headcount, budget, vibe — and verified venues across Delhi NCR bid
-              live for it. You pick. Done. Back to your actual job.
+            <p className="lead rv rv-d2 intent-lead">
+              Verified venues across Delhi NCR come back to you. You pick. Done.
             </p>
-            {/* One pun, once, at the bottom of the hero. The whole joke is the
-                single letter that swaps, so the animation is that letter and
-                nothing else. */}
-            <p className="quip rv rv-d3" aria-label="Tu veer hai. Tu beer hai.">
-              <span aria-hidden="true">
-                Tu <span className="quip-swap"><b>वीर</b><b>बीयर</b></span> hai
-              </span>
-              <span className="quip-note">— either way, someone&rsquo;s booking the venue</span>
-            </p>
+            <BeerQuip />
           </div>
 
           <div className="hero-cards">

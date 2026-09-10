@@ -386,69 +386,66 @@ async function apiSignIn(page, email, password) {
   if (status !== 200) throw new Error(`sign-in for ${email} returned ${status}`);
 }
 
-// ─── 9. The category modal is a second, separate posting path ─
+// ─── 9. The quick-RFP flow is a second, separate posting path ─
 //
-// Everything above posts through the dashboard form. The category modal is
-// the path most people actually use, and it broke independently: it called
-// submitRFP() without awaiting, so a requirement the server rejected still
-// showed the "Published to verified vendors" screen and then existed
-// nowhere. Nothing here covered it, which is why it shipped. It does now.
-console.log('\n── Post through the category modal ──');
+// Everything above posts through the dashboard form. The modal is the path
+// most people actually use, and it broke independently once already: it
+// called submitRFP() without awaiting, so a requirement the server had
+// rejected still showed a success screen and then existed nowhere. Nothing
+// covered it, which is why it shipped. It does now.
+//
+// It also asserts the hero hand-off: a sentence typed on the landing page
+// arrives as ?intent= and pre-fills the form, so someone who described their
+// requirement once is not asked to describe it again.
+console.log('\n── Post through the quick-RFP flow ──');
 {
   const { c: modalCtx, page: mp } = await ctx();
   await apiSignIn(mp, EMP, PASS);
-  await mp.goto(`${BASE}/corporate/dashboard`, { waitUntil: 'domcontentloaded' });
+
+  const before = Number((await pool.query('SELECT COUNT(*)::int AS n FROM rfps')).rows[0].n);
+
+  const intent = 'dinner on 18th Nov for 64 folks at Cyber Hub';
+  await mp.goto(`${BASE}/corporate/dashboard?intent=${encodeURIComponent(intent)}`, {
+    waitUntil: 'domcontentloaded',
+  });
   await mp.waitForTimeout(2000);
-
-  const before = Number(
-    (await pool.query('SELECT COUNT(*)::int AS n FROM rfps')).rows[0].n
-  );
-
   await mp.getByRole('button', { name: /Post New RFP/i }).first().click();
   await mp.waitForTimeout(900);
-  const modal = mp.locator('.modal-overlay');
-  ok('the category modal opens', (await modal.count()) === 1);
 
-  // Step 1 — a format, so categoryDetails isn't empty.
-  for (const b of await modal.locator('button').all()) {
-    const t = (await b.innerText().catch(() => '')) || '';
-    if (/Gala Dinner/i.test(t)) { await b.click(); break; }
-  }
-  await modal.getByRole('button', { name: /^Continue/i }).click();
-  await mp.waitForTimeout(700);
+  ok('the quick-RFP sheet opens', (await mp.locator('.qr-sheet').count()) === 1);
 
-  // Step 2 — the fields the server actually validates.
-  const dates = modal.locator('input[type="date"]');
-  await dates.nth(0).fill('2027-06-18');
-  await dates.nth(1).fill('2027-06-18');
-  const nums = modal.locator('input[type="number"]');
-  await nums.nth(0).fill('64');
-  await nums.nth(1).fill('1450');
-  await modal.getByRole('button', { name: /^Continue/i }).click();
-  await mp.waitForTimeout(700);
-  await shot(mp, 'modal-confirm-step');
+  // A fully-described sentence should land straight on review — the whole
+  // point of parsing it is not asking again.
+  const title = await mp.locator('.qr-title').innerText();
+  ok('a complete sentence skips straight to review', /look right/i.test(title), title);
 
-  await modal.getByRole('button', { name: /Publish Corporate RFP/i }).click();
+  const rows = await mp.locator('.qr-row-v').allInnerTexts();
+  ok('headcount came from the sentence', rows.includes('64'), JSON.stringify(rows));
+  ok('area came from the sentence', rows.some((r) => /Cyber Hub/i.test(r)), JSON.stringify(rows));
+  ok('date came from the sentence', rows.some((r) => /18 Nov/i.test(r)), JSON.stringify(rows));
+  await shot(mp, 'quickrfp-review');
+
+  await mp.locator('.qr-next').click();
   await mp.waitForTimeout(2500);
-  await shot(mp, 'modal-published');
+  await shot(mp, 'quickrfp-posted');
 
-  const after = Number(
-    (await pool.query('SELECT COUNT(*)::int AS n FROM rfps')).rows[0].n
-  );
-  ok('the modal actually writes an RFP', after === before + 1, `${before} -> ${after}`);
+  const after = Number((await pool.query('SELECT COUNT(*)::int AS n FROM rfps')).rows[0].n);
+  ok('the flow actually writes an RFP', after === before + 1, `${before} -> ${after}`);
 
-  const confirmation = await modal.innerText().catch(() => '');
-  ok('the success screen only appears once the server accepted it', /Live|Published/i.test(confirmation));
+  const confirmation = await mp.locator('.qr-title').innerText().catch(() => '');
+  ok('the success screen only appears once the server accepted it', /live/i.test(confirmation), confirmation);
 
   const row = (
-    await pool.query(
-      "SELECT status, total_budget FROM rfps ORDER BY created_at DESC LIMIT 1"
-    )
+    await pool.query('SELECT status, total_budget, universal FROM rfps ORDER BY created_at DESC LIMIT 1')
   ).rows[0];
   ok('it is posted open, so vendors can see it', row.status === 'open', row.status);
-  ok('budget is computed server-side (64 x 1450)', Number(row.total_budget) === 92800, String(row.total_budget));
+  ok('headcount reached the server', Number(row.universal.persons) === 64, String(row.universal.persons));
+  ok(
+    'budget is computed server-side',
+    Number(row.total_budget) === 64 * Number(row.universal.budgetPerPerson),
+    String(row.total_budget)
+  );
 
-  // And the vendor's feed really contains it.
   const { c: vCtx, page: vp } = await ctx();
   await apiSignIn(vp, VENDOR.email, VENDOR.password);
   const feed = await vp.evaluate(async () => {
@@ -456,10 +453,8 @@ console.log('\n── Post through the category modal ──');
     return r.json();
   });
   const ids = (feed.data?.rfps ?? feed.data ?? []).map((r) => r.id);
-  const newest = (
-    await pool.query('SELECT id FROM rfps ORDER BY created_at DESC LIMIT 1')
-  ).rows[0].id;
-  ok('the vendor feed contains the modal-posted requirement', ids.includes(newest));
+  const newest = (await pool.query('SELECT id FROM rfps ORDER BY created_at DESC LIMIT 1')).rows[0].id;
+  ok('the vendor feed contains it', ids.includes(newest));
 
   await modalCtx.close();
   await vCtx.close();
