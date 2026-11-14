@@ -5,12 +5,41 @@ and why. Method: web search → fetch aggregator/directory pages → fetch each 
 page where reachable. Instagram blocks automated fetches, so IG-only communities are
 either `unverified` or excluded.
 
-## Included (139 rows)
+## Included (273 rows, 39 cities)
 
-Gurgaon 70 · Delhi 25 · Noida 3 · Faridabad 1 · Ghaziabad 1 · Mumbai/Navi Mumbai/Thane 15
-· Bengaluru 20 · Jaipur 8. Status: 104 approved, 35 unverified.
+Gurgaon 69 · Pune 27 · Delhi 23 · Bengaluru 22 · Hyderabad 22 · Chennai 19 · Mumbai area 18 ·
+Kolkata 12 · Jaipur 9 · Ahmedabad 8 · Kochi 5 · Noida 3 · Surat 3 · Coimbatore 3 · and 1–2 each
+in Vadodara, Chandigarh, Dehradun, Nagpur, Nashik, Goa, Guwahati, Faridabad, Ghaziabad, Ludhiana,
+Rohtak, Kanpur, Lucknow, Indore, Bhopal, Raipur, Gwalior, Bikaner, Kozhikode, Mysuru,
+Visakhapatnam, Bhubaneswar, Patna. Status: 166 approved, 107 unverified.
 
-## Looked at and rejected
+The second pass (pan-India) is deliberately honest about depth: the five big metros got
+event-flo/endorfin/Meetup/reads.city coverage with schedules; the 25 smaller cities mostly
+have one or two run clubs known only from endorfin's national directory (name + member
+count), so they are `unverified` and link to the directory until someone opens their
+Instagram.
+
+## Pan-India pass — also looked at and rejected
+
+| Candidate | Source | Why excluded |
+|---|---|---|
+| Chennai Cycling Group's 20 neighbourhood chapters (omobikes) | omobikes | Listed only by organiser phone numbers — personal numbers, not a join link; WCCG parent site listed instead |
+| ~60 cycling clubs on omobikes with only a phone number | omobikes | Same — no public channel |
+| Pune Bodyweight Fitness, Pune 300+ Group Fitness, Hyderabad Football Meetup, Habsiguda fitness | meetup.com | Event-only pages, no group identity confirmed |
+| Ronda Night, CCPL 6, PAIGAAM Singles Mixer | meetup.com | Dating / singles events |
+| Hyderabad Startup: Idea to IPO (19K), AIYatra (8K), Kolkata/Ahmedabad Manifestation Clubs (10–11K), Chennai English-fluency meetup (16K) | meetup.com | Large counts but no dated event and generic/organiser-run; add once activity is seen |
+| Chennai Poker House, Silent Sufi Meditation, Cake & Dessert Lovers, Chennai Self-Realization | meetup.com | Past-dated events only / paid classes |
+| AWS SBG college chapters (Hyderabad ×3, Kolkata ×3) | meetup.com | College chapters; one NCR example already listed |
+| Uber Tech Events, Avalara Tech Talks, Pune Kafka (Confluent), Pune Atlassian, Chennai Azure UG (₹3,999 workshop) | meetup.com | Vendor-run events, not peer communities |
+| Anaa's Baking Studio, PotteryDen, Dancing Curve, Treks & Trails, Sunset Cinema Club | lbb.in Pune | Paid classes / commercial operators |
+| Mist LGBTQ Foundation, ResQ Charitable Trust | lbb.in Pune | Foundation/NGO; out of the hobby-community scope for v1 (good candidates for a "cause" pass) |
+| Board Games Meetup @ FC Road Social, Board Games Night Pune | sanketnainani.com | Events dated Jun–Jul 2026, already passed |
+| Raah (Pune), Lamakaan (Hyderabad), Atta Galatta | various | Venues, not communities |
+| Hashtag Magazine Hyderabad list (Sia Photography, Human Library, Tale Tellers, Tangy Sessions, Twin Cities Poetry, HUB bikers) | hashtagmagazine (2022) | Old; kept only GHAC, Urban Sketchers, Board Gamers, Book Club which have current Meetup/IG presence |
+| reads.city chapters beyond those listed (East Pune Reads, KP Reads, Mulund Reads, The Page Turner, …) | reads.city | Homepage shows names only; per-chapter pages not fetched — next pass |
+| Pune/Bengaluru/Mumbai endorfin long tail under 1K members | endorfin.run | No channel confirmed |
+
+## Looked at and rejected (NCR pass)
 
 | Candidate | Source | Why excluded |
 |---|---|---|

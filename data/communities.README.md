@@ -51,6 +51,14 @@ Copy a nearby row, fill every field you can *source*, set `status`, run
 | lbb.in / magicpin (Apr 2026) hobby clubs | Pedal Yatri, Gurgaon Trekking Club, Novel Ideas, Coffee Meetup, Photography Club | 5 |
 | toastmasters.org, linktr.ee (YL Pickleball), gdg.community.dev, robinhoodarmy.com, salsavida.com, mytribe.in, unmukt.co.in, myhoc.in, shutterholictv.com | One-off official pages | 9 |
 
+| event-flo + endorfin city pages (Pune, Hyderabad, Chennai, Kolkata, Ahmedabad) | Schedules, areas, handles, Nov 2026 events | ~35 |
+| endorfin.run /clubs national directory | Run clubs in 25 smaller cities (name + member count only → `unverified`) | ~35 |
+| meetup.com city pages (Pune, Hyderabad, Chennai, Kolkata, Ahmedabad) | Groups with Nov–Dec 2026 events | ~35 |
+| reads.city, LBB Chennai/Pune, Knocksense, South First, DT Next, Bombay Circle Press, Telangana Today | Silent-reading chapters and book clubs in 8 cities | ~18 |
+| omobikes + unventured cycling directories, hashtagmagazine (Hyderabad) | Cycling clubs, Hyderabad hobby communities | ~12 |
+
+Pan-India rows live in `data/communities-india.ts` (same helpers, same rules).
+
 Instagram pages could not be opened from the research tools (robots/permission), so
 anything whose *only* source is an Instagram profile is `unverified`. The full audit,
 including rejected candidates, is in `research/communities-log.md`.

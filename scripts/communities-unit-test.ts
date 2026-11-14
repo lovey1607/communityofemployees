@@ -54,5 +54,11 @@ t('url: filters round-trip and defaults are omitted', () => {
   assert.deepEqual(paramsToFilters(p), f);
   assert.deepEqual(paramsToFilters(new URLSearchParams('category=bogus&gender=x')), DEFAULT_FILTERS);
 });
+t('data: pan-India — at least 20 cities with listings, 250+ rows', () => {
+  const cities = new Set(COMMUNITIES.map((c) => c.city));
+  assert.ok(cities.size >= 20, `cities ${cities.size}`);
+  assert.ok(COMMUNITIES.length >= 250, `rows ${COMMUNITIES.length}`);
+  for (const c of COMMUNITIES) assert.ok(c.location && c.location.lat !== 0, `${c.slug} has no coordinates (city missing from CITY_CENTRE?)`);
+});
 t('mark: deterministic', () => { assert.deepEqual(markFor(COMMUNITIES[0]), markFor(COMMUNITIES[0])); assert.equal(markFor({ slug: 'a', name: 'The Bhag', category: 'running' }).initials, 'TB'); });
 console.log(`\n${n} checks passed`);

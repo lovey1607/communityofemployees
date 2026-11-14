@@ -4,10 +4,12 @@
 // No React, no DOM, so everything here is unit-testable with tsx.
 // ============================================================
 
-import { COMMUNITIES, CATEGORY_META, type Community, type CommunityCategory, type JoinPlatform } from '@/data/communities';
+import { COMMUNITIES_CORE, CATEGORY_META, CITY_CENTRE, type Community, type CommunityCategory, type JoinPlatform } from '@/data/communities';
+import { COMMUNITIES_INDIA } from '@/data/communities-india';
 
 export type { Community, CommunityCategory, JoinPlatform };
-export { COMMUNITIES, CATEGORY_META };
+export const COMMUNITIES: Community[] = [...COMMUNITIES_CORE, ...COMMUNITIES_INDIA];
+export { CATEGORY_META };
 
 // ─── Brand ───────────────────────────────────────────────────
 export const BRAND = {
@@ -53,26 +55,55 @@ export const AREAS: Place[] = [
   { label: 'Jawahar Circle / Malviya Nagar', lat: 26.84, lng: 75.8, city: 'Jaipur' },
   { label: 'C-Scheme / MI Road', lat: 26.91, lng: 75.8, city: 'Jaipur' },
   { label: 'Vaishali Nagar', lat: 26.91, lng: 75.74, city: 'Jaipur' },
+  { label: 'Koregaon Park / Kalyani Nagar', lat: 18.54, lng: 73.9, city: 'Pune' },
+  { label: 'Baner / Balewadi / Aundh', lat: 18.56, lng: 73.79, city: 'Pune' },
+  { label: 'Deccan / FC Road', lat: 18.52, lng: 73.84, city: 'Pune' },
+  { label: 'Hinjewadi / Wakad / PCMC', lat: 18.6, lng: 73.76, city: 'Pune' },
+  { label: 'Kharadi / Viman Nagar', lat: 18.55, lng: 73.93, city: 'Pune' },
+  { label: 'Gachibowli / Hitec City', lat: 17.44, lng: 78.36, city: 'Hyderabad' },
+  { label: 'Jubilee Hills / KBR Park', lat: 17.42, lng: 78.42, city: 'Hyderabad' },
+  { label: 'Banjara Hills', lat: 17.41, lng: 78.44, city: 'Hyderabad' },
+  { label: 'Secunderabad', lat: 17.44, lng: 78.5, city: 'Hyderabad' },
+  { label: 'Kondapur / Madhapur', lat: 17.46, lng: 78.37, city: 'Hyderabad' },
+  { label: 'Besant Nagar / Adyar', lat: 13.0, lng: 80.26, city: 'Chennai' },
+  { label: 'Anna Nagar', lat: 13.09, lng: 80.21, city: 'Chennai' },
+  { label: 'T. Nagar / Mylapore', lat: 13.04, lng: 80.25, city: 'Chennai' },
+  { label: 'OMR / Sholinganallur', lat: 12.9, lng: 80.23, city: 'Chennai' },
+  { label: 'Velachery / Guindy', lat: 12.98, lng: 80.22, city: 'Chennai' },
+  { label: 'Rabindra Sarovar / Southern Ave', lat: 22.51, lng: 88.36, city: 'Kolkata' },
+  { label: 'Park Street / Esplanade', lat: 22.55, lng: 88.35, city: 'Kolkata' },
+  { label: 'Salt Lake / New Town', lat: 22.58, lng: 88.43, city: 'Kolkata' },
+  { label: 'Ballygunge / Gariahat', lat: 22.52, lng: 88.37, city: 'Kolkata' },
+  { label: 'Navrangpura / Parimal Garden', lat: 23.03, lng: 72.56, city: 'Ahmedabad' },
+  { label: 'SG Highway / Prahlad Nagar', lat: 23.01, lng: 72.51, city: 'Ahmedabad' },
+  { label: 'Sabarmati Riverfront', lat: 23.03, lng: 72.57, city: 'Ahmedabad' },
+  { label: 'Panampilly Nagar / Kadavanthra', lat: 9.96, lng: 76.3, city: 'Kochi' },
+  { label: 'Kakkanad', lat: 10.01, lng: 76.35, city: 'Kochi' },
+  { label: 'Sector 17 / Sukhna Lake', lat: 30.74, lng: 76.79, city: 'Chandigarh' },
+  { label: 'Mohali', lat: 30.7, lng: 76.72, city: 'Chandigarh' },
 ];
 
-export const CITY_CENTRES: Record<string, Place> = {
-  Gurgaon: { label: 'Gurgaon', lat: 28.4595, lng: 77.0266, city: 'Gurgaon' },
-  Delhi: { label: 'Delhi', lat: 28.6139, lng: 77.209, city: 'Delhi' },
-  Noida: { label: 'Noida', lat: 28.5355, lng: 77.391, city: 'Noida' },
-  Mumbai: { label: 'Mumbai', lat: 19.076, lng: 72.8777, city: 'Mumbai' },
-  Bengaluru: { label: 'Bengaluru', lat: 12.9716, lng: 77.5946, city: 'Bengaluru' },
-  Jaipur: { label: 'Jaipur', lat: 26.9124, lng: 75.7873, city: 'Jaipur' },
-};
+/** Every city we list, in display order: metros first, then the rest A–Z. */
+export const METRO_CITIES = ['Gurgaon', 'Delhi', 'Noida', 'Mumbai', 'Bengaluru', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Ahmedabad', 'Jaipur'];
+const GROUP_MEMBERS = new Set(['Faridabad', 'Ghaziabad', 'Navi Mumbai', 'Thane', 'Gandhinagar', 'Mohali']);
+export const ALL_CITIES: string[] = [
+  ...METRO_CITIES,
+  ...Object.keys(CITY_CENTRE).filter((c) => !METRO_CITIES.includes(c) && !GROUP_MEMBERS.has(c)).sort(),
+];
+export const CITY_CENTRES: Record<string, Place> = Object.fromEntries(
+  ALL_CITIES.map((city) => [city, { label: city, lat: CITY_CENTRE[city][0], lng: CITY_CENTRE[city][1], city }]),
+);
 
 /** NCR is one market: a Gurgaon search should see Delhi/Noida clubs too. */
-export const CITY_GROUPS: Record<string, string[]> = {
+export const CITY_GROUPS: Record<string, string[]> = Object.fromEntries(ALL_CITIES.map((c) => [c, [c]]));
+Object.assign(CITY_GROUPS, {
   Gurgaon: ['Gurgaon', 'Delhi', 'Noida', 'Faridabad', 'Ghaziabad'],
   Delhi: ['Delhi', 'Gurgaon', 'Noida', 'Faridabad', 'Ghaziabad'],
   Noida: ['Noida', 'Delhi', 'Gurgaon', 'Ghaziabad', 'Faridabad'],
   Mumbai: ['Mumbai', 'Navi Mumbai', 'Thane'],
-  Bengaluru: ['Bengaluru'],
-  Jaipur: ['Jaipur'],
-};
+  Ahmedabad: ['Ahmedabad', 'Gandhinagar'],
+  Chandigarh: ['Chandigarh', 'Mohali'],
+});
 
 const R = 6371;
 export function distanceKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
@@ -247,7 +278,7 @@ export function activeFilterCount(f: Filters): number {
 }
 
 // ─── Slugs for /communities/[city]/[category] ────────────────
-export const CITY_SLUGS: Record<string, string> = { gurgaon: 'Gurgaon', delhi: 'Delhi', noida: 'Noida', mumbai: 'Mumbai', bengaluru: 'Bengaluru', bangalore: 'Bengaluru', jaipur: 'Jaipur' };
+export const CITY_SLUGS: Record<string, string> = { ...Object.fromEntries(ALL_CITIES.map((c) => [c.toLowerCase(), c])), bangalore: 'Bengaluru', gurugram: 'Gurgaon', bombay: 'Mumbai', madras: 'Chennai', calcutta: 'Kolkata', vizag: 'Visakhapatnam', trivandrum: 'Thiruvananthapuram', calicut: 'Kozhikode', mysore: 'Mysuru', 'delhi-ncr': 'Gurgaon' };
 export const slugForCity = (city: string) => city.toLowerCase();
 
 // ─── Generated visual mark ───────────────────────────────────

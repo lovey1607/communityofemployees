@@ -20,9 +20,12 @@ No env vars, no database needed for these routes. Also try:
   bottom sheet / side panel, keyless OSM map), `CommunityCard`, `DetailView`, `Mark`
   (generated identity), `CopNav`.
 - `lib/communities/index.ts` — pure filtering/sorting/distance/URL helpers (unit-tested).
-- `data/communities.ts` — **139 listings** (Gurgaon 70 · Delhi 25 · Noida 3 · Faridabad 1
-  · Ghaziabad 1 · Mumbai area 15 · Bengaluru 20 · Jaipur 8). 104 `approved`,
-  35 `unverified` (badged in the UI). Every row has a source URL + date.
+- `data/communities.ts` + `data/communities-india.ts` — **273 listings across 39 cities**
+  (Gurgaon 69 · Pune 27 · Delhi 23 · Bengaluru 22 · Hyderabad 22 · Chennai 19 · Mumbai area 18
+  · Kolkata 12 · Jaipur 9 · Ahmedabad 8 · Kochi 5 · 28 smaller cities with 1–3 each).
+  166 `approved`, 107 `unverified` (badged). Every row has a source URL + date. The smaller
+  cities are mostly run clubs known only from endorfin's national directory — real, but
+  thin; that's what the badge is for.
 - `data/communities.README.md`, `research/communities-log.md`,
   `research/design-notes.md`, `research/screenshots/` (12 shots, desktop + 390px).
 - One tasteful link added to the COE landing footer ("Communities near you →").
@@ -39,6 +42,8 @@ No env vars, no database needed for these routes. Also try:
   tab with `noopener`, save toggle, OG tags on detail, pre-filtered city/category routes,
   404 on unknown slug, geolocation granted *and* denied paths, mobile has no horizontal
   scroll, bottom-sheet filters, sticky join bar, reduced-motion render, zero page errors.
+- City picker is searchable (metros as chips, the rest as a grid with counts); city slugs
+  include aliases (`/communities/bangalore`, `/madras`, `/calcutta`, `/gurugram`).
 - Existing COE suites were not run here (they need Postgres); the only shared file
   touched is `app/page.tsx` (one `<li>`), so risk is minimal — but run `npm run test:e2e`
   locally before merging anyway.
@@ -46,8 +51,9 @@ No env vars, no database needed for these routes. Also try:
 ## Creative calls you may want to overrule
 
 1. **Accent teal `#0F766E`** (not COE saffron) — one CSS variable.
-2. **NCR is one market**: Gurgaon shows Delhi/Noida clubs sorted by distance. See
-   `CITY_GROUPS`.
+2. **NCR is one market** (also Mumbai+Navi Mumbai+Thane, Ahmedabad+Gandhinagar,
+   Chandigarh+Mohali): see `CITY_GROUPS`. Default city is still Gurgaon; geolocation
+   switches to the nearest listed city within 80 km.
 3. **Geolocation only after intent** (category pick or "Near me"), never on load.
 4. **Unverified rows are shown with a badge**, not hidden. There's a "Verified only" filter.
 5. **Featured picks** (`featured: true`, 10 rows) — I chose the most iconic/active;

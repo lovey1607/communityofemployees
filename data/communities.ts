@@ -55,18 +55,28 @@ export type Community = {
 };
 
 // ─── helpers (keep rows short) ───────────────────────────────
-const V = '2026-11-14';
-type Partial_ = Omit<Partial<Community>, 'name' | 'slug' | 'category' | 'city' | 'join' | 'source'> &
+export const V = '2026-11-14';
+export type Partial_ = Omit<Partial<Community>, 'name' | 'slug' | 'category' | 'city' | 'join' | 'source'> &
   Pick<Community, 'name' | 'slug' | 'category' | 'city' | 'join' | 'source'>;
 
-const CITY_CENTRE: Record<string, [number, number]> = {
+export const CITY_CENTRE: Record<string, [number, number]> = {
   Gurgaon: [28.4595, 77.0266], Delhi: [28.6139, 77.209], Noida: [28.5355, 77.391],
   Faridabad: [28.4089, 77.3178], Ghaziabad: [28.6692, 77.4538],
   Mumbai: [19.076, 72.8777], 'Navi Mumbai': [19.033, 73.0297], Thane: [19.2183, 72.9781],
   Bengaluru: [12.9716, 77.5946], Jaipur: [26.9124, 75.7873],
+  Pune: [18.5204, 73.8567], Hyderabad: [17.385, 78.4867], Chennai: [13.0827, 80.2707], Kolkata: [22.5726, 88.3639],
+  Ahmedabad: [23.0225, 72.5714], Gandhinagar: [23.2156, 72.6369], Chandigarh: [30.7333, 76.7794], Mohali: [30.7046, 76.7179],
+  Kochi: [9.9312, 76.2673], Indore: [22.7196, 75.8577], Lucknow: [26.8467, 80.9462], Goa: [15.4909, 73.8278],
+  Surat: [21.1702, 72.8311], Nagpur: [21.1458, 79.0882], Coimbatore: [11.0168, 76.9558], Dehradun: [30.3165, 78.0322],
+  Bhopal: [23.2599, 77.4126], Vadodara: [22.3072, 73.1812], Kanpur: [26.4499, 80.3319], Nashik: [19.9975, 73.7898],
+  Bhubaneswar: [20.2961, 85.8245], Guwahati: [26.1445, 91.7362], Patna: [25.5941, 85.1376], Raipur: [21.2514, 81.6296],
+  Mysuru: [12.2958, 76.6394], Visakhapatnam: [17.6868, 83.2185], Thiruvananthapuram: [8.5241, 76.9366], Ludhiana: [30.901, 75.8573],
+  Jodhpur: [26.2389, 73.0243], Gwalior: [26.2183, 78.1828], Bikaner: [28.0229, 73.3119], Kozhikode: [11.2588, 75.7804],
+  Madurai: [9.9252, 78.1198], Rohtak: [28.8955, 76.6066], Meerut: [28.9845, 77.7064], Haridwar: [29.9457, 78.1642],
 };
 
-function c(p: Partial_): Community {
+export function c(raw: Partial_): Community {
+  const p = Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== undefined)) as Partial_;
   const centre = CITY_CENTRE[p.city] ?? [0, 0];
   return {
     id: p.slug,
@@ -87,9 +97,9 @@ function c(p: Partial_): Community {
     ...p,
   } as Community;
 }
-const at = (lat: number, lng: number, label: string, precision: 'exact' | 'area' = 'area') => ({ lat, lng, label, precision });
-const ig = (h: string) => `https://www.instagram.com/${h}/`;
-const wa = (code: string) => `https://chat.whatsapp.com/${code}`;
+export const at = (lat: number, lng: number, label: string, precision: 'exact' | 'area' = 'area') => ({ lat, lng, label, precision });
+export const ig = (h: string) => `https://www.instagram.com/${h}/`;
+export const wa = (code: string) => `https://chat.whatsapp.com/${code}`;
 const MISFITS_GGN = 'https://www.misfits.net.in/city/gurgaon';
 const ENDORFIN_GGN = 'https://www.endorfin.run/run-clubs/gurgaon';
 const EVENTFLO_GGN = 'https://www.event-flo.com/run-clubs/gurgaon';
@@ -118,7 +128,7 @@ function misfits(slug: string, name: string, code: string, category: CommunityCa
   });
 }
 
-export const COMMUNITIES: Community[] = [
+export const COMMUNITIES_CORE: Community[] = [
   // ───────────────────────── GURGAON · RUNNING / FITNESS ─────────────────
   c({
     slug: 'gurgaon-runners-group', name: 'Gurgaon Runners Group', category: 'running', city: 'Gurgaon',
@@ -1435,7 +1445,6 @@ export const COMMUNITIES: Community[] = [
   }),
 ];
 
-export const CITIES = ['Gurgaon', 'Delhi', 'Noida', 'Mumbai', 'Bengaluru', 'Jaipur'] as const;
 
 export const CATEGORY_META: Record<CommunityCategory, { label: string; hue: number }> = {
   running:      { label: 'Running',       hue: 18 },

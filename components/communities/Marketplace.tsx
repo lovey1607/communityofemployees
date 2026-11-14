@@ -15,7 +15,7 @@ import {
   UtensilsCrossed, Users, Languages, HeartHandshake, Leaf, Baby, PawPrint, Briefcase, Dice5, Sparkles,
 } from 'lucide-react';
 import {
-  COMMUNITIES, CATEGORY_META, CATEGORY_ORDER, AREAS, CITY_CENTRES, CITY_GROUPS, DEFAULT_FILTERS,
+  COMMUNITIES, CATEGORY_META, CATEGORY_ORDER, AREAS, CITY_CENTRES, CITY_GROUPS, DEFAULT_FILTERS, METRO_CITIES, ALL_CITIES,
   applyFilters, categoriesWithListings, filtersToParams, activeFilterCount, nearestCity, PLATFORM_LABEL,
   type Filters, type Origin, type CommunityCategory, type Scored,
 } from '@/lib/communities';
@@ -139,7 +139,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   const pristine = nActive === 0 && !f.q;
   const featured = useMemo(() => cityPool.filter((c) => c.featured).slice(0, 8), [cityPool]);
   const fallback: Scored[] = useMemo(() => results.length ? [] : applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, city: f.city, category: f.category }, origin).slice(0, 3), [results.length, f.city, f.category, origin]);
-  const cityCount = Object.keys(CITY_CENTRES).length;
+  const cityCount = useMemo(() => new Set(COMMUNITIES.map((c) => c.city)).size, []);
 
   const chip = (label: string, on: boolean, onClick: () => void, extra?: React.ReactNode) => (
     <button type="button" className="cop-pill" aria-pressed={on} onClick={onClick}>{label}{extra}</button>
@@ -178,7 +178,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
                   </AnimatePresence>
                 </span>
               </h1>
-              <p>Run clubs, turf football, silent reading, founder breakfasts, board-game nights. Real communities with a direct link to join — no sign-up wall, no middleman.</p>
+              <p>Run clubs, turf football, silent reading, founder breakfasts, board-game nights — across {cityCount} Indian cities. Real communities with a direct link to join. No sign-up wall, no middleman.</p>
             </div>
             <div className="cop-count" aria-label="Listing counts">
               <div><b>{COMMUNITIES.length}</b><span>communities</span></div>
@@ -327,10 +327,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
                 <span className="status">{geo.busy && <span className="cop-spin" />}{geo.msg ?? 'We only use it to sort by distance. Nothing is stored online.'}</span>
               </div>
               {!lockCity && (
-                <div className="cop-fgroup">
-                  <h4>City</h4>
-                  <div className="cities">{Object.keys(CITY_CENTRES).map((city) => chip(city, f.city === city && originKind !== 'area', () => pickCity(city)))}</div>
-                </div>
+                <CityPicker current={f.city} onPick={pickCity} />
               )}
               <div className="cop-fgroup">
                 <h4>Area in {f.city}</h4>
@@ -398,6 +395,40 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+// ─── City picker: metros as chips, everything else searchable ─────
+const CITY_COUNT = new Map<string, number>();
+for (const c of COMMUNITIES) for (const [k, group] of Object.entries(CITY_GROUPS)) if (group.includes(c.city)) CITY_COUNT.set(k, (CITY_COUNT.get(k) ?? 0) + 1);
+
+function CityPicker({ current, onPick }: { current: string; onPick: (city: string) => void }) {
+  const [q, setQ] = useState('');
+  const norm = (s: string) => s.toLowerCase();
+  const others = ALL_CITIES.filter((c) => !METRO_CITIES.includes(c) && (CITY_COUNT.get(c) ?? 0) > 0);
+  const match = (c: string) => !q || norm(c).includes(norm(q));
+  return (
+    <>
+      <div className="cop-fgroup">
+        <h4>City</h4>
+        <input className="input-base" type="search" placeholder={`Search ${ALL_CITIES.length} cities…`} value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search cities" />
+        <div className="cities" style={{ marginTop: '.6rem' }}>
+          {METRO_CITIES.filter(match).map((city) => (
+            <button key={city} type="button" className="cop-pill" aria-pressed={current === city} onClick={() => onPick(city)}>{city} <span className="n" style={{ color: 'var(--muted)', fontWeight: 500 }}>{CITY_COUNT.get(city) ?? 0}</span></button>
+          ))}
+        </div>
+      </div>
+      {others.some(match) && (
+        <div className="cop-fgroup">
+          <h4>More cities</h4>
+          <div className="areas">
+            {others.filter(match).map((city) => (
+              <button key={city} type="button" className={current === city ? 'on' : ''} onClick={() => onPick(city)}>{city} <span style={{ color: 'var(--muted)' }}>· {CITY_COUNT.get(city) ?? 0}</span></button>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
