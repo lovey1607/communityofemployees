@@ -1240,6 +1240,7 @@ export default function HomePage() {
                 <li><a href="#calc">Cost calculator</a></li>
                 <li><Link href="/vendors">Vendors near you</Link></li>
                 <li><a href="#vendors">For venues</a></li>
+                <li><Link href="/communities">Communities near you →</Link></li>
               </ul>
             </div>
             <div>

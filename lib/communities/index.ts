@@ -1,0 +1,282 @@
+// ============================================================
+// lib/communities/index.ts — pure helpers for the communities
+// marketplace: filtering, sorting, distance, URL state, generated marks.
+// No React, no DOM, so everything here is unit-testable with tsx.
+// ============================================================
+
+import { COMMUNITIES, CATEGORY_META, type Community, type CommunityCategory, type JoinPlatform } from '@/data/communities';
+
+export type { Community, CommunityCategory, JoinPlatform };
+export { COMMUNITIES, CATEGORY_META };
+
+// ─── Brand ───────────────────────────────────────────────────
+export const BRAND = {
+  name: 'Community of People',
+  short: 'CoP',
+  domain: 'communityofpeople.com',
+  tagline: 'Find your people.',
+} as const;
+
+// ─── Geography ───────────────────────────────────────────────
+export type Place = { label: string; lat: number; lng: number; city: string };
+
+/** Pickable areas, Gurgaon-first. Coordinates are approximate centroids. */
+export const AREAS: Place[] = [
+  { label: 'DLF Cyber City / Cyber Hub', lat: 28.495, lng: 77.089, city: 'Gurgaon' },
+  { label: 'Udyog Vihar', lat: 28.502, lng: 77.08, city: 'Gurgaon' },
+  { label: 'MG Road / DLF Phase 1–3', lat: 28.48, lng: 77.09, city: 'Gurgaon' },
+  { label: 'Golf Course Road', lat: 28.4515, lng: 77.0975, city: 'Gurgaon' },
+  { label: 'Golf Course Ext Rd / Sector 62–63', lat: 28.408, lng: 77.088, city: 'Gurgaon' },
+  { label: 'Sector 29 / Leisure Valley', lat: 28.4665, lng: 77.064, city: 'Gurgaon' },
+  { label: 'Sushant Lok / Sector 43–56', lat: 28.455, lng: 77.07, city: 'Gurgaon' },
+  { label: 'Sohna Road / Sector 48–49', lat: 28.418, lng: 77.04, city: 'Gurgaon' },
+  { label: 'South City / Sector 30–40', lat: 28.445, lng: 77.03, city: 'Gurgaon' },
+  { label: 'New Gurgaon / Dwarka Expressway', lat: 28.46, lng: 76.98, city: 'Gurgaon' },
+  { label: 'Nehru Park / Chanakyapuri', lat: 28.589, lng: 77.195, city: 'Delhi' },
+  { label: 'Lodhi Garden / Khan Market', lat: 28.593, lng: 77.22, city: 'Delhi' },
+  { label: 'Connaught Place', lat: 28.631, lng: 77.219, city: 'Delhi' },
+  { label: 'Hauz Khas / Saket', lat: 28.55, lng: 77.2, city: 'Delhi' },
+  { label: 'Dwarka', lat: 28.59, lng: 77.05, city: 'Delhi' },
+  { label: 'Noida Sector 18 / 62', lat: 28.57, lng: 77.33, city: 'Noida' },
+  { label: 'Bandra / Carter Road', lat: 19.06, lng: 72.82, city: 'Mumbai' },
+  { label: 'Marine Drive / Nariman Point', lat: 18.93, lng: 72.82, city: 'Mumbai' },
+  { label: 'Worli / Lower Parel', lat: 19.01, lng: 72.82, city: 'Mumbai' },
+  { label: 'Powai / Andheri East', lat: 19.12, lng: 72.9, city: 'Mumbai' },
+  { label: 'Thane', lat: 19.218, lng: 72.978, city: 'Mumbai' },
+  { label: 'Navi Mumbai (Kharghar / Belapur)', lat: 19.04, lng: 73.05, city: 'Mumbai' },
+  { label: 'Cubbon Park / MG Road', lat: 12.976, lng: 77.593, city: 'Bengaluru' },
+  { label: 'Indiranagar', lat: 12.978, lng: 77.64, city: 'Bengaluru' },
+  { label: 'Koramangala / HSR', lat: 12.93, lng: 77.63, city: 'Bengaluru' },
+  { label: 'Jayanagar / JP Nagar', lat: 12.925, lng: 77.583, city: 'Bengaluru' },
+  { label: 'Whitefield', lat: 12.97, lng: 77.75, city: 'Bengaluru' },
+  { label: 'Electronic City', lat: 12.845, lng: 77.66, city: 'Bengaluru' },
+  { label: 'Jawahar Circle / Malviya Nagar', lat: 26.84, lng: 75.8, city: 'Jaipur' },
+  { label: 'C-Scheme / MI Road', lat: 26.91, lng: 75.8, city: 'Jaipur' },
+  { label: 'Vaishali Nagar', lat: 26.91, lng: 75.74, city: 'Jaipur' },
+];
+
+export const CITY_CENTRES: Record<string, Place> = {
+  Gurgaon: { label: 'Gurgaon', lat: 28.4595, lng: 77.0266, city: 'Gurgaon' },
+  Delhi: { label: 'Delhi', lat: 28.6139, lng: 77.209, city: 'Delhi' },
+  Noida: { label: 'Noida', lat: 28.5355, lng: 77.391, city: 'Noida' },
+  Mumbai: { label: 'Mumbai', lat: 19.076, lng: 72.8777, city: 'Mumbai' },
+  Bengaluru: { label: 'Bengaluru', lat: 12.9716, lng: 77.5946, city: 'Bengaluru' },
+  Jaipur: { label: 'Jaipur', lat: 26.9124, lng: 75.7873, city: 'Jaipur' },
+};
+
+/** NCR is one market: a Gurgaon search should see Delhi/Noida clubs too. */
+export const CITY_GROUPS: Record<string, string[]> = {
+  Gurgaon: ['Gurgaon', 'Delhi', 'Noida', 'Faridabad', 'Ghaziabad'],
+  Delhi: ['Delhi', 'Gurgaon', 'Noida', 'Faridabad', 'Ghaziabad'],
+  Noida: ['Noida', 'Delhi', 'Gurgaon', 'Ghaziabad', 'Faridabad'],
+  Mumbai: ['Mumbai', 'Navi Mumbai', 'Thane'],
+  Bengaluru: ['Bengaluru'],
+  Jaipur: ['Jaipur'],
+};
+
+const R = 6371;
+export function distanceKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const p = Math.PI / 180;
+  const dLat = (bLat - aLat) * p;
+  const dLng = (bLng - aLng) * p;
+  const x = Math.sin(dLat / 2) ** 2 + Math.cos(aLat * p) * Math.cos(bLat * p) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+
+export function formatKm(km: number): string {
+  if (km < 1) return '< 1 km';
+  if (km < 10) return `${km.toFixed(1)} km`;
+  return `${Math.round(km)} km`;
+}
+
+/** Nearest city centre to a point, so geolocation can pick a market. */
+export function nearestCity(lat: number, lng: number): { city: string; km: number } {
+  let best = { city: 'Gurgaon', km: Infinity };
+  for (const c of Object.values(CITY_CENTRES)) {
+    const km = distanceKm(lat, lng, c.lat, c.lng);
+    if (km < best.km) best = { city: c.city, km };
+  }
+  return best;
+}
+
+// ─── Filters ─────────────────────────────────────────────────
+export type Gender = 'all' | 'women' | 'men';
+export type Price = 'any' | 'free' | 'paid';
+export type Cadence = 'any' | 'weekly' | 'monthly';
+export type Size = 'any' | 'small' | 'medium' | 'large';
+export type Sort = 'nearest' | 'active' | 'newest' | 'az';
+
+export type Filters = {
+  q: string;
+  category: CommunityCategory | 'all';
+  city: string;
+  gender: Gender;
+  beginner: boolean;
+  price: Price;
+  events: boolean;
+  cadence: Cadence;
+  size: Size;
+  join: JoinPlatform | 'any';
+  verified: boolean;
+  sort: Sort;
+};
+
+export const DEFAULT_FILTERS: Filters = {
+  q: '', category: 'all', city: 'Gurgaon', gender: 'all', beginner: false, price: 'any',
+  events: false, cadence: 'any', size: 'any', join: 'any', verified: false, sort: 'nearest',
+};
+
+export const CATEGORY_ORDER: (CommunityCategory | 'all')[] = [
+  'all', 'running', 'sports', 'outdoors', 'cycling', 'fitness', 'books', 'games', 'creative',
+  'food', 'social', 'startup', 'tech', 'professional', 'wellbeing', 'cause',
+];
+
+/** Which categories actually have listings — hides empty chips. */
+export function categoriesWithListings(list: Community[] = COMMUNITIES): CommunityCategory[] {
+  const set = new Set(list.map((c) => c.category));
+  return CATEGORY_ORDER.filter((k): k is CommunityCategory => k !== 'all' && set.has(k));
+}
+
+const norm = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9\s]/g, ' ');
+
+export function matchesQuery(c: Community, q: string): boolean {
+  const needle = norm(q).trim();
+  if (!needle) return true;
+  const hay = norm([c.name, c.tagline, c.area ?? '', c.city, c.category, CATEGORY_META[c.category].label, ...c.tags].join(' '));
+  return needle.split(/\s+/).every((w) => hay.includes(w));
+}
+
+export type Origin = { lat: number; lng: number; label: string } | null;
+
+export type Scored = Community & { km: number | null };
+
+export function applyFilters(all: Community[], f: Filters, origin: Origin): Scored[] {
+  const cities = CITY_GROUPS[f.city] ?? [f.city];
+  const out: Scored[] = [];
+  for (const c of all) {
+    if (!cities.includes(c.city)) continue;
+    if (f.category !== 'all' && c.category !== f.category) continue;
+    if (f.gender !== 'all' && c.audience.gender !== f.gender) continue;
+    if (f.beginner && !(c.audience.level === 'beginner' || c.tags.includes('beginner-friendly'))) continue;
+    if (f.price === 'free' && c.pricing.type !== 'free') continue;
+    if (f.price === 'paid' && !(c.pricing.type === 'paid' || c.pricing.type === 'membership' || c.pricing.type === 'pay-per-event')) continue;
+    if (f.events && !(c.hasEvents && c.meets.cadence !== 'unknown')) continue;
+    if (f.cadence === 'weekly' && c.meets.cadence !== 'weekly') continue;
+    if (f.cadence === 'monthly' && !(c.meets.cadence === 'monthly' || c.meets.cadence === 'fortnightly')) continue;
+    if (f.size === 'small' && c.size.bucket !== '<50' && c.size.bucket !== '50–200') continue;
+    if (f.size === 'medium' && c.size.bucket !== '200–1000') continue;
+    if (f.size === 'large' && c.size.bucket !== '1000+') continue;
+    if (f.join !== 'any' && c.join.platform !== f.join) continue;
+    if (f.verified && c.status !== 'approved') continue;
+    if (!matchesQuery(c, f.q)) continue;
+    const km = origin && c.location ? distanceKm(origin.lat, origin.lng, c.location.lat, c.location.lng) : null;
+    out.push({ ...c, km });
+  }
+  return sortScored(out, f.sort, origin != null);
+}
+
+const SIZE_RANK: Record<Community['size']['bucket'], number> = { '1000+': 4, '200–1000': 3, '50–200': 2, '<50': 1, unknown: 0 };
+const CAD_RANK: Record<Community['meets']['cadence'], number> = { weekly: 4, fortnightly: 3, monthly: 2, irregular: 1, unknown: 0 };
+
+export function activityScore(c: Community): number {
+  return (c.status === 'approved' ? 10 : 0) + CAD_RANK[c.meets.cadence] * 2 + SIZE_RANK[c.size.bucket] + (c.featured ? 3 : 0);
+}
+
+export function sortScored(list: Scored[], sort: Sort, hasOrigin: boolean): Scored[] {
+  const byName = (a: Scored, b: Scored) => a.name.localeCompare(b.name);
+  const arr = [...list];
+  if (sort === 'az') return arr.sort(byName);
+  if (sort === 'newest') return arr.sort((a, b) => b.createdAt.localeCompare(a.createdAt) || byName(a, b));
+  if (sort === 'active') return arr.sort((a, b) => activityScore(b) - activityScore(a) || byName(a, b));
+  // nearest: city-precision rows sink below area-precision rows at equal-ish distance
+  if (!hasOrigin) return arr.sort((a, b) => activityScore(b) - activityScore(a) || byName(a, b));
+  return arr.sort((a, b) => {
+    const ak = a.km ?? 1e9, bk = b.km ?? 1e9;
+    const ap = a.location?.precision === 'city' ? 1 : 0, bp = b.location?.precision === 'city' ? 1 : 0;
+    if (ap !== bp) return ap - bp;
+    return ak - bk || activityScore(b) - activityScore(a);
+  });
+}
+
+// ─── URL state ───────────────────────────────────────────────
+const KEYS: (keyof Filters)[] = ['q', 'category', 'city', 'gender', 'beginner', 'price', 'events', 'cadence', 'size', 'join', 'verified', 'sort'];
+
+export function filtersToParams(f: Filters): URLSearchParams {
+  const p = new URLSearchParams();
+  for (const k of KEYS) {
+    const v = f[k], d = DEFAULT_FILTERS[k];
+    if (v === d) continue;
+    p.set(k, typeof v === 'boolean' ? '1' : String(v));
+  }
+  return p;
+}
+
+export function paramsToFilters(p: URLSearchParams | Record<string, string | string[] | undefined>, base: Filters = DEFAULT_FILTERS): Filters {
+  const get = (k: string): string | null => {
+    if (p instanceof URLSearchParams) return p.get(k);
+    const v = p[k];
+    return Array.isArray(v) ? v[0] ?? null : v ?? null;
+  };
+  const f: Filters = { ...base };
+  const s = (k: keyof Filters, allowed?: readonly string[]) => {
+    const v = get(k);
+    if (v == null) return;
+    if (allowed && !allowed.includes(v)) return;
+    (f as unknown as Record<string, unknown>)[k] = v;
+  };
+  const b = (k: keyof Filters) => { const v = get(k); if (v != null) (f as unknown as Record<string, unknown>)[k] = v === '1' || v === 'true'; };
+  s('q');
+  s('category', [...CATEGORY_ORDER, 'language', 'parents', 'pets', 'other']);
+  s('city', Object.keys(CITY_GROUPS));
+  s('gender', ['all', 'women', 'men']);
+  b('beginner');
+  s('price', ['any', 'free', 'paid']);
+  b('events');
+  s('cadence', ['any', 'weekly', 'monthly']);
+  s('size', ['any', 'small', 'medium', 'large']);
+  s('join', ['any', 'whatsapp', 'instagram', 'meetup', 'website', 'hangout', 'other']);
+  b('verified');
+  s('sort', ['nearest', 'active', 'newest', 'az']);
+  return f;
+}
+
+export function activeFilterCount(f: Filters): number {
+  let n = 0;
+  for (const k of KEYS) if (k !== 'city' && k !== 'sort' && k !== 'q' && f[k] !== DEFAULT_FILTERS[k]) n++;
+  return n;
+}
+
+// ─── Slugs for /communities/[city]/[category] ────────────────
+export const CITY_SLUGS: Record<string, string> = { gurgaon: 'Gurgaon', delhi: 'Delhi', noida: 'Noida', mumbai: 'Mumbai', bengaluru: 'Bengaluru', bangalore: 'Bengaluru', jaipur: 'Jaipur' };
+export const slugForCity = (city: string) => city.toLowerCase();
+
+// ─── Generated visual mark ───────────────────────────────────
+/** Deterministic colour + initials from the slug. No organiser imagery stored. */
+export function markFor(c: Pick<Community, 'slug' | 'name' | 'category'>): { hue: number; initials: string; shape: 0 | 1 | 2 | 3 } {
+  let h = 0;
+  for (let i = 0; i < c.slug.length; i++) h = (h * 31 + c.slug.charCodeAt(i)) >>> 0;
+  const base = CATEGORY_META[c.category].hue;
+  const hue = (base + (h % 24) - 12 + 360) % 360;
+  const words = c.name.replace(/[^A-Za-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean);
+  const initials = (words.length >= 2 ? words[0][0] + words[1][0] : (words[0] ?? '?').slice(0, 2)).toUpperCase();
+  return { hue, initials, shape: (h % 4) as 0 | 1 | 2 | 3 };
+}
+
+export function bySlug(slug: string): Community | undefined {
+  return COMMUNITIES.find((c) => c.slug === slug);
+}
+
+export function similarTo(c: Community, n = 4): Community[] {
+  const cities = CITY_GROUPS[c.city] ?? [c.city];
+  return COMMUNITIES
+    .filter((o) => o.slug !== c.slug && cities.includes(o.city))
+    .map((o) => ({ o, s: (o.category === c.category ? 5 : 0) + o.tags.filter((t) => c.tags.includes(t)).length + (o.city === c.city ? 1 : 0) }))
+    .sort((a, b) => b.s - a.s)
+    .slice(0, n)
+    .map((x) => x.o);
+}
+
+export const PLATFORM_LABEL: Record<JoinPlatform, string> = {
+  whatsapp: 'WhatsApp', instagram: 'Instagram', meetup: 'Meetup', luma: 'Luma', misfits: 'Misfits',
+  strava: 'Strava', website: 'Website', telegram: 'Telegram', hangout: 'hangout.in', other: 'Link',
+};
