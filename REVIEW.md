@@ -48,6 +48,19 @@ No env vars, no database needed for these routes. Also try:
   touched is `app/page.tsx` (one `<li>`), so risk is minimal — but run `npm run test:e2e`
   locally before merging anyway.
 
+## v4 — animated hero + location ask
+
+- `components/communities/HeroScene.tsx`: an inline-SVG scene per category (map with
+  dropping pins + a walking figure by default; runner, cyclist, bouncing ball, dumbbell,
+  mountain hiker, rocket, terminal cursor, paint strokes, flipping book, steaming cup,
+  chat bubbles, rolling dice). Picking a chip springs a new scene in and swaps the
+  headline ("Find your run crew in Gurgaon.") and a Gen-Z kicker ("5am club, no excuses").
+  All CSS keyframes; honours reduced motion.
+- Hero now *asks* for location in a chat-style bubble ("Where are you right now?") with
+  Use my location / Pick area, and shows "Showing what's near X · Change" once set.
+- Cards trimmed: category pill, share button and third fact hidden on small screens;
+  one-line taglines.
+
 ## Creative calls you may want to overrule
 
 1. **Palette: black + red (`#E6232B`) + Zepto-purple pop** on white — all tokens at the top of `communities.css`; the calmer teal version is one commit back (`bcc9f44`).

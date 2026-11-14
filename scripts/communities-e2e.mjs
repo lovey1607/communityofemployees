@@ -79,14 +79,14 @@ await ctx.close();
 // geolocation granted near Sohna Road
 [ctx, p] = await page({ width: 1400, height: 900 }, { geolocation: { latitude: 28.418, longitude: 77.04 }, permissions: ['geolocation'] });
 await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });
-await p.click('button:has-text("Near me")'); await p.waitForTimeout(1000);
+await p.click('.cop-ask button:has-text("Use my location")'); await p.waitForTimeout(1000);
 ok('geolocation granted → "Near your location"', (await p.textContent('.cop-loc .where')).includes('your location'));
 await ctx.close();
 
 // geolocation denied → graceful
 [ctx, p] = await page({ width: 1400, height: 900 });
 await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });
-await p.click('button:has-text("Near me")'); await p.waitForTimeout(1000);
+await p.click('.cop-ask button:has-text("Use my location")'); await p.waitForTimeout(1000);
 ok('geolocation denied → location picker opens, no crash', await p.isVisible('.cop-locpick'));
 await ctx.close();
 

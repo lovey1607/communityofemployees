@@ -21,6 +21,7 @@ import {
 } from '@/lib/communities';
 import { CommunityCard } from './CommunityCard';
 import { Mark } from './Mark';
+import { HeroScene, SCENE_COPY } from './HeroScene';
 
 const ICONS: Record<CommunityCategory | 'all', React.ComponentType<{ size?: number }>> = {
   all: Sparkles, running: Footprints, cycling: Bike, sports: Trophy, fitness: Dumbbell, outdoors: Mountain,
@@ -157,47 +158,58 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   if (f.verified) removable.push({ k: 'verified', label: 'Verified only', clear: () => update({ verified: false }) });
   if (f.q) removable.push({ k: 'q', label: `“${f.q}”`, clear: () => update({ q: '' }) });
 
-  const heading = title ?? (f.category === 'all' ? 'Find your people in' : `${CATEGORY_META[f.category].label} communities in`);
+  
 
   return (
     <div className="cop">
       {/* ─── Hero ─── */}
       <section className="cop-hero">
-        <div className="wrap">
-          <div className="cop-hero-row">
-            <div>
-              <h1>
-                {heading}{' '}
-                <span className="city" aria-live="polite">
-                  <AnimatePresence mode="popLayout" initial={false}>
-                    <motion.span key={f.city}
-                      initial={reduce ? false : { y: '60%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={reduce ? undefined : { y: '-60%', opacity: 0 }}
-                      transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}>
-                      {f.city}.
-                    </motion.span>
-                  </AnimatePresence>
-                </span>
-              </h1>
-              <p>Run clubs, turf football, silent reading, founder breakfasts, board-game nights — across {cityCount} Indian cities. Real communities with a direct link to join. No sign-up wall, no middleman.</p>
+        <div className="wrap cop-hero-grid">
+          <div>
+            <div className="cop-kicker"><i /> {SCENE_COPY[f.category].kicker}</div>
+            <h1>
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span key={f.category} style={{ display: 'inline' }}
+                  initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={reduce ? undefined : { opacity: 0, y: -10 }} transition={{ duration: 0.25 }}>
+                  {title ?? SCENE_COPY[f.category].line}
+                </motion.span>
+              </AnimatePresence>{' '}
+              <span className="city" aria-live="polite">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.span key={f.city}
+                    initial={reduce ? false : { y: '60%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={reduce ? undefined : { y: '-60%', opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}>
+                    {f.city}.
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+            </h1>
+            <p className="sub">{COMMUNITIES.length} real communities · {cityCount} cities · one tap to join.</p>
+            <div className="cop-search">
+              <label>
+                <Search size={18} />
+                <span className="sr">Search communities</span>
+                <input type="search" value={f.q} onChange={(e) => update({ q: e.target.value })} placeholder="pickleball, women only, board games…" enterKeyHint="search" />
+                {f.q && <button type="button" className="clear" aria-label="Clear search" onClick={() => update({ q: '' })}><X size={14} /></button>}
+              </label>
             </div>
-            <div className="cop-count" aria-label="Listing counts">
-              <div><b>{COMMUNITIES.length}</b><span>communities</span></div>
-              <div><b>{cityCount}</b><span>cities</span></div>
-              <div><b>{cityPool.length}</b><span>in {f.city} area</span></div>
-            </div>
+            {origin ? (
+              <div className="cop-ask">
+                <span className="em">📍</span>
+                <p>Showing what’s near <b>{origin.label}</b><small>Sorted by distance from you</small></p>
+                <button type="button" className="cop-btn ghost" onClick={() => setLocOpen(true)}>Change</button>
+              </div>
+            ) : (
+              <div className="cop-ask" role="group" aria-label="Set your location">
+                <span className="em">👋</span>
+                <p>Where are you right now?<small>So we can show what’s actually near you — nothing stored online.</small></p>
+                <button type="button" className="cop-btn cop-btn-primary" onClick={() => locate(false)} disabled={geo.busy}><LocateFixed size={14} /> {geo.busy ? 'Finding…' : 'Use my location'}</button>
+                <button type="button" className="cop-btn ghost" onClick={() => setLocOpen(true)}>Pick area</button>
+              </div>
+            )}
+            {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
           </div>
-          <div className="cop-search">
-            <label>
-              <Search size={18} />
-              <span className="sr">Search communities</span>
-              <input type="search" value={f.q} onChange={(e) => update({ q: e.target.value })} placeholder={`Search “pickleball”, “women only”, “Cyber City”, “board games”…`} enterKeyHint="search" />
-              {f.q && <button type="button" className="clear" aria-label="Clear search" onClick={() => update({ q: '' })}><X size={14} /></button>}
-            </label>
-            <button type="button" className="cop-btn cop-btn-primary" onClick={() => locate(false)} disabled={geo.busy}>
-              <LocateFixed size={16} /> {geo.busy ? 'Finding…' : 'Near me'}
-            </button>
-          </div>
-          {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
+          <HeroScene category={f.category} />
         </div>
       </section>
       <div ref={sentinel} aria-hidden="true" />
