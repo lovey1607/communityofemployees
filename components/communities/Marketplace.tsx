@@ -197,7 +197,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
               <LocateFixed size={16} /> {geo.busy ? 'Finding…' : 'Near me'}
             </button>
           </div>
-          {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem' }} role="status">{geo.msg}</p>}
+          {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
         </div>
       </section>
       <div ref={sentinel} aria-hidden="true" />

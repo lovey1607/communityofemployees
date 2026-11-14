@@ -29,13 +29,17 @@ content between the visitor and the join button.
 - **Linear** — motion respects `prefers-reduced-motion`; stagger ≤ 35 ms per card,
   ≤ 300 ms total; layout animations via Framer `layout`, which is already a dependency.
 
-## Accent
+## Palette (v2 — vibrant)
 
-`#0F766E` (deep teal) on COE's cream ground. Reason: it must sit beside COE's saffron
-without being read as the same product, it passes AA on cream for text (`#0B4F4A` for
-small text), it photographs well next to the warm category hues of the marks, and it
-reads "outdoors / people" rather than "SaaS blue". Easy to swap: it's one variable in
-`app/communities/communities.css`.
+Lovey asked for Zepto/Zomato energy, so v2 is **black + red + a purple pop** on white:
+`--black #0E0C0B` for nav, hero band, join box and footer; `--accent #E6232B` red for every
+primary action (join, "Near me", "Change"), card hover glow and the city word in the hero;
+`--pop #6C2BD9` (Zepto purple) for the "unverified" badge and the logo gradient so the second
+colour never competes with the red CTA. Ground is pure white, not COE's cream, so the two
+products are visibly siblings-not-twins. Contrast: red on white passes AA for 14px+ bold;
+small red text uses `--accent-ink #9E0F16`. All tokens live at the top of
+`app/communities/communities.css` — the earlier calm-teal version is one git commit back if
+the vibrancy is too much.
 
 ## Category hues
 

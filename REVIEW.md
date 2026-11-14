@@ -50,7 +50,7 @@ No env vars, no database needed for these routes. Also try:
 
 ## Creative calls you may want to overrule
 
-1. **Accent teal `#0F766E`** (not COE saffron) — one CSS variable.
+1. **Palette: black + red (`#E6232B`) + Zepto-purple pop** on white — all tokens at the top of `communities.css`; the calmer teal version is one commit back (`bcc9f44`).
 2. **NCR is one market** (also Mumbai+Navi Mumbai+Thane, Ahmedabad+Gandhinagar,
    Chandigarh+Mohali): see `CITY_GROUPS`. Default city is still Gurgaon; geolocation
    switches to the nearest listed city within 80 km.
