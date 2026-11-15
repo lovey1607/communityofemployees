@@ -6,9 +6,31 @@
 
 import { COMMUNITIES_CORE, CATEGORY_META, CITY_CENTRE, type Community, type CommunityCategory, type JoinPlatform } from '@/data/communities';
 import { COMMUNITIES_INDIA } from '@/data/communities-india';
+import { COMMUNITIES_DISCOVERED } from '@/data/communities-discovered';
+import { UPDATES, REMOVED, VERIFIED_ON } from '@/data/communities-updates';
 
 export type { Community, CommunityCategory, JoinPlatform };
-export const COMMUNITIES: Community[] = [...COMMUNITIES_CORE, ...COMMUNITIES_INDIA];
+
+/** City used for pan-India / internet-first rows; they appear in every city view. */
+export const ONLINE_CITY = 'Online';
+
+/** Apply the dated verification layer (data/communities-updates.ts) to seed rows. */
+export function applyUpdates(rows: Community[]): Community[] {
+  return rows.filter((r) => !REMOVED.has(r.slug)).map((r) => {
+    const u = UPDATES[r.slug];
+    if (!u) return r;
+    const { activitySignal, links, ...rest } = u;
+    const next: Community = { ...r, ...rest, links: { ...r.links, ...(links ?? {}) }, source: { url: r.links.instagram ?? r.source.url, verifiedOn: VERIFIED_ON, activitySignal } };
+    if (rest.city && rest.city !== r.city && r.location?.precision === 'city') {
+      const centre = CITY_CENTRE[rest.city];
+      next.location = centre ? { lat: centre[0], lng: centre[1], label: rest.city, precision: 'city' } : null;
+      next.area = null;
+    }
+    return next;
+  });
+}
+
+export const COMMUNITIES: Community[] = [...applyUpdates([...COMMUNITIES_CORE, ...COMMUNITIES_INDIA]), ...COMMUNITIES_DISCOVERED];
 export { CATEGORY_META };
 
 // ─── Brand ───────────────────────────────────────────────────
@@ -132,7 +154,9 @@ export function nearestCity(lat: number, lng: number): { city: string; km: numbe
 
 // ─── Filters ─────────────────────────────────────────────────
 export type Gender = 'all' | 'women' | 'men';
-export type Price = 'any' | 'free' | 'paid';
+export type Price = 'any' | 'free' | 'paid' | 'membership';
+export type Mode = 'any' | 'inperson' | 'online';
+export type Age = 'any' | 'genz' | '50plus';
 export type Cadence = 'any' | 'weekly' | 'monthly';
 export type Size = 'any' | 'small' | 'medium' | 'large';
 export type Sort = 'nearest' | 'active' | 'newest' | 'az';
@@ -148,18 +172,20 @@ export type Filters = {
   cadence: Cadence;
   size: Size;
   join: JoinPlatform | 'any';
+  mode: Mode;
+  age: Age;
   verified: boolean;
   sort: Sort;
 };
 
 export const DEFAULT_FILTERS: Filters = {
   q: '', category: 'all', city: 'Gurgaon', gender: 'all', beginner: false, price: 'any',
-  events: false, cadence: 'any', size: 'any', join: 'any', verified: false, sort: 'nearest',
+  events: false, cadence: 'any', size: 'any', join: 'any', mode: 'any', age: 'any', verified: false, sort: 'nearest',
 };
 
 export const CATEGORY_ORDER: (CommunityCategory | 'all')[] = [
-  'all', 'running', 'sports', 'outdoors', 'cycling', 'fitness', 'books', 'games', 'creative',
-  'food', 'social', 'startup', 'tech', 'professional', 'wellbeing', 'cause',
+  'all', 'running', 'sports', 'social', 'dating', 'outdoors', 'cycling', 'fitness', 'books', 'games', 'creative',
+  'food', 'women', 'men', 'startup', 'tech', 'professional', 'wellbeing', 'cause', 'civic', 'pets', 'parents', 'language',
 ];
 
 /** Which categories actually have listings — hides empty chips. */
@@ -185,12 +211,16 @@ export function applyFilters(all: Community[], f: Filters, origin: Origin): Scor
   const cities = CITY_GROUPS[f.city] ?? [f.city];
   const out: Scored[] = [];
   for (const c of all) {
-    if (!cities.includes(c.city)) continue;
+    if (c.city !== ONLINE_CITY && !cities.includes(c.city)) continue;
     if (f.category !== 'all' && c.category !== f.category) continue;
     if (f.gender !== 'all' && c.audience.gender !== f.gender) continue;
     if (f.beginner && !(c.audience.level === 'beginner' || c.tags.includes('beginner-friendly'))) continue;
     if (f.price === 'free' && c.pricing.type !== 'free') continue;
     if (f.price === 'paid' && !(c.pricing.type === 'paid' || c.pricing.type === 'membership' || c.pricing.type === 'pay-per-event')) continue;
+    if (f.price === 'membership' && c.pricing.type !== 'membership') continue;
+    if (f.mode === 'inperson' && c.mode === 'online') continue;
+    if (f.mode === 'online' && c.mode === 'offline') continue;
+    if (f.age !== 'any' && c.ageBand !== f.age) continue;
     if (f.events && !(c.hasEvents && c.meets.cadence !== 'unknown')) continue;
     if (f.cadence === 'weekly' && c.meets.cadence !== 'weekly') continue;
     if (f.cadence === 'monthly' && !(c.meets.cadence === 'monthly' || c.meets.cadence === 'fortnightly')) continue;
@@ -229,8 +259,17 @@ export function sortScored(list: Scored[], sort: Sort, hasOrigin: boolean): Scor
   });
 }
 
+/** Short “where” label for cards: area, city, or online. */
+export function whereLabel(c: Pick<Community, 'city' | 'area' | 'mode'>): string {
+  if (c.city === ONLINE_CITY) return c.mode === 'hybrid' ? 'Online + city chapters' : 'Online · pan-India';
+  return c.area ?? c.city;
+}
+
+/** Join-platform options shown in the Filters panel. */
+export const JOIN_FILTER_OPTIONS: JoinPlatform[] = ['whatsapp', 'instagram', 'meetup', 'website', 'discord', 'reddit', 'facebook', 'hangout', 'other'];
+
 // ─── URL state ───────────────────────────────────────────────
-const KEYS: (keyof Filters)[] = ['q', 'category', 'city', 'gender', 'beginner', 'price', 'events', 'cadence', 'size', 'join', 'verified', 'sort'];
+const KEYS: (keyof Filters)[] = ['q', 'category', 'city', 'gender', 'beginner', 'price', 'events', 'cadence', 'size', 'join', 'mode', 'age', 'verified', 'sort'];
 
 export function filtersToParams(f: Filters): URLSearchParams {
   const p = new URLSearchParams();
@@ -257,15 +296,17 @@ export function paramsToFilters(p: URLSearchParams | Record<string, string | str
   };
   const b = (k: keyof Filters) => { const v = get(k); if (v != null) (f as unknown as Record<string, unknown>)[k] = v === '1' || v === 'true'; };
   s('q');
-  s('category', [...CATEGORY_ORDER, 'language', 'parents', 'pets', 'other']);
+  s('category', [...CATEGORY_ORDER, 'other']);
   s('city', Object.keys(CITY_GROUPS));
   s('gender', ['all', 'women', 'men']);
   b('beginner');
-  s('price', ['any', 'free', 'paid']);
+  s('price', ['any', 'free', 'paid', 'membership']);
   b('events');
   s('cadence', ['any', 'weekly', 'monthly']);
   s('size', ['any', 'small', 'medium', 'large']);
-  s('join', ['any', 'whatsapp', 'instagram', 'meetup', 'website', 'hangout', 'other']);
+  s('join', ['any', ...JOIN_FILTER_OPTIONS]);
+  s('mode', ['any', 'inperson', 'online']);
+  s('age', ['any', 'genz', '50plus']);
   b('verified');
   s('sort', ['nearest', 'active', 'newest', 'az']);
   return f;
@@ -309,5 +350,6 @@ export function similarTo(c: Community, n = 4): Community[] {
 
 export const PLATFORM_LABEL: Record<JoinPlatform, string> = {
   whatsapp: 'WhatsApp', instagram: 'Instagram', meetup: 'Meetup', luma: 'Luma', misfits: 'Misfits',
-  strava: 'Strava', website: 'Website', telegram: 'Telegram', hangout: 'hangout.in', other: 'Link',
+  strava: 'Strava', website: 'Website', telegram: 'Telegram', hangout: 'hangout.in',
+  discord: 'Discord', reddit: 'Reddit', facebook: 'Facebook', other: 'Link / form',
 };

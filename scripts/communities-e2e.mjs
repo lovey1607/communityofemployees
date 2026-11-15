@@ -89,6 +89,18 @@ await p.goto(`${B}/communities/mumbai`, { waitUntil: 'networkidle' });
 ok('/communities/mumbai switches city', (await p.textContent('h1')).includes('Mumbai'));
 await p.goto(`${B}/communities/nope-not-a-slug`);
 ok('unknown slug → 404', (await p.title()).toLowerCase().includes('404') || (await p.content()).includes('404'));
+// 15 Nov discovery: new categories, online rows in every city, new filters
+await p.goto(`${B}/communities?category=dating`, { waitUntil: 'networkidle' }); await p.waitForTimeout(500);
+ok('?category=dating shows singles communities', (await p.content()).includes('Let’s Socialise'));
+await p.screenshot({ path: `${OUT}12-desktop-singles.png` });
+await p.goto(`${B}/communities/jaipur?mode=online`, { waitUntil: 'networkidle' }); await p.waitForTimeout(500);
+ok('online rows appear in a non-metro city (Jaipur, mode=online)', (await p.content()).includes('LocalCircles'));
+await p.goto(`${B}/communities/save-indian-family-foundation`, { waitUntil: 'networkidle' });
+ok('online detail page: pan-India breadcrumb, organiser join link', (await p.textContent('.cop-crumbs')).includes('Online') && (await p.$$('a[href^="https://chat.whatsapp.com/"]')).length > 0);
+await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });
+await p.click('button:has-text("Filters")'); await p.waitForTimeout(400);
+ok('Filters panel has Age focus, Where, Membership and Discord options', await p.isVisible('text=Age focus') && await p.isVisible('button:has-text("Online / hybrid")') && await p.isVisible('button:has-text("Membership / premium")') && await p.isVisible('.cop-fgroup button:has-text("Discord")'));
+await p.screenshot({ path: `${OUT}13-desktop-filters-v7.png` });
 await p.goto(`${B}/communities/submit`, { waitUntil: 'networkidle' });
 await p.screenshot({ path: `${OUT}09-desktop-submit.png` });
 await ctx.close();

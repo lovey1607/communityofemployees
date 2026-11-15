@@ -3,7 +3,7 @@
 // we last checked.
 import Link from 'next/link';
 import { ExternalLink, Clock, Users, IndianRupee, MapPin, CalendarCheck } from 'lucide-react';
-import { CATEGORY_META, PLATFORM_LABEL, similarTo, slugForCity, type Community } from '@/lib/communities';
+import { CATEGORY_META, PLATFORM_LABEL, similarTo, slugForCity, type Community, whereLabel } from '@/lib/communities';
 import { Mark } from './Mark';
 import { SimilarGrid } from './SimilarGrid';
 
@@ -21,10 +21,12 @@ export function DetailView({ c }: { c: Community }) {
   const pad = loc?.precision === 'city' ? 0.12 : 0.025;
   const mapSrc = loc ? `https://www.openstreetmap.org/export/embed.html?bbox=${(loc.lng - pad * 1.4).toFixed(4)}%2C${(loc.lat - pad).toFixed(4)}%2C${(loc.lng + pad * 1.4).toFixed(4)}%2C${(loc.lat + pad).toFixed(4)}&layer=mapnik&marker=${loc.lat.toFixed(5)}%2C${loc.lng.toFixed(5)}` : null;
   const similar = similarTo(c, 4);
+  const online = c.city === 'Online';
+  const cityHref = online ? '/communities' : `/communities/${slugForCity(c.city === 'Navi Mumbai' || c.city === 'Thane' ? 'Mumbai' : ['Faridabad', 'Ghaziabad'].includes(c.city) ? 'Delhi' : c.city)}`;
   const links = Object.entries(c.links).filter(([, v]) => !!v) as [string, string][];
   const jsonLd = {
     '@context': 'https://schema.org', '@type': 'Organization', name: c.name, description: c.tagline, url: c.join.url,
-    address: { '@type': 'PostalAddress', addressLocality: c.area ?? c.city, addressRegion: c.city, addressCountry: 'IN' },
+    ...(c.city === 'Online' ? {} : { address: { '@type': 'PostalAddress', addressLocality: c.area ?? c.city, addressRegion: c.city, addressCountry: 'IN' } }),
     sameAs: links.map(([, v]) => v),
   };
 
@@ -34,8 +36,8 @@ export function DetailView({ c }: { c: Community }) {
       <div className="wrap">
         <nav className="cop-crumbs" aria-label="Breadcrumb">
           <Link href="/communities">Communities</Link><span>/</span>
-          <Link href={`/communities/${slugForCity(c.city === 'Navi Mumbai' || c.city === 'Thane' ? 'Mumbai' : ['Faridabad', 'Ghaziabad'].includes(c.city) ? 'Delhi' : c.city)}`}>{c.city}</Link><span>/</span>
-          <Link href={`/communities/${slugForCity(c.city === 'Navi Mumbai' || c.city === 'Thane' ? 'Mumbai' : ['Faridabad', 'Ghaziabad'].includes(c.city) ? 'Delhi' : c.city)}/${c.category}`}>{meta.label}</Link><span>/</span>
+          <Link href={cityHref}>{online ? 'Online · pan-India' : c.city}</Link><span>/</span>
+          {!online && <><Link href={`${cityHref}/${c.category}`}>{meta.label}</Link><span>/</span></>}
           <span aria-current="page">{c.name}</span>
         </nav>
         <div className="cop-detail-grid">
@@ -55,7 +57,7 @@ export function DetailView({ c }: { c: Community }) {
             <p className="desc">{c.description}</p>
             <dl className="meta">
               <div><dt><Clock size={12} style={{ display: 'inline', verticalAlign: '-1px' }} /> When</dt><dd>{c.meets.summary ?? ({ weekly: 'Weekly', fortnightly: 'Fortnightly', monthly: 'Monthly', irregular: 'Pop-up — see their page', unknown: 'See their page' }[c.meets.cadence])}</dd></div>
-              <div><dt><MapPin size={12} style={{ display: 'inline', verticalAlign: '-1px' }} /> Where</dt><dd>{c.area ?? c.city}{c.area ? `, ${c.city}` : ''}</dd></div>
+              <div><dt><MapPin size={12} style={{ display: 'inline', verticalAlign: '-1px' }} /> Where</dt><dd>{c.city === 'Online' ? whereLabel(c) : <>{c.area ?? c.city}{c.area ? `, ${c.city}` : ''}</>}</dd></div>
               <div><dt><Users size={12} style={{ display: 'inline', verticalAlign: '-1px' }} /> Who</dt><dd>{who}{level}{c.audience.ageNote ? ` · ${c.audience.ageNote}` : ''}</dd></div>
               <div><dt><IndianRupee size={12} style={{ display: 'inline', verticalAlign: '-1px' }} /> Cost</dt><dd>{price}{c.pricing.note ? <span style={{ display: 'block', fontWeight: 400, fontSize: '.8rem', color: 'var(--muted)' }}>{c.pricing.note}</span> : null}</dd></div>
               <div><dt>Size</dt><dd>{c.size.bucket === 'unknown' ? 'Not published' : `${c.size.bucket} people`}{c.size.note ? <span style={{ display: 'block', fontWeight: 400, fontSize: '.8rem', color: 'var(--muted)' }}>{c.size.note}</span> : null}</dd></div>

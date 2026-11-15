@@ -62,3 +62,9 @@ Pan-India rows live in `data/communities-india.ts` (same helpers, same rules).
 Instagram pages could not be opened from the research tools (robots/permission), so
 anything whose *only* source is an Instagram profile is `unverified`. The full audit,
 including rejected candidates, is in `research/communities-log.md`.
+
+## v7 additions (15 Nov 2026)
+- `mode`: `offline` (default) | `online` | `hybrid`. Pan-India/internet-first rows use `city: 'Online'` and `location: null`; they appear in every city view.
+- `ageBand`: `genz` | `millennial` | `50plus` | `null`. Set it **only** when the organiser states an age focus.
+- New categories: `dating` (shown as "Singles"), `women`, `men`, `civic`. New join platforms: `discord`, `reddit`, `facebook`.
+- Corrections to existing rows go in `communities-updates.ts` (dated override layer); new finds go in `communities-discovered.ts`.

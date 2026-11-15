@@ -23,11 +23,11 @@ export type CommunityCategory =
   | 'running' | 'cycling' | 'sports' | 'fitness' | 'outdoors'
   | 'tech' | 'startup' | 'creative' | 'books' | 'food' | 'social'
   | 'language' | 'cause' | 'wellbeing' | 'parents' | 'pets'
-  | 'professional' | 'games' | 'other';
+  | 'professional' | 'games' | 'dating' | 'men' | 'women' | 'civic' | 'other';
 
 export type JoinPlatform =
   | 'whatsapp' | 'instagram' | 'meetup' | 'luma' | 'misfits' | 'strava'
-  | 'website' | 'telegram' | 'hangout' | 'other';
+  | 'website' | 'telegram' | 'hangout' | 'discord' | 'reddit' | 'facebook' | 'other';
 
 export type Community = {
   id: string;
@@ -45,6 +45,10 @@ export type Community = {
   pricing: { type: 'free' | 'paid' | 'pay-per-event' | 'membership' | 'unknown'; note: string | null };
   size: { bucket: '<50' | '50–200' | '200–1000' | '1000+' | 'unknown'; note: string | null };
   hasEvents: boolean;
+  /** Where it happens. 'online' rows (city 'Online') show in every city. */
+  mode: 'offline' | 'online' | 'hybrid';
+  /** Only set when the organiser states an age focus. */
+  ageBand: 'genz' | 'millennial' | '50plus' | null;
   join: { url: string; platform: JoinPlatform; cta: string };
   links: { instagram?: string; website?: string; meetup?: string; strava?: string; luma?: string; whatsapp?: string; facebook?: string };
   source: { url: string; verifiedOn: string; activitySignal: string };
@@ -77,19 +81,21 @@ export const CITY_CENTRE: Record<string, [number, number]> = {
 
 export function c(raw: Partial_): Community {
   const p = Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== undefined)) as Partial_;
-  const centre = CITY_CENTRE[p.city] ?? [0, 0];
+  const centre = CITY_CENTRE[p.city];
   return {
     id: p.slug,
     tagline: '',
     description: '',
     tags: [],
     area: null,
-    location: p.location ?? { lat: centre[0], lng: centre[1], label: p.city, precision: 'city' },
+    location: p.location !== undefined ? p.location : centre ? { lat: centre[0], lng: centre[1], label: p.city, precision: 'city' } : null,
     meets: { cadence: 'unknown', summary: null },
     audience: { gender: 'all', ageNote: null, level: 'all' },
     pricing: { type: 'unknown', note: null },
     size: { bucket: 'unknown', note: null },
     hasEvents: true,
+    mode: 'offline',
+    ageBand: null,
     links: {},
     status: 'approved',
     imageUrl: null,
@@ -1465,5 +1471,9 @@ export const CATEGORY_META: Record<CommunityCategory, { label: string; hue: numb
   pets:         { label: 'Pets',          hue: 55 },
   professional: { label: 'Professional',  hue: 210 },
   games:        { label: 'Games',         hue: 245 },
+  dating:       { label: 'Singles',       hue: 335 },
+  men:          { label: 'Men',           hue: 205 },
+  women:        { label: 'Women',         hue: 305 },
+  civic:        { label: 'Civic & consumer', hue: 120 },
   other:        { label: 'Other',         hue: 0 },
 };

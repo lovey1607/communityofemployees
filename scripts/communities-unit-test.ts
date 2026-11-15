@@ -58,7 +58,44 @@ t('data: pan-India — at least 20 cities with listings, 250+ rows', () => {
   const cities = new Set(COMMUNITIES.map((c) => c.city));
   assert.ok(cities.size >= 20, `cities ${cities.size}`);
   assert.ok(COMMUNITIES.length >= 250, `rows ${COMMUNITIES.length}`);
-  for (const c of COMMUNITIES) assert.ok(c.location && c.location.lat !== 0, `${c.slug} has no coordinates (city missing from CITY_CENTRE?)`);
+  for (const c of COMMUNITIES) {
+    if (c.city === 'Online') { assert.equal(c.location, null, `${c.slug}: online rows carry no pin`); continue; }
+    assert.ok(c.location && c.location.lat !== 0, `${c.slug} has no coordinates (city missing from CITY_CENTRE?)`);
+  }
+});
+t('data: every row has source url, verifiedOn, activity signal; slugs unique', () => {
+  const seen = new Set<string>();
+  for (const c of COMMUNITIES) {
+    assert.ok(!seen.has(c.slug), `duplicate slug ${c.slug}`); seen.add(c.slug);
+    assert.ok(/^https?:\/\//.test(c.source.url) && c.source.verifiedOn && c.source.activitySignal, `${c.slug} source incomplete`);
+    assert.ok(/^https?:\/\//.test(c.join.url), `${c.slug} join url`);
+  }
+});
+t('updates: 15 Nov pass applied — removals gone, promotions + corrections in', () => {
+  for (const s of ['delhi-book-lovers', 'jaipur-cycling-club', 'great-hyderabad-adventure-club', 'hyderabad-book-club', 'cloka-club-chennai']) assert.ok(!COMMUNITIES.some((c) => c.slug === s), s);
+  const gr = COMMUNITIES.find((c) => c.slug === 'gurgaon-reads')!;
+  assert.equal(gr.status, 'approved'); assert.equal(gr.source.verifiedOn, '2026-11-15'); assert.match(gr.meets.summary ?? '', /Chapters/);
+  const so = COMMUNITIES.find((c) => c.slug === 'step-out')!;
+  assert.equal(so.city, 'Mumbai'); assert.equal(so.status, 'unverified'); assert.equal(so.location?.label, 'Mumbai');
+});
+t('filters: online rows show in every city; mode filter splits them', () => {
+  const blr = applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, city: 'Bengaluru' }, null);
+  const jai = applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, city: 'Jaipur' }, null);
+  assert.ok(blr.some((c) => c.slug === 'localcircles') && jai.some((c) => c.slug === 'localcircles'));
+  const inPerson = applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, mode: 'inperson' }, null);
+  assert.ok(inPerson.every((c) => c.mode !== 'online'));
+  const online = applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, mode: 'online' }, null);
+  assert.ok(online.length > 0 && online.every((c) => c.mode !== 'offline'));
+});
+t('filters: new categories, age focus, membership, discord join', () => {
+  for (const cat of ['dating', 'women', 'men', 'civic'] as const) assert.ok(applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, category: cat }, null).length > 0, cat);
+  const gz = applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, city: 'Delhi', age: 'genz' }, null);
+  assert.ok(gz.length > 0 && gz.every((c) => c.ageBand === 'genz'));
+  const mem = applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, price: 'membership' }, null);
+  assert.ok(mem.length > 0 && mem.every((c) => c.pricing.type === 'membership'));
+  assert.ok(applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, join: 'discord' }, null).length > 0);
+  const f = { ...DEFAULT_FILTERS, mode: 'online' as const, age: '50plus' as const, price: 'membership' as const, join: 'reddit' as const };
+  assert.deepEqual(paramsToFilters(filtersToParams(f)), f);
 });
 t('mark: deterministic', () => { assert.deepEqual(markFor(COMMUNITIES[0]), markFor(COMMUNITIES[0])); assert.equal(markFor({ slug: 'a', name: 'The Bhag', category: 'running' }).initials, 'TB'); });
 console.log(`\n${n} checks passed`);

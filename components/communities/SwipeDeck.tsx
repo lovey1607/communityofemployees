@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion, useMotionValue, useTransform, useReducedMotion, type PanInfo } from 'framer-motion';
 import { Heart, X, ExternalLink, MapPin, Clock, Users, IndianRupee, RotateCcw } from 'lucide-react';
-import { CATEGORY_META, formatKm, type Scored } from '@/lib/communities';
+import { CATEGORY_META, formatKm, whereLabel, type Scored } from '@/lib/communities';
 import { Mark } from './Mark';
 import { priceLabel, audienceLabel, cadenceLabel } from './CommunityCard';
 
@@ -101,7 +101,7 @@ function DeckCard({ c, saved, fling, onSwipe, reduce }: { c: Scored; saved: bool
       <motion.span className="stamp like" style={{ opacity: likeOp }}>SAVE</motion.span>
       <motion.span className="stamp nope" style={{ opacity: nopeOp }}>SKIP</motion.span>
       <div className="hd">
-        <span className="k">{meta.label}{c.area ? ` · ${c.area}` : ` · ${c.city}`}</span>
+        <span className="k">{meta.label} · {whereLabel(c)}</span>
         <Mark c={c} size={64} />
         {c.km != null && <span className="km">{formatKm(c.km)} away</span>}
       </div>
@@ -113,7 +113,7 @@ function DeckCard({ c, saved, fling, onSwipe, reduce }: { c: Scored; saved: bool
           <li><Clock size={14} /> {facts[0]}</li>
           <li><Users size={14} /> {facts[1]}</li>
           <li><IndianRupee size={14} /> {facts[2]}</li>
-          <li><MapPin size={14} /> {c.area ?? c.city}</li>
+          <li><MapPin size={14} /> {whereLabel(c)}</li>
         </ul>
         <a className="cop-btn cop-btn-primary" href={c.join.url} target="_blank" rel="noopener noreferrer">{c.join.cta} <ExternalLink size={14} /></a>
         <Link href={`/communities/${c.slug}`} className="more">Full details →</Link>

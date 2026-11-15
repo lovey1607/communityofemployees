@@ -20,7 +20,7 @@ No env vars, no database needed for these routes. Also try:
   bottom sheet / side panel, keyless OSM map), `CommunityCard`, `DetailView`, `Mark`
   (generated identity), `CopNav`.
 - `lib/communities/index.ts` — pure filtering/sorting/distance/URL helpers (unit-tested).
-- `data/communities.ts` + `data/communities-india.ts` — **273 listings across 39 cities**
+- `data/communities.ts` + `data/communities-india.ts` (+ v7 `communities-discovered.ts`, `communities-updates.ts`) — **294 listings** (v7 counts below; v6 numbers here: 273 across 39 cities)
   (Gurgaon 69 · Pune 27 · Delhi 23 · Bengaluru 22 · Hyderabad 22 · Chennai 19 · Mumbai area 18
   · Kolkata 12 · Jaipur 9 · Ahmedabad 8 · Kochi 5 · 28 smaller cities with 1–3 each).
   166 `approved`, 107 `unverified` (badged). Every row has a source URL + date. The smaller
@@ -63,6 +63,48 @@ No env vars, no database needed for these routes. Also try:
   chip opens a "Pick a vibe" sheet with every category as a tile. Chips are now ordered
   by how many listings they have.
 - Browser checks: 33.
+
+## v7 — Firecrawl pass: verified data, new categories, new filters (15 Nov 2026)
+
+**Data** (all evidence in `research/firecrawl-verify-2026-11-15.md` + `research/firecrawl-discovery-2026-11-15.md`)
+- **294 listings, 205 approved / 89 unverified.** Before this pass: 273, 166 / 107.
+- `data/communities-updates.ts` is a new override layer applied in `lib/communities`, so the diff shows exactly what the scrape changed.
+  - Verification: 20 rows promoted to approved, with corrected schedules, venues, join links and pricing.
+  - Removed 5 dead or wrong rows: delhi-book-lovers, jaipur-cycling-club, great-hyderabad-adventure-club, hyderabad-book-club, cloka-club-chennai.
+  - Moved 2 rows to Mumbai: step-out, open-mics-by-kasa-kai.
+- `data/communities-discovered.ts` adds 25 rows:
+  - Singles: Offline by Happy Hour ×3, Let's Socialise ×3.
+  - Gen Z: Viral Talkiies. Plus Clock It.
+  - 50+: Marzi ×2.
+  - Pickleball: Gurugram Pickleball Club, Konnect.
+  - Women: SWAG, HEN, plus 2 unverified.
+  - Men: SIFF.
+  - Civic & consumer: LocalCircles, plus the Ola complaints FB group (unverified).
+  - Paid/premium: TiE Delhi-NCR, SaaSBoomi.
+  - Online: a 50k-member Discord, 3 Reddit meet-up subs.
+  - Pets: 1 row.
+- **Online rows**: `city: 'Online'`, no map pin. They show in **every** city view, labelled "Online · pan-India" or "Online + city chapters".
+
+**Taxonomy and filters**
+- New categories: **Singles** (`dating`), **Women**, **Men**, **Civic & consumer**. Pets/Parents/Language now show as chips when they have rows.
+- New fields: `mode` (offline/online/hybrid) and `ageBand` (genz/millennial/50plus). `ageBand` is set only where the organiser says so.
+- Filters panel additions (all in the URL: `mode=`, `age=`, `price=membership`, `join=discord|reddit|facebook`):
+  - **Age focus**: Gen Z, 50+
+  - **Where**: in person, online/hybrid
+  - **Membership / premium** pricing
+  - **Join via**: now includes Discord, Reddit, Facebook and Link/form
+- Tests: unit 11 → 15 checks; e2e 33 → 37 checks. All pass.
+
+**Not built from the pasted MASTER BUILD PROMPT (needs backend / your decision):**
+- DB tables, the admin review dashboard, the scheduled re-verification job.
+- Telegram, X and LinkedIn connectors.
+- Per-member counts from closed platforms.
+
+The data shape maps 1:1 to those tables when you're ready.
+
+**Judgement calls to check:**
+- Listing SIFF (men's-rights NGO) under "Men" uses its own wording.
+- Reddit subs are member-run, not organiser-run; the card says so.
 
 ## v5 — Tinder-style swipe deck
 

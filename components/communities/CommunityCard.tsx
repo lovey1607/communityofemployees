@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Heart, Share2, Clock, Users, IndianRupee, MapPin, ExternalLink } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { CATEGORY_META, PLATFORM_LABEL, formatKm, type Scored } from '@/lib/communities';
+import { CATEGORY_META, PLATFORM_LABEL, formatKm, type Scored, whereLabel } from '@/lib/communities';
 import { Mark } from './Mark';
 
 export function priceLabel(c: Scored): string {
@@ -61,7 +61,7 @@ export function CommunityCard({ c, saved, onSave, onToast, index = 0 }: {
           <h3><Link href={detail}>{c.name}</Link></h3>
           <div className="sub">
             <span className="catpill">{meta.label}</span>
-            <span><MapPin size={11} style={{ display: 'inline', verticalAlign: '-1px' }} /> {c.area ?? c.city}</span>
+            <span><MapPin size={11} style={{ display: 'inline', verticalAlign: '-1px' }} /> {whereLabel(c)}</span>
             {c.km != null && <span className="dist">· {formatKm(c.km)}</span>}
           </div>
         </div>

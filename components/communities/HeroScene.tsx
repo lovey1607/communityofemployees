@@ -26,6 +26,10 @@ export const SCENE_COPY: Record<CommunityCategory | 'all', { kicker: string; lin
   language: { kicker: 'parlez, hablar, bolo', line: 'Find your language swap in' },
   parents: { kicker: 'nap-time friendly', line: 'Find your parent gang in' },
   pets: { kicker: 'dogs welcome, obviously', line: 'Find your pack in' },
+  dating: { kicker: 'no swiping, just showing up', line: 'Meet singles in' },
+  women: { kicker: 'women only, all welcome', line: 'Find your girls in' },
+  men: { kicker: 'circles for men', line: 'Find your brotherhood in' },
+  civic: { kicker: 'complain louder, together', line: 'Find your citizens in' },
   other: { kicker: 'pick a vibe ↓', line: 'Find your people in' },
 };
 
@@ -173,6 +177,7 @@ const SCENES: Partial<Record<CommunityCategory | 'all', () => React.JSX.Element>
   all: MapScene, running: Runner, cycling: Cyclist, sports: Ball, fitness: Dumbbell, outdoors: Mountain,
   tech: Cursor, startup: Rocket, creative: Brush, books: Book, food: Cup, social: Bubbles, games: Dice,
   professional: Bubbles, wellbeing: Cup, cause: Bubbles, language: Bubbles, parents: Bubbles, pets: Runner, other: MapScene,
+  dating: Bubbles, women: Ball, men: Bubbles, civic: MapScene,
 };
 
 export function HeroScene({ category }: { category: CommunityCategory | 'all' }) {

@@ -13,10 +13,11 @@ import {
   Search, X, SlidersHorizontal, LocateFixed, Map as MapIcon, ChevronRight, Layers, LayoutGrid,
   Footprints, Bike, Trophy, Dumbbell, Mountain, Cpu, Rocket, Palette, BookOpen,
   UtensilsCrossed, Users, Languages, HeartHandshake, Leaf, Baby, PawPrint, Briefcase, Dice5, Sparkles,
+  Heart, Venus, Mars, Megaphone,
 } from 'lucide-react';
 import {
   COMMUNITIES, CATEGORY_META, CATEGORY_ORDER, AREAS, CITY_CENTRES, CITY_GROUPS, DEFAULT_FILTERS, METRO_CITIES, ALL_CITIES,
-  applyFilters, categoriesWithListings, filtersToParams, activeFilterCount, nearestCity, PLATFORM_LABEL,
+  JOIN_FILTER_OPTIONS, ONLINE_CITY, applyFilters, categoriesWithListings, filtersToParams, activeFilterCount, nearestCity, PLATFORM_LABEL,
   type Filters, type Origin, type CommunityCategory, type Scored,
 } from '@/lib/communities';
 import { CommunityCard } from './CommunityCard';
@@ -29,6 +30,7 @@ const ICONS: Record<CommunityCategory | 'all', React.ComponentType<{ size?: numb
   tech: Cpu, startup: Rocket, creative: Palette, books: BookOpen, food: UtensilsCrossed, social: Users,
   language: Languages, cause: HeartHandshake, wellbeing: Leaf, parents: Baby, pets: PawPrint,
   professional: Briefcase, games: Dice5, other: Sparkles,
+  dating: Heart, women: Venus, men: Mars, civic: Megaphone,
 };
 
 const SAVED_KEY = 'cop:saved';
@@ -168,7 +170,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   const pristine = nActive === 0 && !f.q;
   const featured = useMemo(() => cityPool.filter((c) => c.featured).slice(0, 8), [cityPool]);
   const fallback: Scored[] = useMemo(() => results.length ? [] : applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, city: f.city, category: f.category }, origin).slice(0, 3), [results.length, f.city, f.category, origin]);
-  const cityCount = useMemo(() => new Set(COMMUNITIES.map((c) => c.city)).size, []);
+  const cityCount = useMemo(() => new Set(COMMUNITIES.map((c) => c.city).filter((c) => c !== ONLINE_CITY)).size, []);
 
   const chip = (label: string, on: boolean, onClick: () => void, extra?: React.ReactNode) => (
     <button type="button" className="cop-pill" aria-pressed={on} onClick={onClick}>{label}{extra}</button>
@@ -178,11 +180,13 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   if (f.category !== 'all') removable.push({ k: 'category', label: CATEGORY_META[f.category].label, clear: () => update({ category: 'all' }) });
   if (f.gender !== 'all') removable.push({ k: 'gender', label: f.gender === 'women' ? 'Women only' : 'Men only', clear: () => update({ gender: 'all' }) });
   if (f.beginner) removable.push({ k: 'beginner', label: 'Beginner-friendly', clear: () => update({ beginner: false }) });
-  if (f.price !== 'any') removable.push({ k: 'price', label: f.price === 'free' ? 'Free' : 'Paid', clear: () => update({ price: 'any' }) });
+  if (f.price !== 'any') removable.push({ k: 'price', label: f.price === 'free' ? 'Free' : f.price === 'membership' ? 'Membership / premium' : 'Paid', clear: () => update({ price: 'any' }) });
   if (f.events) removable.push({ k: 'events', label: 'Has regular events', clear: () => update({ events: false }) });
   if (f.cadence !== 'any') removable.push({ k: 'cadence', label: f.cadence === 'weekly' ? 'Weekly' : 'Monthly', clear: () => update({ cadence: 'any' }) });
   if (f.size !== 'any') removable.push({ k: 'size', label: `Size: ${f.size}`, clear: () => update({ size: 'any' }) });
   if (f.join !== 'any') removable.push({ k: 'join', label: `Join via ${PLATFORM_LABEL[f.join]}`, clear: () => update({ join: 'any' }) });
+  if (f.mode !== 'any') removable.push({ k: 'mode', label: f.mode === 'online' ? 'Online' : 'In person', clear: () => update({ mode: 'any' }) });
+  if (f.age !== 'any') removable.push({ k: 'age', label: f.age === 'genz' ? 'Gen Z' : '50+', clear: () => update({ age: 'any' }) });
   if (f.verified) removable.push({ k: 'verified', label: 'Verified only', clear: () => update({ verified: false }) });
   if (f.q) removable.push({ k: 'q', label: `“${f.q}”`, clear: () => update({ q: '' }) });
 
@@ -406,10 +410,21 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
               {chip('Men only', f.gender === 'men', () => update({ gender: 'men' }))}
               {chip('Beginner-friendly', f.beginner, () => update({ beginner: !f.beginner }))}
             </div></div>
+            <div className="cop-fgroup"><h4>Age focus <small>(only where the organiser says so)</small></h4><div className="opts">
+              {chip('Any age', f.age === 'any', () => update({ age: 'any' }))}
+              {chip('Gen Z', f.age === 'genz', () => update({ age: 'genz' }))}
+              {chip('50+', f.age === '50plus', () => update({ age: '50plus' }))}
+            </div></div>
+            <div className="cop-fgroup"><h4>Where</h4><div className="opts">
+              {chip('In person + online', f.mode === 'any', () => update({ mode: 'any' }))}
+              {chip('In person', f.mode === 'inperson', () => update({ mode: 'inperson' }))}
+              {chip('Online / hybrid', f.mode === 'online', () => update({ mode: 'online' }))}
+            </div></div>
             <div className="cop-fgroup"><h4>Pricing</h4><div className="opts">
               {chip('Any', f.price === 'any', () => update({ price: 'any' }))}
               {chip('Free', f.price === 'free', () => update({ price: 'free' }))}
               {chip('Paid / per event', f.price === 'paid', () => update({ price: 'paid' }))}
+              {chip('Membership / premium', f.price === 'membership', () => update({ price: 'membership' }))}
             </div></div>
             <div className="cop-fgroup"><h4>How often</h4><div className="opts">
               {chip('Any', f.cadence === 'any' && !f.events, () => update({ cadence: 'any', events: false }))}
@@ -425,10 +440,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
             </div></div>
             <div className="cop-fgroup"><h4>Join via</h4><div className="opts">
               {chip('Any', f.join === 'any', () => update({ join: 'any' }))}
-              {chip('WhatsApp', f.join === 'whatsapp', () => update({ join: 'whatsapp' }))}
-              {chip('Instagram', f.join === 'instagram', () => update({ join: 'instagram' }))}
-              {chip('Meetup', f.join === 'meetup', () => update({ join: 'meetup' }))}
-              {chip('Website', f.join === 'website', () => update({ join: 'website' }))}
+              {JOIN_FILTER_OPTIONS.map((p) => <span key={p}>{chip(PLATFORM_LABEL[p], f.join === p, () => update({ join: p }))}</span>)}
             </div></div>
             <div className="cop-fgroup"><h4>Trust</h4><div className="opts">
               {chip('Verified activity only', f.verified, () => update({ verified: !f.verified }))}
