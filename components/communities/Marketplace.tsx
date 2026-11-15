@@ -19,7 +19,8 @@ import {
 } from '@/lib/communities';
 import { CommunityCard } from './CommunityCard';
 import { Mark } from './Mark';
-import { HeroScene, SCENE_COPY } from './HeroScene';
+import { SCENE_COPY } from './HeroScene';
+import { HeroStack } from './HeroStack';
 import { SwipeDeck } from './SwipeDeck';
 import { CursorBuddy, burst } from './CursorBuddy';
 import { CAT_EMOJI } from './emoji';
@@ -141,6 +142,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
 
   // ─── derived ───
   const cityPool = useMemo(() => COMMUNITIES.filter((c) => c.city === ONLINE_CITY || (CITY_GROUPS[f.city] ?? [f.city]).includes(c.city)), [f.city]);
+  const verifiedCount = useMemo(() => cityPool.filter((c) => c.status === 'approved' && c.source.verifiedOn >= '2026-11-01').length, [cityPool]);
   const platformCount = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) if (f.category === 'all' || c.category === f.category) m.set(c.join.platform, (m.get(c.join.platform) ?? 0) + 1); return m; }, [cityPool, f.category]);
   const catsRaw = useMemo(() => categoriesWithListings(cityPool), [cityPool]);
   const catCountPre = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) m.set(c.category, (m.get(c.category) ?? 0) + 1); return m; }, [cityPool]);
@@ -246,7 +248,10 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
             <PlatformDock counts={platformCount} value={f.join} onPick={(p) => update({ join: p })} />
             {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
           </div>
-          <HeroScene category={shownCat} />
+          <HeroStack category={shownCat}
+            label={shownCat === 'all' ? `communities around ${f.city}` : `${CATEGORY_META[shownCat].label.toLowerCase()} picks around ${f.city}`}
+            count={shownCat === 'all' ? cityPool.length : catCount.get(shownCat) ?? 0}
+            verified={verifiedCount} />
         </div>
       </section>
       <div ref={sentinel} aria-hidden="true" />

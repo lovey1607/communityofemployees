@@ -10,6 +10,7 @@ import { Heart, X, ExternalLink, MapPin, Clock, Users, IndianRupee, RotateCcw } 
 import { CATEGORY_META, formatKm, whereLabel, type Scored } from '@/lib/communities';
 import { Mark } from './Mark';
 import { CAT_EMOJI } from './emoji';
+import { CardPhoto } from './CardPhoto';
 import { priceLabel, audienceLabel, cadenceLabel } from './CommunityCard';
 
 type Dir = 'left' | 'right';
@@ -127,9 +128,9 @@ function DeckCard({ c, i, saved, dir, onDecide, reduce }: { c: Scored; i: number
       <motion.span className="stamp like" style={{ opacity: likeOp }}>SAVE ♥</motion.span>
       <motion.span className="stamp nope" style={{ opacity: nopeOp }}>NOPE</motion.span>
       <div className="hd">
-        <span className="k">{meta.label}</span>
-        <span className="emo" aria-hidden="true">{CAT_EMOJI[c.category]}</span>
-        <Mark c={c} size={44} />
+        <CardPhoto c={c} w={480} h={300} credit={false} />
+        <span className="k">{CAT_EMOJI[c.category]} {meta.label}</span>
+        <Mark c={c} size={38} />
         {c.km != null && <span className="km">{formatKm(c.km)}</span>}
       </div>
       <div className="body">

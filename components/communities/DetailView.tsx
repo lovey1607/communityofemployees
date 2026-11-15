@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ExternalLink, Clock, Users, IndianRupee, MapPin, CalendarCheck } from 'lucide-react';
 import { CATEGORY_META, PLATFORM_LABEL, similarTo, slugForCity, type Community, whereLabel } from '@/lib/communities';
 import { Mark } from './Mark';
+import { CardPhoto } from './CardPhoto';
 import { SimilarGrid } from './SimilarGrid';
 
 function fmtDate(iso: string) {
@@ -40,6 +41,7 @@ export function DetailView({ c }: { c: Community }) {
           {!online && <><Link href={`${cityHref}/${c.category}`}>{meta.label}</Link><span>/</span></>}
           <span aria-current="page">{c.name}</span>
         </nav>
+        <CardPhoto c={c} w={1400} h={460} className="cop-detail-cover" />
         <div className="cop-detail-grid">
           <div>
             <div className="head">

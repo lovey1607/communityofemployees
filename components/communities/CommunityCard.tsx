@@ -7,6 +7,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { CATEGORY_META, PLATFORM_LABEL, formatKm, type Scored, whereLabel } from '@/lib/communities';
 import { Mark } from './Mark';
 import { CAT_EMOJI } from './emoji';
+import { CardPhoto } from './CardPhoto';
 
 export function priceLabel(c: Scored): string {
   switch (c.pricing.type) {
@@ -56,13 +57,18 @@ export function CommunityCard({ c, saved, onSave, onToast, index = 0 }: {
       style={{ ['--c-ink' as string]: `hsl(${meta.hue} 60% 28%)`, ['--c-soft' as string]: `hsl(${meta.hue} 70% 93%)`, transform: pressed ? 'scale(.985)' : undefined }}
       onPointerDown={() => setPressed(true)} onPointerUp={() => setPressed(false)} onPointerLeave={() => setPressed(false)}
     >
+      <div className="cover">
+        <CardPhoto c={c} w={560} h={300} />
+        <Link href={detail} className="cover-link" tabIndex={-1} aria-hidden="true" />
+        <span className="cover-cat">{CAT_EMOJI[c.category]} {meta.label}</span>
+        {c.km != null && <span className="cover-km">{formatKm(c.km)}</span>}
+      </div>
       {c.status === 'unverified' && <span className="unv" title="We found this community but could not confirm activity in the last ~90 days.">Unverified</span>}
       <div className="head">
         <span className="mark"><Mark c={c} size={48} /></span>
         <div className="ttl">
           <h3><Link href={detail}>{c.name}</Link></h3>
           <div className="sub">
-            <span className="catpill">{meta.label}</span>
             <span><MapPin size={11} style={{ display: 'inline', verticalAlign: '-1px' }} /> {whereLabel(c)}</span>
             {c.km != null && <span className="dist">· {formatKm(c.km)}</span>}
           </div>

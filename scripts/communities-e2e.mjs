@@ -49,7 +49,7 @@ ok('undo brings the card back', (await p.textContent('.cop-deck-card.front h3'))
 await p.keyboard.press('ArrowRight'); await p.waitForTimeout(600);
 ok('→ key saves', (await p.$$eval('.cop-picks a', (e) => e.length)) === 2);
 await p.click('.cop-seg button:has-text("Grid")'); await p.waitForTimeout(600);
-ok('Grid toggle shows cards, all running', await p.$$eval('.cop-card .catpill', (e) => e.length > 5 && e.every((x) => x.textContent === 'Running')));
+ok('Grid toggle shows cards, all running', await p.$$eval('.cop-card .cover-cat', (e) => e.length > 5 && e.every((x) => x.textContent.includes('Running'))));
 await p.screenshot({ path: `${OUT}02-desktop-running.png` });
 
 await p.click('.cop-loc .change'); await p.waitForTimeout(400);
@@ -106,6 +106,12 @@ await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });
 await p.click('button:has-text("Filters")'); await p.waitForTimeout(400);
 ok('Filters panel has Age focus, Where, Membership and Discord options', await p.isVisible('text=Age focus') && await p.isVisible('button:has-text("Online / hybrid")') && await p.isVisible('button:has-text("Membership / premium")') && await p.isVisible('.cop-fgroup button:has-text("Discord")'));
 await p.screenshot({ path: `${OUT}13-desktop-filters-v7.png` });
+await p.goto(`${B}/communities/corporate-events`, { waitUntil: 'networkidle' });
+ok('corporate events page: hero, calculator and COE CTA', (await p.textContent('h1')).includes('In one post') && await p.isVisible('.ce-total') && await p.isVisible('.ce-intent button'));
+await p.click('.ce-tabs button:has-text("Sports league")'); await p.waitForTimeout(300);
+ok('calculator updates the estimate', (await p.textContent('.ce-total .ph')).includes('₹1,900 per head'));
+await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });
+ok('cards carry a cover photo with credit', (await p.$$('.cop-card .cop-photo img')).length > 0 && (await p.$$('.cop-card figcaption a[href^="https://unsplash.com/photos/"]')).length > 0);
 await p.goto(`${B}/communities/submit`, { waitUntil: 'networkidle' });
 await p.screenshot({ path: `${OUT}09-desktop-submit.png` });
 await ctx.close();
