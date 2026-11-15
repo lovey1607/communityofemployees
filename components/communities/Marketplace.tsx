@@ -146,7 +146,22 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
 
   // ─── derived ───
   const cityPool = useMemo(() => COMMUNITIES.filter((c) => (CITY_GROUPS[f.city] ?? [f.city]).includes(c.city)), [f.city]);
-  const cats = useMemo(() => categoriesWithListings(cityPool), [cityPool]);
+  const catsRaw = useMemo(() => categoriesWithListings(cityPool), [cityPool]);
+  const catCountPre = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) m.set(c.category, (m.get(c.category) ?? 0) + 1); return m; }, [cityPool]);
+  const cats = useMemo(() => [...catsRaw].sort((a, b) => (catCountPre.get(b) ?? 0) - (catCountPre.get(a) ?? 0)), [catsRaw, catCountPre]);
+  // Mobile: until a category is picked, the headline + scene cycle through the top 3.
+  const [cycleIdx, setCycleIdx] = useState(-1);
+  const [isMobile, setIsMobile] = useState(false);
+  const [catsOpen, setCatsOpen] = useState(false);
+  useEffect(() => { const mq = matchMedia('(max-width: 820px)'); const on = () => setIsMobile(mq.matches); on(); mq.addEventListener('change', on); return () => mq.removeEventListener('change', on); }, []);
+  useEffect(() => {
+    if (!isMobile || reduce || f.category !== 'all' || cats.length === 0) { setCycleIdx(-1); return; }
+    const top = Math.min(3, cats.length);
+    const first = setTimeout(() => setCycleIdx(0), 1600);
+    const t = setInterval(() => setCycleIdx((i) => (i + 1) % top), 2600);
+    return () => { clearTimeout(first); clearInterval(t); };
+  }, [isMobile, reduce, f.category, cats]);
+  const shownCat: CommunityCategory | 'all' = f.category !== 'all' ? f.category : cycleIdx >= 0 ? cats[cycleIdx] ?? 'all' : 'all';
   const catCount = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) m.set(c.category, (m.get(c.category) ?? 0) + 1); return m; }, [cityPool]);
   const results = useMemo(() => applyFilters(COMMUNITIES, f, origin), [f, origin]);
   const nActive = activeFilterCount(f);
@@ -179,12 +194,12 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
       <section className="cop-hero">
         <div className="wrap cop-hero-grid">
           <div>
-            <div className="cop-kicker"><i /> {SCENE_COPY[f.category].kicker}</div>
+            <div className="cop-kicker"><i /> {SCENE_COPY[shownCat].kicker}</div>
             <h1>
               <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span key={f.category} style={{ display: 'inline' }}
-                  initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={reduce ? undefined : { opacity: 0, y: -10 }} transition={{ duration: 0.25 }}>
-                  {title ?? SCENE_COPY[f.category].line}
+                <motion.span key={shownCat} style={{ display: 'inline-block' }}
+                  initial={reduce ? false : { opacity: 0, y: 14, filter: 'blur(6px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} exit={reduce ? undefined : { opacity: 0, y: -14, filter: 'blur(6px)' }} transition={{ duration: 0.32 }}>
+                  {f.category === 'all' && title ? title : SCENE_COPY[shownCat].line}
                 </motion.span>
               </AnimatePresence>{' '}
               <span className="city" aria-live="polite">
@@ -222,7 +237,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
             )}
             {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
           </div>
-          <HeroScene category={f.category} />
+          <HeroScene category={shownCat} />
         </div>
       </section>
       <div ref={sentinel} aria-hidden="true" />
@@ -231,16 +246,18 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
       <section className={`cop-filters${stuck ? ' stuck' : ''}${view === 'swipe' ? ' swipe' : ''}`} aria-label="Filters">
         <div className="wrap">
           <div className="cop-cats" role="tablist" aria-label="Category">
-            {(['all', ...cats] as (CommunityCategory | 'all')[]).map((k) => {
+            {(['all', ...cats] as (CommunityCategory | 'all')[]).map((k, idx) => {
               const Icon = ICONS[k];
               const on = f.category === k;
+              const extra = idx > 2 && !on;
               return (
-                <button key={k} type="button" role="tab" className="cop-cat" aria-pressed={on} aria-selected={on} onClick={() => update({ category: on && k !== 'all' ? 'all' : k })}>
+                <button key={k} type="button" role="tab" className={`cop-cat${extra ? ' extra' : ''}`} aria-pressed={on} aria-selected={on} onClick={() => update({ category: on && k !== 'all' ? 'all' : k })}>
                   <Icon size={16} /> {k === 'all' ? 'All' : CATEGORY_META[k].label}
                   <span className="n">{k === 'all' ? cityPool.length : catCount.get(k) ?? 0}</span>
                 </button>
               );
             })}
+            <button type="button" className="cop-cat more-cats" onClick={() => setCatsOpen(true)}>More <span className="n">+{Math.max(0, cats.length - 2)}</span></button>
           </div>
           <div className="cop-ctl">
             <div className="cop-loc">
@@ -366,6 +383,20 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
             </div>
           </Overlay>
         )}
+        {catsOpen && (
+          <Overlay onClose={() => setCatsOpen(false)} title="Pick a vibe" reduce={!!reduce}>
+            <div className="cop-catgrid">
+              {(['all', ...cats] as (CommunityCategory | 'all')[]).map((k) => {
+                const Icon = ICONS[k];
+                return (
+                  <button key={k} type="button" className={f.category === k ? 'on' : ''} onClick={() => { setCatsOpen(false); update({ category: k }); }}>
+                    <Icon size={22} /><b>{k === 'all' ? 'All' : CATEGORY_META[k].label}</b><span>{k === 'all' ? cityPool.length : catCount.get(k) ?? 0}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </Overlay>
+        )}
         {moreOpen && (
           <Overlay onClose={() => setMoreOpen(false)} title="Filters" reduce={!!reduce}
             footer={<><button type="button" className="cop-btn cop-btn-ghost" onClick={() => setF({ ...DEFAULT_FILTERS, city: f.city })}>Clear all</button><button type="button" className="cop-btn cop-btn-primary" onClick={() => setMoreOpen(false)}>Show {results.length}</button></>}>
@@ -460,7 +491,8 @@ function CityPicker({ current, onPick }: { current: string; onPick: (city: strin
 
 // ─── Overlay: bottom sheet on mobile, side panel on desktop ──────
 function Overlay({ title, children, footer, onClose, reduce }: { title: string; children: React.ReactNode; footer?: React.ReactNode; onClose: () => void; reduce: boolean }) {
-  const [mobile, setMobile] = useState(false);
+  // Overlays only mount after a click, so reading matchMedia here can't cause a hydration mismatch.
+  const [mobile, setMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 820px)').matches);
   useEffect(() => {
     const mq = matchMedia('(max-width: 820px)');
     const on = () => setMobile(mq.matches); on();

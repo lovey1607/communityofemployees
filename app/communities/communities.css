@@ -426,3 +426,109 @@
   .cop-deck-card h3 { font-size: 1.3rem; }
   .cop-deck-card .hd { height: 36%; min-height: 150px; }
 }
+
+/* ═══ v6 THEME — "Midnight Neon" ═══════════════════════════════
+   Deep indigo-black, electric violet → hot pink gradient for every
+   action, acid-lime as the highlight. Spotify-Wrapped / Discord /
+   Bumble energy. All tokens here; delete this block to get v5 red. */
+.cop {
+  --black: #0B0A1A;
+  --accent: #7C3AED;           /* electric violet */
+  --accent-2: #C4B5FD;         /* violet on dark */
+  --accent-soft: #EDE7FF;
+  --accent-ink: #5B21B6;
+  --pop: #FF3D8B;              /* hot pink */
+  --pop-soft: #FFE0EE;
+  --lime: #C6FF3D;
+  --grad: linear-gradient(120deg, #7C3AED 0%, #C026D3 50%, #FF3D8B 100%);
+  background: #FBFAFF;
+}
+.cop .cop-btn-primary, .cop .cop-btn-accent, .cop-loc .change, .cop-seg button.on {
+  background: var(--grad); color: #fff; border-color: transparent;
+  box-shadow: 0 12px 28px -12px rgba(124, 58, 237, .75);
+}
+.cop .cop-btn-primary:hover, .cop .cop-btn-accent:hover, .cop-loc .change:hover { background: var(--grad); filter: brightness(1.08) saturate(1.1); }
+.cop-nav { background: var(--black); }
+.cop-nav-links a::after { background: var(--lime); }
+.cop-logo i { background: linear-gradient(135deg, var(--lime), #7C3AED 60%, #FF3D8B); }
+
+/* hero */
+.cop-hero { background: var(--black); }
+.cop-hero::before { background: radial-gradient(circle, rgba(124, 58, 237, .65), transparent 62%); }
+.cop-hero::after { background: radial-gradient(circle, rgba(255, 61, 139, .5), transparent 62%); }
+.cop-hero h1 .city { background: linear-gradient(90deg, var(--lime), #7CFFCB 60%, #C4B5FD); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cop-hero h1 .city > span { -webkit-text-fill-color: transparent; background: inherit; -webkit-background-clip: text; background-clip: text; }
+.cop-kicker { color: var(--lime); }
+.cop-kicker i { background: var(--lime); animation: cop-ping-lime 1.6s ease-out infinite; }
+@keyframes cop-ping-lime { 0% { box-shadow: 0 0 0 0 rgba(198, 255, 61, .6); } 100% { box-shadow: 0 0 0 10px rgba(198, 255, 61, 0); } }
+.cop-search label:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(124, 58, 237, .35); }
+.cop-ask { background: rgba(124, 58, 237, .14); border-color: rgba(196, 181, 253, .25); }
+
+/* filters & chips */
+.cop-filters { background: rgba(251, 250, 255, .94); }
+.cop-cat { border-color: #E7E3F5; }
+.cop-cat:hover { border-color: var(--accent); }
+.cop-cat[aria-pressed="true"] { background: var(--black); border-color: var(--black); box-shadow: 0 8px 20px -10px rgba(124, 58, 237, .8); }
+.cop-cat[aria-pressed="true"] svg { color: var(--lime); }
+.cop-pill, .cop-select select, .cop-loc { border-color: #E7E3F5; }
+.cop-pill[aria-pressed="true"], .cop-pill.on { background: var(--black); border-color: var(--black); color: #fff; }
+.cop-seg { background: #EFEBFA; }
+.cop-loc .live { background: var(--accent); }
+
+/* cards */
+.cop-card { border-color: #ECE8F7; }
+.cop-card:hover { border-color: var(--accent); box-shadow: 0 30px 60px -26px rgba(124, 58, 237, .45); }
+.cop-card .dist { color: var(--accent-ink); }
+.cop-card .facts svg, .cop-deck-card .facts li svg { color: var(--accent); }
+.cop-card .ico.saved { color: var(--pop); border-color: var(--pop); background: var(--pop-soft); }
+.cop-card .unv, .cop-deck-card .unv-inline { color: #A3175A; background: var(--pop-soft); border-color: var(--pop); }
+
+/* swipe deck */
+.cop-main.is-swipe { background: radial-gradient(900px 460px at 50% 0%, #EFE8FF, #FBFAFF 72%); }
+.cop-deck-card { box-shadow: 0 34px 70px -30px rgba(76, 29, 149, .55), 0 0 0 1px rgba(76, 29, 149, .08); }
+.cop-deck-card .hd .km { background: rgba(11, 10, 26, .75); }
+.cop-deck-card .stamp.like { color: #2E7D00; border-color: var(--lime); background: rgba(198, 255, 61, .92); }
+.cop-deck-card .stamp.nope { color: var(--pop); border-color: var(--pop); }
+.cop-deck-actions .undo { color: #8B5CF6; }
+.cop-deck-actions .skip { color: var(--pop); }
+.cop-deck-actions .join { color: var(--accent); }
+.cop-deck-actions .save { background: var(--grad); }
+.cop-picks .lbl { color: var(--accent); }
+.cop-deck-top .cnt { color: var(--black); }
+
+/* detail + footer */
+.cop-joinbox { background: var(--black); }
+.cop-joinbox::before { background: radial-gradient(circle, rgba(124, 58, 237, .8), transparent 65%); }
+.cop .cop-joinbox .cop-btn { background: var(--grad); color: #fff; }
+.cop-foot { background: var(--black); }
+.cop-foot a:hover { color: var(--lime); }
+.cop *:focus-visible { outline-color: rgba(124, 58, 237, .45); }
+
+/* mobile: All + top-2 chips, then "More" */
+.cop-cat.more-cats { display: none; }
+.cop-catgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+.cop-catgrid button { border: 1.5px solid #E7E3F5; background: #fff; border-radius: 18px; padding: .9rem .4rem; display: grid; justify-items: center; gap: .3rem; transition: transform .2s var(--ease), border-color .2s; }
+.cop-catgrid button svg { color: var(--accent); }
+.cop-catgrid button b { font-size: .86rem; color: var(--black); }
+.cop-catgrid button span { font-size: .72rem; color: var(--muted); }
+.cop-catgrid button:hover { transform: translateY(-2px); border-color: var(--accent); }
+.cop-catgrid button.on { background: var(--black); border-color: var(--black); }
+.cop-catgrid button.on b { color: #fff; } .cop-catgrid button.on svg { color: var(--lime); }
+@media (max-width: 820px) {
+  .cop-cats { overflow: visible; flex-wrap: nowrap; }
+  .cop-cat.extra { display: none; }
+  .cop-cat.more-cats { display: inline-flex; background: var(--grad); color: #fff; border-color: transparent; }
+  .cop-cat.more-cats .n { color: rgba(255,255,255,.8); }
+  .cop-hero h1 { min-height: 2.1em; }
+}
+@media (max-width: 820px) {
+  .cop-cats { overflow-x: auto; gap: .35rem; }
+  .cop-cat { padding: .45rem .7rem .45rem .55rem; font-size: .82rem; gap: .35rem; }
+  .cop-cat:not(.more-cats) .n { display: none; }
+  .cop-cat svg { width: 15px; height: 15px; }
+}
+@media (max-width: 820px) {
+  .cop-cat:not(.more-cats):not([aria-pressed="true"]) svg { display: none; }
+  .cop-cat { padding: .45rem .75rem; }
+}
+@media (max-width: 360px) { .cop-cat { font-size: .78rem; padding: .4rem .6rem; } }

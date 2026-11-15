@@ -48,6 +48,22 @@ No env vars, no database needed for these routes. Also try:
   touched is `app/page.tsx` (one `<li>`), so risk is minimal — but run `npm run test:e2e`
   locally before merging anyway.
 
+## v6 — "Midnight Neon" theme + dynamic mobile titles
+
+- **Theme:** deep indigo-black (`#0B0A1A`), electric-violet → magenta → hot-pink gradient
+  on every action button, acid-lime highlights (city name, kicker, active-chip icon, nav
+  underline), soft lavender page ground. Spotify Wrapped / Discord / Bumble energy. The
+  whole theme is one block at the end of `app/communities/communities.css` — delete it to
+  get the v5 red/black look back.
+- **Dynamic titles on mobile:** until a category is picked, the headline and animated
+  scene cycle through the top 3 categories for the city ("Find your squad in Gurgaon." →
+  "Find your creatives in Gurgaon." …) with a soft blur-swap. Desktop stays still. Off when
+  the visitor prefers reduced motion.
+- **Mobile chips:** only All + the 2 biggest categories show, then a gradient "More +N"
+  chip opens a "Pick a vibe" sheet with every category as a tile. Chips are now ordered
+  by how many listings they have.
+- Browser checks: 33.
+
 ## v5 — Tinder-style swipe deck
 
 - Picking any category drops you into a **swipe deck** (`components/communities/SwipeDeck.tsx`):
@@ -79,7 +95,7 @@ No env vars, no database needed for these routes. Also try:
 
 ## Creative calls you may want to overrule
 
-1. **Palette: black + red (`#E6232B`) + Zepto-purple pop** on white — all tokens at the top of `communities.css`; the calmer teal version is one commit back (`bcc9f44`).
+1. **Palette: Midnight Neon** (indigo-black + violet→pink gradient + lime). Override block at the end of `communities.css`; the red/black v5 look returns if you delete it, and the calm teal v1 is commit `bcc9f44`.
 2. **NCR is one market** (also Mumbai+Navi Mumbai+Thane, Ahmedabad+Gandhinagar,
    Chandigarh+Mohali): see `CITY_GROUPS`. Default city is still Gurgaon; geolocation
    switches to the nearest listed city within 80 km.
