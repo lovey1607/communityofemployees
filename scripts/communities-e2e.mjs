@@ -97,6 +97,9 @@ ok('?category=dating shows singles communities', (await p.content()).includes('L
 await p.screenshot({ path: `${OUT}12-desktop-singles.png` });
 await p.goto(`${B}/communities/jaipur?mode=online`, { waitUntil: 'networkidle' }); await p.waitForTimeout(500);
 ok('online rows appear in a non-metro city (Jaipur, mode=online)', (await p.content()).includes('LocalCircles'));
+await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });
+await p.click('.cop-app:has-text("Telegram")'); await p.waitForTimeout(600);
+ok('hero app dock: Telegram filters to Telegram joins', p.url().includes('join=telegram') && (await p.$$eval('.cop-card a.join', (e) => e.length > 0 && e.every((x) => x.href.startsWith('https://t.me/')))));
 await p.goto(`${B}/communities/save-indian-family-foundation`, { waitUntil: 'networkidle' });
 ok('online detail page: pan-India breadcrumb, organiser join link', (await p.textContent('.cop-crumbs')).includes('Online') && (await p.$$('a[href^="https://chat.whatsapp.com/"]')).length > 0);
 await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });

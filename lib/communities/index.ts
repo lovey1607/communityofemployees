@@ -267,7 +267,7 @@ export function whereLabel(c: Pick<Community, 'city' | 'area' | 'mode'>): string
 }
 
 /** Join-platform options shown in the Filters panel. */
-export const JOIN_FILTER_OPTIONS: JoinPlatform[] = ['whatsapp', 'instagram', 'meetup', 'website', 'discord', 'reddit', 'facebook', 'hangout', 'other'];
+export const JOIN_FILTER_OPTIONS: JoinPlatform[] = ['whatsapp', 'telegram', 'instagram', 'meetup', 'website', 'discord', 'reddit', 'facebook', 'hangout', 'other'];
 
 // ─── URL state ───────────────────────────────────────────────
 const KEYS: (keyof Filters)[] = ['q', 'category', 'city', 'gender', 'beginner', 'price', 'events', 'cadence', 'size', 'join', 'mode', 'age', 'verified', 'sort'];

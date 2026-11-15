@@ -640,3 +640,31 @@ html.cop-cursor select { cursor: pointer !important; }
   .cop-cat .emo { font-size: .95rem; }
   .cop-quick button:nth-of-type(n+5) { display: none; }
 }
+
+/* ─── v8.1 platform dock: "Join on your app" ─── */
+.cop-dock { margin-top: .9rem; display: flex; align-items: center; gap: .9rem; min-width: 0; }
+.cop-dock-lbl { flex: none; font-family: var(--font-display); font-weight: 800; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.55); writing-mode: horizontal-tb; }
+.cop-dock-lbl i { font-style: normal; color: var(--lime); }
+.cop-dock-row { display: flex; gap: .55rem; padding: .45rem .55rem; border-radius: 22px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(10px); overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.cop-dock-row::-webkit-scrollbar { display: none; }
+.cop-app { position: relative; flex: none; display: grid; justify-items: center; gap: .25rem; width: 58px; padding: .1rem 0 0; color: #fff; }
+.cop-app .ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--bg, rgba(255,255,255,.12)); box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -3px 0 rgba(0,0,0,.18), 0 8px 18px -8px rgba(0,0,0,.6); transition: box-shadow .25s, transform .25s; }
+.cop-app.any .ico { background: rgba(255,255,255,.12); }
+.cop-app .nm { font-size: .64rem; font-weight: 700; color: rgba(255,255,255,.75); white-space: nowrap; max-width: 64px; overflow: hidden; text-overflow: ellipsis; }
+.cop-app .badge { position: absolute; top: -5px; right: 1px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--pop); color: #fff; font-size: .66rem; font-weight: 800; display: grid; place-items: center; box-shadow: 0 0 0 2px var(--black); animation: cop-badge-pop .5s cubic-bezier(.2,.9,.3,1.6) both; animation-delay: calc(var(--i, 0) * 45ms + .35s); }
+@keyframes cop-badge-pop { from { transform: scale(0); } to { transform: scale(1); } }
+.cop-app.on .ico { box-shadow: 0 0 0 2px var(--black), 0 0 0 4px var(--lime), 0 10px 24px -6px rgba(198,255,61,.55); }
+.cop-app.on .nm { color: var(--lime); }
+.cop-app.on .ico::after { content: ""; position: absolute; inset: -6px; border-radius: 18px; border: 2px solid var(--lime); opacity: 0; animation: cop-app-ping 1.4s ease-out infinite; }
+.cop-app .ico { position: relative; }
+@keyframes cop-app-ping { 0% { opacity: .8; transform: scale(.9); } 100% { opacity: 0; transform: scale(1.35); } }
+.cop-dock-row:has(.cop-app.on:not(.any)) .cop-app:not(.on) { opacity: .55; filter: saturate(.6); }
+.cop-dock-row:has(.cop-app.on:not(.any)) .cop-app:not(.on):hover { opacity: 1; filter: none; }
+.cop-app.empty { opacity: .4; }
+@media (max-width: 640px) {
+  .cop-dock { flex-direction: column; align-items: stretch; gap: .4rem; }
+  .cop-dock-row { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; padding: .5rem 16px; }
+  .cop-app { width: 54px; }
+  .cop-app .ico { width: 40px; height: 40px; border-radius: 12px; }
+}
+.cop-hero-grid > * { min-width: 0; }

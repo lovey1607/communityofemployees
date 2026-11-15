@@ -23,6 +23,7 @@ import { HeroScene, SCENE_COPY } from './HeroScene';
 import { SwipeDeck } from './SwipeDeck';
 import { CursorBuddy, burst } from './CursorBuddy';
 import { CAT_EMOJI } from './emoji';
+import { PlatformDock } from './PlatformDock';
 
 
 const SAVED_KEY = 'cop:saved';
@@ -139,7 +140,8 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   };
 
   // ─── derived ───
-  const cityPool = useMemo(() => COMMUNITIES.filter((c) => (CITY_GROUPS[f.city] ?? [f.city]).includes(c.city)), [f.city]);
+  const cityPool = useMemo(() => COMMUNITIES.filter((c) => c.city === ONLINE_CITY || (CITY_GROUPS[f.city] ?? [f.city]).includes(c.city)), [f.city]);
+  const platformCount = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) if (f.category === 'all' || c.category === f.category) m.set(c.join.platform, (m.get(c.join.platform) ?? 0) + 1); return m; }, [cityPool, f.category]);
   const catsRaw = useMemo(() => categoriesWithListings(cityPool), [cityPool]);
   const catCountPre = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) m.set(c.category, (m.get(c.category) ?? 0) + 1); return m; }, [cityPool]);
   const cats = useMemo(() => [...catsRaw].sort((a, b) => (catCountPre.get(b) ?? 0) - (catCountPre.get(a) ?? 0)), [catsRaw, catCountPre]);
@@ -241,6 +243,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
               ))}
               <span className="sub">{COMMUNITIES.length} communities · {cityCount} cities</span>
             </div>
+            <PlatformDock counts={platformCount} value={f.join} onPick={(p) => update({ join: p })} />
             {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
           </div>
           <HeroScene category={shownCat} />

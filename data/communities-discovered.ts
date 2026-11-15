@@ -57,6 +57,19 @@ const reddit = (slug: string, name: string, sub: string, city: string, signal: s
   source: src(`https://www.reddit.com/r/${sub}/`, signal), createdAt: D,
 });
 
+
+const MM = 'https://marathonmitra.com/running-communities';
+const mmChannel = (slug: string, city: string, code: string): Community => c({
+  slug: `marathonmitra-${slug}`, name: `${city} Runners Community (MarathonMitra)`, category: 'running', city,
+  tagline: `WhatsApp channel for ${city} runners — race alerts and group-run updates.`,
+  description: `MarathonMitra’s ${city} WhatsApp channel: local race alerts, running events and training-group updates. A channel (announcements), not a chat group.`,
+  tags: ['whatsapp channel', 'races', 'free'], pricing: { type: 'free', note: null },
+  join: { url: `https://whatsapp.com/channel/${code}`, platform: 'whatsapp', cta: 'Follow the WhatsApp channel' },
+  links: { website: MM },
+  source: src(MM, 'Listed on MarathonMitra city directory, 15 Nov 2026'),
+  status: 'unverified', createdAt: D,
+});
+
 export const COMMUNITIES_DISCOVERED: Community[] = [
   // ───────── SINGLES / DATING ─────────
   happyHour('Delhi'), happyHour('Mumbai'), happyHour('Bengaluru'),
@@ -303,5 +316,45 @@ export const COMMUNITIES_DISCOVERED: Community[] = [
     source: src('https://reclub.co/communities/in', 'Listed on Reclub India, 15 Nov 2026'),
     status: 'unverified', createdAt: D,
   }),
-];
+  // ───────── TELEGRAM ─────────
+  c({
+    slug: 'adventures-unlimited-telegram', name: 'Adventures Unlimited — Hiking & Travel', category: 'outdoors', city: 'Online',
+    tagline: 'Hikes, treks, trips and photowalks — plans drop on Telegram.',
+    description: 'Telegram channel for Adventures Unlimited: hiking trips, trekking tours, travel expeditions and photowalks. Trip plans, payments and RSVPs are posted in the channel.',
+    tags: ['telegram', 'hiking', 'treks', 'travel'], mode: 'hybrid',
+    pricing: { type: 'pay-per-event', note: 'Trips are paid' },
+    join: { url: 'https://t.me/liveopenly', platform: 'telegram', cta: 'Join on Telegram' },
+    source: src('https://t.me/s/liveopenly', 'Telegram post 13 Nov 2026'), createdAt: D,
+  }),
+  c({
+    slug: 'marathonmitra', name: 'MarathonMitra', category: 'running', city: 'Online',
+    tagline: 'India-wide runners’ network — race alerts, city groups.',
+    description: 'Community-driven running platform with race alerts, stories and city running groups. Telegram for the national community; city WhatsApp channels listed separately.',
+    tags: ['telegram', 'races', 'marathon', 'free'], mode: 'online', pricing: { type: 'free', note: null },
+    size: { bucket: '1000+', note: '19,322+ runners (site)' },
+    join: { url: 'https://t.me/+xF_-dwyVYQ01OTc1', platform: 'telegram', cta: 'Join on Telegram' },
+    links: { website: 'https://marathonmitra.com/running-communities' },
+    source: src('https://marathonmitra.com/running-communities', 'Directory live 15 Nov 2026; channel activity not dated'),
+    status: 'unverified', createdAt: D,
+  }),
+  c({
+    slug: 'the-weekend-hike-telegram', name: 'The Weekend Hike', category: 'outdoors', city: 'Online',
+    tagline: 'Big Telegram group for weekend hike plans.',
+    description: 'Telegram group (3,181 members) where weekend hikes are planned. City and organiser are not stated publicly — check the group before you go.',
+    tags: ['telegram', 'hiking', 'weekend'], mode: 'hybrid',
+    size: { bucket: '1000+', note: '3,181 members, 149 online (search snippet)' },
+    join: { url: 'https://t.me/+VO_JTDiEcvIxYjRl', platform: 'telegram', cta: 'Join on Telegram' },
+    source: src('https://t.me/+VO_JTDiEcvIxYjRl', 'Invite page shows 3,181 members; posts not public'),
+    status: 'unverified', createdAt: D,
+  }),
 
+  // ───────── MARATHONMITRA CITY WHATSAPP CHANNELS ─────────
+  mmChannel('kolkata', 'Kolkata', '0029Vb7sMOIDDmFMOIily636'),
+  mmChannel('bangalore', 'Bengaluru', '0029VbCEuEpHwXb783OAYC46'),
+  mmChannel('pune', 'Pune', '0029VbCIWPuATRSsFSSfb61i'),
+  mmChannel('chennai', 'Chennai', '0029Vb7O5nAF1YlUbOhlJm2Z'),
+  mmChannel('ahmedabad', 'Ahmedabad', '0029Vb7Q50QInlqLN3TJQW35'),
+  mmChannel('chandigarh', 'Chandigarh', '0029VbCwb3z4dTnNUJ2He13n'),
+  mmChannel('mumbai', 'Mumbai', '0029VbCRUtGIXnlnwr9yJX0A'),
+  mmChannel('delhi', 'Delhi', '0029VbCu7hJ0G0XiTLxB1Y0q'),
+];
