@@ -886,3 +886,15 @@ html.cop-cursor select { cursor: pointer !important; }
 .cop-buddy .dot { width: 5px; height: 5px; left: -2.5px; top: -2.5px; box-shadow: 0 0 0 1.5px #fff; }
 .cop-buddy::after { width: 24px; height: 24px; left: -12px; top: -12px; border-width: 1.5px; }
 .cop-burst { font-size: 16px; }
+
+/* ─── v9.2: city picker up top, even smaller cursor ─── */
+.cop-locpick .cities { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: .45rem; }
+.cop-locpick .cities .cop-pill { justify-content: space-between; padding: .6rem .8rem; border-radius: 14px; font-weight: 700; }
+.cop-locpick .cities .cop-pill[aria-pressed="true"] { background: var(--black); color: #fff; border-color: var(--black); }
+.cop-locpick .cities .cop-pill[aria-pressed="true"] .n { color: var(--lime) !important; }
+.cop-buddy .face { font-size: 13px; left: 2px; top: 2px; }
+.cop-buddy.hot .face { font-size: 16px; }
+.cop-buddy.press .face { font-size: 11px; }
+.cop-buddy .dot { width: 4px; height: 4px; left: -2px; top: -2px; box-shadow: 0 0 0 1px #fff; }
+.cop-buddy::after { width: 18px; height: 18px; left: -9px; top: -9px; }
+.cop-burst { font-size: 13px; }

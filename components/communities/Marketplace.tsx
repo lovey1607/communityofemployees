@@ -29,6 +29,8 @@ import { PlatformDock } from './PlatformDock';
 
 const SAVED_KEY = 'cop:saved';
 const ORIGIN_KEY = 'cop:origin';
+const CITY_KEY = 'cop:city';
+const GEO_ASKED_KEY = 'cop:geo-asked';
 
 type Props = { initial: Filters; lockCity?: boolean; title?: string };
 
@@ -56,9 +58,14 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
       if (Array.isArray(s)) setSaved(new Set(s));
       const o = JSON.parse(localStorage.getItem(ORIGIN_KEY) || 'null');
       if (o && typeof o.lat === 'number') { setOrigin(o); setOriginKind(o.kind ?? 'area'); }
+      // Remember the visitor's city: /communities with no ?city= opens where they were last.
+      const urlHasCity = new URLSearchParams(location.search).has('city');
+      const lastCity = localStorage.getItem(CITY_KEY);
+      if (!lockCity && !urlHasCity && lastCity && CITY_CENTRES[lastCity] && lastCity !== initial.city) setF((x) => ({ ...x, city: lastCity }));
     } catch { /* storage unavailable */ }
     setHydrated(true);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (hydrated && !lockCity) { try { localStorage.setItem(CITY_KEY, f.city); } catch { /* ignore */ } } }, [f.city, hydrated, lockCity]);
   const persistOrigin = (o: Origin, kind: 'geo' | 'area' | 'city') => {
     setOrigin(o); setOriginKind(kind);
     try { localStorage.setItem(ORIGIN_KEY, JSON.stringify(o ? { ...o, kind } : null)); } catch { /* ignore */ }
@@ -100,9 +107,9 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
         const { latitude: lat, longitude: lng } = pos.coords;
         const near = nearestCity(lat, lng);
         persistOrigin({ lat, lng, label: 'your location' }, 'geo');
-        if (near.km < 80 && !lockCity && near.city !== f.city) setF((x) => ({ ...x, city: near.city, sort: 'nearest' }));
+        if (!lockCity && near.city !== f.city) setF((x) => ({ ...x, city: near.city, sort: 'nearest' }));
         else setF((x) => ({ ...x, sort: 'nearest' }));
-        setGeo({ busy: false, msg: near.km > 80 ? `You’re ${Math.round(near.km)} km from ${near.city} — showing ${f.city} by distance anyway.` : null });
+        setGeo({ busy: false, msg: near.km > 80 ? `The nearest city we cover is ${near.city} (${Math.round(near.km)} km). Pick another city any time.` : null });
         say('Sorted by distance from you');
       },
       (err) => {
@@ -113,6 +120,24 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
       { timeout: 9000, maximumAge: 120000 },
     );
   }, [f.city, lockCity]);
+
+  // Default to the visitor's real location: on first visit ask once (the
+  // browser shows its own prompt); if they already granted it, refresh
+  // silently each visit. Declined → we stay on the default city and the
+  // location bubble lets them pick a city/area by hand.
+  useEffect(() => {
+    if (!hydrated || lockCity || !('geolocation' in navigator)) return;
+    let asked = false;
+    try { asked = localStorage.getItem(GEO_ASKED_KEY) === '1'; } catch { /* ignore */ }
+    const go = () => { askedGeo.current = true; try { localStorage.setItem(GEO_ASKED_KEY, '1'); } catch { /* ignore */ } locate(true); };
+    const perms = (navigator as Navigator & { permissions?: Permissions }).permissions;
+    if (perms?.query) {
+      perms.query({ name: 'geolocation' as PermissionName }).then((st) => {
+        if (st.state === 'granted') go();
+        else if (st.state === 'prompt' && !asked && originKind !== 'area' && originKind !== 'city') go();
+      }).catch(() => { if (!asked) go(); });
+    } else if (!asked) go();
+  }, [hydrated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const update = (patch: Partial<Filters>) => {
     setF((x) => ({ ...x, ...patch }));
@@ -135,6 +160,11 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
     setLocOpen(false);
   };
   const pickCity = (city: string) => {
+    if (lockCity && city !== f.city) {
+      try { localStorage.setItem(CITY_KEY, city); } catch { /* ignore */ }
+      window.location.href = `/communities?city=${encodeURIComponent(city)}`;
+      return;
+    }
     const c = CITY_CENTRES[city];
     persistOrigin({ lat: c.lat, lng: c.lng, label: `${city} (centre)` }, 'city');
     setF((x) => ({ ...x, city, sort: 'nearest' }));
@@ -383,9 +413,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
                 <button type="button" className="cop-btn cop-btn-accent cop-btn-sm" onClick={() => { locate(false); }} disabled={geo.busy}><LocateFixed size={14} /> Use my location</button>
                 <span className="status">{geo.busy && <span className="cop-spin" />}{geo.msg ?? 'We only use it to sort by distance. Nothing is stored online.'}</span>
               </div>
-              {!lockCity && (
-                <CityPicker current={f.city} onPick={pickCity} />
-              )}
+              <CityPicker current={f.city} onPick={pickCity} />
               <div className="cop-fgroup">
                 <h4>Area in {f.city}</h4>
                 <div className="areas">

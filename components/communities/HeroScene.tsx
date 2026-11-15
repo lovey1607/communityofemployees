@@ -18,7 +18,7 @@ export const SCENE_COPY: Record<CommunityCategory | 'all', { kicker: string; lin
   creative: { kicker: 'jam, sketch, open mic', line: 'Find your creatives in' },
   books: { kicker: 'silent reading, loud opinions', line: 'Find your readers in' },
   food: { kicker: 'dinner with strangers', line: 'Find your foodies in' },
-  social: { kicker: 'new city, new friends', line: 'Find your people in' },
+  social: { kicker: 'new city, new friends', line: 'Make new friends in' },
   games: { kicker: 'board games till 2am', line: 'Find your game night in' },
   professional: { kicker: 'network, minus the cringe', line: 'Find your circle in' },
   wellbeing: { kicker: 'slow sundays', line: 'Find your calm in' },

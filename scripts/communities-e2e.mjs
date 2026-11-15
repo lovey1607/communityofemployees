@@ -118,9 +118,22 @@ await ctx.close();
 
 // geolocation granted near Sohna Road
 [ctx, p] = await page({ width: 1400, height: 900 }, { geolocation: { latitude: 28.418, longitude: 77.04 }, permissions: ['geolocation'] });
-await p.goto(`${B}/communities`, { waitUntil: 'networkidle' });
-await p.click('.cop-ask button:has-text("Use my location")'); await p.waitForTimeout(1000);
-ok('geolocation granted → "Near your location"', (await p.textContent('.cop-loc .where')).includes('your location'));
+await p.goto(`${B}/communities`, { waitUntil: 'networkidle' }); await p.waitForTimeout(1200);
+ok('geolocation already granted → located automatically on load', (await p.textContent('.cop-loc .where')).includes('your location'));
+await ctx.close();
+// granted in Mumbai → defaults to Mumbai; city stays switchable
+[ctx, p] = await page({ width: 1400, height: 900 }, { geolocation: { latitude: 19.07, longitude: 72.88 }, permissions: ['geolocation'] });
+await p.goto(`${B}/communities`, { waitUntil: 'networkidle' }); await p.waitForTimeout(1200);
+ok('auto-location picks the nearest city (Mumbai)', (await p.textContent('.cop-hero h1')).includes('Mumbai'));
+await p.click('.cop-loc .change'); await p.waitForTimeout(400);
+await p.click('.cop-locpick .cities button:has-text("Bengaluru")'); await p.waitForTimeout(600);
+ok('city can still be changed by hand (→ Bengaluru)', (await p.textContent('.cop-hero h1')).includes('Bengaluru'));
+await ctx.close();
+// city page (/communities/jaipur) still offers the city switcher
+[ctx, p] = await page({ width: 1400, height: 900 });
+await p.goto(`${B}/communities/jaipur`, { waitUntil: 'networkidle' });
+await p.click('.cop-loc .change'); await p.waitForTimeout(400);
+ok('city pages show the city picker too', await p.isVisible('.cop-locpick .cities button:has-text("Mumbai")'));
 await ctx.close();
 
 // geolocation denied → graceful
@@ -134,7 +147,7 @@ await ctx.close();
 [ctx, p] = await page({ width: 390, height: 844 });
 await p.goto(`${B}/communities`, { waitUntil: 'networkidle' }); await p.waitForTimeout(500);
 ok('mobile: no horizontal page scroll', (await p.evaluate(() => document.documentElement.scrollWidth)) === 390);
-const h1a = await p.textContent('.cop-hero h1'); await p.waitForTimeout(4300); const h1b = await p.textContent('.cop-hero h1');
+const h1a = await p.textContent('.cop-hero h1'); await p.waitForTimeout(7000); const h1b = await p.textContent('.cop-hero h1');
 ok('mobile: headline cycles through category titles', h1a !== h1b, `${h1a} → ${h1b}`);
 ok('mobile: only All + 2 chips + More visible', (await p.$$eval('.cop-cat', (e) => e.filter((x) => getComputedStyle(x).display !== 'none').length)) === 4);
 await p.click('.cop-cat.more-cats'); await p.waitForTimeout(500);
