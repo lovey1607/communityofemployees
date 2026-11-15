@@ -48,6 +48,22 @@ No env vars, no database needed for these routes. Also try:
   touched is `app/page.tsx` (one `<li>`), so risk is minimal — but run `npm run test:e2e`
   locally before merging anyway.
 
+## v5 — Tinder-style swipe deck
+
+- Picking any category drops you into a **swipe deck** (`components/communities/SwipeDeck.tsx`):
+  drag right = save, left = skip, with SAVE/SKIP stamps that fade in as you drag, a
+  stacked-card look, and round action buttons (undo · skip · open join link · save).
+  Keyboard: ← skip, → save, Enter opens the join link, Backspace undoes.
+- Saved cards collect in a "Your picks" row under the deck (stored on the device only).
+- A **Swipe / Grid** toggle sits in the filter bar; Map is grid-only.
+- Fixed the unreadable "Start here" strip by removing it (it was also the noisiest block).
+  The filter row is down to location · Women only · Free · Filters; the rest live in the panel.
+- On phones the filter bar scrolls away in swipe mode, so one card plus its buttons fit
+  on one screen. Picking a category auto-scrolls to the deck.
+- References: Tinder (stamps, button row), Bumble BFF (one decision per card), Hinge
+  (big readable type on white), Zepto (black/red/purple palette).
+- Browser checks: 30 (adds drag-save, skip, undo, keyboard, grid toggle, mobile deck).
+
 ## v4 — animated hero + location ask
 
 - `components/communities/HeroScene.tsx`: an inline-SVG scene per category (map with

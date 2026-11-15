@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import {
-  Search, X, SlidersHorizontal, LocateFixed, Map as MapIcon, ChevronRight,
+  Search, X, SlidersHorizontal, LocateFixed, Map as MapIcon, ChevronRight, Layers, LayoutGrid,
   Footprints, Bike, Trophy, Dumbbell, Mountain, Cpu, Rocket, Palette, BookOpen,
   UtensilsCrossed, Users, Languages, HeartHandshake, Leaf, Baby, PawPrint, Briefcase, Dice5, Sparkles,
 } from 'lucide-react';
@@ -22,6 +22,7 @@ import {
 import { CommunityCard } from './CommunityCard';
 import { Mark } from './Mark';
 import { HeroScene, SCENE_COPY } from './HeroScene';
+import { SwipeDeck } from './SwipeDeck';
 
 const ICONS: Record<CommunityCategory | 'all', React.ComponentType<{ size?: number }>> = {
   all: Sparkles, running: Footprints, cycling: Bike, sports: Trophy, fitness: Dumbbell, outdoors: Mountain,
@@ -45,6 +46,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   const [locOpen, setLocOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [mapOn, setMapOn] = useState(false);
+  const [view, setView] = useState<'swipe' | 'grid'>(initial.category !== 'all' ? 'swipe' : 'grid');
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
   const [stuck, setStuck] = useState(false);
@@ -118,6 +120,17 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
 
   const update = (patch: Partial<Filters>) => {
     setF((x) => ({ ...x, ...patch }));
+    if (patch.category) {
+      setView(patch.category === 'all' ? 'grid' : 'swipe'); setMapOn(false);
+      if (patch.category !== 'all') setTimeout(() => {
+        const main = document.querySelector('.cop-main') as HTMLElement | null;
+        const bar = document.querySelector('.cop-filters') as HTMLElement | null;
+        if (!main) return;
+        const stickyBar = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight : 0;
+        const top = main.getBoundingClientRect().top + window.scrollY - 64 - stickyBar + 4;
+        window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+      }, 140);
+    }
     if (patch.category && patch.category !== 'all' && !origin && !askedGeo.current) { askedGeo.current = true; locate(true); }
   };
   const pickArea = (a: { label: string; lat: number; lng: number; city: string }) => {
@@ -215,7 +228,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
       <div ref={sentinel} aria-hidden="true" />
 
       {/* ─── Filters, always visible ─── */}
-      <section className={`cop-filters${stuck ? ' stuck' : ''}`} aria-label="Filters">
+      <section className={`cop-filters${stuck ? ' stuck' : ''}${view === 'swipe' ? ' swipe' : ''}`} aria-label="Filters">
         <div className="wrap">
           <div className="cop-cats" role="tablist" aria-label="Category">
             {(['all', ...cats] as (CommunityCategory | 'all')[]).map((k) => {
@@ -238,13 +251,15 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
             </div>
             <span className="desk">{chip('Women only', f.gender === 'women', () => update({ gender: f.gender === 'women' ? 'all' : 'women' }))}</span>
             <span className="desk">{chip('Free', f.price === 'free', () => update({ price: f.price === 'free' ? 'any' : 'free' }))}</span>
-            <span className="desk">{chip('Beginner-friendly', f.beginner, () => update({ beginner: !f.beginner }))}</span>
-            <span className="desk">{chip('Regular events', f.events, () => update({ events: !f.events }))}</span>
             <button type="button" className="cop-pill" aria-pressed={nActive > (f.category !== 'all' ? 1 : 0)} onClick={() => setMoreOpen(true)}>
               <SlidersHorizontal size={14} /> Filters {nActive > 0 && <span className="cnt">{nActive}</span>}
             </button>
             <span className="spacer" />
-            <button type="button" className="cop-pill desk" aria-pressed={mapOn} onClick={() => setMapOn((m) => !m)}><MapIcon size={14} /> Map</button>
+            <div className="cop-seg" role="tablist" aria-label="View">
+              <button type="button" role="tab" aria-selected={view === 'swipe'} className={view === 'swipe' ? 'on' : ''} onClick={() => { setView('swipe'); setMapOn(false); }}><Layers size={14} /> Swipe</button>
+              <button type="button" role="tab" aria-selected={view === 'grid'} className={view === 'grid' ? 'on' : ''} onClick={() => setView('grid')}><LayoutGrid size={14} /> Grid</button>
+            </div>
+            {view === 'grid' && <button type="button" className="cop-pill desk" aria-pressed={mapOn} onClick={() => setMapOn((m) => !m)}><MapIcon size={14} /> Map</button>}
             <span className="cop-select">
               <label className="sr" htmlFor="cop-sort">Sort</label>
               <select id="cop-sort" value={f.sort} onChange={(e) => update({ sort: e.target.value as Filters['sort'] })}>
@@ -266,29 +281,17 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
       </section>
 
       {/* ─── Results ─── */}
-      <main className={`cop-main${mapOn ? ' with-map' : ''}`}>
+      <main className={`cop-main${mapOn && view === 'grid' ? ' with-map' : ''}${view === 'swipe' ? ' is-swipe' : ''}`}>
         <div className="wrap">
           <div>
-            {pristine && featured.length > 0 && (
-              <section className="cop-featured" aria-label="Featured communities">
-                <h2>Start here</h2>
-                <div className="cop-strip">
-                  {featured.map((c) => (
-                    <Link key={c.slug} href={`/communities/${c.slug}`} className="cop-feat" style={{ ['--h' as string]: CATEGORY_META[c.category].hue }}>
-                      <span className="k">{CATEGORY_META[c.category].label} · {c.area ?? c.city}</span>
-                      <h3>{c.name}</h3>
-                      <p>{c.tagline}</p>
-                      <span className="go">See how to join <ChevronRight size={14} /></span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
-            <p className="cop-note" style={{ marginBottom: '.8rem' }} aria-live="polite">
+            <p className="cop-note" style={{ marginBottom: '.8rem', display: view === 'swipe' && results.length > 0 ? 'none' : undefined }} aria-live="polite">
               {results.length} {results.length === 1 ? 'community' : 'communities'}
               {f.category !== 'all' ? ` · ${CATEGORY_META[f.category].label.toLowerCase()}` : ''}
               {origin ? ` · sorted by distance from ${origin.label}` : ` · ${f.city} & around`}
             </p>
+            {view === 'swipe' && results.length > 0 ? (
+              <SwipeDeck items={results} saved={saved} onSave={toggleSave} onToast={say} onExit={() => setView('grid')} />
+            ) : (
             <LayoutGroup>
               <motion.div className="cop-grid" layout={!reduce}>
                 <AnimatePresence mode="popLayout" initial={false}>
@@ -320,12 +323,23 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
                 )}
               </motion.div>
             </LayoutGroup>
+            )}
+            {saved.size > 0 && view === 'swipe' && (
+              <div className="cop-picks" aria-label="Your saved picks">
+                <span className="lbl">Your picks · {saved.size}</span>
+                <div className="row">
+                  {COMMUNITIES.filter((c) => saved.has(c.slug)).slice(0, 12).map((c) => (
+                    <Link key={c.slug} href={`/communities/${c.slug}`} title={c.name}><Mark c={c} size={40} /></Link>
+                  ))}
+                </div>
+              </div>
+            )}
             <p className="cop-note" style={{ marginTop: '2rem', maxWidth: '70ch' }}>
               Every listing links to the organiser’s own channel and shows the date we last checked it. “Unverified” means we found the community but couldn’t confirm activity in the last ~90 days.
               Spot something wrong? <a href="mailto:contact@communityofemployees.com" style={{ textDecoration: 'underline' }}>Tell us</a>.
             </p>
           </div>
-          {mapOn && <MapPanel origin={origin} city={f.city} count={results.length} />}
+          {mapOn && view === 'grid' && <MapPanel origin={origin} city={f.city} count={results.length} />}
         </div>
       </main>
 

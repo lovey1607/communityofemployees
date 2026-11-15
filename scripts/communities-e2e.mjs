@@ -30,7 +30,24 @@ ok('no "List a community" text hidden (button has visible text)', (await p.$eval
 
 await p.click('.cop-cat:has-text("Running")'); await p.waitForTimeout(700);
 ok('Running chip filters and updates the URL', p.url().includes('category=running'));
-ok('Running results all running', await p.$$eval('.cop-card .catpill', (e) => e.every((x) => x.textContent === 'Running')));
+ok('picking a category opens the swipe deck', await p.isVisible('.cop-deck'));
+await p.screenshot({ path: `${OUT}02-desktop-running-swipe.png` });
+// swipe: drag right saves + advances
+const first = await p.textContent('.cop-deck-card:not(.ghost) h3');
+const bx = await p.locator('.cop-deck-card:not(.ghost)').boundingBox();
+await p.mouse.move(bx.x + bx.width / 2, bx.y + bx.height / 2); await p.mouse.down();
+await p.mouse.move(bx.x + bx.width / 2 + 300, bx.y + bx.height / 2, { steps: 12 }); await p.mouse.up(); await p.waitForTimeout(700);
+const second = await p.textContent('.cop-deck-card:not(.ghost) h3');
+ok('drag right advances the deck', first !== second, `${first} → ${second}`);
+ok('drag right saves to "Your picks"', (await p.$$eval('.cop-picks a', (e) => e.length)) === 1);
+await p.click('.cop-deck-actions .skip'); await p.waitForTimeout(600);
+ok('skip button advances', (await p.textContent('.cop-deck-card:not(.ghost) h3')) !== second);
+await p.click('.cop-deck-actions .undo'); await p.waitForTimeout(600);
+ok('undo brings the card back', (await p.textContent('.cop-deck-card:not(.ghost) h3')) === second);
+await p.keyboard.press('ArrowRight'); await p.waitForTimeout(600);
+ok('→ key saves', (await p.$$eval('.cop-picks a', (e) => e.length)) === 2);
+await p.click('.cop-seg button:has-text("Grid")'); await p.waitForTimeout(600);
+ok('Grid toggle shows cards, all running', await p.$$eval('.cop-card .catpill', (e) => e.length > 5 && e.every((x) => x.textContent === 'Running')));
 await p.screenshot({ path: `${OUT}02-desktop-running.png` });
 
 await p.click('.cop-loc .change'); await p.waitForTimeout(400);
@@ -59,7 +76,7 @@ const join = await p.$eval('.cop-card .join', (e) => ({ href: e.href, target: e.
 ok('join link opens organiser URL in new tab with noopener', /^https?:/.test(join.href) && join.target === '_blank' && /noopener/.test(join.rel));
 
 await p.click('.cop-card .ico[aria-label="Save"]'); await p.waitForTimeout(200);
-ok('save toggles (localStorage)', (await p.$$eval('.cop-card .ico.saved', (e) => e.length)) === 1);
+ok('save toggles (localStorage)', (await p.$$eval('.cop-card .ico.saved', (e) => e.length)) >= 1);
 
 await p.goto(`${B}/communities/the-bhag`, { waitUntil: 'networkidle' });
 ok('detail page renders OG tags', (await p.$eval('meta[property="og:title"]', (e) => e.content)).includes('The Bhag'));
@@ -67,7 +84,7 @@ ok('detail page shows last-checked date', (await p.textContent('.cop-detail')).i
 await p.screenshot({ path: `${OUT}08-desktop-detail.png`, fullPage: true });
 
 await p.goto(`${B}/communities/gurgaon/running`, { waitUntil: 'networkidle' });
-ok('/communities/gurgaon/running pre-filters', await p.$$eval('.cop-card .catpill', (e) => e.length > 5 && e.every((x) => x.textContent === 'Running')));
+ok('/communities/gurgaon/running opens straight into the deck', await p.isVisible('.cop-deck') && (await p.textContent('h1')).includes('run crew'));
 await p.goto(`${B}/communities/mumbai`, { waitUntil: 'networkidle' });
 ok('/communities/mumbai switches city', (await p.textContent('h1')).includes('Mumbai'));
 await p.goto(`${B}/communities/nope-not-a-slug`);
@@ -99,6 +116,9 @@ await p.click('.cop-pill:has-text("Filters")'); await p.waitForTimeout(500);
 ok('mobile: filters open as a bottom sheet', await p.isVisible('.cop-sheet'));
 await p.screenshot({ path: `${OUT}11-mobile-sheet.png` });
 await p.keyboard.press('Escape');
+await p.goto(`${B}/communities/gurgaon/books`, { waitUntil: 'networkidle' }); await p.waitForTimeout(400);
+ok('mobile: deck renders, no horizontal scroll', (await p.isVisible('.cop-deck')) && (await p.evaluate(() => document.documentElement.scrollWidth)) === 390);
+await p.screenshot({ path: `${OUT}13-mobile-swipe.png` });
 await p.goto(`${B}/communities/cubbon-reads`, { waitUntil: 'networkidle' });
 ok('mobile: sticky join bar on detail', await p.isVisible('.cop-sticky-join .cop-btn'));
 await p.screenshot({ path: `${OUT}12-mobile-detail.png` });
