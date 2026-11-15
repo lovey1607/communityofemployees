@@ -14,6 +14,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { ROTATING, EXAMPLES, OCCASIONS, STEPS, TRUST, CALC, HUBS, type CalcCategory } from '@/data/coe-events';
 import { TOPIC_PHOTOS, photoSrc, photoPage, type Photo } from '@/data/category-photos';
+import { SmartImg } from './SmartImg';
 
 const inr = (n: number) => '₹' + Math.round(n).toLocaleString('en-IN');
 const money = (n: number) => (n >= 100000 ? '₹' + (n / 100000).toFixed(2).replace(/\.?0+$/, '') + ' L' : inr(n));
@@ -82,8 +83,7 @@ export function CorporateEvents() {
               <motion.figure key={p.id} className={`hcard h${i}`} initial={reduce ? false : { opacity: 0, y: 60, rotate: 0 }}
                 animate={{ opacity: 1, x: [-86, 0, 92][i], y: [18, -10, 26][i], rotate: [-10, 2, 12][i], scale: i === 1 ? 1.04 : 0.94 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 20, delay: i * 0.08 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photoSrc(p, 420, 520)} alt="" />
+                <SmartImg eager srcs={[p, TOPIC_PHOTOS.social[0], TOPIC_PHOTOS.network[1]].map((x) => photoSrc(x, 420, 520))} />
               </motion.figure>
             ))}
             <div className="hchip c1"><span className="e">📡</span> venues bid, you pick</div>
@@ -103,8 +103,7 @@ export function CorporateEvents() {
             {OCCASIONS.map((o, i) => (
               <motion.article key={o.title} className="ce-occ-card" initial={reduce ? false : { opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ delay: (i % 3) * 0.06 }}>
                 <figure className="cop-photo">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photoSrc(PHOTO[o.photo], 640, 360)} alt="" loading="lazy" />
+                  <SmartImg srcs={[PHOTO[o.photo], TOPIC_PHOTOS.social[0], TOPIC_PHOTOS.network[1]].map((x) => photoSrc(x, 640, 360))} />
                   <figcaption>Representative photo · <a href={photoPage(PHOTO[o.photo])} target="_blank" rel="noopener noreferrer">{PHOTO[o.photo].by} / Unsplash</a></figcaption>
                   <span className="emo">{o.emoji}</span>
                 </figure>

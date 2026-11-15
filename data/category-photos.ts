@@ -165,7 +165,14 @@ export const photoPage = (p: Photo) => `https://unsplash.com/photos/${p.page}`;
 
 /** Deterministic pick so the same listing always shows the same photo. */
 export function photoFor(slug: string, category: CommunityCategory): Photo {
+  return photosFor(slug, category)[0];
+}
+/** The listing's photo first, then the rest of its category, then a few safe generics — used as fallbacks if one fails to load. */
+export function photosFor(slug: string, category: CommunityCategory): Photo[] {
   const list = CATEGORY_PHOTOS[category] ?? T.social;
   let h = 0; for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  return list[h % list.length];
+  const k = h % list.length;
+  const rot = [...list.slice(k), ...list.slice(0, k)];
+  const extra = [T.social[0], T.books[2], T.hike[2]].filter((p) => !rot.includes(p));
+  return [...rot, ...extra];
 }

@@ -869,3 +869,20 @@ html.cop-cursor select { cursor: pointer !important; }
 .cop-card .cover-cat, .cop-card .cover-km { z-index: 2; pointer-events: none; }
 .cop-detail-cover { height: clamp(180px, 28vw, 340px); border-radius: 24px; margin: .8rem 0 1.4rem; }
 .cop-detail-cover figcaption { opacity: 1; left: 14px; bottom: 10px; font-size: .7rem; }
+
+/* ─── v9.1: image fallbacks + smaller cursor ─── */
+.cop-photo { background: linear-gradient(135deg, #FFB088, #FF6B4A 55%, #3A2A3F); }
+.cop-photo .ph-emo { position: absolute; inset: 0; display: grid; place-items: center; font-size: 48px; filter: drop-shadow(0 8px 14px rgba(0,0,0,.3)); }
+.cop-photo img { position: relative; z-index: 1; opacity: 0; transition: opacity .35s ease, transform .6s var(--ease); }
+.cop-photo img.is-loaded { opacity: 1; }
+.cop-photo figcaption { z-index: 2; }
+.hcard { background: linear-gradient(135deg, #FFB088, #FF6B4A 55%, #3A2A3F); }
+.hcard img { opacity: 0; transition: opacity .35s ease; }
+.hcard img.is-loaded { opacity: 1; }
+
+.cop-buddy .face { font-size: 17px; left: 3px; top: 3px; }
+.cop-buddy.hot .face { font-size: 21px; }
+.cop-buddy.press .face { font-size: 14px; }
+.cop-buddy .dot { width: 5px; height: 5px; left: -2.5px; top: -2.5px; box-shadow: 0 0 0 1.5px #fff; }
+.cop-buddy::after { width: 24px; height: 24px; left: -12px; top: -12px; border-width: 1.5px; }
+.cop-burst { font-size: 16px; }
