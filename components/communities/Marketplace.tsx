@@ -11,9 +11,6 @@ import Link from 'next/link';
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import {
   Search, X, SlidersHorizontal, LocateFixed, Map as MapIcon, ChevronRight, Layers, LayoutGrid,
-  Footprints, Bike, Trophy, Dumbbell, Mountain, Cpu, Rocket, Palette, BookOpen,
-  UtensilsCrossed, Users, Languages, HeartHandshake, Leaf, Baby, PawPrint, Briefcase, Dice5, Sparkles,
-  Heart, Venus, Mars, Megaphone,
 } from 'lucide-react';
 import {
   COMMUNITIES, CATEGORY_META, CATEGORY_ORDER, AREAS, CITY_CENTRES, CITY_GROUPS, DEFAULT_FILTERS, METRO_CITIES, ALL_CITIES,
@@ -24,14 +21,9 @@ import { CommunityCard } from './CommunityCard';
 import { Mark } from './Mark';
 import { HeroScene, SCENE_COPY } from './HeroScene';
 import { SwipeDeck } from './SwipeDeck';
+import { CursorBuddy, burst } from './CursorBuddy';
+import { CAT_EMOJI } from './emoji';
 
-const ICONS: Record<CommunityCategory | 'all', React.ComponentType<{ size?: number }>> = {
-  all: Sparkles, running: Footprints, cycling: Bike, sports: Trophy, fitness: Dumbbell, outdoors: Mountain,
-  tech: Cpu, startup: Rocket, creative: Palette, books: BookOpen, food: UtensilsCrossed, social: Users,
-  language: Languages, cause: HeartHandshake, wellbeing: Leaf, parents: Baby, pets: PawPrint,
-  professional: Briefcase, games: Dice5, other: Sparkles,
-  dating: Heart, women: Venus, men: Mars, civic: Megaphone,
-};
 
 const SAVED_KEY = 'cop:saved';
 const ORIGIN_KEY = 'cop:origin';
@@ -194,6 +186,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
 
   return (
     <div className="cop">
+      <CursorBuddy emoji={CAT_EMOJI[shownCat]} />
       {/* ─── Hero ─── */}
       <section className="cop-hero">
         <div className="wrap cop-hero-grid">
@@ -216,29 +209,38 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
                 </AnimatePresence>
               </span>
             </h1>
-            <p className="sub">{COMMUNITIES.length} real communities · {cityCount} cities · one tap to join.</p>
-            <div className="cop-search">
-              <label>
-                <Search size={18} />
-                <span className="sr">Search communities</span>
-                <input type="search" value={f.q} onChange={(e) => update({ q: e.target.value })} placeholder="pickleball, women only, board games…" enterKeyHint="search" />
-                {f.q && <button type="button" className="clear" aria-label="Clear search" onClick={() => update({ q: '' })}><X size={14} /></button>}
-              </label>
+            <div className="cop-hero-tools">
+              <div className="cop-search">
+                <label>
+                  <Search size={18} />
+                  <span className="sr">Search communities</span>
+                  <input type="search" value={f.q} onChange={(e) => update({ q: e.target.value })} placeholder="pickleball, women only, board games…" enterKeyHint="search" />
+                  {f.q && <button type="button" className="clear" aria-label="Clear search" onClick={() => update({ q: '' })}><X size={14} /></button>}
+                </label>
+              </div>
+              {origin ? (
+                <div className="cop-ask on">
+                  <button type="button" className="cop-locbtn" onClick={() => setLocOpen(true)}><span aria-hidden="true">📍</span> Near <b>{origin.label}</b> <small>change</small></button>
+                </div>
+              ) : (
+                <div className="cop-ask" role="group" aria-label="Set your location">
+                  <button type="button" className="cop-locbtn hot" onClick={() => locate(false)} disabled={geo.busy}><LocateFixed size={15} /> {geo.busy ? 'Finding…' : 'Use my location'}</button>
+                  <button type="button" className="cop-locbtn" onClick={() => setLocOpen(true)}>Pick area</button>
+                </div>
+              )}
             </div>
-            {origin ? (
-              <div className="cop-ask">
-                <span className="em">📍</span>
-                <p>Showing what’s near <b>{origin.label}</b><small>Sorted by distance from you</small></p>
-                <button type="button" className="cop-btn ghost" onClick={() => setLocOpen(true)}>Change</button>
-              </div>
-            ) : (
-              <div className="cop-ask" role="group" aria-label="Set your location">
-                <span className="em">👋</span>
-                <p>Where are you right now?<small>So we can show what’s actually near you — nothing stored online.</small></p>
-                <button type="button" className="cop-btn cop-btn-primary" onClick={() => locate(false)} disabled={geo.busy}><LocateFixed size={14} /> {geo.busy ? 'Finding…' : 'Use my location'}</button>
-                <button type="button" className="cop-btn ghost" onClick={() => setLocOpen(true)}>Pick area</button>
-              </div>
-            )}
+            <div className="cop-quick" aria-label="Popular searches">
+              {['pickleball', 'women only', 'singles', 'board games', 'run club', 'free'].map((q) => (
+                <button key={q} type="button" onClick={() => {
+                  if (q === 'women only') update({ gender: f.gender === 'women' ? 'all' : 'women' });
+                  else if (q === 'singles') update({ category: 'dating' });
+                  else if (q === 'free') update({ price: f.price === 'free' ? 'any' : 'free' });
+                  else if (q === 'run club') update({ category: 'running' });
+                  else update({ q: f.q === q ? '' : q });
+                }}>{q}</button>
+              ))}
+              <span className="sub">{COMMUNITIES.length} communities · {cityCount} cities</span>
+            </div>
             {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
           </div>
           <HeroScene category={shownCat} />
@@ -251,12 +253,12 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
         <div className="wrap">
           <div className="cop-cats" role="tablist" aria-label="Category">
             {(['all', ...cats] as (CommunityCategory | 'all')[]).map((k, idx) => {
-              const Icon = ICONS[k];
               const on = f.category === k;
               const extra = idx > 2 && !on;
               return (
-                <button key={k} type="button" role="tab" className={`cop-cat${extra ? ' extra' : ''}`} aria-pressed={on} aria-selected={on} onClick={() => update({ category: on && k !== 'all' ? 'all' : k })}>
-                  <Icon size={16} /> {k === 'all' ? 'All' : CATEGORY_META[k].label}
+                <button key={k} type="button" role="tab" className={`cop-cat${extra ? ' extra' : ''}`} aria-pressed={on} aria-selected={on} data-cur={CAT_EMOJI[k]}
+                  onClick={(e) => { if (!on && k !== 'all') burst(e.clientX, e.clientY, CAT_EMOJI[k]); update({ category: on && k !== 'all' ? 'all' : k }); }}>
+                  <span className="emo" aria-hidden="true">{CAT_EMOJI[k]}</span> {k === 'all' ? 'All' : CATEGORY_META[k].label}
                   <span className="n">{k === 'all' ? cityPool.length : catCount.get(k) ?? 0}</span>
                 </button>
               );
@@ -391,10 +393,9 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
           <Overlay onClose={() => setCatsOpen(false)} title="Pick a vibe" reduce={!!reduce}>
             <div className="cop-catgrid">
               {(['all', ...cats] as (CommunityCategory | 'all')[]).map((k) => {
-                const Icon = ICONS[k];
                 return (
-                  <button key={k} type="button" className={f.category === k ? 'on' : ''} onClick={() => { setCatsOpen(false); update({ category: k }); }}>
-                    <Icon size={22} /><b>{k === 'all' ? 'All' : CATEGORY_META[k].label}</b><span>{k === 'all' ? cityPool.length : catCount.get(k) ?? 0}</span>
+                  <button key={k} type="button" className={f.category === k ? 'on' : ''} data-cur={CAT_EMOJI[k]} onClick={(e) => { burst(e.clientX, e.clientY, CAT_EMOJI[k]); setCatsOpen(false); update({ category: k }); }}>
+                    <span className="emo" aria-hidden="true">{CAT_EMOJI[k]}</span><b>{k === 'all' ? 'All' : CATEGORY_META[k].label}</b><span>{k === 'all' ? cityPool.length : catCount.get(k) ?? 0}</span>
                   </button>
                 );
               })}

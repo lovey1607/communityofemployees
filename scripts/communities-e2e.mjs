@@ -31,19 +31,21 @@ ok('no "List a community" text hidden (button has visible text)', (await p.$eval
 await p.click('.cop-cat:has-text("Running")'); await p.waitForTimeout(700);
 ok('Running chip filters and updates the URL', p.url().includes('category=running'));
 ok('picking a category opens the swipe deck', await p.isVisible('.cop-deck'));
+ok('desktop deck shows 3 cards side by side', (await p.$$('.cop-deck-rail .cop-deck-card')).length === 3);
+ok('cursor buddy is active on desktop', await p.evaluate(() => document.documentElement.classList.contains('cop-cursor')));
 await p.screenshot({ path: `${OUT}02-desktop-running-swipe.png` });
 // swipe: drag right saves + advances
-const first = await p.textContent('.cop-deck-card:not(.ghost) h3');
-const bx = await p.locator('.cop-deck-card:not(.ghost)').boundingBox();
+const first = await p.textContent('.cop-deck-card.front h3');
+const bx = await p.locator('.cop-deck-card.front').boundingBox();
 await p.mouse.move(bx.x + bx.width / 2, bx.y + bx.height / 2); await p.mouse.down();
 await p.mouse.move(bx.x + bx.width / 2 + 300, bx.y + bx.height / 2, { steps: 12 }); await p.mouse.up(); await p.waitForTimeout(700);
-const second = await p.textContent('.cop-deck-card:not(.ghost) h3');
+const second = await p.textContent('.cop-deck-card.front h3');
 ok('drag right advances the deck', first !== second, `${first} → ${second}`);
 ok('drag right saves to "Your picks"', (await p.$$eval('.cop-picks a', (e) => e.length)) === 1);
 await p.click('.cop-deck-actions .skip'); await p.waitForTimeout(600);
-ok('skip button advances', (await p.textContent('.cop-deck-card:not(.ghost) h3')) !== second);
+ok('skip button advances', (await p.textContent('.cop-deck-card.front h3')) !== second);
 await p.click('.cop-deck-actions .undo'); await p.waitForTimeout(600);
-ok('undo brings the card back', (await p.textContent('.cop-deck-card:not(.ghost) h3')) === second);
+ok('undo brings the card back', (await p.textContent('.cop-deck-card.front h3')) === second);
 await p.keyboard.press('ArrowRight'); await p.waitForTimeout(600);
 ok('→ key saves', (await p.$$eval('.cop-picks a', (e) => e.length)) === 2);
 await p.click('.cop-seg button:has-text("Grid")'); await p.waitForTimeout(600);

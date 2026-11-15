@@ -19,7 +19,10 @@ const p = (activitySignal: string, rest: Omit<Patch, 'activitySignal'> = {}): Pa
 
 export const UPDATES: Record<string, Patch> = {
   'gurgaon-reads': p('Edition 37 posted 4 Nov 2026 on Instagram', {
-    area: 'Unitech Cyber Park', meets: { cadence: 'weekly', summary: 'Sundays 11:30am at Chapters Bookstore, Unitech Cyber Park' },
+    description: 'Gurgaon’s silent-reading meetup, now indoors: Sundays 11:30am at Chapters Bookstore, Unitech Cyber Park. Bring any book, read alongside strangers, chat after if you like. Free, no sign-up. Edition 37 was on 4 Nov 2026.',
+    tags: ['silent reading', 'sunday', 'free', 'beginner-friendly', 'bookstore'], location: { lat: 28.4416, lng: 77.0563, label: 'Unitech Cyber Park, Sector 39', precision: 'area' },
+    area: 'Unitech Cyber Park', tagline: 'Silent reading together — Sunday late mornings at Chapters Bookstore.',
+    meets: { cadence: 'weekly', summary: 'Sundays 11:30am at Chapters Bookstore, Unitech Cyber Park' },
   }),
   'camellia-artisanal': p('Instagram post 15 Nov 2026', { tagline: 'Artisanal food experiences — mostly Kolkata pop-ups now, with Delhi NCR delivery.' }),
   'run-with-me-club': p('Instagram post 9 Nov 2026 (Trail Running Series)', { tags: ['trail running', 'Bandhwari', 'Mangar', 'Panikot'] }),

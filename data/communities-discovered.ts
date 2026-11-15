@@ -272,4 +272,36 @@ export const COMMUNITIES_DISCOVERED: Community[] = [
     source: src('https://www.meetup.com/pune-pets-owners-meetup/', 'Meetup page live 15 Nov 2026; next event not shown'),
     status: 'unverified', createdAt: D,
   }),
+  // ───────── MORE PICKLEBALL (Reclub India directory) ─────────
+  c({
+    slug: 'east-coast-pickleball-club', name: 'East Coast Pickleball Club', category: 'sports', city: 'Chennai',
+    tagline: 'ECR pickleball club — open play and mixed-team tournaments.',
+    description: 'Pickleball club at Cholamandal Artists Village, Injambakkam (ECR). Runs open play and tournaments; book sessions on Reclub.',
+    tags: ['pickleball', 'ECR', 'tournaments'], area: 'Injambakkam, ECR',
+    size: { bucket: '50–200', note: '99 members on Reclub' },
+    join: { url: 'https://reclub.co/clubs/@east-coast-pickleball-club', platform: 'website', cta: 'Join on Reclub' },
+    source: src('https://reclub.co/communities/in', 'Listed on Reclub India with 99 members and a tournament page; session dates not public'),
+    status: 'unverified', createdAt: D,
+  }),
+  c({
+    slug: 'gurgaon-picklers', name: 'Gurgaon Picklers', category: 'sports', city: 'Gurgaon',
+    tagline: 'Casual pickleball games around Gurgaon.',
+    description: 'A Reclub pickleball group for Gurgaon players. Games are posted on the club page.',
+    tags: ['pickleball', 'casual'],
+    size: { bucket: '<50', note: '36 members on Reclub' },
+    join: { url: 'https://reclub.co/clubs/@gurgaon-picklers', platform: 'website', cta: 'Join on Reclub' },
+    source: src('https://reclub.co/communities/in', 'Listed on Reclub India, 15 Nov 2026'),
+    status: 'unverified', createdAt: D,
+  }),
+  c({
+    slug: 'breach-candy-pickleball', name: 'Breach Candy Pickleball', category: 'sports', city: 'Mumbai',
+    tagline: 'South Mumbai pickleball group.',
+    description: 'A Reclub pickleball group around Breach Candy. Games are posted on the club page.',
+    tags: ['pickleball', 'south mumbai'], area: 'Breach Candy',
+    size: { bucket: '<50', note: '24 members on Reclub' },
+    join: { url: 'https://reclub.co/clubs/@breach-candy-pickle-ball', platform: 'website', cta: 'Join on Reclub' },
+    source: src('https://reclub.co/communities/in', 'Listed on Reclub India, 15 Nov 2026'),
+    status: 'unverified', createdAt: D,
+  }),
 ];
+

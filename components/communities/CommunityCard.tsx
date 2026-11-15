@@ -6,6 +6,7 @@ import { Heart, Share2, Clock, Users, IndianRupee, MapPin, ExternalLink } from '
 import { motion, useReducedMotion } from 'framer-motion';
 import { CATEGORY_META, PLATFORM_LABEL, formatKm, type Scored, whereLabel } from '@/lib/communities';
 import { Mark } from './Mark';
+import { CAT_EMOJI } from './emoji';
 
 export function priceLabel(c: Scored): string {
   switch (c.pricing.type) {
@@ -51,6 +52,7 @@ export function CommunityCard({ c, saved, onSave, onToast, index = 0 }: {
       exit={reduce ? undefined : { opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1], delay: Math.min(index, 8) * 0.035 }}
       className="cop-card"
+      data-cur={CAT_EMOJI[c.category]}
       style={{ ['--c-ink' as string]: `hsl(${meta.hue} 60% 28%)`, ['--c-soft' as string]: `hsl(${meta.hue} 70% 93%)`, transform: pressed ? 'scale(.985)' : undefined }}
       onPointerDown={() => setPressed(true)} onPointerUp={() => setPressed(false)} onPointerLeave={() => setPressed(false)}
     >

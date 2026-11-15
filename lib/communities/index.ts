@@ -7,6 +7,7 @@
 import { COMMUNITIES_CORE, CATEGORY_META, CITY_CENTRE, type Community, type CommunityCategory, type JoinPlatform } from '@/data/communities';
 import { COMMUNITIES_INDIA } from '@/data/communities-india';
 import { COMMUNITIES_DISCOVERED } from '@/data/communities-discovered';
+import { COMMUNITIES_MEETUP_NOV } from '@/data/communities-meetup-nov';
 import { UPDATES, REMOVED, VERIFIED_ON } from '@/data/communities-updates';
 
 export type { Community, CommunityCategory, JoinPlatform };
@@ -30,7 +31,7 @@ export function applyUpdates(rows: Community[]): Community[] {
   });
 }
 
-export const COMMUNITIES: Community[] = [...applyUpdates([...COMMUNITIES_CORE, ...COMMUNITIES_INDIA]), ...COMMUNITIES_DISCOVERED];
+export const COMMUNITIES: Community[] = [...applyUpdates([...COMMUNITIES_CORE, ...COMMUNITIES_INDIA]), ...COMMUNITIES_DISCOVERED, ...COMMUNITIES_MEETUP_NOV];
 export { CATEGORY_META };
 
 // ─── Brand ───────────────────────────────────────────────────
