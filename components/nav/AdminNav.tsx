@@ -6,6 +6,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
@@ -13,6 +14,7 @@ import { Shield, LogOut } from 'lucide-react';
 
 export function AdminNav() {
   const router = useRouter();
+  const pathname = usePathname();
   const { logout } = useStore();
 
   const handleLogout = () => {
@@ -85,9 +87,12 @@ export function AdminNav() {
         </Link>
       </div>
 
-      {/* Center: Office Lights */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      </div>
+      {/* Center: sections */}
+      <nav style={{ display: 'flex', alignItems: 'center', gap: 6 }} aria-label="Admin sections">
+        {[['/admin/dashboard', 'COE'], ['/admin/communities', 'Communities']].map(([href, label]) => (
+          <Link key={href} href={href} style={{ padding: '7px 12px', borderRadius: 10, fontSize: 13, fontWeight: 700, textDecoration: 'none', color: pathname?.startsWith(href) ? '#FFF7EC' : '#1D1A17', background: pathname?.startsWith(href) ? '#B23A7A' : 'transparent' }}>{label}</Link>
+        ))}
+      </nav>
 
       {/* Right: Admin Pill & Logout */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
