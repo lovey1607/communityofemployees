@@ -61,7 +61,7 @@ function ResetPasswordInner() {
             <p style={{ fontSize: 14, color: '#137A43', lineHeight: 1.6 }}>
               Password updated. Every existing session has been signed out. Taking you back…
             </p>
-            <Link href="/" style={{ color: '#FF6B2C', fontSize: 14 }}>Back to COE</Link>
+            <Link href="/teams" style={{ color: '#FF6B2C', fontSize: 14 }}>Back to COE</Link>
           </>
         ) : !token ? (
           <p style={{ fontSize: 14, color: '#B3261E' }}>That link is missing its reset code.</p>

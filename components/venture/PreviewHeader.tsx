@@ -75,7 +75,7 @@ export function PreviewHeader() {
         }}
       >
         {/* Brand Logo & Tag */}
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+        <Link href="/teams" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
           <div
             style={{
               width: 36,

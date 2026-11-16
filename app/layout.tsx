@@ -12,13 +12,13 @@ import { AuthModal } from '@/components/auth/AuthModal';
 import { SessionProvider } from '@/components/SessionProvider';
 
 export const metadata: Metadata = {
-  title: 'COE Portal — Community of Employees',
+  title: 'Community of People — find run clubs, sports groups, book clubs & more near you',
   description:
-    'The enterprise B2B live reverse-bidding marketplace connecting corporate teams with verified vendors for sports, events, offsites, gifts, and merchandise.',
-  keywords: 'corporate events, employee benefits, B2B marketplace, reverse bidding, DLF Cyber City',
+    'A listing marketplace of real, active communities across Indian cities — with a direct link to join each one. Sibling to Community of Employees, the team-outing marketplace at /teams.',
+  keywords: 'communities, run clubs, sports groups, book clubs, meetups, Gurgaon, Delhi NCR, Mumbai, Bengaluru, Jaipur',
   openGraph: {
-    title: 'COE Portal — Community of Employees',
-    description: 'Enterprise corporate procurement marketplace',
+    title: 'Community of People — find your people',
+    description: 'Run clubs, sports, reading, founders, board games. Real communities, one tap to join.',
     type: 'website',
   },
 };
