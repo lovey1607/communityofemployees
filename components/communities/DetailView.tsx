@@ -13,7 +13,7 @@ function fmtDate(iso: string) {
   return isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-export function DetailView({ c }: { c: Community }) {
+export function DetailView({ c, all }: { c: Community; all?: Community[] }) {
   const meta = CATEGORY_META[c.category];
   const price = c.pricing.type === 'free' ? 'Free' : c.pricing.type === 'unknown' ? 'Ask organiser' : c.pricing.type === 'membership' ? 'Membership' : c.pricing.type === 'pay-per-event' ? 'Pay per event' : 'Paid';
   const who = c.audience.gender === 'women' ? 'Women only' : c.audience.gender === 'men' ? 'Men only' : 'Open to all';
@@ -21,7 +21,7 @@ export function DetailView({ c }: { c: Community }) {
   const loc = c.location;
   const pad = loc?.precision === 'city' ? 0.12 : 0.025;
   const mapSrc = loc ? `https://www.openstreetmap.org/export/embed.html?bbox=${(loc.lng - pad * 1.4).toFixed(4)}%2C${(loc.lat - pad).toFixed(4)}%2C${(loc.lng + pad * 1.4).toFixed(4)}%2C${(loc.lat + pad).toFixed(4)}&layer=mapnik&marker=${loc.lat.toFixed(5)}%2C${loc.lng.toFixed(5)}` : null;
-  const similar = similarTo(c, 4);
+  const similar = similarTo(c, 4, all);
   const online = c.city === 'Online';
   const cityHref = online ? '/communities' : `/communities/${slugForCity(c.city === 'Navi Mumbai' || c.city === 'Thane' ? 'Mumbai' : ['Faridabad', 'Ghaziabad'].includes(c.city) ? 'Delhi' : c.city)}`;
   const links = Object.entries(c.links).filter(([, v]) => !!v) as [string, string][];
@@ -81,6 +81,11 @@ export function DetailView({ c }: { c: Community }) {
                 </div>
               )}
               <p className="fine">Opens the organiser’s own {PLATFORM_LABEL[c.join.platform]}. Community of People doesn’t run this group and doesn’t take a fee.</p>
+            </div>
+            <div className="cop-leadbox">
+              <b>Run this group?</b>
+              <span>Fix the details or take it down — free.</span>
+              <div><Link href={`/communities/submit?edit=${c.slug}`}>Update listing</Link><Link href={`/communities/submit?remove=${c.slug}`}>Remove</Link></div>
             </div>
             {mapSrc && (
               <div className="cop-mapcard">

@@ -13,6 +13,8 @@ export default function CommunitiesLayout({ children }: { children: React.ReactN
   return (
     <div className="cop">
       {/* Editorial serif for hero accents (React 19 hoists this into <head>). */}
+      <link rel="preconnect" href="https://images.unsplash.com" />
+      <link rel="dns-prefetch" href="https://images.unsplash.com" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" precedence="default" />
       <CopNav />
       {children}

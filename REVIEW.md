@@ -2,6 +2,33 @@
 
 **Status: built, tested, committed locally. NOT pushed. Nothing touched `main`, Vercel or the DB.**
 
+## v10 — backend: admin manager + group-lead requests
+
+**Needs the new tables first:** `npm run db:migrate` (adds `drizzle/0003_communities.sql`:
+`communities`, `community_submissions`). Run it on your local DB now. For production (Neon),
+run it only after you've reviewed this — it only ADDS two empty tables, nothing else changes.
+No seed needed: the researched listings stay in `data/*.ts`; the DB is an overlay on top.
+
+- **`/admin/communities`** (admin login; also linked from the admin top bar as "Communities")
+  - Listings tab: search + filters (category, free/paid/per-event/membership, platform, city,
+    status, source = researched/edited/added), 50 per page.
+  - Edit (drawer form), Hide / Unhide, Revert (drop your edit, back to the researched version),
+    Delete (only for listings added here — researched ones can be hidden, not deleted),
+    "+ Add community".
+  - Requests tab: what group leads sent, with old → new diff. Approve & publish /
+    Edit then approve (new listings) / Reject with a note. Nothing goes live until approved.
+- **`/communities/submit`** (public, for group leads) — three tabs: List a new community /
+  Update my listing / Remove a listing. Update pre-fills the current details and only sends
+  the fields they changed. Every detail page now has "Run this group? Update · Remove" links.
+  Rate-limited (6/hour per IP), honeypot, same-origin check.
+- Public pages read `getAllCommunities()` = static + DB overlay, cached 5 min and busted
+  instantly on every admin write. If the DB is unreachable the site falls back to the static list.
+- Every admin action is in the audit log (`community.create/update/hide/unhide/revert/delete`,
+  `community_submission.approve/reject`).
+- Tests: `scripts/communities-api-test.mjs` (28 checks — run against a LOCAL server + DB:
+  `BASE=http://localhost:3000 ADMIN_EMAIL=… ADMIN_PASSWORD=… node scripts/communities-api-test.mjs`;
+  it cleans up its own listings), e2e 48 checks, unit 15 checks.
+
 ## Run it
 
     npm install

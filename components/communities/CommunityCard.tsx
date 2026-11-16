@@ -47,7 +47,6 @@ export function CommunityCard({ c, saved, onSave, onToast, index = 0 }: {
 
   return (
     <motion.article
-      layout={!reduce}
       initial={reduce ? false : { opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       exit={reduce ? undefined : { opacity: 0, scale: 0.98 }}
@@ -58,7 +57,7 @@ export function CommunityCard({ c, saved, onSave, onToast, index = 0 }: {
       onPointerDown={() => setPressed(true)} onPointerUp={() => setPressed(false)} onPointerLeave={() => setPressed(false)}
     >
       <div className="cover">
-        <CardPhoto c={c} w={560} h={300} />
+        <CardPhoto c={c} w={480} h={260} />
         <Link href={detail} className="cover-link" tabIndex={-1} aria-hidden="true" />
         <span className="cover-cat">{CAT_EMOJI[c.category]} {meta.label}</span>
         {c.km != null && <span className="cover-km">{formatKm(c.km)}</span>}

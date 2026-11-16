@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Marketplace } from '@/components/communities/Marketplace';
+import { getAllCommunities } from '@/lib/communities/store';
 import { CITY_SLUGS, CATEGORY_META, CATEGORY_ORDER, paramsToFilters, DEFAULT_FILTERS, type CommunityCategory } from '@/lib/communities';
 
 type Params = { cityOrSlug: string; category: string };
@@ -26,5 +27,5 @@ export default async function CityCategoryPage({ params, searchParams }: { param
   if (!city || !(category in CATEGORY_META)) notFound();
   const sp = await searchParams;
   const initial = paramsToFilters(sp, { ...DEFAULT_FILTERS, city, category: category as CommunityCategory });
-  return <Marketplace initial={{ ...initial, city, category: category as CommunityCategory }} lockCity />;
+  return <Marketplace initial={{ ...initial, city, category: category as CommunityCategory }} lockCity all={await getAllCommunities()} />;
 }

@@ -26,6 +26,7 @@ export const RATE_LIMITS = {
   bidCreate: { name: 'bid-create', limit: 60, windowSeconds: 3600 },
   review: { name: 'review', limit: 20, windowSeconds: 3600 },
   publicRead: { name: 'public-read', limit: 300, windowSeconds: 300 },
+  communitySubmit: { name: 'community-submit', limit: 6, windowSeconds: 3600 },
 } as const satisfies Record<string, RateLimitRule>;
 
 export interface RateLimitResult {

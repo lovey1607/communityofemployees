@@ -1,0 +1,13 @@
+/* components/communities/community-form.css — the listing form (admin + group leads). */
+.cf { --ink: #1D1A17; --muted: #7A7066; --line: #E8E0D2; --accent: #FF5733; }
+.cf fieldset { border: 0; padding: 0; margin: 0 0 1.2rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
+.cf legend { font-size: .74rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--accent, #FF5733); margin-bottom: .5rem; grid-column: 1 / -1; }
+.cf legend small { text-transform: none; letter-spacing: 0; color: var(--muted); font-weight: 600; }
+.cf label { display: grid; gap: .3rem; font-size: .8rem; font-weight: 700; color: var(--ink); min-width: 0; }
+.cf label small { color: var(--muted); font-weight: 500; }
+.cf label.w2 { grid-column: span 2; }
+.cf label.chk { display: flex; align-items: center; gap: .5rem; align-self: end; }
+.cf input:not([type=checkbox]), .cf select, .cf textarea { width: 100%; min-width: 0; border: 1.5px solid var(--line, #E8E0D2); border-radius: 10px; padding: .55rem .7rem; font-size: .9rem; font-weight: 500; background: #fff; color: var(--ink); font-family: inherit; }
+.cf input:focus, .cf select:focus, .cf textarea:focus { outline: none; border-color: var(--accent, #FF5733); box-shadow: 0 0 0 3px rgba(255,87,51,.15); }
+.cf-err { color: #B42318; font-size: .74rem; font-weight: 600; }
+@media (max-width: 640px) { .cf fieldset { grid-template-columns: 1fr; } .cf label.w2 { grid-column: auto; } }

@@ -6,7 +6,11 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Marketplace } from '@/components/communities/Marketplace';
 import { DetailView } from '@/components/communities/DetailView';
-import { COMMUNITIES, CITY_SLUGS, bySlug, paramsToFilters, DEFAULT_FILTERS, CATEGORY_META } from '@/lib/communities';
+import { COMMUNITIES, CITY_SLUGS, paramsToFilters, DEFAULT_FILTERS, CATEGORY_META } from '@/lib/communities';
+import { getAllCommunities, getCommunity } from '@/lib/communities/store';
+
+// New listings added in the admin get pages on demand.
+export const dynamicParams = true;
 
 type Params = { cityOrSlug: string };
 
@@ -18,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { cityOrSlug } = await params;
   const city = CITY_SLUGS[cityOrSlug.toLowerCase()];
   if (city) return { title: `Communities in ${city} — Community of People`, description: `Run clubs, sports groups, reading meetups and more in ${city}, with a direct link to join each one.` };
-  const c = bySlug(cityOrSlug);
+  const c = await getCommunity(cityOrSlug);
   if (!c) return {};
   const title = `${c.name} — ${CATEGORY_META[c.category].label} in ${c.area ?? c.city}`;
   return {
@@ -35,9 +39,10 @@ export default async function CityOrSlugPage({ params, searchParams }: { params:
   if (city) {
     const sp = await searchParams;
     const initial = paramsToFilters(sp, { ...DEFAULT_FILTERS, city });
-    return <Marketplace initial={{ ...initial, city }} lockCity />;
+    return <Marketplace initial={{ ...initial, city }} lockCity all={await getAllCommunities()} />;
   }
-  const c = bySlug(cityOrSlug);
+  const all = await getAllCommunities();
+  const c = all.find((x) => x.slug === cityOrSlug);
   if (!c) notFound();
-  return <DetailView c={c} />;
+  return <DetailView c={c} all={all} />;
 }

@@ -15,7 +15,7 @@ import {
 import {
   COMMUNITIES, CATEGORY_META, CATEGORY_ORDER, AREAS, CITY_CENTRES, CITY_GROUPS, DEFAULT_FILTERS, METRO_CITIES, ALL_CITIES,
   JOIN_FILTER_OPTIONS, ONLINE_CITY, applyFilters, categoriesWithListings, filtersToParams, activeFilterCount, nearestCity, PLATFORM_LABEL,
-  type Filters, type Origin, type CommunityCategory, type Scored,
+  type Filters, type Origin, type CommunityCategory, type Scored, type Community,
 } from '@/lib/communities';
 import { CommunityCard } from './CommunityCard';
 import { Mark } from './Mark';
@@ -32,9 +32,9 @@ const ORIGIN_KEY = 'cop:origin';
 const CITY_KEY = 'cop:city';
 const GEO_ASKED_KEY = 'cop:geo-asked';
 
-type Props = { initial: Filters; lockCity?: boolean; title?: string };
+type Props = { initial: Filters; lockCity?: boolean; title?: string; all?: Community[] };
 
-export function Marketplace({ initial, lockCity = false, title }: Props) {
+export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIES }: Props) {
   const reduce = useReducedMotion();
   const [f, setF] = useState<Filters>(initial);
   const [origin, setOrigin] = useState<Origin>(null);
@@ -171,7 +171,12 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   };
 
   // ─── derived ───
-  const cityPool = useMemo(() => COMMUNITIES.filter((c) => c.city === ONLINE_CITY || (CITY_GROUPS[f.city] ?? [f.city]).includes(c.city)), [f.city]);
+  const cityPool = useMemo(() => all.filter((c) => c.city === ONLINE_CITY || (CITY_GROUPS[f.city] ?? [f.city]).includes(c.city)), [f.city, all]);
+  // Render the grid in pages: 24 cards first, more on demand (keeps the
+  // first paint fast even when a city has 150+ listings).
+  const PAGE = 24;
+  const [limit, setLimit] = useState(PAGE);
+  useEffect(() => { setLimit(PAGE); }, [f]);
   const verifiedCount = useMemo(() => cityPool.filter((c) => c.status === 'approved' && c.source.verifiedOn >= '2026-11-01').length, [cityPool]);
   const platformCount = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) if (f.category === 'all' || c.category === f.category) m.set(c.join.platform, (m.get(c.join.platform) ?? 0) + 1); return m; }, [cityPool, f.category]);
   const catsRaw = useMemo(() => categoriesWithListings(cityPool), [cityPool]);
@@ -191,12 +196,13 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
   }, [isMobile, reduce, f.category, cats]);
   const shownCat: CommunityCategory | 'all' = f.category !== 'all' ? f.category : cycleIdx >= 0 ? cats[cycleIdx] ?? 'all' : 'all';
   const catCount = useMemo(() => { const m = new Map<string, number>(); for (const c of cityPool) m.set(c.category, (m.get(c.category) ?? 0) + 1); return m; }, [cityPool]);
-  const results = useMemo(() => applyFilters(COMMUNITIES, f, origin), [f, origin]);
+  const results = useMemo(() => applyFilters(all, f, origin), [all, f, origin]);
   const nActive = activeFilterCount(f);
   const pristine = nActive === 0 && !f.q;
   const featured = useMemo(() => cityPool.filter((c) => c.featured).slice(0, 8), [cityPool]);
-  const fallback: Scored[] = useMemo(() => results.length ? [] : applyFilters(COMMUNITIES, { ...DEFAULT_FILTERS, city: f.city, category: f.category }, origin).slice(0, 3), [results.length, f.city, f.category, origin]);
-  const cityCount = useMemo(() => new Set(COMMUNITIES.map((c) => c.city).filter((c) => c !== ONLINE_CITY)).size, []);
+  const fallback: Scored[] = useMemo(() => results.length ? [] : applyFilters(all, { ...DEFAULT_FILTERS, city: f.city, category: f.category }, origin).slice(0, 3), [all, results.length, f.city, f.category, origin]);
+  const cityCount = useMemo(() => new Set(all.map((c) => c.city).filter((c) => c !== ONLINE_CITY)).size, [all]);
+  const cityCounts = useMemo(() => { const m = new Map<string, number>(); for (const c of all) for (const [k, group] of Object.entries(CITY_GROUPS)) if (group.includes(c.city)) m.set(k, (m.get(k) ?? 0) + 1); return m; }, [all]);
 
   const chip = (label: string, on: boolean, onClick: () => void, extra?: React.ReactNode) => (
     <button type="button" className="cop-pill" aria-pressed={on} onClick={onClick}>{label}{extra}</button>
@@ -273,7 +279,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
                   else update({ q: f.q === q ? '' : q });
                 }}>{q}</button>
               ))}
-              <span className="sub">{COMMUNITIES.length} communities · {cityCount} cities</span>
+              <span className="sub">{all.length} communities · {cityCount} cities</span>
             </div>
             <PlatformDock counts={platformCount} value={f.join} onPick={(p) => update({ join: p })} />
             {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
@@ -356,10 +362,16 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
             <LayoutGroup>
               <motion.div className="cop-grid" layout={!reduce}>
                 <AnimatePresence mode="popLayout" initial={false}>
-                  {results.map((c, i) => (
+                  {results.slice(0, limit).map((c, i) => (
                     <CommunityCard key={c.slug} c={c} index={i} saved={saved.has(c.slug)} onSave={toggleSave} onToast={say} />
                   ))}
                 </AnimatePresence>
+                {results.length > limit && (
+                  <div className="cop-more">
+                    <button type="button" className="cop-btn cop-btn-primary" onClick={() => setLimit((l) => l + PAGE * 2)}>Show {Math.min(PAGE * 2, results.length - limit)} more</button>
+                    <span>{limit} of {results.length}</span>
+                  </div>
+                )}
                 {results.length === 0 && (
                   <div className="cop-empty">
                     <h3>Nothing matches that exactly.</h3>
@@ -389,7 +401,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
               <div className="cop-picks" aria-label="Your saved picks">
                 <span className="lbl">Your picks · {saved.size}</span>
                 <div className="row">
-                  {COMMUNITIES.filter((c) => saved.has(c.slug)).slice(0, 12).map((c) => (
+                  {all.filter((c) => saved.has(c.slug)).slice(0, 12).map((c) => (
                     <Link key={c.slug} href={`/communities/${c.slug}`} title={c.name}><Mark c={c} size={40} /></Link>
                   ))}
                 </div>
@@ -413,7 +425,7 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
                 <button type="button" className="cop-btn cop-btn-accent cop-btn-sm" onClick={() => { locate(false); }} disabled={geo.busy}><LocateFixed size={14} /> Use my location</button>
                 <span className="status">{geo.busy && <span className="cop-spin" />}{geo.msg ?? 'We only use it to sort by distance. Nothing is stored online.'}</span>
               </div>
-              <CityPicker current={f.city} onPick={pickCity} />
+              <CityPicker current={f.city} onPick={pickCity} counts={cityCounts} />
               <div className="cop-fgroup">
                 <h4>Area in {f.city}</h4>
                 <div className="areas">
@@ -505,10 +517,8 @@ export function Marketplace({ initial, lockCity = false, title }: Props) {
 }
 
 // ─── City picker: metros as chips, everything else searchable ─────
-const CITY_COUNT = new Map<string, number>();
-for (const c of COMMUNITIES) for (const [k, group] of Object.entries(CITY_GROUPS)) if (group.includes(c.city)) CITY_COUNT.set(k, (CITY_COUNT.get(k) ?? 0) + 1);
 
-function CityPicker({ current, onPick }: { current: string; onPick: (city: string) => void }) {
+function CityPicker({ current, onPick, counts: CITY_COUNT }: { current: string; onPick: (city: string) => void; counts: Map<string, number> }) {
   const [q, setQ] = useState('');
   const norm = (s: string) => s.toLowerCase();
   const others = ALL_CITIES.filter((c) => !METRO_CITIES.includes(c) && (CITY_COUNT.get(c) ?? 0) > 0);

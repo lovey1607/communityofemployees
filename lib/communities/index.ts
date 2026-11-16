@@ -339,9 +339,9 @@ export function bySlug(slug: string): Community | undefined {
   return COMMUNITIES.find((c) => c.slug === slug);
 }
 
-export function similarTo(c: Community, n = 4): Community[] {
+export function similarTo(c: Community, n = 4, list: Community[] = COMMUNITIES): Community[] {
   const cities = CITY_GROUPS[c.city] ?? [c.city];
-  return COMMUNITIES
+  return list
     .filter((o) => o.slug !== c.slug && cities.includes(o.city))
     .map((o) => ({ o, s: (o.category === c.category ? 5 : 0) + o.tags.filter((t) => c.tags.includes(t)).length + (o.city === c.city ? 1 : 0) }))
     .sort((a, b) => b.s - a.s)

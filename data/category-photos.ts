@@ -160,7 +160,7 @@ export const CATEGORY_PHOTOS: Record<CommunityCategory, Photo[]> = {
 
 /** Sized Unsplash URL (their CDN resizes on the fly). */
 export const photoSrc = (p: Photo, w = 640, h?: number) =>
-  `https://images.unsplash.com/photo-${p.id}?auto=format&fit=crop&q=70&w=${w}${h ? `&h=${h}` : ''}`;
+  `https://images.unsplash.com/photo-${p.id}?auto=format&fit=crop&q=60&w=${w}${h ? `&h=${h}` : ''}`;
 export const photoPage = (p: Photo) => `https://unsplash.com/photos/${p.page}`;
 
 /** Deterministic pick so the same listing always shows the same photo. */

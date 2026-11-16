@@ -246,3 +246,44 @@ export type VendorProfileRow = typeof vendorProfiles.$inferSelect;
 export type RfpRow = typeof rfps.$inferSelect;
 export type BidRow = typeof bids.$inferSelect;
 export type VendorReviewRow = typeof vendorReviews.$inferSelect;
+
+// ─── Community of People (drizzle/0003_communities.sql) ─────
+export const communities = pgTable(
+  'communities',
+  {
+    id: text('id').primaryKey(),
+    slug: text('slug').notNull(),
+    name: text('name').notNull(),
+    category: text('category').notNull(),
+    city: text('city').notNull(),
+    status: text('status').$type<'approved' | 'unverified' | 'hidden'>().notNull().default('approved'),
+    pricingType: text('pricing_type').notNull().default('unknown'),
+    joinPlatform: text('join_platform').notNull().default('other'),
+    data: jsonb('data').$type<Record<string, unknown>>().notNull(),
+    origin: text('origin').$type<'admin' | 'lead'>().notNull().default('admin'),
+    updatedBy: text('updated_by'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('communities_slug_key').on(t.slug)]
+);
+
+export const communitySubmissions = pgTable('community_submissions', {
+  id: text('id').primaryKey(),
+  kind: text('kind').$type<'new' | 'update' | 'remove'>().notNull(),
+  targetSlug: text('target_slug'),
+  payload: jsonb('payload').$type<Record<string, unknown>>().notNull().default({}),
+  submitterName: text('submitter_name').notNull(),
+  submitterEmail: text('submitter_email').notNull(),
+  submitterRole: text('submitter_role').$type<'organiser' | 'co-organiser' | 'member' | 'other'>().notNull().default('organiser'),
+  message: text('message'),
+  status: text('status').$type<'pending' | 'approved' | 'rejected'>().notNull().default('pending'),
+  reviewNote: text('review_note'),
+  reviewedBy: text('reviewed_by'),
+  reviewedAt: timestamp('reviewed_at', { withTimezone: true }),
+  ip: text('ip'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type CommunityRow = typeof communities.$inferSelect;
+export type CommunitySubmissionRow = typeof communitySubmissions.$inferSelect;

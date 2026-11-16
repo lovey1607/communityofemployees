@@ -1,6 +1,6 @@
 'use client';
-// components/communities/CursorBuddy.tsx — the mouse pointer becomes the
-// current vibe: 📚 for books, 🏓 for sports, 👟 for running… Over a card it
+// components/communities/CursorBuddy.tsx — the normal mouse pointer stays;
+// on a click, a small emoji of the current vibe pops beside it: 📚 for books, 🏓 for sports, 👟 for running… Over a card it
 // turns into that card's emoji; over anything clickable it grows and gets a
 // ring. Picking a category fires a little emoji burst.
 //
@@ -22,29 +22,38 @@ export function CursorBuddy({ emoji }: { emoji: string }) {
     const fine = window.matchMedia('(pointer: fine)').matches;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!fine || !el.current) return;
-    const root = document.documentElement;
-    root.classList.add('cop-cursor');
-    let x = -100, y = -100, raf = 0;
+    // Native cursor stays. The emoji only pops up beside it for a moment
+    // when the visitor clicks something (and when the vibe changes).
+    let x = -100, y = -100, raf = 0, hideT: ReturnType<typeof setTimeout> | null = null;
+    const show = (ms = 1100) => {
+      el.current?.classList.remove('off');
+      if (hideT) clearTimeout(hideT);
+      hideT = setTimeout(() => el.current?.classList.add('off'), ms);
+    };
+    (window as unknown as { __copBuddyShow?: (ms?: number) => void }).__copBuddyShow = show;
     const paint = () => { raf = 0; if (el.current) el.current.style.transform = `translate3d(${x}px, ${y}px, 0)`; };
     const move = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
       x = e.clientX; y = e.clientY;
       if (!raf) raf = requestAnimationFrame(paint);
-      const t = e.target as Element | null;
-      const field = t?.closest('input, textarea, select, iframe');
-      const hot = t?.closest('a, button, [role="button"], [role="tab"], label, summary');
-      const card = t?.closest<HTMLElement>('[data-cur]');
-      const next = card?.dataset.cur ?? base.current;
-      if (face.current && face.current.textContent !== next) {
-        face.current.textContent = next;
-        face.current.animate?.([{ transform: 'scale(.4) rotate(-20deg)' }, { transform: 'scale(1) rotate(0)' }], { duration: reduce ? 0 : 220, easing: 'cubic-bezier(.2,.9,.3,1.4)' });
-      }
-      el.current!.classList.toggle('hot', !!hot);
-      el.current!.classList.toggle('off', !!field);
     };
     const leave = () => el.current?.classList.add('off');
-    const enter = () => el.current?.classList.remove('off');
-    const down = () => el.current?.classList.add('press');
+    const enter = () => { /* stays hidden until a click */ };
+    const down = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      const t = e.target as Element | null;
+      if (t?.closest('input, textarea, select, iframe')) return;
+      const hot = t?.closest('a, button, [role="button"], [role="tab"], label, summary, [data-cur]');
+      if (!hot) return;
+      const next = t?.closest<HTMLElement>('[data-cur]')?.dataset.cur ?? base.current;
+      if (face.current) {
+        face.current.textContent = next;
+        face.current.animate?.([{ transform: 'scale(.3) rotate(-25deg)' }, { transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: reduce ? 0 : 320, easing: 'ease-out' });
+      }
+      x = e.clientX; y = e.clientY; paint();
+      el.current?.classList.add('press');
+      show();
+    };
     const up = () => el.current?.classList.remove('press');
     const onBurst = (ev: Event) => {
       if (reduce) return;
@@ -70,7 +79,7 @@ export function CursorBuddy({ emoji }: { emoji: string }) {
     addEventListener('pointerup', up);
     addEventListener('cop:burst', onBurst);
     return () => {
-      root.classList.remove('cop-cursor');
+      if (hideT) clearTimeout(hideT);
       removeEventListener('pointermove', move);
       document.removeEventListener('pointerleave', leave);
       document.removeEventListener('pointerenter', enter);
@@ -86,6 +95,7 @@ export function CursorBuddy({ emoji }: { emoji: string }) {
     if (face.current && face.current.textContent !== emoji) {
       face.current.textContent = emoji;
       face.current.animate?.([{ transform: 'scale(.3) rotate(-30deg)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out' });
+      (window as unknown as { __copBuddyShow?: (ms?: number) => void }).__copBuddyShow?.(1400);
     }
   }, [emoji]);
 
