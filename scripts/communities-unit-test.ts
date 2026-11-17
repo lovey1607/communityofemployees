@@ -1,7 +1,8 @@
 // scripts/communities-unit-test.ts — pure-function checks for the communities
 // marketplace. Run: npx tsx scripts/communities-unit-test.ts
 import assert from 'node:assert/strict';
-import { COMMUNITIES, applyFilters, DEFAULT_FILTERS, distanceKm, filtersToParams, paramsToFilters, markFor, nearestCity, matchesQuery } from '../lib/communities';
+import { COMMUNITIES } from '../lib/communities/data';
+import { applyFilters, DEFAULT_FILTERS, distanceKm, filtersToParams, paramsToFilters, markFor, nearestCity, matchesQuery } from '../lib/communities';
 
 let n = 0; const t = (name: string, fn: () => void) => { fn(); n++; console.log('✓', name); };
 

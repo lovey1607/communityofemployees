@@ -1,0 +1,94 @@
+Los Angeles | meet-friends-los-angeles | Meet Friends Los Angeles | social | New in LA Club | Fri 20 Nov | online | Making new friends across Los Angeles.
+Los Angeles | los-angeles-startup-pitch-networking-group | LA Startup Pitch & Networking | startup | Startups, Investors & Innovators Pitch Night | Tue 17 Nov | in-person | Startup pitch nights with investors.
+Los Angeles | rust-los-angeles | Rust Los Angeles | tech | Rust LA November | Tue 17 Nov | in-person | Rust programming meetup.
+Los Angeles | scriptcamp | skillca.mp Script Jam | creative | Script Jam — write a short screenplay in an hour | Sun 6 Dec | in-person | Free one-hour screenplay writing jams.
+Los Angeles | los-angeles-hiking-group | Los Angeles Hiking Group | outdoors | Easy Night Walk around Silverlake | Fri 20 Nov | in-person | Group hikes and walks around LA.
+Los Angeles | bringyourownpen | Bring Your Own Pen: Community Art Group | creative | Drink and Draw @ Stories Books & Cafe | Thu 19 Nov | in-person | Drink-and-draw nights for artists of any level.
+Los Angeles | south-pasadena-craft-circle | South Pasadena Craft Circle | creative | Saturday Picnic | Sat 21 Nov | in-person | Crafting circle with picnics and meetups.
+Los Angeles | business-bestie | The Besties: Women's Networking | women | Coffee Chats with the Besties | Fri 20 Nov | in-person | Women networking over coffee.
+Los Angeles | vibe-code-la | Vibe Code LA | tech | Vibe Code LA Meetup | Mon 7 Dec | in-person | Coding meetup for AI-assisted builders.
+Los Angeles | board-game-and-brews-meetup | Board Game and Brew Meetup | games | Board Games at The Original Farmers' Market | Fri 20 Nov | in-person | Board games at local venues.
+Los Angeles | shutupandwritela | Shut Up & Write! Los Angeles | books | Shut Up & Write in Los Feliz | Wed 18 Nov | in-person | Weekly focused writing sessions.
+Los Angeles | vegansofla | VegansOfLA | food | Vegan Potluck on Thanksgiving | Thu 26 Nov | in-person | Vegan potlucks, picnics and meet & greets.
+Los Angeles | japanese-sake-and-culture-meetup | Japanese Sake, Shochu & Spirits Group | food | Sake Sampling at Astro | Sat 21 Nov | in-person | Tastings exploring Japanese sake and culture.
+Seattle | psppython | Puget Sound Programming Python (PuPPy) | tech | Python talk night at F5 | Wed 18 Nov | in-person | Seattle's Python community talks.
+Seattle | sustainablecapitolhill | Sustainable Capitol Hill | cause | Intro to Woodshop | Sun 22 Nov | in-person | Neighbourhood sustainability workshops and projects.
+Seattle | seattle-coffee-and-chess | Seattle Coffee and Chess | games | Friday Night Chess at Nudibranch | Fri 20 Nov | in-person | Casual chess over coffee.
+Seattle | silent-book-club-seattle | Silent Book Club Seattle | books | Silent Book Club at 1 Hotel | Wed 18 Nov | in-person | Read quietly together, chat after.
+Seattle | seattle-spanish-meetup-group | Seattle Spanish Meetup (Capitol Hill) | language | Spanish conversation | Tue 17 Nov | in-person | Spanish conversation practice.
+Seattle | botc-seattle | Blood on the Clocktower Seattle | games | Clocktower at Elysian | Thu 19 Nov | in-person | Social-deduction game nights, new players welcome.
+Seattle | seattlephotowalks | Seattle Photowalks | creative | Pike Place Market for the Holidays | Sat 5 Dec | in-person | Group photo walks.
+Seattle | gearhouse-events | Gearhouse Community Events | outdoors | Snowshoeing 101 | Mon 23 Nov | in-person | Hikes and beginner outdoor classes.
+Seattle | seattle-cocktail-club | Seattle Cocktail Club | food | Happy Hour at Snow Globe | Mon 14 Dec | in-person | Exploring bars and cocktail happy hours.
+Seattle | seattle-data-science-meetup-group | Seattle Data Science Meetup | tech | Data Professionals Friday Coffee | Fri 20 Nov | in-person | Data folks meeting over coffee.
+Seattle | seattle-beginner-pickleball | Seattle Beginner Pickleball | sports | Pickleball for Beginners at Green Lake | Thu 19 Nov | in-person | Beginner-friendly pickleball.
+Seattle | producttank-seattle | ProductTank Seattle | tech | Happy Hour Networking | Wed 18 Nov | in-person | Product management meetups.
+Austin | atx-startup-network | ATX Startup Network | startup | End-of-Year Mega Tech Social | Wed 18 Nov | in-person | Founders and tech folks in Austin.
+Austin | i-love-austin-but-i-need-some-f-g-friends | I Love Austin, But I Need Some Friends | social | Singles Mingle | Sat 21 Nov | in-person | Social events for making local friends.
+Austin | austinhorrormovieclub | Austin Horror Movie Club | creative | Happy Horror Hour | Wed 18 Nov | in-person | Watch and discuss horror films.
+Austin | games-and-grub-austin | South Austin Games & Grub | games | Weekly Board Games at Pinthouse | Wed 18 Nov | in-person | Weekly board games with food and drinks.
+Austin | the-board-walks | The Board Walks — Austin | outdoors | Walk & Talk About Life's Big Questions | Sat 21 Nov | in-person | Walks with big-question conversations.
+Austin | meet-and-hike | Meet and Hike ATX | outdoors | Hikes & Bites | Sun 22 Nov | in-person | Trail hikes followed by food.
+Austin | new-in-austin | New To Austin 20/30s | social | Dinner, Drinks and New Friends | Fri 20 Nov | in-person | Helping newcomers in their 20s/30s make friends.
+Austin | journey-landandsoul | ATX Women's Hikes | women | Women's Hike at Barton Creek Greenbelt | Tue 1 Dec | in-person | Monthly hikes for women.
+Austin | meetup-group-naljkhzl | Austin Foodies | food | Austin Foodies @ Oria | Thu 19 Nov | in-person | Group meals at Austin restaurants.
+Austin | atxstories | Austin New Yorker Short Story Readers | books | Weekly Short Story Readers Club | Tue 17 Nov | in-person | Weekly discussion of New Yorker short stories.
+Austin | history-matters | History Matters: Book Club With Beer | books | World War II at Sea | Sat 21 Nov | in-person | History book club over drinks.
+Austin | austin-acts-of-kindness | Austin Acts of Kindness | cause | HEB Feast of Sharing volunteer shift | Tue 24 Nov | in-person | Volunteering together around Austin.
+Boston | unplugged-boston | Unplugged Gaming Boston | games | Game Night at CanalSide | Tue 17 Nov | in-person | Board game and RPG community.
+Boston | sober-curious-circle-boston-south-shore | Sober & Curious Boston | social | Holiday Lights Walk | Wed 9 Dec | in-person | Alcohol-free socials.
+Boston | the-boston-security-meetup | Boston Security Meetup | tech | November Meetup | Thu 19 Nov | in-person | Information-security meetup.
+Boston | boston-hackers | Boston Hackers | tech | December Meetup | Thu 3 Dec | in-person | Hackers and builders meetup.
+Boston | bostonsubtleasians | Boston Subtle Asians | social | 5-Year Birthday Dance Party | Sat 21 Nov | in-person | Socials for the Asian diaspora.
+Boston | boston-random-acts-of-connection | Boston Random Acts of Connection | social | Open Studios outing | Sun 22 Nov | in-person | Outings for making local connections.
+Boston | code-for-boston | Code for Boston | civic | Hack Night + New Member Orientation | Tue 17 Nov | in-person | Civic-tech volunteers building tools for good.
+Boston | somerville-movie-club | Somerville Movie Club | creative | Movie Trivia @ Somerville Theater | Tue 17 Nov | in-person | Film lovers' meetups.
+Boston | speak-up-cambridge | Speak Up Cambridge | professional | Sparkle When You Speak | Wed 9 Dec | hybrid | Public speaking practice.
+Boston | boardgames-boston | Beantown Gamers | games | Light Game Night | Thu 19 Nov | in-person | Weekly board game nights.
+Boston | boston-vegan-meetup | Boston Vegan Meetup | food | Monthly Vegan Meetup | Sun 22 Nov | in-person | Monthly vegan food socials.
+Chicago | illinois-prairie-postgresql-user-group | Illinois Prairie PostgreSQL User Group | tech | PG_STATS talk | Tue 17 Nov | in-person | PostgreSQL user group.
+Chicago | pydatachi | PyData Chicago | tech | How AI Can Enhance Survey Research | Thu 19 Nov | hybrid | Python data community.
+Chicago | chicago-travel-talk-20s-40s | Chicago Travel Talk 20s–40s | social | Midday Coffee Break | Sat 21 Nov | in-person | Travel chats and meetups.
+Chicago | chicago-backpackers | Chicago Backpackers | outdoors | Monthly Social | Wed 18 Nov | in-person | Backpacking trips and socials.
+Chicago | chicago-spanish-language | Chicago Spanish Language Meetup | language | Loop Spanish Practice @ Harold Washington Library | Sun 22 Nov | in-person | Spanish practice.
+Chicago | northwest-side-chicago-board-game-friends | Northwest Side Board Game Friends | games | Game Night at Stay & Play | Thu 19 Nov | in-person | Monthly board game nights.
+Chicago | ao3-chicago | AO3 Chicago — Fic Lovers' Book Club | books | Fic Writing Session @ Harold Washington Library | Sat 21 Nov | in-person | Fanfiction book club and writing sessions.
+Chicago | south-side-gaming | South Side Gaming | games | Pilsen Monthly Game Night | Wed 18 Nov | in-person | Monthly game nights.
+Chicago | chicagoveg | ChicagoVeg | food | Vegan Thanksgiving Potluck | Sat 21 Nov | in-person | Vegetarian and vegan community events.
+Chicago | chinese-english-language-corner | Chinese/English Language Corner | language | Language Exchange @ Chinese American Museum | Sat 21 Nov | in-person | Chinese–English exchange.
+Chicago | chicago-sews | Chicago Sews | creative | Shirt/Dress Sewlebration | Sat 5 Dec | in-person | Sewing community.
+Chicago | chicago-film-lover-exchange | Chicago Film Lover Meetup | creative | Almodóvar at the Siskel + dinner | Fri 27 Nov | in-person | Film screenings and discussion.
+Washington DC | ai-innovators-network-tysons-meetup-dc-nova-md | AI Innovators Network (DC/VA/MD) | tech | AI Policy and the Race for Global Rules | Wed 18 Nov | in-person | AI talks across the DMV.
+Washington DC | profs-and-pints-meetup | Profs and Pints DC | creative | The Tragedy of the Kennedy Center | Tue 17 Nov | in-person | Professor talks in bars.
+Washington DC | the-third-place-rockville-20s-and-30s-social-group | The Third Place (20s & 30s) | social | Logan Circle After Dark | Fri 20 Nov | in-person | Socials for 20s and 30s.
+Washington DC | dmv-dnd-meetup | DMV D&D Group | games | Tavern Board Game Night | Wed 18 Nov | in-person | D&D and tabletop gaming.
+Washington DC | meetup-group-dpbbopsc | Cocktails and Coloring | creative | Cocktails & Coloring @ Ballston | Tue 17 Nov | in-person | Colouring-book socials.
+Washington DC | dc-urban-walkers | DC Urban Walkers | outdoors | Capitol Hill & National Mall Walk | Wed 18 Nov | in-person | Urban walks around DC.
+Washington DC | dc-science-fiction-book-club | D.C. Science Fiction Book Club | books | Klara and the Sun | Wed 18 Nov | in-person | Monthly sci-fi book club.
+Washington DC | arlington-coffee-and-chill-meetup | Arlington Coffee and Chill | social | Coffee Meetup #52 | Sat 21 Nov | in-person | Relaxed coffee meetups.
+Washington DC | writers-hithe | Writers' Hithe | creative | November Writers' Meetup | Sun 22 Nov | in-person | Writers' meetup.
+Washington DC | washington-quantum-computing-meetup | Washington Quantum Computing Meetup | tech | Quantum-Classical Systems Engineering | Sun 22 Nov | in-person | Quantum computing talks.
+Washington DC | dmv-social-20-s-40-s | DMV Social 20s to 40s | social | Meet and Greet at Hyde Social | Fri 20 Nov | in-person | Socials for 20s to 40s.
+Washington DC | latemorninghikers | Late Morning DC Hikers | outdoors | November Happy Hour | Thu 19 Nov | in-person | Hikes that start at a civilised hour.
+Miami | professionalworkersofmiami | Professional Workers of Miami | professional | BOHO House Happy Hour | Fri 20 Nov | in-person | Professional happy hours.
+Miami | miami-downtown-dining | Miami Downtown Dining | food | Picanha 305 | Tue 17 Nov | in-person | Group dinners downtown.
+Miami | kickback-south-florida | Kickback South Florida | social | Brickell Happy Hour | Wed 18 Nov | in-person | Socials and happy hours.
+Miami | intl-cafe-miami | Int'l Café Miami | language | Language Exchange | Sat 21 Nov | in-person | International language exchange.
+Miami | miami-startup-pitch-and-networking-group | Miami Startup Pitch & Networking | startup | Pitch and Networking Event | Tue 17 Nov | in-person | Startup pitch nights.
+Miami | street-photography-miami-beach | Street Photography — Miami Beach | creative | Photowalk — Vice City Stockyard | Sun 29 Nov | in-person | Street photography walks.
+Miami | south-florida-20s-30s-40s-social-adventures | Alex's 20s/30s/40s Social Adventures | social | Holiday Crawl | Fri 11 Dec | in-person | Social outings for adults.
+Miami | one-love-fun-volunteer-events | One Love Fun Volunteer Events | cause | Social Walks for Shelter Dogs | Sun 22 Nov | in-person | Fun volunteering and socials.
+Miami | miami-french-speaking-community-meetup-group | Miami French Speaking Community | language | On parle français | Sat 21 Nov | in-person | French conversation meetups.
+Miami | miami-fitness-wellness-events-with-sweatpals | Miami Fitness & Wellness (Sweatpals) | fitness | Sunset Run at Club Studio | Tue 17 Nov | in-person | Group runs and workouts.
+Miami | bigcypress | Florida Trail Association — Big Cypress | outdoors | Crandon Park Hike | Sun 29 Nov | in-person | Hikes and trail days.
+Miami | volo-miami | Volo Miami | sports | Pickleball Mixer at Regency Padel | Wed 18 Nov | in-person | Adult social sports leagues.
+Vancouver | yatta-canada | YATTA! Canada Language Exchange | language | Social & Language Exchange | Tue 17 Nov | in-person | Weekly English–Japanese exchange socials.
+Vancouver | new-not-so-new-in-vancouver | New and Not So New in Vancouver | social | New & Not So New in Vancouver | Wed 25 Nov | in-person | Newcomers and locals connecting.
+Vancouver | vd-vancouver-fraser-valley-digital | Vancouver & Fraser Valley Digital | tech | Digital Networking Evening | Tue 17 Nov | in-person | Digital professionals networking.
+Vancouver | vancouver-meetup-group | Vancouver Curiosity Club | creative | Eastside Culture Crawl outing | Sun 22 Nov | in-person | Culture, art and talks outings.
+Vancouver | vancouver-20s-to-40s-singles-fun-friendships-meetup | Vancouver 20s–40s Singles & Friendships | dating | Fast Friends at Alibi Room | Sat 28 Nov | in-person | Socials for meeting new people.
+Vancouver | wasabi | Wasabi Picnic & Language Exchange | language | Japanese–English Exchange | Tue 17 Nov | in-person | Japanese–English exchange.
+Vancouver | connectmore | ConnectMore — VanCity Social Club | social | Community building meetup | Sun 22 Nov | in-person | Community-building socials.
+Vancouver | vancouver-pub-nights | Vancouver Pub Nights | social | Pub Night at Fionn MacCool's | Thu 19 Nov | in-person | Fortnightly pub nights.
+Vancouver | canadays-eng-jp-exchange | Canadays English Social | games | Board Game Night | Tue 17 Nov | in-person | Beginner-friendly English socials with board games.
+Vancouver | vanawsug | Vancouver AWS User Group | tech | Year-End Celebration | Wed 9 Dec | in-person | AWS user group.

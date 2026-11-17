@@ -1,0 +1,60 @@
+Mexico City | awsugcdmx | AWS User Group Ciudad de México | tech | From Serverless to AI | Thu 26 Nov | in-person | AWS community in CDMX.
+Mexico City | thedatapub | The Data Pub | tech | AI agents in production for LatAm | Wed 25 Nov | hybrid | Data and AI talks.
+Mexico City | ai-cdmx | AI/IA CDMX | tech | Where Did My Paycheck Go? | Tue 17 Nov | in-person | AI community in Mexico City.
+Mexico City | product-management-society-cdmx-chapter | Product Management Society CDMX | professional | PM networking in Roma Norte | Thu 19 Nov | in-person | Networking for product managers.
+Mexico City | neverwinter-free-parties-mexico | Neverwinter Free Parties Mexico | food | Free cooking masterclass (Roma Norte) | Sat 21 Nov | in-person | Free cooking classes and socials.
+Mexico City | mob-mexico-on-board | México on Board — Board Games CDMX | games | MoB Sur — Parque Hundido | Tue 17 Nov | in-person | Board-game meetups across the city.
+Mexico City | silent-book-club-cdmx | Silent Book Club CDMX | books | Silent Book Club CDMX | Sun 22 Nov | in-person | Silent reading socials.
+Mexico City | huellas-volunteering | Huellas Volunteering CDMX | cause | Volunteering with elders and children | Sat 5 Dec | in-person | Volunteer days with elders and children.
+Mexico City | reading-party | Reading Party MX | books | Reading Party — Quotes edition | Sat 28 Nov | in-person | Reading parties.
+Mexico City | pub-trivia-nights-napoles-mexico-city | Pub Trivia Nights Nápoles | games | 90s & 00s Music Pub Quiz | Tue 24 Nov | in-person | Pub quiz nights.
+São Paulo | sao-paulo-dbt-meetup-group | São Paulo dbt Meetup | tech | 5th Community dbt meetup | Tue 17 Nov | in-person | dbt data community.
+São Paulo | grafana-and-friends-sao-paulo | Grafana & Friends São Paulo | tech | Grafana Weekend 2nd ed. | Sat 28 Nov | in-person | Observability and DevOps community.
+São Paulo | socializandoemsampa | Socializando em Sampa | social | Vinho no Boteco | Wed 25 Nov | in-person | Socials and outings.
+São Paulo | walk-and-talk-english-conversations-and-connections | Walk and Talk — English Conversations | language | Morning Walk & English Conversation | Sat 28 Nov | in-person | English practice on morning walks.
+São Paulo | aidev-saopaulo | São Paulo AI Developer Group | tech | Enterprise AI meetup | Thu 19 Nov | in-person | AI developers community.
+São Paulo | multilingo | MultiLingo São Paulo Language Exchange | language | Multilingo Thursday Night | Thu 19 Nov | in-person | Weekly language exchange.
+São Paulo | sao-paulo-data-science-odsc | ODSC AI São Paulo | tech | AI Skills Accelerator | Wed 25 Nov | in-person | Data science and AI community.
+Buenos Aires | dataenginear | dataengine.ar | tech | Meetup #03 | Thu 26 Nov | in-person | Data engineering meetup.
+Buenos Aires | good-times-buenos-aires | Good Times Buenos Aires | games | BA Trivia Pub Quiz (English) | Tue 17 Nov | in-person | English pub quizzes and socials.
+Buenos Aires | baconnect | Buenos Aires Connect | professional | Networking in Palermo | Sun 22 Nov | in-person | Networking socials.
+Buenos Aires | aws-data-ai | AWS Data User Group Argentina | tech | Hands-on Workshop #2 | Wed 2 Dec | in-person | AWS data community.
+Buenos Aires | sysarmy | Sysarmy | tech | #AdminBirras year-end | Thu 3 Dec | in-person | Sysadmin community beers and talks.
+Buenos Aires | meetup-group-csbztlml | Mafia Club Buenos Aires | games | Blood on the Clocktower | Thu 19 Nov | in-person | Social-deduction game nights.
+Buenos Aires | staurday-morning-running-club | Saturday Morning Running Club | running | Run for your coffee | Sat 21 Nov | in-person | Saturday runs ending at coffee.
+Buenos Aires | huellas-volunteering | Huellas Volunteering Buenos Aires | cause | Volunteering with children and elders | Sat 5 Dec | in-person | Volunteer days.
+Buenos Aires | naveguenos-en-velero | Naveguemos en Velero | outdoors | Sailing from Palermo | Sun 22 Nov | in-person | Group sailing outings.
+Cape Town | cape-town-ms-dev-user-group | Cape Town MS Developer User Group | tech | .NET Conf South Africa | Sat 28 Nov | in-person | .NET developers.
+Cape Town | cape-town-scrum-user-group-sugsa | Scrum User Group Cape Town (SUGSA) | professional | Your new teammate is a bot | Thu 26 Nov | in-person | Agile practitioners.
+Cape Town | wordpress-cape-town | WordPress Cape Town | tech | Breakfast hack | Wed 18 Nov | in-person | WordPress community.
+Cape Town | outdoor-cape-town | Outdoor Cape Town | outdoors | Cecilia Forest to Eagle's Nest | Sat 21 Nov | in-person | Hikes for all levels.
+Cape Town | boland-adventures | Boland Adventures | outdoors | Frustration Gorge to Disa Gorge | Sat 5 Dec | in-person | Table Mountain adventures.
+Cape Town | lekkerchats | Lekker Chats | social | Lekker Wednesdays @ Ground Zero | Wed 18 Nov | in-person | Weekly conversation socials.
+Cape Town | makers-founders-ct | Makers & Founders CT | startup | Build together #17 | Sat 21 Nov | in-person | Co-working for makers and founders.
+Cape Town | speaking-spanish-cape-town | Speaking Spanish in Cape Town | language | Bebidas en Diciembre | Tue 8 Dec | in-person | Spanish speakers' socials.
+Cape Town | cape-town-hobbyists-meetup-group | Cape Town Hobbies Social Club | creative | Create & Connect Social, Newlands | Sun 29 Nov | in-person | Crafts and hobbies socials.
+Nairobi | microsoft-dynamics-365-kenya | Dynamics 365 & Power Platform Kenya | tech | F&O, Power Platform & AI | Fri 27 Nov | in-person | Microsoft tech user group.
+Nairobi | browserstack-qa-meetup-group-nairobi | BrowserStack QA Meetup Nairobi | tech | Testing Real-World AI Products | Sat 28 Nov | in-person | QA and testing community.
+Nairobi | atlassiancommunitynairobi | Atlassian Community Nairobi | tech | Team '26 Europe Recap | Sat 21 Nov | in-person | Atlassian and agile community.
+Nairobi | nairobi-women-in-machine-learning-data-science | Nairobi Women in ML & Data Science | women | 100 Days of ML | Sun 29 Nov | online | Supporting women in ML and data science.
+Nairobi | nairobi-startup-idea-to-ipo | Nairobi Startup: Idea to IPO | startup | Build a Job-Hunt AI Agent | Thu 3 Dec | online | Founders community.
+Lagos | pydata-lagos | PyData Lagos | tech | P-Values and Statistical Significance | Sat 28 Nov | online | Data science and Python community.
+Lagos | aws-nigeria-user-group | AWS Nigeria User Group | tech | AWS Community Day Nigeria | Sat 12 Dec | online | AWS users across Nigeria.
+Stockholm | stockholm-rust | Stockholm Rust | tech | Rust Meetup @ Lovable | Thu 26 Nov | in-person | Rust community.
+Stockholm | stockholm-mlops-community | Stockholm MLOps Community | tech | #41 AI & Cybersecurity | Thu 19 Nov | in-person | MLOps and AI engineering.
+Stockholm | stockholm-creative-people-meetup | Stockholm Creative People | creative | Collaborative Comic Strips | Sun 22 Nov | in-person | Sketching and creative sessions.
+Stockholm | stockholm-anime-society | Stockholm Anime Society | games | Anime Winter Party | Sat 28 Nov | in-person | Anime fan socials.
+Stockholm | stockholm-storytelling-meetup-group | Stockholm Storytelling (English) | creative | Storytelling after work @ Källarbyn | Wed 25 Nov | in-person | Oral storytelling nights.
+Stockholm | stockholm-board-games-new-friends | Stockholm Board Games & New Friends | games | Board Game Hangout | Sun 29 Nov | in-person | Board games to make friends.
+Stockholm | sthlm-hikers-outdoors-group | Sthlm Hikers | outdoors | Upcoming hike | Mon 30 Nov | in-person | Hiking group.
+Stockholm | stockholm-polyglot-meetup-group | Stockholm Polyglots | language | Polyglot Evening | Tue 24 Nov | in-person | Language learners and polyglots.
+Stockholm | stockholm-roleplaying-guild | Stockholm Roleplaying Guild | games | Open Roleplaying Game Meetup | Sat 21 Nov | in-person | Tabletop RPGs.
+Zurich | drinksandlinks | Drinks and Links Zürich | professional | Drinks & Links at Amboss Rampe | Wed 25 Nov | in-person | Professional networking drinks.
+Zurich | alpine-trekkers-zurich | Alpine Trekkers Zurich | outdoors | Find a travel companion | Fri 20 Nov | in-person | Hikers and outdoor adventurers.
+Zurich | zurich-women-in-business-marketing | Women in Business Zurich | women | Coffee & Walk networking | Sat 5 Dec | in-person | Walks and networking for women.
+Zurich | marketers-in-zurich | Marketers in Zurich | professional | Marketing Meetup Wednesday | Wed 25 Nov | in-person | Marketers' networking.
+Zurich | zurichtogether | Zurich Together | social | After Work Drinks, Ping Pong & Games | Wed 18 Nov | in-person | Socials and after-work events.
+Zurich | zurich-german-conversation-group | Zürich German Conversation Group | language | German conversation | Wed 18 Nov | in-person | German practice.
+Zurich | vegan-and-vegan-curious-in-zurich | Vegan and Vegan-Curious in Zürich | food | Vegan Fondue | Fri 4 Dec | in-person | Vegan food socials.
+Zurich | beach-volleyball-for-beginners | Beach & Fun Volleyball — Beginners | sports | Beachvolley at Beachhalle Zürich Nord | Sat 21 Nov | in-person | Beginner beach volleyball.
+Zurich | zurichbookclub | The Zürich Book Club | books | Anna Karenina | Wed 18 Nov | in-person | Regular book club.

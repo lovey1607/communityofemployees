@@ -43,7 +43,7 @@ export function PublicNav() {
         }}
       >
         {/* Left: Logo + Brand */}
-        <Link href="/" style={{ textDecoration: 'none' }}>
+        <Link href="/teams" style={{ textDecoration: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div
               style={{

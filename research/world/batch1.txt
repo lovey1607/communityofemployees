@@ -1,0 +1,112 @@
+# city | slug | name | category | event | date | mode | what
+San Francisco | friendly-cricket-in-san-francisco | Weekend Cricket in San Francisco | sports | Friendly cricket game | Sun 22 Nov | in-person | Friendly weekend cricket games around the city.
+San Francisco | sf-social-mixers-and-networking | SF Social Mixers and Networking | social | Mixer & Networking Meetup | Thu 3 Dec | in-person | Mixers and networking nights for locals.
+San Francisco | i-wanna-do-it-but-not-alone | I Wanna Do It But Not Alone | social | A Theater Night in San Francisco | Sat 21 Nov | in-person | Plays, shows and outings for people who'd rather not go solo.
+San Francisco | gist-irl | Gist IRL SF | social | 20s & 30s Speed Friending | Mon 23 Nov | in-person | Speed-friending nights for people in their 20s and 30s.
+San Francisco | san-francisco-urban-explorers | San Francisco Urban Explorers | outdoors | 49 Hills Challenge — Walk 2 | Sat 21 Nov | in-person | City walks working through all of San Francisco's hills.
+San Francisco | sf-philosophy-reading-group | San Francisco Philosophy Reading Group | books | Chuang Tzu on Knowledge, Skill, and Letting Go | Wed 18 Nov | in-person | Close reading and discussion of classic philosophy texts.
+San Francisco | monthly-sf-game-development-community | SF Game Development | tech | What If No One Plays My Game? | Wed 18 Nov | in-person | Monthly meetup for indie and studio game developers.
+San Francisco | cookbook-to-table | Cookbook to Table (SF) | food | Holiday Treat Swap | Sun 6 Dec | in-person | Cook from a shared cookbook, then eat together.
+San Francisco | german-56 | SF German Stammtisch | language | Stammtisch at Paprika | Tue 17 Nov | in-person | Regular German-speaking get-together over food and drinks.
+San Francisco | bay-area-millennials-and-gen-z-meetup-group | Bay Area Millennials and Gen Z | social | NightLife at California Academy of Sciences | Thu 3 Dec | in-person | Outings and socials for millennials and Gen Z.
+San Francisco | sf_anime_social_club | SF Anime Social Club | games | Cozy Anime Watch Together | Fri 20 Nov | in-person | Anime watch parties and fan socials.
+San Francisco | sf-code-coffee | San Francisco AI Code and Coffee | tech | SF AI Code and Coffee @ Salesforce Park | Sun 22 Nov | in-person | Weekend co-coding over coffee for AI builders.
+San Francisco | sf-movie-club | San Francisco Movie Club | creative | Monthly Movie Happy Hour | Thu 19 Nov | in-person | Watch and talk films; monthly happy hour.
+San Francisco | sfpython | San Francisco Python Meetup | tech | Agentic Python API — Nov SF Python at Vercel | Wed 18 Nov | in-person | The city's long-running monthly Python meetup.
+San Francisco | sociallanguage | SF Social and Language Lovers | language | SF Social Language Lovers Meet Up | Wed 18 Nov | in-person | Multilingual language exchange socials.
+San Francisco | walking-in-sf | Walking in San Francisco for Health and History | outdoors | Waterfront Walk to Maritime Sites | Sat 28 Nov | in-person | Health walks with a dose of local history.
+San Francisco | sfvegansociety | San Francisco Vegan Society | food | Indoor Climb & Dine | Tue 17 Nov | in-person | Vegan socials, activities and plant-based dinners.
+San Francisco | last-minute-backpackers | Last-Minute Backpackers | outdoors | Yosemite Fall Colors — Camping & Hiking | Fri 20 Nov | in-person | Camping, hiking and backpacking trips out of the Bay.
+San Francisco | the-san-francisco-not-quite-a-book-club-book-club | The SF "Not Quite a Book Club" Book Club | books | Book, Coffee, Chit Chat | Wed 25 Nov | in-person | Bring any book; coffee and conversation.
+San Francisco | sffoodies | San Francisco Foodies | food | Anchovy Bar, family style | Sat 21 Nov | in-person | Group dinners at restaurants around the city.
+San Francisco | spanish-language-meetup | San Francisco Spanish-Language Meetup | language | La Hora Feliz at Muddy Waters Cafe | Fri 20 Nov | in-person | Spanish conversation hours in cafés.
+San Francisco | san-francisco-fantasy-book-club | SF Fantasy and Sci-Fi Book Club | books | Automatic Noodle @ Woods Lowside | Wed 18 Nov | in-person | Monthly fantasy and science-fiction book club.
+San Francisco | slowrunnerssf | Slow Runners Club | running | Sunday Morning Run | Sun 22 Nov | in-person | Relaxed, no-drop group runs for every pace.
+New York | iosoho | iOSoho — NYC iOS Engineers | tech | Server-Driven UI on Top of Design System | Tue 17 Nov | in-person | New York's largest iOS engineering meetup.
+New York | rust-nyc | Rust NYC | tech | Rust NYC: The UnConf 2026 | Fri 4 Dec | in-person | Rust programming talks and meetups.
+New York | ny-young-professionals | NY Young Professionals | professional | NY Professionals Happy Hour | Thu 19 Nov | in-person | Socials and networking for young professionals.
+New York | exploring-nyc-history-and-neighborhoods | Exploring NYC History and Neighborhoods | outdoors | Gilded Age Upper East Side Tour | Fri 20 Nov | in-person | Walking tours of NYC history and architecture.
+New York | nyc-photographers | NYC Photographers | creative | Main Street America — Beacon NY | Sat 28 Nov | in-person | Photo walks, workshops and meetups.
+New York | newyorkportugueselearners | New York Portuguese-Learners Network | language | New York Portuguese Meetup | Tue 17 Nov | in-person | Portuguese practice and cultural exchange.
+New York | ny-pub-and-grub | NY Pub and Grub | social | Make friends over pub and grub | Thu 19 Nov | in-person | Make friends over pub food and drinks.
+New York | language-collective | The Language Collective | language | Tuesday Evening Language Exchange | Tue 17 Nov | in-person | Weekly evening language exchange.
+New York | content-creators-exchange-of-new-york | Content Creators Exchange of New York | creative | Content Creator Party + Networking Mixer | Sat 21 Nov | in-person | Community and mixers for content creators.
+New York | silentbookclubnyc | Silent Book Club NYC | books | Saturday Afternoon at Brooklyn Public Library | Sat 21 Nov | in-person | Read quietly together, chat after.
+New York | boardgame-icebreakers | NYC Boardgame Icebreakers | games | Boardgames at The Hugh, Midtown East | Wed 18 Nov | in-person | Board-game nights for meeting new people.
+New York | thewritinggroup | The Writing Group | creative | Harlem Session | Tue 17 Nov | in-person | Write-together sessions across the city.
+New York | weekend-urban-sketch | Weekend Urban Sketch | creative | Central Park Bethesda Fountain Drawing | Sun 22 Nov | in-person | Weekend urban sketching around New York.
+New York | girlsgoexplorenyc | Girls Go Explore NYC | women | SoHo Girl Club Coffee Walk | Sun 13 Dec | in-person | Women exploring cafés and neighbourhoods together.
+New York | nyc-outdoor-badminton | NYC Outdoor Badminton | sports | Badminton/Pickleball in Central Park | Sat 21 Nov | in-person | Weekly outdoor badminton and pickleball.
+New York | greenspeakers | Greenspeakers Toastmasters | professional | Greenspeakers Winter Social | Thu 3 Dec | in-person | Toastmasters club for practising public speaking.
+New York | loungeasiaamericas | Lounge Asia — New York | social | Asian Background Social (Easy English) | Tue 17 Nov | in-person | Socials for people with an Asian background, in easy English.
+London | sketchbook-london | Sketchbook London | creative | Sketchbook: British Museum | Sun 29 Nov | in-person | Sketching sessions in London museums.
+London | internationalsocialhub | International Social Hub | social | International Social Hub drinks | Sat 21 Nov | in-person | International drinks socials for meeting people.
+London | data-ai-london | Data & AI London | tech | Meetup #18 | Wed 25 Nov | in-person | Meetup for data and AI practitioners.
+London | fun-friendly-london-walks-with-matt | Fun & Friendly London Walks with Matt | outdoors | Spitalfields Walk | Sun 22 Nov | in-person | Friendly guided walks around London.
+London | london-social-circle-20s-30s | London Social Circle — 20s & 30s | social | London Social for 20s & 30s | Wed 18 Nov | in-person | Socials for meeting people in their 20s and 30s.
+London | free-outdoor-trips-from-london | FREE Outdoor Trips From London | outdoors | The Missendens (8 or 13 miles) | Sat 21 Nov | in-person | Free countryside walks reachable by train.
+London | product-pints | Product Pints | tech | Final drinks of 2026 | Tue 24 Nov | in-person | Casual drinks for product people.
+London | london-js | London.js | tech | London.js at Slack | Mon 23 Nov | in-person | Learn, share and use JavaScript.
+London | london-friendship-project | The Great Friendship Project (20s & 30s) | social | Free Social Walk, Games & Pub Trip | Sun 22 Nov | in-person | Free walks, games and pub trips to make friends.
+London | london-east-asian-friends-leaf | London East Asians and Friends — LEAF | social | Gathering @ Mercato Metropolitano | Sat 21 Nov | in-person | Gatherings for East Asians and friends.
+London | japanese-culture-meetup-london | Japanese Culture Meetup — London | language | Monthly Pub Social | Sat 5 Dec | in-person | Monthly socials around Japanese language and culture.
+London | games-friends | Games & Friends | games | Board and Social Games | Sat 21 Nov | in-person | Board games and social games.
+London | weekend-mandarin | London Mandarin & English Exchange | language | Mandarin & English Exchange — Free | Sat 21 Nov | in-person | Free Mandarin–English language exchange.
+London | cityzenlondon | CityZen | social | Christmas Lights & Market Walk | Wed 18 Nov | in-person | Social walks and events around London.
+London | london-museums-a-z-lomaz | London Museums A-Z (LoMAZ) | social | Museum Lates | Fri 20 Nov | in-person | Museum visits and socials for Gen X and millennials.
+Dubai | deepconnectionsdubai | Deep Connections Dubai | social | Deep Connections Dubai | Sun 22 Nov | in-person | Meet-ups for making genuine friends in Dubai.
+Dubai | founders | Founders Network UAE | startup | Investors Chat | Wed 18 Nov | in-person | Founders meeting VCs and angel investors.
+Dubai | dubai-ai | DubAI AI | tech | Dubai AI Meetup | Sat 21 Nov | in-person | Weekly meetup to learn and discuss AI.
+Dubai | hcd-uae | Human Centred Design (HCD) UAE | creative | The State of Design: UAE 2026 | Thu 19 Nov | in-person | Human-centred design community in the UAE.
+Dubai | badminton-lovers-dubai | Badminton Lovers Dubai | sports | Thursday Badminton @ Danube Sports World | Thu 19 Nov | in-person | Weekly evening badminton games.
+Dubai | dubaidata | DubAI and Data Professionals | tech | Agentic AI Masterclass | Thu 19 Nov | in-person | Data and AI professionals meetup.
+Dubai | business-networking-dubai | Dubai Business Networking | professional | Speed Business Networking DIFC | Wed 25 Nov | in-person | Fortnightly speed networking in DIFC.
+Dubai | foundersummit | Dubai Tech Founders Summit | startup | Startup Founders & Entrepreneurs Meetup | Sun 22 Nov | in-person | Weekly meetup for startup founders.
+Dubai | communication-leadership-meetup-group-uae | Communication & Leadership @ BurJuman | professional | Master Public Speaking Through Practice | Thu 26 Nov | in-person | Free public-speaking practice sessions.
+Dubai | adventure-emarat | Adventure Eagles by Adventure Emarat | outdoors | The Viral Valley — Free Morning Hike | Sat 21 Nov | in-person | Free hikes and outdoor adventures across the UAE.
+Dubai | badmintonactive | Badminton Active Dubai | sports | Thursday Advanced Badminton, DIP | Thu 19 Nov | in-person | Advanced badminton sessions.
+Dubai | badminton-for-all | Badminton For All — Dubai | sports | Wednesday Badminton @ Sportsbay Al Karama | Wed 18 Nov | in-person | Badminton for all levels, weekly.
+Dubai | socializinguae | Socializing UAE | social | Make new friends at Pier 7 Marina | Sat 21 Nov | in-person | Fortnightly socials to make new friends.
+Dubai | meetoverchai | MeetOverChai | professional | Dubai Business Networking over chai | Thu 19 Nov | in-person | Weekly business networking over chai.
+Dubai | dubaiboardgamers | Dubai Board Gamers | games | Saturday Board Gaming @ South Market DIFC | Sat 21 Nov | in-person | Weekly Saturday board-gaming.
+Dubai | loungeasiaeurope | Lounge Asia — Dubai | social | Dubai Asian Meetup | Wed 25 Nov | in-person | Fortnightly socials for people with an Asian background.
+Singapore | evening-walks-social-dinners | Evening Walks & Social Dinners | social | Heritage Walk & Orchard Road Light-Up Dinner | Sat 21 Nov | in-person | Evening walks followed by group dinners.
+Singapore | aws-sg | AWS User Group Singapore | tech | AWS User Group Meetup November 2026 | Wed 18 Nov | in-person | Community-run AWS meetups.
+Singapore | meetup-group-iogvppgh | Global Affairs | social | World Affairs Discussion | Sun 22 Nov | in-person | Discussion group on world affairs.
+Singapore | alpine-trekkers-sg | Alpine Trekkers SG | outdoors | Find a travel companion | Fri 20 Nov | in-person | Trekkers and travel companions.
+Singapore | i-walk-i-hike-i-eat-i-travel | I Walk I Hike I Eat I Travel | outdoors | Fort Canning Walk | Sun 22 Nov | in-person | Walks, hikes and food outings.
+Singapore | expats-locals-singapore-meet-people-worth-meeting | Expats & Locals Singapore | social | Friday Social | Fri 27 Nov | in-person | Fortnightly socials for expats and locals.
+Singapore | gdg-singapore | GDG Singapore | tech | DevFest Singapore 2026 | Sat 28 Nov | in-person | Google Developer Group Singapore.
+Singapore | singapore-toastmasters-public-speaking | Singapore Toastmasters Public Speaking | professional | Conquer your Fear of Public Speaking | Wed 18 Nov | in-person | Public speaking and leadership practice.
+Singapore | data-engineering-sg | Data Engineering Singapore | tech | DESG × Confluent × IMDA | Thu 19 Nov | in-person | Data engineering community.
+Singapore | singapore-walking-group | Singapore Walking Group | outdoors | 2-Year Anniversary Walk + Dinner | Sat 28 Nov | in-person | Group walks with a dinner after.
+Singapore | machine-learning-singapore | Machine Learning Singapore | tech | MLSG November | Thu 26 Nov | in-person | Monthly machine learning meetup.
+Singapore | global-ai-singapore-community | Global AI Singapore | tech | SG Agentic Nights | Tue 24 Nov | in-person | AI builders' community nights.
+Singapore | wiserfasterclub | Wiser Faster Club | books | Non-Fiction Book Club | Sat 28 Nov | in-person | Monthly non-fiction book club.
+Singapore | singapore-ros-meetup | Singapore ROS Meetup | tech | SG ROS Meetup | Wed 18 Nov | in-person | Robot Operating System community.
+Toronto | stop-scrolling-start-meeting-people | Stop Scrolling Start Meeting People | social | Friends Like Family: Games & Laughs | Fri 27 Nov | in-person | Games nights to make real friends (not a dating event).
+Toronto | torontojs | Toronto JavaScript | tech | TechTalk — November 2026 | Tue 24 Nov | in-person | JavaScript talks and meetups.
+Toronto | defcon416 | DEFCON Toronto (DC416) | tech | The Cybersecurity of Emerging Technology | Mon 23 Nov | in-person | Cybersecurity community meetups.
+Toronto | the-hip-haus-toronto | The Hip Haus — Young Professionals | professional | Networking Event for Professionals | Thu 19 Nov | in-person | Young professionals networking.
+Toronto | better-english-cafe | Better English Cafe | language | Free Weekly ESL Conversation | Tue 17 Nov | in-person | Free weekly English conversation practice.
+Toronto | north-toronto-moms-group | North Toronto Moms | parents | Holiday Shopping + Drinks | Tue 17 Nov | in-person | Meetups for mums in North Toronto.
+Toronto | toronto-founders-hub | Toronto Founders and Entrepreneurs Hub | startup | Founders Networking at 5 Elements | Sat 21 Nov | in-person | Founders and entrepreneurs networking.
+Toronto | toronto-silent-book-club-meetup-group | Silent Book Club Toronto | books | Silent Bookclub Meeting #99 | Tue 24 Nov | in-person | Read quietly together, chat after.
+Toronto | tilesocial | TILE Language Exchange Toronto | language | Toronto's Biggest Language Exchange Social | Sat 21 Nov | in-person | Big language-exchange socials with a mini class.
+Toronto | downtown-toronto-french-conversation-exchange | Downtown Toronto French Conversation | language | French conversation exchange | Sun 22 Nov | in-person | French–English conversation exchange.
+Toronto | owasp-toronto | OWASP Toronto | tech | OWASP Toronto November Event | Wed 18 Nov | hybrid | Application-security chapter meetups.
+Toronto | toronto-singles-in-the-city | Toronto Singles in the City | dating | Fast Friends: Board Games, 25–45 | Sat 21 Nov | in-person | Socials for singles; board games and mixers.
+Sydney | alcsydney | ALC — Meet & Make Friends in Sydney | social | Free PTE Practice Class | Thu 19 Nov | in-person | Activities to meet people and make friends.
+Sydney | sydney-tech-meetups | Sydney Tech Meetup | tech | Monthly Social Tech Meetup | Thu 26 Nov | in-person | Monthly social for tech folks.
+Sydney | aws-sydney-well-architected-user-group | AWS Sydney Well-Architected User Group | tech | AWS Well-Architected Meetup | Thu 26 Nov | in-person | AWS architecture user group.
+Sydney | hikewalktothebar | We Hike. We Walk… to the Bar | outdoors | Kings Cross to Golden Sheaf | Wed 18 Nov | in-person | Walks that end at a pub.
+Sydney | unhurried-sydney | Unhurried Conversations Sydney | social | Unhurried Conversations — Sunday | Sun 22 Nov | in-person | Slow, one-at-a-time conversations with strangers.
+Sydney | let-s-make-japanese-friends | CSJ — Japanese Meetup Sydney | language | Japanese & English Café Exchange | Fri 20 Nov | in-person | Japanese–English language exchange.
+Sydney | international-sydney-meet-up | Go with the Flow — Make Friends in Sydney | social | BBQ Party in Sydney | Sun 29 Nov | in-person | International socials and parties.
+Sydney | sydjs-classic | SydJS | tech | SydJS: Open Source Social | Wed 25 Nov | in-person | Sydney's JavaScript meetup.
+Sydney | philosophy-fight-club-social-hangout | Philosophy Fight Club | books | Café Philosophique | Wed 25 Nov | in-person | Philosophy discussions and hangouts.
+Sydney | sydney-creative-customer-experience-ccx | Sydney Creative Customer Experience (CCX) | creative | Design Connection #8 | Thu 26 Nov | in-person | Design and CX community.
+Sydney | aloha-sydney | Aloha Sydney — Language Exchange | language | Rooftop Language Exchange | Wed 18 Nov | in-person | Language-exchange parties for 20s and 30s.
+Sydney | hercollectivespace | Her Collective Space | women | Guided Women's Business Networking | Sat 5 Dec | in-person | Women's business networking.
+Sydney | sydney-design-thinking-meetup | Sydney Design Thinking | professional | SydDT #132 | Thu 19 Nov | in-person | Design-thinking talks and networking.
+Sydney | sydney-professional-singles-meetup-group | Sydney Professional Singles | dating | Fast Friends Happy Hour, 21–40 | Sat 21 Nov | in-person | Socials and happy hours for professional singles.

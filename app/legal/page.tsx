@@ -35,7 +35,7 @@ export default function MasterLegalPage() {
         }}
       >
         <Link
-          href="/"
+          href="/teams"
           style={{
             textDecoration: 'none',
             display: 'flex',

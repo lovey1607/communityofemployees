@@ -30,7 +30,7 @@ export default function TermsOfServicePage() {
           alignItems: 'center',
         }}
       >
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#137A43', fontSize: 13, fontWeight: 700 }}>
+        <Link href="/teams" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, color: '#137A43', fontSize: 13, fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Back to Marketplace Homepage</span>
         </Link>

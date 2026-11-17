@@ -78,7 +78,7 @@ export function NavBar() {
       }}
     >
       {/* Brand Logo */}
-      <Link href="/" style={{ textDecoration: 'none', cursor: 'pointer' }}>
+      <Link href="/teams" style={{ textDecoration: 'none', cursor: 'pointer' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div
             style={{
@@ -134,7 +134,7 @@ export function NavBar() {
       {/* Navigation Links & Role Selector */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <Link
-          href="/"
+          href="/teams"
           className={`nav-link ${isHome ? 'active' : ''}`}
           style={{ color: '#1D1A17' }}
         >

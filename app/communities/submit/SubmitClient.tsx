@@ -65,7 +65,7 @@ export function SubmitClient({ options }: { options: Opt[] }) {
           <span className="big">🎉</span>
           <h1>{done === 'new' ? 'Thanks — your community is in the queue.' : done === 'update' ? 'Thanks — we’ve got your changes.' : 'Got it — we’ll review the removal.'}</h1>
           <p className="cop-note">We review every request by hand, usually within a couple of days, and email {me.submitterEmail} if we have questions. Nothing changes on the site until we approve it.</p>
-          <div className="row"><Link href="/communities" className="cop-btn cop-btn-primary">Back to communities</Link><button className="cop-btn" onClick={() => { setDone(null); setForm(structuredClone(EMPTY_INPUT)); setTarget(''); }}>Send another</button></div>
+          <div className="row"><Link href="/" className="cop-btn cop-btn-primary">Back to communities</Link><button className="cop-btn" onClick={() => { setDone(null); setForm(structuredClone(EMPTY_INPUT)); setTarget(''); }}>Send another</button></div>
         </div>
       </div></section>
     );
@@ -74,7 +74,7 @@ export function SubmitClient({ options }: { options: Opt[] }) {
   return (
     <section className="cop-submit">
       <div className="wrap">
-        <p className="cop-crumbs"><Link href="/communities">Communities</Link><span>/</span><span>For group leads</span></p>
+        <p className="cop-crumbs"><Link href="/">Communities</Link><span>/</span><span>For group leads</span></p>
         <h1 className="sb-h1">Run a group? <em>Keep it listed right.</em></h1>
         <p className="cop-note sb-lead">Free, always. Add your community, fix its details, or ask us to take it down. We check every request by hand before anything changes.</p>
 

@@ -507,7 +507,7 @@ export default function AdminDashboard() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 900, color: 'var(--ink)', lineHeight: 1, letterSpacing: '-0.02em' }}>Admin Control Center</h1>
                 <Link
-                  href="/"
+                  href="/teams"
                   style={{
                     padding: '4px 10px',
                     borderRadius: 8,

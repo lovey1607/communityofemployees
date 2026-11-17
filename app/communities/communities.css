@@ -939,3 +939,10 @@ html.cop-cursor select { cursor: pointer !important; }
 .cop-leadbox span { color: var(--muted); }
 .cop-leadbox div { display: flex; gap: .8rem; margin-top: .3rem; }
 .cop-leadbox a { font-weight: 700; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── v11: around the world ─────────────────────────────────── */
+.cop-regions { display: flex; gap: .35rem; flex-wrap: wrap; margin-top: .6rem; }
+.cop-regions button { font-size: .76rem; font-weight: 700; padding: .32rem .6rem; border-radius: 999px; border: 1px solid var(--line, #E8E0D2); background: #fff; cursor: pointer; }
+.cop-regions button:hover { border-color: var(--ink, #1D1A17); }
+.cop-world { scroll-margin-top: 12px; }
+.cop-world h4 span { margin-right: .2rem; }

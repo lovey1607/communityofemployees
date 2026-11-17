@@ -47,7 +47,7 @@ export function VendorNav() {
     >
       {/* Left: Brand + Role Badge + Home Link */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <Link href="/" style={{ textDecoration: 'none' }} title="Return to Marketplace Homepage">
+        <Link href="/teams" style={{ textDecoration: 'none' }} title="Return to Marketplace Homepage">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div
               style={{
@@ -89,7 +89,7 @@ export function VendorNav() {
         </Link>
 
         <Link
-          href="/"
+          href="/teams"
           style={{
             padding: '5px 12px',
             borderRadius: 8,

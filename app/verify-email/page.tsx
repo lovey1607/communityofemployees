@@ -60,7 +60,7 @@ function VerifyEmailInner() {
         </h1>
         <p style={{ margin: '0 0 22px', fontSize: 14, lineHeight: 1.6, color: 'var(--ink-2)' }}>{message}</p>
         <Link
-          href="/"
+          href="/teams"
           style={{
             display: 'inline-block', padding: '11px 20px', borderRadius: 11,
             background: '#FF6B2C', color: '#FFF7EC', fontWeight: 700, fontSize: 14, textDecoration: 'none',

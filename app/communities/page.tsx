@@ -1,17 +1,14 @@
-// app/communities/page.tsx — the marketplace. Filter state comes from the
-// URL so any filtered view is shareable.
-import { Suspense } from 'react';
-import { Marketplace } from '@/components/communities/Marketplace';
-import { paramsToFilters } from '@/lib/communities';
-import { getAllCommunities } from '@/lib/communities/store';
+// app/communities/page.tsx — the marketplace moved to "/". Shared and indexed
+// /communities links (filters included) keep working by redirecting there.
+import { redirect } from 'next/navigation';
 
-export default async function CommunitiesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+export default async function CommunitiesIndex({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const sp = await searchParams;
-  const initial = paramsToFilters(sp);
-  const all = await getAllCommunities();
-  return (
-    <Suspense fallback={<div className="wrap" style={{ padding: '3rem 0' }}><div className="cop-skel" /></div>}>
-      <Marketplace initial={initial} all={all} />
-    </Suspense>
-  );
+  const qs = new URLSearchParams();
+  for (const [key, value] of Object.entries(sp)) {
+    if (Array.isArray(value)) value.forEach((v) => qs.append(key, v));
+    else if (value !== undefined) qs.set(key, value);
+  }
+  const query = qs.toString();
+  redirect(query ? `/?${query}` : '/');
 }
