@@ -8,13 +8,14 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import {
   Search, X, SlidersHorizontal, LocateFixed, Map as MapIcon, ChevronRight, Layers, LayoutGrid,
 } from 'lucide-react';
 import {
-  COMMUNITIES, CATEGORY_META, CATEGORY_ORDER, AREAS, CITY_CENTRES, CITY_GROUPS, DEFAULT_FILTERS, METRO_CITIES, ALL_CITIES,
-  JOIN_FILTER_OPTIONS, ONLINE_CITY, applyFilters, categoriesWithListings, filtersToParams, activeFilterCount, nearestCity, PLATFORM_LABEL,
+  CATEGORY_META, CATEGORY_ORDER, WORLD_REGIONS, CITY_COUNTRY, isWorldCity, cityLabel, AREAS, CITY_CENTRES, CITY_GROUPS, DEFAULT_FILTERS, METRO_CITIES, ALL_CITIES,
+  JOIN_FILTER_OPTIONS, applyFilters, inCity, categoriesWithListings, filtersToParams, activeFilterCount, nearestCity, PLATFORM_LABEL,
   type Filters, type Origin, type CommunityCategory, type Scored, type Community,
 } from '@/lib/communities';
 import { CommunityCard } from './CommunityCard';
@@ -32,9 +33,18 @@ const ORIGIN_KEY = 'cop:origin';
 const CITY_KEY = 'cop:city';
 const GEO_ASKED_KEY = 'cop:geo-asked';
 
-type Props = { initial: Filters; lockCity?: boolean; title?: string; all?: Community[] };
+/**
+ * `all` is only the slice for the current city (plus pan-India online rows for
+ * Indian cities) — the server cuts it so the page never ships every listing.
+ * Switching to a city outside that slice navigates and the server sends the new one.
+ */
+type Props = { initial: Filters; lockCity?: boolean; title?: string; all: Community[]; cityCounts: Record<string, number>; totals: { listings: number; cities: number } };
 
-export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIES }: Props) {
+export const CITY_COOKIE = 'cop_city';
+
+export function Marketplace({ initial, lockCity = false, title, all, cityCounts: cityCountsRec, totals }: Props) {
+  const router = useRouter();
+  const poolCity = initial.city;
   const reduce = useReducedMotion();
   const [f, setF] = useState<Filters>(initial);
   const [origin, setOrigin] = useState<Origin>(null);
@@ -58,14 +68,19 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
       if (Array.isArray(s)) setSaved(new Set(s));
       const o = JSON.parse(localStorage.getItem(ORIGIN_KEY) || 'null');
       if (o && typeof o.lat === 'number') { setOrigin(o); setOriginKind(o.kind ?? 'area'); }
-      // Remember the visitor's city: /communities with no ?city= opens where they were last.
-      const urlHasCity = new URLSearchParams(location.search).has('city');
-      const lastCity = localStorage.getItem(CITY_KEY);
-      if (!lockCity && !urlHasCity && lastCity && CITY_CENTRES[lastCity] && lastCity !== initial.city) setF((x) => ({ ...x, city: lastCity }));
     } catch { /* storage unavailable */ }
     setHydrated(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { if (hydrated && !lockCity) { try { localStorage.setItem(CITY_KEY, f.city); } catch { /* ignore */ } } }, [f.city, hydrated, lockCity]);
+  // Remember the visitor's city in a cookie, so /communities (server-rendered) opens there next time.
+  const rememberCity = (city: string) => { try { document.cookie = `${CITY_COOKIE}=${encodeURIComponent(city)}; path=/; max-age=31536000; samesite=lax`; localStorage.setItem(CITY_KEY, city); } catch { /* ignore */ } };
+  useEffect(() => { if (hydrated && !lockCity) rememberCity(f.city); }, [f.city, hydrated, lockCity]); // eslint-disable-line react-hooks/exhaustive-deps
+  /** Switch city: in-slice cities switch instantly; anything else loads that city's slice. */
+  const goCity = (city: string, extra: Partial<Filters> = {}) => {
+    if (!lockCity && (CITY_GROUPS[poolCity] ?? [poolCity]).includes(city)) { setF((x) => ({ ...x, ...extra, city })); return; }
+    rememberCity(city);
+    const p = filtersToParams({ ...f, ...extra, city });
+    router.push(`/?${p.toString()}`);
+  };
   const persistOrigin = (o: Origin, kind: 'geo' | 'area' | 'city') => {
     setOrigin(o); setOriginKind(kind);
     try { localStorage.setItem(ORIGIN_KEY, JSON.stringify(o ? { ...o, kind } : null)); } catch { /* ignore */ }
@@ -107,7 +122,7 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
         const { latitude: lat, longitude: lng } = pos.coords;
         const near = nearestCity(lat, lng);
         persistOrigin({ lat, lng, label: 'your location' }, 'geo');
-        if (!lockCity && near.city !== f.city) setF((x) => ({ ...x, city: near.city, sort: 'nearest' }));
+        if (!lockCity && near.city !== f.city) goCity(near.city, { sort: 'nearest' });
         else setF((x) => ({ ...x, sort: 'nearest' }));
         setGeo({ busy: false, msg: near.km > 80 ? `The nearest city we cover is ${near.city} (${Math.round(near.km)} km). Pick another city any time.` : null });
         say('Sorted by distance from you');
@@ -127,6 +142,8 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
   // location bubble lets them pick a city/area by hand.
   useEffect(() => {
     if (!hydrated || lockCity || !('geolocation' in navigator)) return;
+    // A city in the URL was chosen (a shared link, or the visitor just switched) — don't override it.
+    if (new URLSearchParams(location.search).has('city')) return;
     let asked = false;
     try { asked = localStorage.getItem(GEO_ASKED_KEY) === '1'; } catch { /* ignore */ }
     const go = () => { askedGeo.current = true; try { localStorage.setItem(GEO_ASKED_KEY, '1'); } catch { /* ignore */ } locate(true); };
@@ -156,22 +173,18 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
   };
   const pickArea = (a: { label: string; lat: number; lng: number; city: string }) => {
     persistOrigin({ lat: a.lat, lng: a.lng, label: a.label }, 'area');
-    setF((x) => ({ ...x, city: lockCity ? x.city : a.city, sort: 'nearest' }));
+    if (lockCity || a.city === f.city) setF((x) => ({ ...x, sort: 'nearest' })); else goCity(a.city, { sort: 'nearest' });
     setLocOpen(false);
   };
   const pickCity = (city: string) => {
-    if (lockCity && city !== f.city) {
-      try { localStorage.setItem(CITY_KEY, city); } catch { /* ignore */ }
-      window.location.href = `/communities?city=${encodeURIComponent(city)}`;
-      return;
-    }
     const c = CITY_CENTRES[city];
     persistOrigin({ lat: c.lat, lng: c.lng, label: `${city} (centre)` }, 'city');
-    setF((x) => ({ ...x, city, sort: 'nearest' }));
+    if (city === f.city) { setF((x) => ({ ...x, sort: 'nearest' })); return; }
+    goCity(city, { sort: 'nearest' });
   };
 
   // ─── derived ───
-  const cityPool = useMemo(() => all.filter((c) => c.city === ONLINE_CITY || (CITY_GROUPS[f.city] ?? [f.city]).includes(c.city)), [f.city, all]);
+  const cityPool = useMemo(() => all.filter((c) => inCity(c, f.city)), [f.city, all]);
   // Render the grid in pages: 24 cards first, more on demand (keeps the
   // first paint fast even when a city has 150+ listings).
   const PAGE = 24;
@@ -201,8 +214,8 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
   const pristine = nActive === 0 && !f.q;
   const featured = useMemo(() => cityPool.filter((c) => c.featured).slice(0, 8), [cityPool]);
   const fallback: Scored[] = useMemo(() => results.length ? [] : applyFilters(all, { ...DEFAULT_FILTERS, city: f.city, category: f.category }, origin).slice(0, 3), [all, results.length, f.city, f.category, origin]);
-  const cityCount = useMemo(() => new Set(all.map((c) => c.city).filter((c) => c !== ONLINE_CITY)).size, [all]);
-  const cityCounts = useMemo(() => { const m = new Map<string, number>(); for (const c of all) for (const [k, group] of Object.entries(CITY_GROUPS)) if (group.includes(c.city)) m.set(k, (m.get(k) ?? 0) + 1); return m; }, [all]);
+  const cityCount = totals.cities;
+  const cityCounts = useMemo(() => new Map(Object.entries(cityCountsRec)), [cityCountsRec]);
 
   const chip = (label: string, on: boolean, onClick: () => void, extra?: React.ReactNode) => (
     <button type="button" className="cop-pill" aria-pressed={on} onClick={onClick}>{label}{extra}</button>
@@ -279,7 +292,7 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
                   else update({ q: f.q === q ? '' : q });
                 }}>{q}</button>
               ))}
-              <span className="sub">{all.length} communities · {cityCount} cities</span>
+              <span className="sub">{totals.listings} communities · {cityCount} cities</span>
             </div>
             <PlatformDock counts={platformCount} value={f.join} onPick={(p) => update({ join: p })} />
             {geo.msg && <p className="cop-note" style={{ marginTop: '.5rem', color: 'rgba(255,255,255,.7)' }} role="status">{geo.msg}</p>}
@@ -425,15 +438,17 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
                 <button type="button" className="cop-btn cop-btn-accent cop-btn-sm" onClick={() => { locate(false); }} disabled={geo.busy}><LocateFixed size={14} /> Use my location</button>
                 <span className="status">{geo.busy && <span className="cop-spin" />}{geo.msg ?? 'We only use it to sort by distance. Nothing is stored online.'}</span>
               </div>
-              <CityPicker current={f.city} onPick={pickCity} counts={cityCounts} />
-              <div className="cop-fgroup">
-                <h4>Area in {f.city}</h4>
-                <div className="areas">
-                  {AREAS.filter((a) => a.city === f.city).map((a) => (
-                    <button key={a.label} type="button" className={origin?.label === a.label ? 'on' : ''} onClick={() => pickArea(a)}>{a.label}</button>
-                  ))}
+              {AREAS.some((a) => a.city === f.city) && (
+                <div className="cop-fgroup">
+                  <h4>Area in {f.city}</h4>
+                  <div className="areas">
+                    {AREAS.filter((a) => a.city === f.city).map((a) => (
+                      <button key={a.label} type="button" className={origin?.label === a.label ? 'on' : ''} onClick={() => pickArea(a)}>{a.label}</button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+              <CityPicker current={f.city} onPick={pickCity} counts={cityCounts} />
             </div>
           </Overlay>
         )}
@@ -521,13 +536,18 @@ export function Marketplace({ initial, lockCity = false, title, all = COMMUNITIE
 function CityPicker({ current, onPick, counts: CITY_COUNT }: { current: string; onPick: (city: string) => void; counts: Map<string, number> }) {
   const [q, setQ] = useState('');
   const norm = (s: string) => s.toLowerCase();
-  const others = ALL_CITIES.filter((c) => !METRO_CITIES.includes(c) && (CITY_COUNT.get(c) ?? 0) > 0);
+  const others = ALL_CITIES.filter((c) => !METRO_CITIES.includes(c) && !isWorldCity(c) && (CITY_COUNT.get(c) ?? 0) > 0);
   const match = (c: string) => !q || norm(c).includes(norm(q));
   return (
     <>
-      <div className="cop-fgroup">
-        <h4>City</h4>
-        <input className="input-base" type="search" placeholder={`Search ${ALL_CITIES.length} cities…`} value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search cities" />
+      <div className="cop-fgroup" id="cop-region-India">
+        <h4>India · metros</h4>
+        <input className="input-base" type="search" placeholder={`Search ${ALL_CITIES.length} cities or countries…`} value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search cities" />
+        <div className="cop-regions" role="navigation" aria-label="Jump to region">
+          {['India', ...Object.keys(WORLD_REGIONS)].map((r) => (
+            <button key={r} type="button" onClick={() => document.getElementById(`cop-region-${r.replace(/\W+/g, '-')}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>{r === 'India' ? '🇮🇳 India' : r}</button>
+          ))}
+        </div>
         <div className="cities" style={{ marginTop: '.6rem' }}>
           {METRO_CITIES.filter(match).map((city) => (
             <button key={city} type="button" className="cop-pill" aria-pressed={current === city} onClick={() => onPick(city)}>{city} <span className="n" style={{ color: 'var(--muted)', fontWeight: 500 }}>{CITY_COUNT.get(city) ?? 0}</span></button>
@@ -536,7 +556,7 @@ function CityPicker({ current, onPick, counts: CITY_COUNT }: { current: string; 
       </div>
       {others.some(match) && (
         <div className="cop-fgroup">
-          <h4>More cities</h4>
+          <h4>More cities in India</h4>
           <div className="areas">
             {others.filter(match).map((city) => (
               <button key={city} type="button" className={current === city ? 'on' : ''} onClick={() => onPick(city)}>{city} <span style={{ color: 'var(--muted)' }}>· {CITY_COUNT.get(city) ?? 0}</span></button>
@@ -544,6 +564,20 @@ function CityPicker({ current, onPick, counts: CITY_COUNT }: { current: string; 
           </div>
         </div>
       )}
+      {Object.entries(WORLD_REGIONS).map(([region, cities]) => {
+        const list = cities.filter((c) => (CITY_COUNT.get(c) ?? 0) > 0 && (match(c) || match(CITY_COUNTRY[c] ?? '') || match(region)));
+        if (!list.length) return null;
+        return (
+          <div key={region} className="cop-fgroup cop-world" id={`cop-region-${region.replace(/\W+/g, '-')}`}>
+            <h4><span aria-hidden="true">🌍</span> {region}</h4>
+            <div className="areas">
+              {list.map((city) => (
+                <button key={city} type="button" className={current === city ? 'on' : ''} onClick={() => onPick(city)} title={cityLabel(city)}>{city} <span style={{ color: 'var(--muted)' }}>· {CITY_COUNT.get(city) ?? 0}</span></button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }

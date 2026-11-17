@@ -1,0 +1,43 @@
+Copenhagen | ai-meetup-copenhagen-innovators-creators-techies | AI Meetup Copenhagen | tech | AI Meetup Copenhagen #11 | Thu 19 Nov | in-person | AI builders and creators.
+Copenhagen | braet-cafe-boardgames-brews-events | BRÆT Café — Boardgames & Brews | games | Game Test: Murder Mystery | Wed 18 Nov | in-person | Board-game café events.
+Copenhagen | copenhagen-global-hangout | Copenhagen Global Hangout | social | Global Hangout | Sat 21 Nov | in-person | International socials.
+Copenhagen | unity-meetup-copenhagen | Unity Meetup Copenhagen | tech | Content Directories | Wed 18 Nov | in-person | Unity game developers.
+Copenhagen | pen-paper-rpgs-copenhagen | Pen & Paper RPGs Copenhagen | games | One-Shot TTRPG Event | Thu 19 Nov | in-person | One-shot tabletop RPGs.
+Copenhagen | meetup-group-qvpaekte | DEAR WORLD Copenhagen | running | Social Run — run the city | Tue 24 Nov | in-person | International social runs.
+Copenhagen | danish-language-cafe | Danish Language Café | language | Danish Language Café | Thu 19 Nov | in-person | Danish conversation practice.
+Copenhagen | the-social-geek-cph | The Social Geek CPH | games | Star Wars Weekend visit | Sat 21 Nov | in-person | Fandom and geek socials.
+Copenhagen | copenhagen-choose-your-own-book-group | The Any Book Bookclub | books | Let's talk books | Sat 28 Nov | in-person | Bring any book; talk books.
+Prague | reset-hard | Tech Talks by signageOS — reset --hard | tech | Dark Factory talk | Wed 25 Nov | in-person | Tech talks.
+Prague | pydata-prague | PyData Prague | tech | PyData Prague #37 | Thu 26 Nov | in-person | Data science and Python.
+Prague | prague-golang-meetup | Prague Golang Meetup | tech | Go Meetup #26 | Thu 19 Nov | in-person | Go developers.
+Prague | international-cafe-philo-open-philosophical-discussions | International Café Philo Prague | books | Open philosophical discussion | Fri 4 Dec | in-person | Philosophy discussions for everybody.
+Prague | reactgirls | ReactGirls | women | ReactGirls & Active24 meetup | Thu 19 Nov | in-person | Coding meetups for women.
+Prague | prague-together | Prague Together | social | Sim Racing night | Mon 16 Nov | in-person | Social activities and outings.
+Prague | imperial-tales | Imperial Tales | games | Board Game Night | Wed 18 Nov | in-person | Board-game nights.
+Vienna | ai-austria | AI Austria Meetup | tech | AI Breakfast Vienna | Fri 27 Nov | in-person | AI breakfasts.
+Vienna | vienna-deep-learning-meetup | Vienna Deep Learning Meetup | tech | 77th Deep Learning Meetup | Wed 25 Nov | in-person | Deep learning talks.
+Vienna | vienna-data-science-group-meetup | Vienna Data Science Group | tech | GEO & AI Search | Fri 20 Nov | in-person | Data science community.
+Vienna | owasp-chapter-vienna | OWASP Vienna | tech | The Vibe Coding Horror Show | Thu 19 Nov | in-person | Application security.
+Vienna | talkinwien | talkin' — Social Adventures in Vienna | social | talkin' vienna #87 | Wed 25 Nov | in-person | Storytelling socials.
+Vienna | wien-software-architecture-meetup-group | Wien Software Architecture Meetup | tech | Roadmap to Software Engineering 2.0 | Tue 1 Dec | in-person | Software architecture.
+Vienna | vienna-book-club | Social Book Club Vienna | books | The Art of Loving | Sat 21 Nov | in-person | Social book club.
+Vienna | speedfriendingwien | Make Good Friends in Vienna | social | Speed Friending 20–29 / 30–39 | Sun 22 Nov | in-person | Speed-friending for expats and locals.
+Warsaw | crafted-warsaw-creative-activities-community-workshops | Craft'ed Warsaw | creative | Bucket Hat Painting | Fri 20 Nov | in-person | Creative workshops.
+Warsaw | aws-user-group-warsaw | AWS User Group Warsaw | tech | AWS Meetup 11/2026 | Thu 19 Nov | in-person | AWS community.
+Warsaw | sysopswarszawa | SysOps/DevOps Warszawa | tech | MeetUp #89 | Thu 26 Nov | in-person | SysOps and DevOps.
+Warsaw | producttank-warsaw | ProductTank Warsaw | tech | From Data to Decisions | Thu 19 Nov | in-person | Product management.
+Warsaw | meet-speak-warsaw-social-language-exchange | Meet & Speak Warsaw | language | The Flag Party | Sat 21 Nov | in-person | Social language exchange.
+Warsaw | warsaw-makers-and-founders | Warsaw Makers & Founders | startup | Tech and Beers | Tue 24 Nov | in-person | Makers and founders socials.
+Warsaw | warsaw-board-game-hub | Warsaw Board Game Hub | games | Saturday Board Games | Sat 28 Nov | in-person | Board games.
+Warsaw | founders-running-club-warsaw | Founders Running Club Warsaw | running | Founders Running Club | Sat 21 Nov | in-person | Runs for founders and friends.
+Warsaw | warsaw-international-chess-society | Warsaw International Chess Society | games | Chess Social @ Coco Lounge | Sat 21 Nov | in-person | Social chess.
+Edinburgh | cyberscotconnect | Cyber Scotland Connect | tech | Edinburgh Meetup at CodeBase | Thu 26 Nov | in-person | Cybersecurity professionals.
+Edinburgh | edinburgh-data-science-ai | Edinburgh Data Science and AI | tech | Agentic AI Special | Wed 25 Nov | in-person | Data science and AI.
+Edinburgh | edinburgh-young-international-professionals | Edinburgh Young Professionals | professional | Young Professionals Social | Wed 18 Nov | in-person | Socials for young professionals.
+Edinburgh | leaddev-meetup-edinburgh | LeadDev Meetup Edinburgh | tech | November Meetup | Thu 26 Nov | in-person | Engineering leadership.
+Edinburgh | edinburgh-language-exchange | Edinburgh Language Exchange (ELEC) | language | Español al Barony | Tue 17 Nov | in-person | Language exchanges.
+Edinburgh | producttankedi | ProductTank Edinburgh | professional | The Strategy Cycle | Tue 24 Nov | in-person | Product management.
+Edinburgh | edinburgh-local-video-gamers | Edinburgh Video-Gamers | games | Drinks and Games | Fri 27 Nov | in-person | Gamers' socials.
+Edinburgh | edinburgh-art-galleries-sunday-meetup-group | Edinburgh Art Galleries Sunday Meetup | creative | Scottish Portrait Awards | Sun 6 Dec | in-person | Gallery visits.
+Edinburgh | edinburghjs | EdinburghJS | tech | November Meetup | Tue 17 Nov | in-person | JavaScript developers.
+Edinburgh | edinbarrunners | EdinBar Runners | running | Gentle 5k and a drink — Leith Links | Tue 17 Nov | in-person | Gentle 5Ks followed by a drink.

@@ -1,0 +1,69 @@
+Melbourne | it-career-in-australia | IT Career in Australia — TechWalking | professional | TechWalking after Work | Wed 18 Nov | in-person | Walking networking for tech professionals.
+Melbourne | melbourne-github-user-group | Melbourne GitHub User Group | tech | GitHub Universe Recap | Wed 25 Nov | in-person | GitHub user community.
+Melbourne | the-entrepreneur-club-melbourne | The Entrepreneur Club Melbourne | books | #InPursuit Book Club for Builders | Sat 21 Nov | in-person | Book club for builders and doers.
+Melbourne | melbourne-chess-society | Melbourne Chess Society | games | Social Chess Meetup | Sat 28 Nov | in-person | Social chess.
+Melbourne | product-anonymous-meetup-melbourne | Product Anonymous Melbourne | professional | End-of-year short talks | Wed 18 Nov | in-person | Talks for product people.
+Melbourne | melbourne-python-user-group | Melbourne Python | tech | Melbourne Python Meetup — December | Wed 16 Dec | in-person | Python user group.
+Melbourne | fluent-fast-melbourne | Fluent Fast! Free Language Exchange | language | Free language exchange | Wed 18 Nov | in-person | Free language conversation nights.
+Melbourne | chill-run-crew | Chill Run Crew Melbourne | running | Wednesday Night Chill Run | Wed 18 Nov | in-person | Casual weekly group runs.
+Melbourne | melbourne-mahjong-meetup | Melbourne Mahjong Meetup | games | Hong Kong Mahjong at Marché | Wed 18 Nov | in-person | Mahjong at a board-game café.
+Melbourne | the-melbourne-walk-and-shoot-group | Melbourne Walk and Shoot | creative | Botanical Gardens in Mono | Sun 29 Nov | in-person | Photo walks.
+Auckland | aws-auckland-well-architected-user-group | AWS Auckland Well-Architected User Group | tech | AWS Well-Architected Meetup | Thu 19 Nov | in-person | AWS architecture community.
+Auckland | prompt-poets-society-ai-vibe-coding-auckland | Prompt Poets Society — AI Engineering | tech | Closing the Loop | Tue 24 Nov | in-person | AI engineering meetups.
+Auckland | get-outside-auckland | Get-Outside (G-O) | outdoors | Pākiri River Road to Pākiri Beach | Sat 21 Nov | in-person | Hikes and walking adventures.
+Auckland | aucklandboardgamers | Auckland Board Gamers | games | Tuesday Night Boardgames | Tue 24 Nov | in-person | Regular board-game nights.
+Auckland | auckland-international-film-club | Auckland International Film Club | creative | Soul Kitchen (Germany, 2009) | Thu 10 Dec | in-person | World cinema screenings.
+Auckland | aucklandmakesgames | Auckland Makes Games | tech | November Walkabout | Sat 28 Nov | in-person | Local game developers.
+Auckland | auckland-dining-out-meetup-group | Auckland Dining Out | food | Dinner at Milenta | Sat 12 Dec | in-person | Group dinners.
+Auckland | auckland-outdoors | Auckland Outdoors | outdoors | Manutewhau Walkway & Coastal Path | Sun 29 Nov | in-person | Tramping and walks.
+Auckland | auckland-stoics | Auckland Stoics | books | End of Year Social | Sat 5 Dec | in-person | Stoic philosophy discussions.
+Riyadh | alpine-trekkers-ksa | Alpine Trekkers KSA | outdoors | Find a travel companion | Fri 20 Nov | in-person | Trekkers and travel companions.
+Riyadh | riyadh-adventure | Riyadh Adventure | outdoors | Valley nights camping | Thu 19 Nov | in-person | Desert camping and adventures.
+Riyadh | wayfarers-in-riyadh | Wayfarers in Riyadh | outdoors | Huraymila Park trail (15 km) | Sat 21 Nov | in-person | Hiking new trails.
+Riyadh | films-and-beyound | Films and Beyond | creative | The Social Network discussion | Wed 18 Nov | in-person | Film screenings and discussion.
+Riyadh | riyadh-languages-exchange-intercambio-ممارسة-اللغة | Languages & Culture Exchange Riyadh | language | Chinese Language Exchange | Wed 18 Nov | in-person | Language exchange socials.
+Riyadh | meetnewpeopleriyadh | Curious Connection Club Riyadh | social | Duck the Small Talk #4 | Fri 27 Nov | in-person | Conversation socials.
+Riyadh | eventure | EVENTURE | outdoors | Hail heritage trip | Wed 18 Nov | in-person | Outdoor and heritage trips.
+Riyadh | saudistartupmajlis | Saudi Startup Majlis | startup | Saudi Startup Majlis #4 | Wed 18 Nov | in-person | Founders' majlis.
+Riyadh | riyadh-indoor-football-age-30 | Riyadh Football 30+ | sports | Thursday Football Training | Thu 19 Nov | in-person | Football for adults 30+.
+Tel Aviv | wordpress-israel | WordPress Tel Aviv | tech | WordPress in the AI era | Wed 2 Dec | in-person | WordPress community.
+Tel Aviv | pydata-tel-aviv | PyData Tel Aviv | tech | PyData @ Check Point | Wed 16 Dec | in-person | Data science and Python talks.
+Tel Aviv | cloud-native-israel | Cloud Native Israel | tech | Securing AI workloads | Wed 25 Nov | in-person | Cloud-native community.
+Tel Aviv | angular-tlv | Angular TLV | tech | DevFest AIngular TLV | Mon 14 Dec | in-person | Angular developers.
+Tel Aviv | write-the-docs-taplus | Write the Docs Tel Aviv | tech | Measure What Matters | Mon 23 Nov | in-person | Documentation community.
+Tel Aviv | israeli-tech-radar | Israeli Tech Radar | tech | Real-Time Voice & Video Agents | Mon 23 Nov | in-person | Engineering talks.
+Manila | globalaiphilippines | Global AI Manila | tech | Hands-on with Foundry Agents | Fri 27 Nov | hybrid | AI builders community.
+Manila | spanish-language-meetup-philippines | Spanish Language Meetup Philippines | language | Spanish Meetup — Makati | Sat 21 Nov | in-person | Monthly Spanish practice.
+Manila | manila-devops-user-group | Manila DevOps User Group | tech | DevOps UG Event 07 | Sun 6 Dec | in-person | DevOps knowledge sharing.
+Manila | awsug-buildhers | AWS User Group BuildHers+ Philippines | women | Year-End Celebration | Sun 22 Nov | in-person | Women in cloud computing.
+Manila | hack-the-box-meetup-ph | Hack The Box Meetup Manila | tech | Meetup #11 | Sun 29 Nov | in-person | Ethical hacking community.
+Manila | manila-hangout-activities | Manila Hangout & Activities | social | 20s 30s Global Hangout | Sat 21 Nov | in-person | Socials for 20s and 30s.
+Manila | meetup-philippines | Meetup Philippines — BGC Board Games | games | BGC Board Games Meetup | Sat 21 Nov | in-person | Board games in BGC.
+Manila | practical-philosophy-club-philippines | Practical Philosophy Club Manila | books | Practical Philosophy Meetup | Sun 22 Nov | in-person | Weekly philosophy discussion.
+Manila | ruby-phil | Philippine Ruby Users Group | tech | PhRUG meetup | Thu 26 Nov | in-person | Ruby developers.
+Jakarta | jakarta-social | Jakarta Social | social | Saturday Night Karaoke (Menteng) | Sat 21 Nov | in-person | Socials and karaoke.
+Jakarta | owasp-jakarta-chapter | OWASP Jakarta | tech | Security Week #2 | Mon 30 Nov | in-person | Application security community.
+Jakarta | 20s-30s-socializing-language-exchange | 20s 30s Social & Language Exchange Jakarta | language | Social & Language Exchange | Sat 28 Nov | in-person | Language exchange socials.
+Jakarta | jakarta-friends | Jakarta Friends | food | Potluck with Jakarta Friends | Sat 21 Nov | in-person | Potlucks and socials.
+Jakarta | jakarta-comedy-clubs-meetup-group | Batavia Jokers — English Stand-up | creative | English Stand Up Open Mic | Wed 18 Nov | in-person | English comedy open mics.
+Jakarta | jaksel-badminton | Jakarta Evening Badminton | sports | Evening badminton | Tue 24 Nov | in-person | Regular evening badminton.
+Jakarta | startuplokal | StartupLokal Community | startup | Startup community meetup | Sat 21 Nov | in-person | Startup community networking.
+Jakarta | jakarta-sports-and-entertainment-group | Urban Mills Ancol Sports | sports | Friday Nite Pickleball | Fri 20 Nov | in-person | Pickleball and sports nights.
+Jakarta | jakarta-beginner-runners | Jakarta Beginner Runners | running | Sunday Run | Sun 22 Nov | in-person | Beginner-friendly group runs.
+Ho Chi Minh City | saigon-plant-based-social-food-friends-networking | Saigon Plant-Based Social | food | Weekly Co-Working Meet & Greet | Wed 18 Nov | in-person | Plant-based food and co-working socials.
+Ho Chi Minh City | mundo-lingo-saigon | Mundo Lingo Saigon | language | Mundo Lingo — Thao Dien | Thu 19 Nov | in-person | Weekly language exchange with flag stickers.
+Ho Chi Minh City | practical-philosophy-club-saigon | Practical Philosophy Club Saigon | books | Practical Philosophy Meetup | Sat 21 Nov | in-person | Philosophy discussions.
+Ho Chi Minh City | ho-chi-minh-city-language-culture-meetup | Saigon Language & Culture Meetup | language | Bình Thạnh culture & language exchange | Wed 18 Nov | in-person | Language and culture exchange.
+Ho Chi Minh City | nerd-snipe-saigon | Nerd-snipe Saigon | tech | Computer science talks | Mon 7 Dec | in-person | CS talks for the curious.
+Ho Chi Minh City | saigon-young-professionals-events | Saigon Young Professionals | professional | Business & Cocktails | Wed 18 Nov | in-person | Young professionals networking.
+Ho Chi Minh City | founders-running-club-ho-chi-minh-city | Founders Running Club HCMC | running | Founders Running Club | Sat 21 Nov | in-person | Runs for founders and friends.
+Ho Chi Minh City | kindred-soul | Kindred Soul | creative | Focus Art | Sun 22 Nov | in-person | Art sessions.
+Taipei | heytaipei | Hey Taipei | outdoors | Evening Riverside Walk | Thu 19 Nov | in-person | Evening walks.
+Taipei | internatinal-social-activities-in-taipei | International Social & Activities Taipei | social | Social Night | Sat 21 Nov | in-person | Socials for travellers, locals and expats.
+Taipei | easyhikingandfunactivities | Hiking, Cycling & Fun Activities Taipei | outdoors | Caoling Silver Grass trail | Sat 28 Nov | in-person | Long hikes and rides.
+Taipei | taipei_py | Taipei.py | tech | Airflow & Magpie Meetup | Tue 24 Nov | in-person | Python user group.
+Taipei | taipei-social-networking-and-brainstorming-meetup-group | Taipei Community — Make Real Friends | social | Friday Social | Fri 20 Nov | in-person | Friday socials.
+Taipei | taipei-wordpress | Taipei WordPress Meetup | tech | WordPress meetup | Tue 24 Nov | in-person | WordPress community.
+Taipei | fitfam-taipei | FitFam Taipei | fitness | Wednesday Stair Challenge | Wed 18 Nov | in-person | Free community workouts.
+Taipei | taipei-sports-and-social-club | Taipei Sports and Social Club | sports | Sunday Badminton | Sun 22 Nov | in-person | Social sports.
+Taipei | amnesty-international-taiwan-english-speaking-meet-up-group | Amnesty International Taiwan (English) | cause | Book Swap & Lunch | Sun 29 Nov | in-person | Human-rights volunteering group.

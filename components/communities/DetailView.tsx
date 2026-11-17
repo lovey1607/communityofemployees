@@ -13,7 +13,7 @@ function fmtDate(iso: string) {
   return isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-export function DetailView({ c, all }: { c: Community; all?: Community[] }) {
+export function DetailView({ c, all }: { c: Community; all: Community[] }) {
   const meta = CATEGORY_META[c.category];
   const price = c.pricing.type === 'free' ? 'Free' : c.pricing.type === 'unknown' ? 'Ask organiser' : c.pricing.type === 'membership' ? 'Membership' : c.pricing.type === 'pay-per-event' ? 'Pay per event' : 'Paid';
   const who = c.audience.gender === 'women' ? 'Women only' : c.audience.gender === 'men' ? 'Men only' : 'Open to all';

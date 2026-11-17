@@ -130,7 +130,7 @@ await ctx.close();
 await p.goto(`${B}/communities`, { waitUntil: 'load' }); await p.waitForTimeout(1200); await p.waitForTimeout(1200);
 ok('auto-location picks the nearest city (Mumbai)', (await p.textContent('.cop-hero h1')).includes('Mumbai'));
 await p.click('.cop-loc .change'); await p.waitForTimeout(400);
-await p.click('.cop-locpick .cities button:has-text("Bengaluru")'); await p.waitForTimeout(600);
+await p.click('.cop-locpick .cities button:has-text("Bengaluru")'); await p.waitForURL(/city=Bengaluru/); await p.waitForTimeout(1500);
 ok('city can still be changed by hand (→ Bengaluru)', (await p.textContent('.cop-hero h1')).includes('Bengaluru'));
 await ctx.close();
 // city page (/communities/jaipur) still offers the city switcher
@@ -176,6 +176,31 @@ await ctx.close();
 await p.emulateMedia({ reducedMotion: 'reduce' });
 await p.goto(`${B}/communities`, { waitUntil: 'load' }); await p.waitForTimeout(1200);
 ok('reduced motion: page renders', (await p.$$eval('.cop-card', (e) => e.length)) > 0);
+await ctx.close();
+
+// ─── around the world (v11) ───
+[ctx, p] = await page({ width: 1400, height: 900 });
+const sfRes = await p.goto(`${B}/communities/san-francisco`, { waitUntil: 'load' }); await p.waitForTimeout(1500);
+ok('world: /communities/san-francisco renders', sfRes.status() === 200 && (await p.textContent('.cop-hero h1')).includes('San Francisco'));
+ok('world: San Francisco shows 15+ groups', (await p.$$eval('.cop-card', (e) => e.length)) >= 15);
+const sfHtml = await p.content();
+ok('world: SF page ships only its own slice (no Gurgaon listings)', !sfHtml.includes('The Bhag') && !sfHtml.includes('Gurgaon Reads'));
+ok('world: pan-India online groups stay out of SF', !(await p.textContent('main')).includes('pan-India'));
+await p.screenshot({ path: `${OUT}14-world-sf.png` });
+await p.click('.cop-loc .change'); await p.waitForTimeout(400);
+ok('world: city picker has regions', await p.isVisible('.cop-world h4:has-text("North America")') && await p.isVisible('.cop-world h4:has-text("Middle East")'));
+await p.screenshot({ path: `${OUT}15-world-picker.png` });
+await p.fill('.cop-locpick input[type="search"]', 'japan'); await p.waitForTimeout(300);
+ok('world: picker search matches countries (japan → Tokyo)', await p.isVisible('.cop-world button:has-text("Tokyo")'));
+await p.fill('.cop-locpick input[type="search"]', '');
+await p.click('.cop-world button:has-text("Singapore")'); await p.waitForURL(/city=Singapore/); await p.waitForTimeout(1500);
+ok('world: picking Singapore loads Singapore', (await p.textContent('.cop-hero h1')).includes('Singapore') && (await p.$$eval('.cop-card', (e) => e.length)) >= 10);
+await ctx.close();
+[ctx, p] = await page({ width: 1400, height: 900 });
+await p.goto(`${B}/communities/w-singapore-gdg-singapore`, { waitUntil: 'load' }); await p.waitForTimeout(800);
+ok('world: detail page links to the Meetup group', (await p.getAttribute('.cop-joinbox a.cop-btn', 'href'))?.startsWith('https://www.meetup.com/gdg-singapore'));
+ok('world: city slugs with accents work (/communities/sao-paulo)', (await p.goto(`${B}/communities/sao-paulo`)).status() === 200);
+ok('world: space-separated city links work (/communities/new york)', (await p.goto(`${B}/communities/new%20york`)).status() === 200);
 await ctx.close();
 
 await b.close();

@@ -2,6 +2,27 @@
 
 **Status: built, tested, committed locally. NOT pushed. Nothing touched `main`, Vercel or the DB.**
 
+## v11 — around the world: 59 cities, 594 more communities
+
+- **Cities outside India:** San Francisco, New York, LA, Seattle, Austin, Boston, Chicago, DC, Miami,
+  Denver, Atlanta, San Diego, Toronto, Vancouver · London, Paris, Berlin, Munich, Amsterdam, Dublin,
+  Barcelona, Madrid, Lisbon, Milan, Zurich, Vienna, Prague, Warsaw, Copenhagen, Stockholm, Edinburgh ·
+  Dubai, Abu Dhabi, Doha, Riyadh, Tel Aviv, Istanbul · Singapore, Hong Kong, Tokyo, Seoul, Shanghai,
+  Beijing, Taipei, Bangkok, Kuala Lumpur, Jakarta, Manila, Ho Chi Minh City, Kathmandu, Sydney,
+  Melbourne, Auckland · Mexico City, São Paulo, Buenos Aires · Cape Town, Nairobi, Lagos.
+- Every group came from Meetup's live "events near you" page for that city and had a dated upcoming
+  event (that's its activity signal). How, what was excluded, and known gaps: `research/world/README.md`.
+  Notes → data: `node scripts/build-world-communities.mjs` (validates dates/cities/categories).
+- **City picker** now has region chips (India · Middle East · Asia-Pacific · North America · Europe ·
+  Latin America · Africa) and searches countries too ("japan" → Tokyo). Auto-location picks the
+  nearest city anywhere in the world. Pretty URLs: `/communities/san-francisco`, `/communities/dubai/games`,
+  `/communities/sao-paulo` (old `new%20york`-style links still work).
+- **Faster pages:** listing data no longer ships in the browser bundle (it was ~190 KB of JS on every
+  page). The server now sends only the chosen city's listings; switching to another city loads that
+  city. A San Francisco page is ~19 KB gzipped. Your last city is remembered in a cookie.
+- Pan-India "Online" groups show in Indian cities only, not in San Francisco etc.
+- Tests: e2e 58 checks (10 new world checks), unit 15, API 28.
+
 ## v10 — backend: admin manager + group-lead requests
 
 **Needs the new tables first:** `npm run db:migrate` (adds `drizzle/0003_communities.sql`:

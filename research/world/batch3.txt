@@ -1,0 +1,77 @@
+Paris | paris-30-45-social-club | Club Social Paris 30s & 40s | social | Afterwork — New Faces | Thu 19 Nov | in-person | Weekly afterwork socials for 30s and 40s.
+Paris | theartclub | The Art Club | creative | Draw at Le Bistrot des Artistes | Wed 18 Nov | in-person | Weekly drawing sessions in Paris cafés.
+Paris | paris-games-developers | PIGD — Paris Indie Games Developers | tech | PIGD meetup | Thu 26 Nov | in-person | Meetups for indie game developers.
+Paris | chitchat-language-exchange | ChitChat Language Exchange | language | ChitChat International Night | Thu 19 Nov | in-person | Weekly language exchange and international socials.
+Paris | paris-dataladies | Paris Data Ladies | women | ParisDataLadies #60 | Wed 2 Dec | in-person | Data-science community for women.
+Paris | ecrivaines-parisiennes | Écrivaines Parisiennes | creative | Sunday writing workshop | Sun 22 Nov | in-person | Weekly writing workshops for women writers.
+Paris | paris-angular | Paris Angular | tech | Paris Angular #9 | Tue 1 Dec | in-person | Angular developers' talks.
+Paris | pecparis | PEC — Paris Events Community | games | Play Games & Make New Friends | Sun 22 Nov | in-person | Board-game nights to make friends.
+Paris | the-paris-friendly-silent-book-club | The Paris Friendly Silent Book Club | books | Friendly Silent Reading Circle | Sat 21 Nov | in-person | Silent reading circle, chat after.
+Paris | ateliers-de-theatre-d-improvisation | Ateliers de théâtre d'improvisation | creative | Théâtre d'impro by Kpten Impro | Fri 20 Nov | in-person | Improv theatre workshops.
+Paris | blood-on-the-clocktower-paris | Blood on the Clocktower Paris | games | Clocktower at Caves Alliées | Wed 18 Nov | in-person | Social-deduction game nights.
+Berlin | berlin-casual-club | Berlin Casual Club | women | Women's Wine Night | Wed 2 Dec | in-person | Making new friends; women's wine nights and more.
+Berlin | afterwork-meetup-berlin | Berlin Tech & Creative Afterwork | professional | Tech & Creative Afterwork | Thu 19 Nov | in-person | Afterwork networking in English and German.
+Berlin | global-ai-berlin | Global AI Berlin | tech | Building AI Agents That Think, Remember & Act | Wed 18 Nov | in-person | AI builders' meetup.
+Berlin | berlin-city-walks | Berlin City Walks | outdoors | City Walk Berlin | Sat 21 Nov | in-person | City walks, some with a blind-walk experience.
+Berlin | berlinai | Berlin AI | tech | AI Coding Summit Berlin | Fri 4 Dec | in-person | AI and AI-coding community.
+Berlin | sip_happens_berlin | Sip Happens! | social | Saturday Social @ Electric Social | Sat 21 Nov | in-person | Weekend social drinks.
+Berlin | quality-engineering-berlin | Quality Engineering Berlin | tech | Quality Engineering meetup #14 | Wed 2 Dec | in-person | Software quality engineering talks.
+Berlin | berlin-vegan-social | Berlin Vegan Social | food | Vegan Friendsgiving Potluck | Sun 22 Nov | in-person | Vegan socials and potlucks.
+Berlin | berlin-walking-biking-meetup-group | Berlin Walks, Hikes, Trips & Yoga | outdoors | Afternoon Walk + Coffee | Sun 22 Nov | in-person | Walks, hikes, bike trips and more.
+Berlin | berlin-moabit-sprachcafe-learn-german-easily-a1-a2 | Berlin Sprachcafé (A1–A2) | language | Learn and practise German | Thu 19 Nov | in-person | Easy German practice for beginners.
+Berlin | game-developers-berlin | Game Developers Berlin | tech | November Mini Game Jam | Sat 21 Nov | in-person | Game developers and mini game jams.
+Amsterdam | localsinamsterdam | Locals and Long-term in Amsterdam | social | Midweek Crisis Drinks | Wed 18 Nov | in-person | Drinks for expats and locals to make friends.
+Amsterdam | nomad-founders-investorsamsterdam | NOMAD — Founders & Investors Europe | startup | AI Tech & Startup Night | Tue 1 Dec | in-person | Founders and investors tech nights.
+Amsterdam | amsterdam-language-cafe | Amsterdam Language Cafe | language | English Workshop & Cafe | Wed 18 Nov | in-person | Language cafés and workshops.
+Amsterdam | women-in-product-nl | Women in Product NL | women | Career Planning workshop for 2027 | Mon 30 Nov | in-person | Community for women in product management.
+Amsterdam | hikeandpicturesnl | Hike and Pictures NL | outdoors | Amsterdam Light Festival Walk | Mon 7 Dec | in-person | Hikes and photo walks.
+Amsterdam | dungeons-dragons-amsterdam | Dungeons & Dragons Amsterdam | games | D&D Amsterdam November | Sat 21 Nov | in-person | D&D tabletop meetups.
+Amsterdam | koochcommunity | Kooch — Run a Little, Talk a Lot | running | Run a little, talk a lot | Sun 22 Nov | in-person | Social runs for expats and locals.
+Amsterdam | amsterdam-indie-game-developers | Amsterdam Indie Game Developers | tech | Indie Game Devs Get Together | Sun 22 Nov | in-person | Indie game developers meetup.
+Amsterdam | thefoodiefellowship | The Foodie Fellowship | food | Himalayan dinner at Babal | Sat 28 Nov | in-person | Group dinners exploring world cuisines.
+Amsterdam | armoury-bar-gaming-community | Side Quest Gaming Community | games | Expat Board Gamers | Thu 19 Nov | in-person | Board game nights for expats.
+Dublin | friendlydublin | Friendly Dublin Hangouts | games | Board Games and Fun Night | Tue 17 Nov | in-person | Weekly board-game nights.
+Dublin | new-in-dublin | New in Dublin | social | Social Language Exchange | Wed 18 Nov | in-person | Meet people from all over the world.
+Dublin | pythonireland | Python Ireland | tech | PyCon Ireland 2026 | Sat 21 Nov | in-person | Python community and conference.
+Dublin | dub-sec | Dub|Sec | tech | Dub|Sec November Meetup | Wed 25 Nov | in-person | Cybersecurity community meetups.
+Dublin | walking-coffee-easysocialmeetupsdublin | Walking & Coffee — Social Meetups Dublin | outdoors | Belvedere House & Walled Gardens | Sat 28 Nov | in-person | Walks and coffee socials.
+Dublin | meetup-group-hzxiwxve | Dubliners: Joys of Reading | books | Books & Social | Sat 21 Nov | in-person | Book club socials.
+Dublin | dublin-linux-community | Dublin Linux Community | tech | Linux Tech Talks | Tue 24 Nov | in-person | Linux talks and pub meetups.
+Dublin | mahjong-in-dublin | Mahjong in Dublin | games | Saturday Mahjong @ Board | Sat 28 Nov | in-person | Mahjong games.
+Dublin | the-indie-film-club | The Indie Film Club | creative | Crouching Tiger, Hidden Dragon | Tue 24 Nov | in-person | Independent film screenings.
+Dublin | dublin-book-club | The Dublin Book Club | books | Monthly Meetup | Tue 17 Nov | in-person | Monthly book club.
+Dublin | language-exchange-dublin | Language Exchange Dublin (Flip Lingoes) | language | Flip Lingoes | Wed 18 Nov | in-person | Weekly language exchange.
+Barcelona | language-exchange-barcelona-meetup | Barcelona International Social & Language Exchange | language | Language Exchange & Salsa-Bachata | Tue 17 Nov | in-person | Weekly language exchange with dancing.
+Barcelona | barcelona-entrepreneurs-and-startups | Barcelona Entrepreneurs and Startups | startup | Tuesday Meetup | Tue 17 Nov | in-person | Weekly entrepreneurs meetup.
+Barcelona | storytelling-barcelona | Storytelling Barcelona | creative | Storytelling — "Courage" | Wed 18 Nov | in-person | True-story nights in English.
+Barcelona | ai-engineers-barcelona | AI Engineers Barcelona | tech | Hack & Tell: Secure AI Agents | Thu 19 Nov | in-person | AI engineers building practical apps.
+Barcelona | producttank-barcelona | ProductTank Barcelona | tech | ProductTank November | Thu 26 Nov | in-person | Product management talks.
+Barcelona | lets-talk-about-climate-change | Let's Talk About Climate Change | cause | Climate Action Book Club | Tue 24 Nov | in-person | Climate books and action.
+Barcelona | barcelona-cinema-lovers | Barcelona Cinema Lovers | creative | Cinema Talks in English | Sat 21 Nov | in-person | Watch and discuss films.
+Barcelona | barcelonasocialhikers-com | Barcelona Social Hikers | outdoors | Montserrat route | Sat 28 Nov | in-person | Group hikes around Barcelona.
+Barcelona | charcha-cultural-cafe | Charcha Cultural Cafe | social | Comedy, Conversation & Matcha | Thu 19 Nov | in-person | Cultural conversations and comedy.
+Barcelona | barcelona-role-playing-games-rpgs-meetup-in-english | Barcelona RPGs Meetup (in English) | games | RPG Tavern Gathering | Sat 28 Nov | in-person | Tabletop RPGs in English.
+Barcelona | barcelona-game-creators | Barcelona Game Creators | tech | Monthly meetup with IndieDevDay | Fri 20 Nov | in-person | Video-game creators community.
+Madrid | tech-startups-in-the-pub-relaxed-networking | Tech Startups in the Pub — Madrid | startup | Tech Startups in the Pub | Wed 18 Nov | in-person | Relaxed startup networking.
+Madrid | meetup-group-uwzuhxpe | Madrilingo | language | Language Exchange Sunday | Sun 29 Nov | in-person | Language exchange events.
+Madrid | producttank-madrid | ProductTank Madrid | tech | AI Agents: A Useful Tool or Your Next Team? | Wed 18 Nov | in-person | Product management talks.
+Madrid | aviadores-cine-libros-y-actividades-en-madrid | Aviadores: Cine, Libros y Actividades | books | Cine con tertulia | Sat 21 Nov | in-person | Cinema, book clubs and socials.
+Madrid | chicasinmadridxo | Chicas in Madrid | women | Autumn Walk & Talk | Sat 21 Nov | in-person | Walks and socials for women.
+Madrid | 20s-30s-madrid-social-activities | 20s 30s Madrid Social & Activities | social | Social & Activities | Sat 21 Nov | in-person | Socials for 20s and 30s.
+Madrid | open-up-art-madrid-international-community | Art Lovers & Creative People of Madrid | creative | Cocktails & Creatives | Wed 18 Nov | in-person | Artists and art lovers meetups.
+Madrid | english-boardgame-meet-up | MAD Meeples — English Boardgaming | games | English Gaming at Six Café | Wed 18 Nov | in-person | English-speaking board games.
+Madrid | madrid-meets-china | Madrid Meets China | language | Ruta de los Idiomas | Wed 18 Nov | in-person | Chinese–Spanish exchange.
+Madrid | english-book-club-ciervo-blanco | English Book Club Madrid | books | Greek Lessons by Han Kang | Sat 28 Nov | in-person | English novel book club.
+Madrid | socrates-cafe-madrid-philosophy-discussions-meetup | Socrates Café Madrid | books | Socrates Café at BYOKO | Fri 20 Nov | in-person | Philosophy discussion meetups.
+Madrid | madrid-amazon-web-services-meetup | Madrid AWS Meetup | tech | AWS Workshop: Agentic AI | Wed 18 Nov | in-person | AWS cloud community.
+Lisbon | lisbon-board-games | Game Night in Lisbon | games | Game Night at Amelia Cafe | Tue 17 Nov | in-person | Weekly board-game nights.
+Lisbon | f-ck-the-small-talk | Curious Connection Club | social | F*ck the Small Talk #8 | Tue 17 Nov | in-person | Deep-conversation socials.
+Lisbon | international-friends-lisbon | International Friends Lisbon | social | Meet Local & International Friends | Fri 20 Nov | in-person | Weekly casual socials.
+Lisbon | polylogue | Polylogue | startup | Lightning Talks @ The Clubhouse | Thu 19 Nov | in-person | Lightning talks on ideas and skills.
+Lisbon | open-coffee-lisbon | Open Coffee Lisbon | startup | Evening Social | Tue 24 Nov | in-person | Startup and tech socials.
+Lisbon | mindstone-lisbon-ai-meetup | Mindstone Lisbon AI Meetup | tech | November AI Meetup | Tue 24 Nov | in-person | Practical AI meetups.
+Lisbon | people-of-lisbon | Club People Of Lisbon | social | The Big Get Together | Thu 3 Dec | in-person | Community socials.
+Lisbon | lisbon-sustainability-community | Lisbon Sustainability Community | cause | Beyond The Book: Sustainability | Sat 28 Nov | in-person | Sustainability discussions.
+Lisbon | storytelling-lisboa | Storytelling Lisboa | creative | Storytelling Night — "Courage" | Wed 25 Nov | in-person | Live storytelling nights.
+Lisbon | portuguese-language-culture | Portuguese Language and Culture | language | Free Portuguese Conversation | Wed 18 Nov | in-person | Free Portuguese practice, all levels.
+Lisbon | english-portuguese-conversation-lisbon | English–Portuguese Conversation Lisbon | language | Tuesday Conversation | Tue 17 Nov | in-person | Weekly English–Portuguese exchange.

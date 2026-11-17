@@ -14,7 +14,8 @@ import 'server-only';
 import { unstable_cache, revalidateTag } from 'next/cache';
 import { db } from '@/lib/db';
 import { communities as communitiesTable, type CommunityRow } from '@/lib/db/schema';
-import { COMMUNITIES as STATIC, type Community } from './index';
+import { COMMUNITIES as STATIC } from './data';
+import { cityPoolOf, countByCity, ONLINE_CITY, type Community } from './index';
 
 export const COMMUNITIES_TAG = 'communities';
 const STATIC_BY_SLUG = new Map(STATIC.map((c) => [c.slug, c]));
@@ -52,6 +53,16 @@ export async function getAllCommunities(): Promise<Community[]> {
 
 export async function getCommunity(slug: string): Promise<Community | undefined> {
   return (await getAllCommunities()).find((c) => c.slug === slug);
+}
+
+/** What a city page sends to the browser: that city's slice + picker counts. */
+export async function getCityPayload(city: string) {
+  const list = await getAllCommunities();
+  return {
+    all: cityPoolOf(list, city),
+    cityCounts: countByCity(list),
+    totals: { listings: list.length, cities: new Set(list.map((c) => c.city).filter((c) => c !== ONLINE_CITY)).size },
+  };
 }
 
 /** Admin view: every listing incl. hidden, with where it comes from. Not cached. */

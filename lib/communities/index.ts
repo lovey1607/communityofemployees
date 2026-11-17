@@ -4,34 +4,15 @@
 // No React, no DOM, so everything here is unit-testable with tsx.
 // ============================================================
 
-import { COMMUNITIES_CORE, CATEGORY_META, CITY_CENTRE, type Community, type CommunityCategory, type JoinPlatform } from '@/data/communities';
-import { COMMUNITIES_INDIA } from '@/data/communities-india';
-import { COMMUNITIES_DISCOVERED } from '@/data/communities-discovered';
-import { COMMUNITIES_MEETUP_NOV } from '@/data/communities-meetup-nov';
-import { UPDATES, REMOVED, VERIFIED_ON } from '@/data/communities-updates';
+import { CATEGORY_META, CITY_CENTRE, CITY_COUNTRY, WORLD_REGIONS, type Community, type CommunityCategory, type JoinPlatform } from '@/data/communities';
 
 export type { Community, CommunityCategory, JoinPlatform };
 
 /** City used for pan-India / internet-first rows; they appear in every city view. */
 export const ONLINE_CITY = 'Online';
 
-/** Apply the dated verification layer (data/communities-updates.ts) to seed rows. */
-export function applyUpdates(rows: Community[]): Community[] {
-  return rows.filter((r) => !REMOVED.has(r.slug)).map((r) => {
-    const u = UPDATES[r.slug];
-    if (!u) return r;
-    const { activitySignal, links, ...rest } = u;
-    const next: Community = { ...r, ...rest, links: { ...r.links, ...(links ?? {}) }, source: { url: r.links.instagram ?? r.source.url, verifiedOn: VERIFIED_ON, activitySignal } };
-    if (rest.city && rest.city !== r.city && r.location?.precision === 'city') {
-      const centre = CITY_CENTRE[rest.city];
-      next.location = centre ? { lat: centre[0], lng: centre[1], label: rest.city, precision: 'city' } : null;
-      next.area = null;
-    }
-    return next;
-  });
-}
-
-export const COMMUNITIES: Community[] = [...applyUpdates([...COMMUNITIES_CORE, ...COMMUNITIES_INDIA]), ...COMMUNITIES_DISCOVERED, ...COMMUNITIES_MEETUP_NOV];
+// Listing data lives in ./data (server-side). This module stays data-free so
+// client components can import helpers without shipping every listing.
 export { CATEGORY_META };
 
 // ─── Brand ───────────────────────────────────────────────────
@@ -109,9 +90,18 @@ export const AREAS: Place[] = [
 /** Every city we list, in display order: metros first, then the rest A–Z. */
 export const METRO_CITIES = ['Gurgaon', 'Delhi', 'Noida', 'Mumbai', 'Bengaluru', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Ahmedabad', 'Jaipur'];
 const GROUP_MEMBERS = new Set(['Faridabad', 'Ghaziabad', 'Navi Mumbai', 'Thane', 'Gandhinagar', 'Mohali']);
+/** Cities outside India, flattened in region order. */
+export const WORLD_CITIES: string[] = Object.values(WORLD_REGIONS).flat();
+const WORLD_SET = new Set(WORLD_CITIES);
+export const isWorldCity = (city: string) => WORLD_SET.has(city);
+export { WORLD_REGIONS, CITY_COUNTRY };
+/** "Dubai, UAE" for world cities, plain name for Indian ones. */
+export const cityLabel = (city: string) => (CITY_COUNTRY[city] && CITY_COUNTRY[city] !== city ? `${city}, ${CITY_COUNTRY[city]}` : city);
+
 export const ALL_CITIES: string[] = [
   ...METRO_CITIES,
-  ...Object.keys(CITY_CENTRE).filter((c) => !METRO_CITIES.includes(c) && !GROUP_MEMBERS.has(c)).sort(),
+  ...Object.keys(CITY_CENTRE).filter((c) => !METRO_CITIES.includes(c) && !GROUP_MEMBERS.has(c) && !WORLD_SET.has(c)).sort(),
+  ...WORLD_CITIES,
 ];
 export const CITY_CENTRES: Record<string, Place> = Object.fromEntries(
   ALL_CITIES.map((city) => [city, { label: city, lat: CITY_CENTRE[city][0], lng: CITY_CENTRE[city][1], city }]),
@@ -190,7 +180,7 @@ export const CATEGORY_ORDER: (CommunityCategory | 'all')[] = [
 ];
 
 /** Which categories actually have listings — hides empty chips. */
-export function categoriesWithListings(list: Community[] = COMMUNITIES): CommunityCategory[] {
+export function categoriesWithListings(list: Community[]): CommunityCategory[] {
   const set = new Set(list.map((c) => c.category));
   return CATEGORY_ORDER.filter((k): k is CommunityCategory => k !== 'all' && set.has(k));
 }
@@ -208,11 +198,30 @@ export type Origin = { lat: number; lng: number; label: string } | null;
 
 export type Scored = Community & { km: number | null };
 
+/** Does a listing belong in a city's view? Online (pan-India) rows show in Indian cities only. */
+export function inCity(c: Pick<Community, 'city'>, city: string): boolean {
+  if (c.city === ONLINE_CITY) return !isWorldCity(city);
+  return (CITY_GROUPS[city] ?? [city]).includes(c.city);
+}
+
+/** The slice of listings a city page needs (what the server sends to the browser). */
+export function cityPoolOf(list: Community[], city: string): Community[] {
+  return list.filter((c) => inCity(c, city));
+}
+
+/** Listing count per city key (NCR etc. grouped), for the city picker. */
+export function countByCity(list: Community[]): Record<string, number> {
+  const byCity = new Map<string, number>();
+  for (const c of list) if (c.city !== ONLINE_CITY) byCity.set(c.city, (byCity.get(c.city) ?? 0) + 1);
+  const out: Record<string, number> = {};
+  for (const [k, group] of Object.entries(CITY_GROUPS)) out[k] = group.reduce((n, g) => n + (byCity.get(g) ?? 0), 0);
+  return out;
+}
+
 export function applyFilters(all: Community[], f: Filters, origin: Origin): Scored[] {
-  const cities = CITY_GROUPS[f.city] ?? [f.city];
   const out: Scored[] = [];
   for (const c of all) {
-    if (c.city !== ONLINE_CITY && !cities.includes(c.city)) continue;
+    if (!inCity(c, f.city)) continue;
     if (f.category !== 'all' && c.category !== f.category) continue;
     if (f.gender !== 'all' && c.audience.gender !== f.gender) continue;
     if (f.beginner && !(c.audience.level === 'beginner' || c.tags.includes('beginner-friendly'))) continue;
@@ -320,8 +329,19 @@ export function activeFilterCount(f: Filters): number {
 }
 
 // ─── Slugs for /communities/[city]/[category] ────────────────
-export const CITY_SLUGS: Record<string, string> = { ...Object.fromEntries(ALL_CITIES.map((c) => [c.toLowerCase(), c])), bangalore: 'Bengaluru', gurugram: 'Gurgaon', bombay: 'Mumbai', madras: 'Chennai', calcutta: 'Kolkata', vizag: 'Visakhapatnam', trivandrum: 'Thiruvananthapuram', calicut: 'Kozhikode', mysore: 'Mysuru', 'delhi-ncr': 'Gurgaon' };
-export const slugForCity = (city: string) => city.toLowerCase();
+/** URL segment for a city: "San Francisco" → "san-francisco", "São Paulo" → "sao-paulo". */
+export const slugForCity = (city: string) => city.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+export const CITY_SLUGS: Record<string, string> = {
+  ...Object.fromEntries(ALL_CITIES.map((c) => [slugForCity(c), c])),
+  // old space-separated links keep working
+  ...Object.fromEntries(ALL_CITIES.filter((c) => c.includes(' ')).map((c) => [c.toLowerCase(), c])),
+  bangalore: 'Bengaluru', gurugram: 'Gurgaon', bombay: 'Mumbai', madras: 'Chennai', calcutta: 'Kolkata', vizag: 'Visakhapatnam',
+  trivandrum: 'Thiruvananthapuram', calicut: 'Kozhikode', mysore: 'Mysuru', 'delhi-ncr': 'Gurgaon',
+  sf: 'San Francisco', 'bay-area': 'San Francisco', nyc: 'New York', 'new-york-city': 'New York', la: 'Los Angeles',
+  dc: 'Washington DC', washington: 'Washington DC', saigon: 'Ho Chi Minh City', hcmc: 'Ho Chi Minh City', kl: 'Kuala Lumpur',
+  muenchen: 'Munich', munchen: 'Munich', milano: 'Milan', zuerich: 'Zurich', zurich: 'Zurich', lisboa: 'Lisbon', praha: 'Prague',
+  wien: 'Vienna', cdmx: 'Mexico City', 'sao-paulo': 'São Paulo', 'tel-aviv-yafo': 'Tel Aviv', hk: 'Hong Kong',
+};
 
 // ─── Generated visual mark ───────────────────────────────────
 /** Deterministic colour + initials from the slug. No organiser imagery stored. */
@@ -335,11 +355,7 @@ export function markFor(c: Pick<Community, 'slug' | 'name' | 'category'>): { hue
   return { hue, initials, shape: (h % 4) as 0 | 1 | 2 | 3 };
 }
 
-export function bySlug(slug: string): Community | undefined {
-  return COMMUNITIES.find((c) => c.slug === slug);
-}
-
-export function similarTo(c: Community, n = 4, list: Community[] = COMMUNITIES): Community[] {
+export function similarTo(c: Community, n: number, list: Community[]): Community[] {
   const cities = CITY_GROUPS[c.city] ?? [c.city];
   return list
     .filter((o) => o.slug !== c.slug && cities.includes(o.city))

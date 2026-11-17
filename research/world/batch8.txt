@@ -1,0 +1,61 @@
+Denver | minglenewfriendsdenver | Mingle New Friends Denver | social | Taco Tuesday (Littleton) | Tue 17 Nov | in-person | Socials for making friends.
+Denver | basecamp-social-denver-millenial-genz | Basecamp Social — Denver Millennials & Gen Z | games | Board Games and Brews | Tue 17 Nov | in-person | Socials for millennials and Gen Z.
+Denver | walking-adventurers | Walking Adventurers | outdoors | Holiday Piano Bar Party | Fri 20 Nov | in-person | Walks and socials.
+Denver | denver-booksncrafts | Books. Crafts. Friendship! | books | Big Book Exchange | Wed 18 Nov | in-person | Book swaps and crafting.
+Denver | thinkers-drinkers-international-usa-den | Thinkers & Drinkers Denver | social | The Monday Think & Drink | Mon 23 Nov | in-person | Discussion over drinks.
+Denver | denver-record-club | Denver Record Club | creative | New Music Fridays on Tuesday | Tue 17 Nov | in-person | Music lovers sharing records.
+Denver | alpine-adventurers-hiking | Alpine Adventurers Hiking | outdoors | 5th Anniversary Hike & Dinner | Wed 18 Nov | in-person | Group hikes.
+Denver | denver-spanish-conversation-meetup | Denver Spanish Conversation | language | Hablamos Español @ Cohesion Brewery | Wed 18 Nov | in-person | Spanish practice.
+Denver | craft-beer-and-conversations | Craft Beer and Conversations | food | 4-year Celebration @ Savoie Brewing | Thu 10 Dec | in-person | Brewery visits and conversation.
+Atlanta | atlanta-floral-workshop-meetup-group | Atlanta Floral Workshop | creative | Holiday Wreath Workshop | Sat 5 Dec | in-person | Floral design workshops.
+Atlanta | atlanta-social-life | Atlanta Social | social | Game Night @ Wild Heaven Brewery | Fri 20 Nov | in-person | Socials and game nights.
+Atlanta | kick-it-back-20-and-30-somethings | Kick. It. Back. (20s & 30s) | creative | BYO Craft Afternoon in Decatur | Sun 22 Nov | in-person | Socials for 20s and 30s.
+Atlanta | roswell-alpharetta-sandy-springs-foodies-group | North Atlanta Foodies | food | Dinner at Thrill Korean Steak | Fri 20 Nov | in-person | Group dinners.
+Atlanta | owasp-atlanta | OWASP Atlanta | tech | Cybersecurity Holiday Party | Tue 8 Dec | in-person | Application security chapter.
+Atlanta | east-atlanta-spanish | East Atlanta Spanish Club | language | Spanish Club | Tue 24 Nov | in-person | Spanish practice.
+Atlanta | lets-be-friends-atl | Real Friends ATL | games | Board Games @ Viking Alchemist | Fri 27 Nov | in-person | Social circle and board games.
+Atlanta | atlantavolleyball | Atlanta Volleyball Meetup | sports | Indoor Volleyball @ Decatur | Sun 6 Dec | in-person | Indoor volleyball.
+Atlanta | atlanta-drunken-knitwits | Atlanta Drunken Knitwits | creative | Purls and Pulled Pork | Tue 17 Nov | in-person | Knitting and crafting socials.
+San Diego | san-diego-social-meetups-group | San Diego Social Group | social | Young Professionals Mixer | Fri 20 Nov | in-person | Mixers and socials.
+San Diego | intl-cafe-san-diego | Int'l Café San Diego | language | Int'l Café at Pure Project, Balboa Park | Wed 25 Nov | in-person | Language exchange socials.
+San Diego | balboa-park-saturday-morning-soccer | Balboa Park Saturday Morning Soccer | sports | Saturday morning soccer | Sat 21 Nov | in-person | Weekly pick-up soccer.
+San Diego | boba_social | Boba Social | food | TP Tea Social | Sat 21 Nov | in-person | Boba tea meetups.
+San Diego | san-diego-beer-book-club | San Diego Beer and Book Club | books | Sci-Fi Beer and Book Club | Sun 29 Nov | in-person | Book club at breweries.
+San Diego | san-diego-ieee-meetup | IEEE San Diego Section | tech | Build Your Own AI Agent | Thu 19 Nov | in-person | Engineering talks and networking.
+San Diego | sd-fun-run | SD Fun Run | running | Run & Chug | Wed 18 Nov | in-person | Social runs.
+San Diego | strong-town-san-diego | Strong Towns San Diego | civic | Midway Walk n Talk | Sun 29 Nov | in-person | Walkable-city advocacy.
+Istanbul | takeaphotowalkistanbul | Take a Photo Walk Istanbul | creative | Sirkeci Architecture Photo Walk | Sat 21 Nov | in-person | Photo walks.
+Istanbul | global-women-empowerment-network | Global Women's Empowerment Network Istanbul | women | Women's Empowerment Meetup | Sat 21 Nov | in-person | Community meetups for women.
+Istanbul | istanbul-izmir-data-community | Istanbul & Izmir Data Community | tech | When Data Meets AI | Sat 5 Dec | in-person | Data professionals.
+Istanbul | istanbul-big-social-and-activities | Istanbul Big Social & Activities | social | International Social Night | Sat 21 Nov | in-person | International socials.
+Istanbul | istanbul-turkish-speaking-culture-club | Istanbul Turkish Speaking & Culture Club | language | Turkish Speaking Club | Sat 21 Nov | in-person | Turkish practice.
+Istanbul | earthlings-from-istanbul | Earthlings From Istanbul | social | Kadıköy Weekly | Sat 21 Nov | in-person | Weekly socials.
+Istanbul | speakeasy-istanbul | Speak Easy Istanbul | language | Weekly Language & Culture Night | Wed 18 Nov | in-person | Weekly language exchange.
+Beijing | beijing-chinese-language-meetup-chinese-corner | Beijing Chinese Language Group | language | Chinese Corner | Wed 18 Nov | in-person | Weekly Chinese practice.
+Beijing | beijing-language-exchange-talkspace | Beijing Language Exchange Talkspace | language | Friday Night Talkspace | Fri 20 Nov | in-person | Weekly language exchange.
+Beijing | pet-international-friends | PET International Friends | language | English Corner | Wed 18 Nov | in-person | Weekly English corner discussions.
+Beijing | beijing-vancouver-entrepreneurs-meetup-group | Beijing Make & Mingle Club | creative | Shrink-Plastic Keychain Workshop | Fri 20 Nov | in-person | Craft workshops and socials.
+Beijing | beijing-international-badminton-club | Beijing International Badminton Club | sports | Sunday badminton | Sun 22 Nov | in-person | Weekly badminton.
+Beijing | beijing-badminton-after-work-meetup | Beijing Badminton After Work | sports | Wednesday night badminton | Wed 18 Nov | in-person | After-work badminton.
+Milan | tech-startups-in-the-pub-relaxed-networking | Tech Startups in the Pub — Milan | startup | Tech Startups on the Terrace | Thu 19 Nov | in-person | Relaxed startup networking.
+Milan | women-in-tech-italy | Women in Tech Italy | women | Women in Tech Talk | Wed 18 Nov | in-person | Talks and community for women in tech.
+Milan | milano-language-exchange-meetup-group | Milano Language Exchange | language | Aperitivo in English | Sat 21 Nov | in-person | Language exchange aperitivos.
+Milan | milan-video-tech-meetup-group | Milan Video Tech Meetup | tech | What's Next in Video Tech? | Tue 24 Nov | in-person | Video technology meetups.
+Milan | milan-games-and-friends | Milan Games & Friends | games | Game Night #12 | Sat 21 Nov | in-person | Board-game nights.
+Milan | pydata-milano | PyData Milano | tech | Climate Intelligence with Polars | Thu 19 Nov | in-person | Python data community.
+Milan | english-book-club-milano-literary-fiction-meetup | English Book Club Milano | books | Literary Fiction meetup | Sun 6 Dec | in-person | English literary fiction book club.
+Milan | the-xplorers-toastmasters-club-milano | The Xplorers Toastmasters Milano | professional | Public Speaking Lab | Wed 18 Nov | in-person | Public speaking practice.
+Milan | gitup-natura-cultura-nightlife-amici | GITUP — Nature & Culture | outdoors | Broveda Waterfalls hike | Sat 21 Nov | in-person | Excursions and nature walks.
+Munich | culturemadness | Culture Madness Munich | outdoors | Isar Walk and Talk | Sun 22 Nov | in-person | Walks and talks along the Isar.
+Munich | leaddev-meetup-munich | LeadDev Meetup Munich | tech | LeadDev Munich #4 | Thu 26 Nov | in-person | Engineering leadership.
+Munich | munich-datageeks | Munich Datageeks | tech | November Edition | Thu 26 Nov | in-person | Data talks and networking.
+Munich | producttank-munich | ProductTank Munich | tech | ProductTank Munich #47 | Wed 25 Nov | in-person | Product management.
+Munich | friending-around-munich | Friending Around Munich | social | Speed Friending Night | Sat 21 Nov | in-person | Making friends, locals and expats.
+Munich | happy-gathering | Happy Gathering Munich | social | Monthly Happy Gathering | Fri 27 Nov | in-person | Monthly social for new friends.
+Munich | munich-social-gaming | Munich Social Gaming | games | Friday Board Games | Fri 20 Nov | in-person | Board games.
+Munich | munchen-trips-outings-nature-walks-meetup-group | Trail Blazers Munich | outdoors | Baumgartenschneid loop hike | Sat 21 Nov | in-person | Nature hikes and trips.
+Munich | munichstammtisch | Munich Stammtisch | social | Christmas Market Opening | Fri 20 Nov | in-person | Regular socials and outings.
+Kathmandu | women-awsugnepal | AWS User Group Women in Tech Nepal | women | re:Invent watch and build party | Fri 4 Dec | in-person | Women in tech community.
+Kathmandu | nepalcloudpro | Nepal Cloud Professionals | tech | Season of AI — Episode 02 | Sat 5 Dec | hybrid | Cloud and IT professionals.
+Kathmandu | dot-net-hub-kathmandu | .NET Hub Kathmandu | tech | .NET Conf 2026 Kathmandu | Sat 28 Nov | in-person | .NET developers.
+Kathmandu | kathmandu-social-lab | Kathmandu Social Lab | social | Trivia & Connections night | Fri 27 Nov | in-person | Trivia and social nights.
